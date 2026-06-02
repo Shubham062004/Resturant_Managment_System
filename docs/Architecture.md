@@ -78,9 +78,9 @@ sequenceDiagram
     Server->>Server: Verify password hash (bcrypt)
     Server->>DB: Store hashed Refresh Token
     Server-->>Client: Returns Access Token (JSON) & Refresh Token (HTTP-Only Cookie)
-    
+
     Note over Client,Server: Client accesses routes using Access Token (15m expiry)
-    
+
     Client->>Server: POST /auth/refresh (with Cookie)
     Server->>DB: Lookup Refresh Token Hash
     alt Token is valid & active
@@ -102,6 +102,7 @@ sequenceDiagram
 ### B. Role-Based Access Controls (RBAC)
 
 Clear privilege hierarchies are enforced across all services:
+
 - **SUPER_ADMIN**: Absolute system configuration overrides, database migrations, role elevations.
 - **ADMIN**: Branch configurations, employee registries, report reviews, refund authorizations.
 - **CASHIER**: Floor plan management, order creation, bill settlements.
@@ -117,6 +118,7 @@ router.patch('/profile', authGuard, restrictTo('CUSTOMER', 'ADMIN', 'CASHIER'));
 ### C. Google OAuth Flow
 
 Integrated Google Sign-in allows fast single-sign-on (SSO) credentials:
+
 1. The frontend client triggers Google OAuth consent, returning a verified ID Token (`id_token`).
 2. The client posts the token to `/api/v1/auth/google`.
 3. The backend uses Google's `google-auth-library` to check signatures and extract `email`, name details, and `picture` url.
@@ -136,6 +138,7 @@ Integrated Google Sign-in allows fast single-sign-on (SSO) credentials:
 ### E. MongoDB Security Audits & Session Logs
 
 Highly sensitive account lifecycle actions write logs directly to MongoDB:
+
 - **Audit Logs** (`audit_logs` collection): Documents `userId`, `action` (`LOGIN`, `LOGOUT`, `PASSWORD_RESET`, `EMAIL_VERIFICATION`, `ROLE_CHANGE`), client IP, browser, device category, and payload context.
 - **Active Sessions** (`user_sessions` collection): Monitors concurrent device registrations. Tracks device category, browser details, login time, and maps them to refresh token hashes. Allows users to "terminate all other devices" securely.
 
@@ -144,36 +147,42 @@ Highly sensitive account lifecycle actions write logs directly to MongoDB:
 ## 5. Customer Application Foundation (PR-004)
 
 ### A. Customer App Architecture
+
 The customer experience is organized as a decoupled, responsive user interface structure plugged directly into the shared state and route modules of the monorepo:
+
 1. **Public/Guest Navigation**: Sticky headers, dynamic color transforms on scroll, and a Framer Motion-based mobile navigation drawer.
 2. **Account Section Structure**: A unified sidebar navigation (`ProfileLayout`) rendering favorites, order histories, and account details.
 3. **State Management Integration**: Uses the `customerSlice` Redux reducer to cache user outpost branch selections, search queries, and dietary preferences to browser `localStorage`.
 
 ### B. Routing Structure
+
 Routes are configured in [AppRoutes.tsx](file:///C:/Users/shubh/OneDrive/Desktop/Projects/Resturant_Managment_System/frontend/src/routes/AppRoutes.tsx) under the following layout hierarchy:
-* **CustomerLayout / GuestLayout**:
-  * `/` (LandingPage - Hero, category bar, testimonials, newsletter)
-  * `/about` (AboutPage - History, operational pillars)
-  * `/contact` (ContactPage - Support ticket logging form)
-  * `/branches` (BranchesPage - Outpost listing, location calculation, setting active branch)
-  * `/search` (SearchPage - Debounced input filtering, popular tag chips, matching lists)
-  * `/offers` (OffersPage - Discount code copy cards)
-  * `/menu` (MenuPlaceholderPage - Future modular plug-in)
-  * `/cart` (CartPlaceholderPage - Future modular plug-in)
-  * `/checkout` (CheckoutPlaceholderPage - Future modular plug-in)
-  * `/product/:id` (ProductPlaceholderPage - Future modular plug-in)
-* **ProtectedRoute / ProfileLayout** (inside CustomerLayout):
-  * `/profile` (ProfilePage - Account settings)
-  * `/favorites` (FavoritesPage - Wishlist empty states)
-  * `/orders` (OrdersPage - Smart status timeline stream, past invoice lists)
-* **ErrorLayout**:
-  * `/offline` (OfflinePage - Browser connection listener page)
-  * `/server-error` (ServerErrorPage - 500 fallback screen)
-  * `/not-found` (NotFoundPage - 404 screen)
-* **Staff Dashboard** (`/staff`, `/staff/tables`, `/staff/design-system` under `MainLayout`)
+
+- **CustomerLayout / GuestLayout**:
+  - `/` (LandingPage - Hero, category bar, testimonials, newsletter)
+  - `/about` (AboutPage - History, operational pillars)
+  - `/contact` (ContactPage - Support ticket logging form)
+  - `/branches` (BranchesPage - Outpost listing, location calculation, setting active branch)
+  - `/search` (SearchPage - Debounced input filtering, popular tag chips, matching lists)
+  - `/offers` (OffersPage - Discount code copy cards)
+  - `/menu` (MenuPlaceholderPage - Future modular plug-in)
+  - `/cart` (CartPlaceholderPage - Future modular plug-in)
+  - `/checkout` (CheckoutPlaceholderPage - Future modular plug-in)
+  - `/product/:id` (ProductPlaceholderPage - Future modular plug-in)
+- **ProtectedRoute / ProfileLayout** (inside CustomerLayout):
+  - `/profile` (ProfilePage - Account settings)
+  - `/favorites` (FavoritesPage - Wishlist empty states)
+  - `/orders` (OrdersPage - Smart status timeline stream, past invoice lists)
+- **ErrorLayout**:
+  - `/offline` (OfflinePage - Browser connection listener page)
+  - `/server-error` (ServerErrorPage - 500 fallback screen)
+  - `/not-found` (NotFoundPage - 404 screen)
+- **Staff Dashboard** (`/staff`, `/staff/tables`, `/staff/design-system` under `MainLayout`)
 
 ### C. SEO Strategy
+
 SEO metadata is handled by a reusable `<SEO>` component backed by `react-helmet-async`. It dynamically injects:
+
 1. Title tags (`title` | Oven Xpress)
 2. Meta Descriptions & Meta Keywords
 3. Open Graph (OG) tags for Facebook/LinkedIn previews
@@ -181,6 +190,7 @@ SEO metadata is handled by a reusable `<SEO>` component backed by `react-helmet-
 5. JSON-LD Structured Data Schema injections (e.g. for restaurant locations or ratings).
 
 ### D. Performance Strategy
+
 1. **Route Lazy Loading**: Pages are code-split using `React.lazy` and loaded dynamically.
 2. **Suspense Boundaries**: Router mounts wrapped in `<Suspense>` using specialized layout skeletons or spinner indicators to reduce First Contentful Paint (FCP) lag.
 3. **Debounced Network Simulators**: Global searches utilize a 400ms debounce buffer to limit excessive re-rendering.

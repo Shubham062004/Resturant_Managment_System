@@ -74,7 +74,7 @@ describe('Catalog API Integration Tests', () => {
     mockToken = jwt.sign(
       { id: USER_UUID, email: 'customer@test.com', role: 'CUSTOMER' },
       env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     );
   });
 
@@ -117,7 +117,9 @@ describe('Catalog API Integration Tests', () => {
         products: [],
       });
 
-      const response = await request(app).get('/api/v1/catalog/restaurants/slug/oven-xpress-firehouse');
+      const response = await request(app).get(
+        '/api/v1/catalog/restaurants/slug/oven-xpress-firehouse',
+      );
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);

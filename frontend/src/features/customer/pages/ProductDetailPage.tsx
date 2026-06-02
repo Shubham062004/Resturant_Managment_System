@@ -9,8 +9,18 @@ import {
   useUpdateReview,
   useDeleteReview,
 } from '../store/catalogQueries';
-import { Star, Heart, Clock, Flame, ArrowLeft, Send, Trash2, Edit2, Check, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Star,
+  Heart,
+  Clock,
+  Flame,
+  ArrowLeft,
+  Send,
+  Trash2,
+  Edit2,
+  Check,
+  AlertCircle,
+} from 'lucide-react';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -31,7 +41,10 @@ export const ProductDetailPage: React.FC = () => {
   const [reviewRating, setReviewRating] = useState<number>(5);
   const [reviewComment, setReviewComment] = useState<string>('');
   const [editingReviewId, setEditingReviewId] = useState<string | null>(null);
-  const [feedbackMsg, setFeedbackMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [feedbackMsg, setFeedbackMsg] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const product = response?.data;
   const recommendations = response?.recommendations || [];
@@ -63,8 +76,13 @@ export const ProductDetailPage: React.FC = () => {
         <div className="glass-card max-w-lg mx-auto p-10 border border-red-500/10 bg-red-500/[0.02] text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <p className="text-red-400 font-bold mb-4 font-display text-2xl">Item Not Found</p>
-          <p className="text-neutral-400 text-sm mb-6">The requested product could not be loaded. It may be temporarily unavailable.</p>
-          <Link to="/menu" className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium inline-block transition-all">
+          <p className="text-neutral-400 text-sm mb-6">
+            The requested product could not be loaded. It may be temporarily unavailable.
+          </p>
+          <Link
+            to="/menu"
+            className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium inline-block transition-all"
+          >
             Browse All Menus
           </Link>
         </div>
@@ -81,18 +99,21 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   const handleRecClick = (recSlug: string, recId: string) => {
-    trackRecommendationClickMutation.mutate({
-      productId: product.id,
-      recommendedProductId: recId,
-    }, {
-      onSuccess: () => {
-        navigate(`/product/${recSlug}`);
+    trackRecommendationClickMutation.mutate(
+      {
+        productId: product.id,
+        recommendedProductId: recId,
       },
-      onError: () => {
-        // Safe fallback if click tracking triggers network warnings
-        navigate(`/product/${recSlug}`);
-      }
-    });
+      {
+        onSuccess: () => {
+          navigate(`/product/${recSlug}`);
+        },
+        onError: () => {
+          // Safe fallback if click tracking triggers network warnings
+          navigate(`/product/${recSlug}`);
+        },
+      },
+    );
   };
 
   const handleReviewSubmit = (e: React.FormEvent) => {
@@ -130,7 +151,7 @@ export const ProductDetailPage: React.FC = () => {
               text: err.response?.data?.error?.message || 'Failed to update review.',
             });
           },
-        }
+        },
       );
     } else {
       createReviewMutation.mutate(
@@ -152,7 +173,7 @@ export const ProductDetailPage: React.FC = () => {
               text: err.response?.data?.error?.message || 'Failed to submit review.',
             });
           },
-        }
+        },
       );
     }
   };
@@ -198,33 +219,32 @@ export const ProductDetailPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-24 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Navigation Breadcrumb */}
         <div className="mb-8">
           <Link
             to={product.restaurant ? `/restaurants/${product.restaurant.slug}` : '/menu'}
             className="text-neutral-400 hover:text-white flex items-center gap-2 text-sm font-medium transition-colors"
           >
-            <ArrowLeft className="h-4 w-4 text-primary" /> Back to {product.restaurant?.name || 'Catalog'}
+            <ArrowLeft className="h-4 w-4 text-primary" /> Back to{' '}
+            {product.restaurant?.name || 'Catalog'}
           </Link>
         </div>
 
         {/* 1. Main Grid Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
-          
           {/* Left Column: Image Gallery and Slider */}
           <div className="space-y-6">
             <div className="glass-card aspect-square rounded-3xl overflow-hidden border border-white/5 bg-white/[0.01] relative shadow-2xl flex items-center justify-center">
-              <img
-                src={activeImage}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-              
+              <img src={activeImage} alt={product.name} className="w-full h-full object-cover" />
+
               {/* Floating indicators */}
               <div className="absolute top-6 left-6 p-1 bg-black/60 rounded-lg border border-white/10 backdrop-blur-md">
-                <div className={`w-3.5 h-3.5 border flex items-center justify-center p-0.5 ${product.isVeg ? 'border-green-500' : 'border-red-500'}`}>
-                  <div className={`w-2 h-2 rounded-full ${product.isVeg ? 'bg-green-500' : 'bg-red-500'}`} />
+                <div
+                  className={`w-3.5 h-3.5 border flex items-center justify-center p-0.5 ${product.isVeg ? 'border-green-500' : 'border-red-500'}`}
+                >
+                  <div
+                    className={`w-2 h-2 rounded-full ${product.isVeg ? 'bg-green-500' : 'bg-red-500'}`}
+                  />
                 </div>
               </div>
             </div>
@@ -237,10 +257,16 @@ export const ProductDetailPage: React.FC = () => {
                     key={idx}
                     onClick={() => setActiveImage(imgUrl)}
                     className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                      activeImage === imgUrl ? 'border-primary scale-95 shadow-lg shadow-primary/20' : 'border-white/5 opacity-60 hover:opacity-100'
+                      activeImage === imgUrl
+                        ? 'border-primary scale-95 shadow-lg shadow-primary/20'
+                        : 'border-white/5 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={imgUrl}
+                      alt={`Thumbnail ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -254,7 +280,7 @@ export const ProductDetailPage: React.FC = () => {
                 <span className="text-xs font-semibold text-primary uppercase tracking-widest">
                   {product.category?.name}
                 </span>
-                
+
                 {/* Favorite toggle button */}
                 <button
                   onClick={handleFavoriteToggle}
@@ -307,7 +333,9 @@ export const ProductDetailPage: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-[10px] text-neutral-500 uppercase tracking-widest">Speed</p>
-                    <p className="text-sm font-semibold text-white">{product.preparationTime} mins</p>
+                    <p className="text-sm font-semibold text-white">
+                      {product.preparationTime} mins
+                    </p>
                   </div>
                 </div>
               )}
@@ -316,7 +344,9 @@ export const ProductDetailPage: React.FC = () => {
             {/* Variant Selector */}
             {product.variants && product.variants.length > 0 && (
               <div className="space-y-3">
-                <p className="text-sm text-neutral-400 font-medium">Select Variant Configurations:</p>
+                <p className="text-sm text-neutral-400 font-medium">
+                  Select Variant Configurations:
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {product.variants.map((v) => (
                     <button
@@ -329,7 +359,9 @@ export const ProductDetailPage: React.FC = () => {
                       }`}
                     >
                       <span className="text-xs font-semibold">{v.name}</span>
-                      <span className="text-sm font-bold text-white">${parseFloat(v.price).toFixed(2)}</span>
+                      <span className="text-sm font-bold text-white">
+                        ${parseFloat(v.price).toFixed(2)}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -339,24 +371,24 @@ export const ProductDetailPage: React.FC = () => {
             {/* Price tag & add to cart placeholder */}
             <div className="flex items-center justify-between pt-6 border-t border-white/5">
               <div>
-                <p className="text-xs text-neutral-500 uppercase tracking-widest font-sans">Total Price</p>
-                <p className="text-3xl font-extrabold text-primary">${parseFloat(displayPrice).toFixed(2)}</p>
+                <p className="text-xs text-neutral-500 uppercase tracking-widest font-sans">
+                  Total Price
+                </p>
+                <p className="text-3xl font-extrabold text-primary">
+                  ${parseFloat(displayPrice).toFixed(2)}
+                </p>
               </div>
 
               {/* Cart action is ignored in this PR catalog scope. We render a placeholder customize alert button. */}
-              <button
-                className="py-3.5 px-8 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 text-sm"
-              >
+              <button className="py-3.5 px-8 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 text-sm">
                 Add To Cart Selection
               </button>
             </div>
-
           </div>
         </div>
 
         {/* 2. Review Form & Reviews list */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-16 items-start">
-          
           {/* Reviews list (takes 2 columns) */}
           <div className="lg:col-span-2 space-y-8">
             <h2 className="text-2xl font-bold font-display text-white border-b border-white/5 pb-4">
@@ -382,7 +414,8 @@ export const ProductDetailPage: React.FC = () => {
                             />
                           ) : (
                             <div className="h-10 w-10 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold text-sm">
-                              {rev.user.firstName.charAt(0)}{rev.user.lastName.charAt(0)}
+                              {rev.user.firstName.charAt(0)}
+                              {rev.user.lastName.charAt(0)}
                             </div>
                           )}
                           <div>
@@ -439,13 +472,18 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-12 bg-white/[0.01] border border-white/5 rounded-2xl">
-                <p className="text-neutral-500 text-sm">No reviews yet for this product. Be the first to share your experience!</p>
+                <p className="text-neutral-500 text-sm">
+                  No reviews yet for this product. Be the first to share your experience!
+                </p>
               </div>
             )}
           </div>
 
           {/* Review write box (takes 1 column) */}
-          <div id="review-form-section" className="glass-panel p-6 rounded-2xl border border-white/5 bg-white/[0.01]">
+          <div
+            id="review-form-section"
+            className="glass-panel p-6 rounded-2xl border border-white/5 bg-white/[0.01]"
+          >
             <h3 className="text-xl font-bold font-display text-white mb-6">
               {editingReviewId ? 'Edit Your Review' : 'Add Product Review'}
             </h3>
@@ -454,7 +492,9 @@ export const ProductDetailPage: React.FC = () => {
               <form onSubmit={handleReviewSubmit} className="space-y-4">
                 {/* Clickable Stars */}
                 <div>
-                  <label className="text-xs text-neutral-400 font-medium block mb-2">Your Rating Score:</label>
+                  <label className="text-xs text-neutral-400 font-medium block mb-2">
+                    Your Rating Score:
+                  </label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
@@ -475,7 +515,9 @@ export const ProductDetailPage: React.FC = () => {
 
                 {/* Review Text */}
                 <div>
-                  <label className="text-xs text-neutral-400 font-medium block mb-2">Write Review details:</label>
+                  <label className="text-xs text-neutral-400 font-medium block mb-2">
+                    Write Review details:
+                  </label>
                   <textarea
                     rows={4}
                     value={reviewComment}
@@ -533,7 +575,6 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             )}
           </div>
-
         </div>
 
         {/* 3. Recommended Items Slider */}
@@ -573,7 +614,6 @@ export const ProductDetailPage: React.FC = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

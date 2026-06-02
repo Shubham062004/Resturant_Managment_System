@@ -2,12 +2,11 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCategoryBySlug, useToggleFavorite } from '../store/catalogQueries';
 import { useAppSelector } from '../../../app/store';
-import { Star, Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
 
 export const CategoryDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { data: response, isLoading, isError, refetch } = useCategoryBySlug(slug || '');
+  const { data: response, isLoading, isError } = useCategoryBySlug(slug || '');
   const toggleFavoriteMutation = useToggleFavorite();
   const favoritedIds = useAppSelector((state) => state.favorite.favoritedIds);
 
@@ -25,8 +24,13 @@ export const CategoryDetailPage: React.FC = () => {
         <div className="glass-card max-w-lg mx-auto p-10 border border-red-500/10 bg-red-500/[0.02] text-center">
           <Layers className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <p className="text-red-400 font-bold mb-4 font-display text-2xl">Category Not Found</p>
-          <p className="text-neutral-400 text-sm mb-6">The requested category menu details could not be retrieved.</p>
-          <Link to="/menu" className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium inline-block transition-all">
+          <p className="text-neutral-400 text-sm mb-6">
+            The requested category menu details could not be retrieved.
+          </p>
+          <Link
+            to="/menu"
+            className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium inline-block transition-all"
+          >
             Return to Directory
           </Link>
         </div>
@@ -46,7 +50,6 @@ export const CategoryDetailPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-24 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Navigation Breadcrumb */}
         <div className="mb-8">
           <Link
@@ -60,7 +63,9 @@ export const CategoryDetailPage: React.FC = () => {
         {/* Page Header */}
         <div className="relative mb-12 text-center md:text-left">
           <div className="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
-          <span className="text-xs font-semibold text-primary uppercase tracking-widest block mb-2">Category Section</span>
+          <span className="text-xs font-semibold text-primary uppercase tracking-widest block mb-2">
+            Category Section
+          </span>
           <h1 className="text-4xl md:text-5xl font-bold font-display tracking-tight bg-gradient-to-r from-white to-primary bg-clip-text text-transparent">
             {category.name} Catalog
           </h1>
@@ -75,8 +80,12 @@ export const CategoryDetailPage: React.FC = () => {
         {products.length === 0 ? (
           <div className="text-center py-20 glass-card rounded-2xl border border-white/5 bg-white/[0.01] max-w-xl mx-auto">
             <Layers className="h-16 w-16 text-neutral-600 mx-auto mb-4" />
-            <p className="text-xl font-medium text-neutral-300">No items available in this category</p>
-            <p className="text-neutral-500 text-sm mt-2">Please check back later for updates to our menu catalog.</p>
+            <p className="text-xl font-medium text-neutral-300">
+              No items available in this category
+            </p>
+            <p className="text-neutral-500 text-sm mt-2">
+              Please check back later for updates to our menu catalog.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -111,8 +120,12 @@ export const CategoryDetailPage: React.FC = () => {
 
                     {/* Veg Badge */}
                     <div className="absolute top-4 left-4 p-1.5 bg-black/60 backdrop-blur-md rounded-lg border border-white/15">
-                      <div className={`w-2.5 h-2.5 border flex items-center justify-center ${product.isVeg ? 'border-green-500' : 'border-red-500'}`}>
-                        <div className={`w-1 h-1 rounded-full ${product.isVeg ? 'bg-green-500' : 'bg-red-500'}`} />
+                      <div
+                        className={`w-2.5 h-2.5 border flex items-center justify-center ${product.isVeg ? 'border-green-500' : 'border-red-500'}`}
+                      >
+                        <div
+                          className={`w-1 h-1 rounded-full ${product.isVeg ? 'bg-green-500' : 'bg-red-500'}`}
+                        />
                       </div>
                     </div>
                   </div>
@@ -150,7 +163,8 @@ export const CategoryDetailPage: React.FC = () => {
                         )}
                         {product.preparationTime && (
                           <span className="flex items-center gap-0.5">
-                            <Clock className="h-3.5 w-3.5 text-primary" /> {product.preparationTime} mins
+                            <Clock className="h-3.5 w-3.5 text-primary" /> {product.preparationTime}{' '}
+                            mins
                           </span>
                         )}
                       </div>
@@ -173,7 +187,6 @@ export const CategoryDetailPage: React.FC = () => {
             })}
           </div>
         )}
-
       </div>
     </div>
   );

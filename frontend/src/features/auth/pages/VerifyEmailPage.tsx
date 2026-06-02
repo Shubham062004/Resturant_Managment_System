@@ -11,13 +11,18 @@ export const VerifyEmailPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
-  const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>(token ? 'verifying' : 'idle');
+  const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>(
+    token ? 'verifying' : 'idle',
+  );
   const [message, setMessage] = useState<string | null>(null);
 
   // Resend Verification Form State
   const [email, setEmail] = useState('');
   const [resendLoading, setResendLoading] = useState(false);
-  const [resendStatus, setResendStatus] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
+  const [resendStatus, setResendStatus] = useState<{
+    type: 'success' | 'error';
+    msg: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!token) return;
@@ -29,7 +34,9 @@ export const VerifyEmailPage: React.FC = () => {
         setMessage(response.data.message || 'Email verified successfully!');
       } catch (err: any) {
         setStatus('error');
-        setMessage(err.response?.data?.error?.message || 'Verification token is invalid or has expired.');
+        setMessage(
+          err.response?.data?.error?.message || 'Verification token is invalid or has expired.',
+        );
       }
     };
 
@@ -45,9 +52,15 @@ export const VerifyEmailPage: React.FC = () => {
 
     try {
       const response = await apiClient.post('/auth/resend-verification', { email });
-      setResendStatus({ type: 'success', msg: response.data.message || 'Verification link resent.' });
+      setResendStatus({
+        type: 'success',
+        msg: response.data.message || 'Verification link resent.',
+      });
     } catch (err: any) {
-      setResendStatus({ type: 'error', msg: err.response?.data?.error?.message || 'Failed to dispatch verification link.' });
+      setResendStatus({
+        type: 'error',
+        msg: err.response?.data?.error?.message || 'Failed to dispatch verification link.',
+      });
     } finally {
       setResendLoading(false);
     }
@@ -60,18 +73,23 @@ export const VerifyEmailPage: React.FC = () => {
           <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent" />
             <p className="text-white font-semibold font-display">Verifying account signatures...</p>
-            <p className="text-muted-foreground font-sans text-xs">Communicating verification updates to primary relational ledger</p>
+            <p className="text-muted-foreground font-sans text-xs">
+              Communicating verification updates to primary relational ledger
+            </p>
           </div>
         );
       case 'success':
         return (
           <div className="space-y-6 text-center">
-            <div className="flex justify-center"><CheckCircle2 size={50} className="text-success animate-pulse" /></div>
+            <div className="flex justify-center">
+              <CheckCircle2 size={50} className="text-success animate-pulse" />
+            </div>
             <Alert variant="success" title="Verification Succeeded">
               {message}
             </Alert>
             <p className="text-muted-foreground font-sans text-sm leading-relaxed px-1">
-              Your email profile has been linked and certified. You can now log in to the terminal and access authorized dashboards.
+              Your email profile has been linked and certified. You can now log in to the terminal
+              and access authorized dashboards.
             </p>
             <Link
               to="/login"
@@ -84,15 +102,22 @@ export const VerifyEmailPage: React.FC = () => {
       case 'error':
         return (
           <div className="space-y-6">
-            <div className="flex justify-center"><AlertOctagon size={50} className="text-danger" /></div>
+            <div className="flex justify-center">
+              <AlertOctagon size={50} className="text-danger" />
+            </div>
             <Alert variant="danger" title="Verification Rejected">
               {message}
             </Alert>
             <div className="border-t border-border/40 my-4" />
-            <h3 className="text-white font-display font-semibold text-sm text-center">Request New Verification Link</h3>
+            <h3 className="text-white font-display font-semibold text-sm text-center">
+              Request New Verification Link
+            </h3>
 
             {resendStatus && (
-              <Alert variant={resendStatus.type === 'success' ? 'success' : 'danger'} title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}>
+              <Alert
+                variant={resendStatus.type === 'success' ? 'success' : 'danger'}
+                title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}
+              >
                 {resendStatus.msg}
               </Alert>
             )}
@@ -124,11 +149,15 @@ export const VerifyEmailPage: React.FC = () => {
         return (
           <div className="space-y-6">
             <p className="text-muted-foreground font-sans text-sm leading-relaxed text-center">
-              Please enter your registered email address to receive a verification link containing system activation signatures.
+              Please enter your registered email address to receive a verification link containing
+              system activation signatures.
             </p>
 
             {resendStatus && (
-              <Alert variant={resendStatus.type === 'success' ? 'success' : 'danger'} title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}>
+              <Alert
+                variant={resendStatus.type === 'success' ? 'success' : 'danger'}
+                title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}
+              >
                 {resendStatus.msg}
               </Alert>
             )}
@@ -159,7 +188,10 @@ export const VerifyEmailPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout brandTitle="Email Verification" brandDescription="Link your email profile and certify identity credentials to unlock POS and table grid operational permissions.">
+    <AuthLayout
+      brandTitle="Email Verification"
+      brandDescription="Link your email profile and certify identity credentials to unlock POS and table grid operational permissions."
+    >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">

@@ -3,7 +3,11 @@ import { AuthRequest } from '../../types/express';
 import { CatalogService } from './catalog.service';
 
 export class CatalogController {
-  public static async getRestaurants(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getRestaurants(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const filters = req.query as any;
       const result = await CatalogService.getRestaurants(filters);
@@ -19,7 +23,11 @@ export class CatalogController {
     }
   }
 
-  public static async getRestaurantById(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getRestaurantById(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const restaurant = await CatalogService.getRestaurantById(id);
@@ -34,7 +42,11 @@ export class CatalogController {
     }
   }
 
-  public static async getRestaurantBySlug(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getRestaurantBySlug(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { slug } = req.params;
       const restaurant = await CatalogService.getRestaurantBySlug(slug);
@@ -49,7 +61,11 @@ export class CatalogController {
     }
   }
 
-  public static async getBranches(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getBranches(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { restaurantId } = req.query as { restaurantId?: string };
       const branches = await CatalogService.getBranches(restaurantId);
@@ -64,7 +80,11 @@ export class CatalogController {
     }
   }
 
-  public static async getCategories(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getCategories(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { restaurantId } = req.query as { restaurantId?: string };
       const categories = await CatalogService.getCategories(restaurantId);
@@ -79,7 +99,11 @@ export class CatalogController {
     }
   }
 
-  public static async getCategoryBySlug(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getCategoryBySlug(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { slug } = req.params;
       const { restaurantId } = req.query as { restaurantId?: string };
@@ -95,7 +119,11 @@ export class CatalogController {
     }
   }
 
-  public static async getProducts(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getProducts(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const filters = req.query as any;
       const userId = req.user?.id;
@@ -112,7 +140,11 @@ export class CatalogController {
     }
   }
 
-  public static async getFeaturedProducts(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getFeaturedProducts(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const products = await CatalogService.getFeaturedProducts();
 
@@ -126,7 +158,11 @@ export class CatalogController {
     }
   }
 
-  public static async getProductBySlug(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getProductBySlug(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { slug } = req.params;
       const userId = req.user?.id;
@@ -143,7 +179,11 @@ export class CatalogController {
     }
   }
 
-  public static async trackRecommendationClick(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async trackRecommendationClick(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { productId, recommendedProductId } = req.body;
       const userId = req.user?.id;
@@ -158,7 +198,11 @@ export class CatalogController {
     }
   }
 
-  public static async createReview(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async createReview(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         res.status(401).json({ success: false, message: 'Unauthenticated.' });
@@ -177,7 +221,11 @@ export class CatalogController {
     }
   }
 
-  public static async updateReview(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async updateReview(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         res.status(401).json({ success: false, message: 'Unauthenticated.' });
@@ -197,7 +245,11 @@ export class CatalogController {
     }
   }
 
-  public static async deleteReview(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async deleteReview(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         res.status(401).json({ success: false, message: 'Unauthenticated.' });
@@ -217,7 +269,11 @@ export class CatalogController {
     }
   }
 
-  public static async getReviewsByProductId(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getReviewsByProductId(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { productId } = req.params;
       const reviews = await CatalogService.getReviewsByProductId(productId);
@@ -232,7 +288,11 @@ export class CatalogController {
     }
   }
 
-  public static async toggleFavorite(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async toggleFavorite(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         res.status(401).json({ success: false, message: 'Unauthenticated.' });
@@ -252,7 +312,11 @@ export class CatalogController {
     }
   }
 
-  public static async getFavorites(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getFavorites(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         res.status(401).json({ success: false, message: 'Unauthenticated.' });

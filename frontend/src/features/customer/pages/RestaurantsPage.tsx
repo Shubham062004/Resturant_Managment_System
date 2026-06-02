@@ -49,7 +49,6 @@ export const RestaurantsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-16 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Page Header */}
         <div className="relative mb-12 text-center md:text-left">
           <div className="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
@@ -155,7 +154,10 @@ export const RestaurantsPage: React.FC = () => {
         {isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="glass-card h-96 rounded-2xl border border-white/5 bg-white/[0.01] animate-pulse overflow-hidden">
+              <div
+                key={i}
+                className="glass-card h-96 rounded-2xl border border-white/5 bg-white/[0.01] animate-pulse overflow-hidden"
+              >
                 <div className="h-48 bg-white/5" />
                 <div className="p-6 space-y-4">
                   <div className="h-6 bg-white/10 rounded w-2/3" />
@@ -174,8 +176,15 @@ export const RestaurantsPage: React.FC = () => {
         {isError && (
           <div className="glass-card p-12 rounded-2xl border border-red-500/10 bg-red-500/[0.02] text-center max-w-lg mx-auto">
             <p className="text-red-400 font-semibold mb-4">Connection Error</p>
-            <p className="text-neutral-400 text-sm mb-6">We failed to retrieve the restaurant list from our systems. Please check your network.</p>
-            <button onClick={() => refetch()} className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium transition-all">Retry Fetching</button>
+            <p className="text-neutral-400 text-sm mb-6">
+              We failed to retrieve the restaurant list from our systems. Please check your network.
+            </p>
+            <button
+              onClick={() => refetch()}
+              className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium transition-all"
+            >
+              Retry Fetching
+            </button>
           </div>
         )}
 
@@ -185,8 +194,12 @@ export const RestaurantsPage: React.FC = () => {
             {data?.data.length === 0 ? (
               <div className="text-center py-20 glass-card rounded-2xl border border-white/5 bg-white/[0.01] max-w-xl mx-auto">
                 <Compass className="h-16 w-16 text-neutral-600 mx-auto mb-4 animate-bounce" />
-                <p className="text-xl font-medium text-neutral-300">No restaurants match your filters</p>
-                <p className="text-neutral-500 text-sm mt-2 mb-6">Try refining your search queries or clearing active toggles.</p>
+                <p className="text-xl font-medium text-neutral-300">
+                  No restaurants match your filters
+                </p>
+                <p className="text-neutral-500 text-sm mt-2 mb-6">
+                  Try refining your search queries or clearing active toggles.
+                </p>
                 <button
                   onClick={handleClearFilters}
                   className="py-2.5 px-6 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-medium transition-all"
@@ -195,10 +208,7 @@ export const RestaurantsPage: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <motion.div
-                layout
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-              >
+              <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <AnimatePresence mode="popLayout">
                   {data?.data.map((restaurant) => {
                     const isClosed = false; // Add custom check details if needed
@@ -270,7 +280,6 @@ export const RestaurantsPage: React.FC = () => {
             )}
           </>
         )}
-
       </div>
     </div>
   );

@@ -91,9 +91,11 @@ All API endpoints return standard, structured payloads:
 ### A. Authentication Module (`/api/v1/auth`)
 
 #### 1. Server Register
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/register`
 - **Request Payload**:
+
 ```json
 {
   "email": "jane.cook@ovenxpress.com",
@@ -104,7 +106,9 @@ All API endpoints return standard, structured payloads:
   "role": "KITCHEN_STAFF"
 }
 ```
+
 - **Success Response (201 Created)**:
+
 ```json
 {
   "success": true,
@@ -122,17 +126,21 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 2. Server Login
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/login`
 - **Request Payload**:
+
 ```json
 {
   "email": "staff@ovenxpress.com",
   "password": "strongpassword123"
 }
 ```
+
 - **Success Response (200 OK)**:
-- *Sets Cookie*: `refreshToken=<token_string>; HttpOnly; Secure; SameSite=Lax`
+- _Sets Cookie_: `refreshToken=<token_string>; HttpOnly; Secure; SameSite=Lax`
+
 ```json
 {
   "success": true,
@@ -152,11 +160,13 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 3. Refresh Access Token (Rotation)
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/refresh`
 - **Request Header**: Sends `refreshToken` cookie.
 - **Success Response (200 OK)**:
-- *Sets Cookie*: `refreshToken=<new_token_string>; HttpOnly; Secure; SameSite=Lax`
+- _Sets Cookie_: `refreshToken=<new_token_string>; HttpOnly; Secure; SameSite=Lax`
+
 ```json
 {
   "success": true,
@@ -168,10 +178,12 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 4. Single Device Logout
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/logout`
 - **Success Response (200 OK)**:
-- *Clears Cookie*: `refreshToken`
+- _Clears Cookie_: `refreshToken`
+
 ```json
 {
   "success": true,
@@ -181,11 +193,13 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 5. All Devices Logout
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/logout-all`
 - **Headers**: `Authorization: Bearer <access_token>`
 - **Success Response (200 OK)**:
-- *Clears Cookie*: `refreshToken`
+- _Clears Cookie_: `refreshToken`
+
 ```json
 {
   "success": true,
@@ -195,16 +209,20 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 6. Google OAuth Login/Register
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/google`
 - **Request Payload**:
+
 ```json
 {
   "token": "google-identity-id-token"
 }
 ```
+
 - **Success Response (200 OK)**:
-- *Sets Cookie*: `refreshToken=<token_string>; HttpOnly; Secure; SameSite=Lax`
+- _Sets Cookie_: `refreshToken=<token_string>; HttpOnly; Secure; SameSite=Lax`
+
 ```json
 {
   "success": true,
@@ -224,15 +242,19 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 7. Forgot Password (Request Link)
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/forgot-password`
 - **Request Payload**:
+
 ```json
 {
   "email": "staff@ovenxpress.com"
 }
 ```
+
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -242,16 +264,20 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 8. Reset Password (Perform Update)
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/reset-password`
 - **Request Payload**:
+
 ```json
 {
   "token": "reset-token-hex",
   "password": "newSecurePassword123"
 }
 ```
+
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -261,15 +287,19 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 9. Verify Email Token
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/verify-email`
 - **Request Payload**:
+
 ```json
 {
   "token": "verification-token-hex"
 }
 ```
+
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -279,15 +309,19 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 10. Resend Verification Link
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/resend-verification`
 - **Request Payload**:
+
 ```json
 {
   "email": "staff@ovenxpress.com"
 }
 ```
+
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -297,16 +331,20 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 11. Send OTP
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/send-otp`
 - **Request Payload**:
+
 ```json
 {
   "email": "staff@ovenxpress.com",
   "type": "EMAIL_VERIFICATION"
 }
 ```
+
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -316,9 +354,11 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 12. Verify OTP
+
 - **Method**: `POST`
 - **Route**: `/api/v1/auth/verify-otp`
 - **Request Payload**:
+
 ```json
 {
   "email": "staff@ovenxpress.com",
@@ -326,7 +366,9 @@ All API endpoints return standard, structured payloads:
   "type": "EMAIL_VERIFICATION"
 }
 ```
+
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -336,10 +378,12 @@ All API endpoints return standard, structured payloads:
 ```
 
 #### 13. Get Current User Session (Me)
+
 - **Method**: `GET`
 - **Route**: `/api/v1/auth/me`
 - **Headers**: `Authorization: Bearer <access_token>`
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,
@@ -365,6 +409,7 @@ All API endpoints return standard, structured payloads:
 ### B. User Management Module (`/api/v1/users`)
 
 #### 1. Update Profile & Upload Avatar
+
 - **Method**: `PATCH`
 - **Route**: `/api/v1/users/profile`
 - **Headers**: `Authorization: Bearer <access_token>`, `Content-Type: multipart/form-data`
@@ -374,6 +419,7 @@ All API endpoints return standard, structured payloads:
   - `phone` (string, optional)
   - `avatar` (binary file, optional)
 - **Success Response (200 OK)**:
+
 ```json
 {
   "success": true,

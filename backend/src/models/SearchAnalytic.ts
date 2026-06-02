@@ -17,13 +17,13 @@ const SearchAnalyticSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  }
+  },
 );
 
 export const SearchAnalytic = mongoose.model<ISearchAnalytic>(
   'SearchAnalytic',
   SearchAnalyticSchema,
-  'search_analytics'
+  'search_analytics',
 );
 
 export default SearchAnalytic;

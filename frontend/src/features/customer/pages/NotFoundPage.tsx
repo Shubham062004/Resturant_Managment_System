@@ -22,7 +22,8 @@ export const NotFoundPage: React.FC = () => {
         <div className="space-y-2">
           <h1 className="text-4xl font-display font-extrabold text-white">404 - Node Offline</h1>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
-            The coordinates you input do not match any active menu, branch, or user route in Oven Xpress.
+            The coordinates you input do not match any active menu, branch, or user route in Oven
+            Xpress.
           </p>
         </div>
 

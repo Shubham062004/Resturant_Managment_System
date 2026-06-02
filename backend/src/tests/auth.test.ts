@@ -72,15 +72,13 @@ describe('Auth API Integration Tests', () => {
         id: 'token-uuid',
       });
 
-      const response = await request(app)
-        .post('/api/v1/auth/register')
-        .send({
-          email: 'jane.cook@ovenxpress.com',
-          firstName: 'Jane',
-          lastName: 'Cook',
-          password: 'securePassword123',
-          role: 'KITCHEN_STAFF',
-        });
+      const response = await request(app).post('/api/v1/auth/register').send({
+        email: 'jane.cook@ovenxpress.com',
+        firstName: 'Jane',
+        lastName: 'Cook',
+        password: 'securePassword123',
+        role: 'KITCHEN_STAFF',
+      });
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
@@ -90,14 +88,12 @@ describe('Auth API Integration Tests', () => {
     });
 
     it('should block registration if payload fields are invalid', async () => {
-      const response = await request(app)
-        .post('/api/v1/auth/register')
-        .send({
-          email: 'not-an-email',
-          firstName: '',
-          lastName: 'Cook',
-          password: '123', // less than 6 chars
-        });
+      const response = await request(app).post('/api/v1/auth/register').send({
+        email: 'not-an-email',
+        firstName: '',
+        lastName: 'Cook',
+        password: '123', // less than 6 chars
+      });
 
       expect(response.status).toBe(400);
       expect(response.body.success).toBe(false);
@@ -121,12 +117,10 @@ describe('Auth API Integration Tests', () => {
         id: 'token-uuid',
       });
 
-      const response = await request(app)
-        .post('/api/v1/auth/login')
-        .send({
-          email: 'jane.cook@ovenxpress.com',
-          password: 'securePassword123',
-        });
+      const response = await request(app).post('/api/v1/auth/login').send({
+        email: 'jane.cook@ovenxpress.com',
+        password: 'securePassword123',
+      });
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
@@ -134,18 +128,21 @@ describe('Auth API Integration Tests', () => {
       expect(response.headers['set-cookie']).toBeDefined();
       expect(response.headers['set-cookie'][0]).toContain('refreshToken=');
       expect(AuditService.registerSession).toHaveBeenCalled();
-      expect(AuditService.writeLog).toHaveBeenCalledWith('user-uuid', 'LOGIN', expect.any(String), expect.any(String));
+      expect(AuditService.writeLog).toHaveBeenCalledWith(
+        'user-uuid',
+        'LOGIN',
+        expect.any(String),
+        expect.any(String),
+      );
     });
 
     it('should deny access if credentials do not match', async () => {
       (prisma.user.findFirst as jest.Mock).mockResolvedValue(null);
 
-      const response = await request(app)
-        .post('/api/v1/auth/login')
-        .send({
-          email: 'wrong@ovenxpress.com',
-          password: 'wrongPassword',
-        });
+      const response = await request(app).post('/api/v1/auth/login').send({
+        email: 'wrong@ovenxpress.com',
+        password: 'wrongPassword',
+      });
 
       expect(response.status).toBe(401);
       expect(response.body.success).toBe(false);
@@ -185,7 +182,7 @@ describe('Auth API Integration Tests', () => {
       expect(prisma.refreshToken.update).toHaveBeenCalledWith(
         expect.objectContaining({
           data: { revoked: true },
-        })
+        }),
       );
       expect(AuditService.terminateSession).toHaveBeenCalled();
     });

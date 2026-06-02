@@ -10,11 +10,11 @@ services:
       POSTGRES_PASSWORD: admin_password_9922
       POSTGRES_DB: oven_xpress
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d oven_xpress"]
+      test: ['CMD-SHELL', 'pg_isready -U admin -d oven_xpress']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -26,11 +26,12 @@ services:
     environment:
       MONGO_INITDB_DATABASE: oven_xpress
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "echo 'db.runCommand(\"ping\").ok' | mongosh localhost:27017/test --quiet"]
+      test:
+        ['CMD-SHELL', 'echo ''db.runCommand("ping").ok'' | mongosh localhost:27017/test --quiet']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -49,7 +50,7 @@ services:
       JWT_SECRET: c6747b0e14a1a364be167d3d2db70fa1c4f03932785d99723cb8d234a9ef3878
       JWT_EXPIRES_IN: 1d
     ports:
-      - "5000:5000"
+      - '5000:5000'
     depends_on:
       db-postgres:
         condition: service_healthy
@@ -63,7 +64,7 @@ services:
     container_name: oven-xpress-frontend
     restart: always
     ports:
-      - "80:80"
+      - '80:80'
     depends_on:
       - backend
 

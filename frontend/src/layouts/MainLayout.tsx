@@ -4,7 +4,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { logout } from '../features/auth/store/authSlice';
 import Avatar from '../shared/components/ui/Avatar';
-import { LayoutDashboard, TableProperties, LogOut, Menu, X, Flame, Sparkles, User as UserIcon } from 'lucide-react';
+import {
+  LayoutDashboard,
+  TableProperties,
+  LogOut,
+  Menu,
+  X,
+  Flame,
+  Sparkles,
+  User as UserIcon,
+} from 'lucide-react';
 
 export const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -108,7 +117,10 @@ export const MainLayout = () => {
           </div>
           <div className="flex items-center gap-4">
             {user && (
-              <Link to="/profile" className="flex items-center gap-3.5 hover:opacity-85 transition-all select-none">
+              <Link
+                to="/profile"
+                className="flex items-center gap-3.5 hover:opacity-85 transition-all select-none"
+              >
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-semibold text-white">{`${user.firstName} ${user.lastName}`}</p>
                   <p className="text-xs text-muted-foreground font-medium capitalize">

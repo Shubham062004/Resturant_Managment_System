@@ -10,6 +10,7 @@ import logger from './utils/logger';
 import authRouter from './modules/auth/auth.routes';
 import usersRouter from './modules/users/users.routes';
 import catalogRouter from './modules/catalog/catalog.routes';
+import cartRouter from './modules/cart/cart.routes';
 
 // Express application instance
 export const app = express();
@@ -20,7 +21,7 @@ app.use(
   cors({
     origin: true,
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -54,6 +55,11 @@ app.get('/api/v1/health', (req, res) => {
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/catalog', catalogRouter);
+app.use('/api/v1/cart', cartRouter);
+import addressRouter from './modules/addresses/addresses.routes';
+app.use('/api/v1/addresses', addressRouter);
+import couponRouter from './modules/coupons/coupons.routes';
+app.use('/api/v1/coupons', couponRouter);
 
 app.use('/api/v1/tables', (req, res) => {
   res.status(200).json({

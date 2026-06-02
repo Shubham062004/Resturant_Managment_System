@@ -23,7 +23,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTime: '20-30 min',
     minOrder: 15.0,
     deliveryFee: 1.99,
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&auto=format&fit=crop&q=60',
+    image:
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&auto=format&fit=crop&q=60',
     featured: true,
   },
   {
@@ -36,7 +37,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTime: '25-35 min',
     minOrder: 10.0,
     deliveryFee: 2.99,
-    image: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=500&auto=format&fit=crop&q=60',
+    image:
+      'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=500&auto=format&fit=crop&q=60',
     featured: true,
   },
   {
@@ -49,7 +51,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTime: '30-40 min',
     minOrder: 20.0,
     deliveryFee: 0.0,
-    image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=60',
+    image:
+      'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=60',
     featured: false,
   },
   {
@@ -62,7 +65,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTime: '15-25 min',
     minOrder: 8.0,
     deliveryFee: 1.49,
-    image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop&q=60',
+    image:
+      'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop&q=60',
     featured: true,
   },
   {
@@ -75,7 +79,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTime: '20-30 min',
     minOrder: 12.0,
     deliveryFee: 2.49,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
+    image:
+      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
     featured: false,
   },
 ];

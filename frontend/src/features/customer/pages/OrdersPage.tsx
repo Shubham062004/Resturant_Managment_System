@@ -4,13 +4,7 @@ import SEO from '../../../shared/components/SEO';
 import Card, { CardContent } from '../../../shared/components/ui/Card';
 import Badge from '../../../shared/components/ui/Badge';
 import EmptyState from '../../../shared/components/ui/EmptyState';
-import {
-  ClipboardList,
-  Flame,
-  Truck,
-  Activity,
-  PackageCheck
-} from 'lucide-react';
+import { ClipboardList, Flame, Truck, Activity, PackageCheck } from 'lucide-react';
 
 export const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,18 +15,18 @@ export const OrdersPage: React.FC = () => {
     id: 'OX-9801',
     branch: 'Oven Xpress - Midtown Manhattan',
     date: 'Today, 07:15 PM',
-    amount: 34.50,
+    amount: 34.5,
     items: [
       { name: 'Firebrick Pepperoni Pizza', qty: 1, modifiers: ['Extra Cheese', 'Thick Crust'] },
-      { name: 'Classic Craft Cheeseburger', qty: 1, modifiers: ['No Pickles'] }
+      { name: 'Classic Craft Cheeseburger', qty: 1, modifiers: ['No Pickles'] },
     ],
     status: 'baking', // received, preparing, baking, packed, dispatched
     steps: [
       { key: 'received', label: 'Order Logged', done: true, current: false },
       { key: 'preparing', label: 'Chef Preparation', done: true, current: false },
       { key: 'baking', label: 'Baking (800°F)', done: true, current: true },
-      { key: 'dispatched', label: 'Courier Transit', done: false, current: false }
-    ]
+      { key: 'dispatched', label: 'Courier Transit', done: false, current: false },
+    ],
   };
 
   return (
@@ -44,7 +38,6 @@ export const OrdersPage: React.FC = () => {
       />
 
       <div className="space-y-6 font-sans">
-        
         {/* Head details */}
         <div className="border-b border-border/40 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -52,7 +45,9 @@ export const OrdersPage: React.FC = () => {
               <ClipboardList className="text-primary" size={22} />
               <span>Orders Dispatch Tracker</span>
             </h1>
-            <p className="text-xs text-muted-foreground mt-1">Live digital ticket streams and historical kitchen invoices.</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Live digital ticket streams and historical kitchen invoices.
+            </p>
           </div>
 
           {/* Toggle Tab */}
@@ -82,32 +77,48 @@ export const OrdersPage: React.FC = () => {
 
         {activeTab === 'active' ? (
           <div className="space-y-6">
-            
             {/* Active order panel */}
             <Card className="bg-card/45 border-border/80 shadow-lg">
               <CardContent className="p-6 space-y-6">
-                
                 {/* Header details of active order */}
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/40 pb-4">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary font-display">Active Dispatch</span>
-                    <h2 className="text-base font-bold text-white">Order Ticket #{activeOrder.id}</h2>
-                    <p className="text-xs text-muted-foreground">{activeOrder.branch} • {activeOrder.date}</p>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary font-display">
+                      Active Dispatch
+                    </span>
+                    <h2 className="text-base font-bold text-white">
+                      Order Ticket #{activeOrder.id}
+                    </h2>
+                    <p className="text-xs text-muted-foreground">
+                      {activeOrder.branch} • {activeOrder.date}
+                    </p>
                   </div>
-                  <Badge variant="warning" className="text-[9px] font-extrabold tracking-wider px-3 py-1 animate-pulse">
+                  <Badge
+                    variant="warning"
+                    className="text-[9px] font-extrabold tracking-wider px-3 py-1 animate-pulse"
+                  >
                     Baking in progress
                   </Badge>
                 </div>
 
                 {/* Items preview list */}
                 <div className="space-y-3">
-                  <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white">Culinary details</h3>
+                  <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white">
+                    Culinary details
+                  </h3>
                   <div className="space-y-2 text-xs">
                     {activeOrder.items.map((item) => (
-                      <div key={item.name} className="flex justify-between items-start text-foreground/80 border-b border-border/20 pb-2 last:border-0 last:pb-0">
+                      <div
+                        key={item.name}
+                        className="flex justify-between items-start text-foreground/80 border-b border-border/20 pb-2 last:border-0 last:pb-0"
+                      >
                         <div>
-                          <p className="font-bold text-white">{item.qty}x {item.name}</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{item.modifiers.join(', ')}</p>
+                          <p className="font-bold text-white">
+                            {item.qty}x {item.name}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">
+                            {item.modifiers.join(', ')}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -124,14 +135,17 @@ export const OrdersPage: React.FC = () => {
                   {/* Horizontal tracker steps */}
                   <div className="grid grid-cols-4 gap-2 relative mt-4">
                     {activeOrder.steps.map((step) => (
-                      <div key={step.key} className="flex flex-col items-center text-center space-y-2 relative">
+                      <div
+                        key={step.key}
+                        className="flex flex-col items-center text-center space-y-2 relative"
+                      >
                         <div
                           className={`w-8 h-8 rounded-full border flex items-center justify-center relative z-10 ${
                             step.current
                               ? 'bg-primary border-primary text-white shadow shadow-primary/20 animate-pulse'
                               : step.done
-                              ? 'bg-success/20 border-success text-success'
-                              : 'bg-secondary border-border/80 text-muted-foreground'
+                                ? 'bg-success/20 border-success text-success'
+                                : 'bg-secondary border-border/80 text-muted-foreground'
                           }`}
                         >
                           {step.key === 'received' && <PackageCheck size={14} />}
@@ -139,23 +153,28 @@ export const OrdersPage: React.FC = () => {
                           {step.key === 'baking' && <Flame size={14} />}
                           {step.key === 'dispatched' && <Truck size={14} />}
                         </div>
-                        <span className={`text-[9px] font-bold tracking-tight leading-tight ${
-                          step.current ? 'text-primary' : step.done ? 'text-success' : 'text-muted-foreground'
-                        }`}>
+                        <span
+                          className={`text-[9px] font-bold tracking-tight leading-tight ${
+                            step.current
+                              ? 'text-primary'
+                              : step.done
+                                ? 'text-success'
+                                : 'text-muted-foreground'
+                          }`}
+                        >
                           {step.label}
                         </span>
                       </div>
                     ))}
                   </div>
                 </div>
-
               </CardContent>
             </Card>
 
             <div className="text-center py-6 text-xs text-muted-foreground italic font-sans border border-dashed border-border/60 rounded-xl">
-              * The kitchen dashboard will automatically notify you with hot acoustic pings on courier handoff.
+              * The kitchen dashboard will automatically notify you with hot acoustic pings on
+              courier handoff.
             </div>
-
           </div>
         ) : (
           /* Past orders (empty state) */
@@ -169,7 +188,6 @@ export const OrdersPage: React.FC = () => {
             />
           </div>
         )}
-
       </div>
     </>
   );

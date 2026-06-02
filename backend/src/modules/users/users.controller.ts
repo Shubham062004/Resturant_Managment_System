@@ -7,7 +7,11 @@ export class UsersController {
   /**
    * Update authenticated user profile details & profile image
    */
-  public static async updateProfile(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async updateProfile(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         return next(new AppError('Authentication credentials are missing.', 401));
@@ -30,7 +34,9 @@ export class UsersController {
           },
         });
         if (existingPhoneUser) {
-          return next(new AppError('This phone number is already registered to another account.', 409));
+          return next(
+            new AppError('This phone number is already registered to another account.', 409),
+          );
         }
       }
 

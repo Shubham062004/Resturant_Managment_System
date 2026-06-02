@@ -1,0 +1,42 @@
+# Dependency directories
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Production build artifacts
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.example
+
+# Database & Prisma
+backend/prisma/migrations/
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/prisma/generated/
+backend/src/database/migrations/
+
+# Testing & Coverage
+coverage/
+.nyc_output
+
+# Docker
+.docker/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# Other generated files
+package-lock.json
+*.log

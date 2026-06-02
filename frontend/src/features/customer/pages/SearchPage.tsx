@@ -16,7 +16,7 @@ import {
   Trash2,
   X,
   TrendingUp,
-  Award
+  Award,
 } from 'lucide-react';
 import mockRestaurants from '../../../shared/data/restaurants';
 
@@ -76,10 +76,11 @@ export const SearchPage: React.FC = () => {
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-8 font-sans">
-        
         {/* Page title */}
         <div className="space-y-2 border-b border-border/40 pb-6">
-          <h1 className="text-3xl font-display font-extrabold tracking-tight text-white">Search Kitchens & Menu Catalogs</h1>
+          <h1 className="text-3xl font-display font-extrabold tracking-tight text-white">
+            Search Kitchens & Menu Catalogs
+          </h1>
           <p className="text-muted-foreground text-sm">
             Type keywords, choose active categories, or select past query logs.
           </p>
@@ -116,10 +117,8 @@ export const SearchPage: React.FC = () => {
         </form>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Sidebar tags & logs */}
           <div className="lg:col-span-4 space-y-6">
-            
             {/* Recent Searches */}
             <div className="bg-card/45 border border-border/60 rounded-xl p-5 space-y-4">
               <div className="flex items-center justify-between">
@@ -175,7 +174,6 @@ export const SearchPage: React.FC = () => {
                 ))}
               </div>
             </div>
-
           </div>
 
           {/* Search results catalog */}
@@ -203,7 +201,11 @@ export const SearchPage: React.FC = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {filteredRestaurants.map((res) => (
-                  <Card key={res.id} variant="default" className="bg-card/45 border-border/60 flex flex-col justify-between h-full">
+                  <Card
+                    key={res.id}
+                    variant="default"
+                    className="bg-card/45 border-border/60 flex flex-col justify-between h-full"
+                  >
                     <div className="relative h-40 w-full overflow-hidden">
                       <img
                         src={res.image}
@@ -218,7 +220,7 @@ export const SearchPage: React.FC = () => {
                         </span>
                       )}
                     </div>
-                    
+
                     <CardContent className="p-4 flex-grow flex flex-col justify-between gap-4">
                       <div>
                         <h3 className="font-display font-bold text-sm md:text-base text-white tracking-tight leading-tight">
@@ -249,9 +251,7 @@ export const SearchPage: React.FC = () => {
               </div>
             )}
           </div>
-
         </div>
-
       </div>
     </>
   );

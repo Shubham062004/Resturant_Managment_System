@@ -14,7 +14,7 @@ export class OtpService {
   public static async generateOtp(
     type: OtpType,
     identifier: { email?: string; phone?: string; userId?: string },
-    expiryMinutes = 5
+    expiryMinutes = 5,
   ): Promise<string> {
     const rawCode = Math.floor(100000 + Math.random() * 900000).toString();
     const codeHash = this.hashOtp(rawCode);
@@ -44,7 +44,9 @@ export class OtpService {
       },
     });
 
-    logger.info(`[OTP Service] Generated 6-digit OTP code [${rawCode}] for ${identifier.email || identifier.phone || identifier.userId} (Type: ${type}). Expires in ${expiryMinutes}m.`);
+    logger.info(
+      `[OTP Service] Generated 6-digit OTP code [${rawCode}] for ${identifier.email || identifier.phone || identifier.userId} (Type: ${type}). Expires in ${expiryMinutes}m.`,
+    );
 
     return rawCode;
   }
@@ -55,7 +57,7 @@ export class OtpService {
   public static async verifyOtp(
     type: OtpType,
     identifier: { email?: string; phone?: string; userId?: string },
-    inputCode: string
+    inputCode: string,
   ): Promise<{ success: boolean; message: string }> {
     const searchConditions = [
       identifier.email ? { email: identifier.email } : {},
@@ -93,7 +95,11 @@ export class OtpService {
     // 3. Check attempts throttling (max 5 attempts)
     if (otpRecord.attempts >= 5) {
       await prisma.otp.delete({ where: { id: otpRecord.id } });
-      return { success: false, message: 'Too many incorrect attempts. This OTP has been voided. Please request a new code.' };
+      return {
+        success: false,
+        message:
+          'Too many incorrect attempts. This OTP has been voided. Please request a new code.',
+      };
     }
 
     // 4. Compare hash

@@ -101,15 +101,18 @@ Every component is developed to prioritize accessibility:
 ## 7. Customer Experience (PR-004)
 
 ### A. Layout System
+
 - **CustomerLayout / GuestLayout**: Responsive viewport frame mounting sticky headers, a scroll listener, and a global structured directory footer.
 - **ProfileLayout**: Two-column account layout containing a sidebar directory for settings navigation and a main container for child pages.
 - **ErrorLayout**: Blurred-radial dark overlay wrapper for isolating application error boundaries.
 
 ### B. Navigation Components
+
 - **Navbar**: Sticky headers with dynamic scroll transitions. Incorporates a sliding navigation drawer on mobile viewports and a visual branch outpost tag.
 - **Footer**: Multi-column footer directory providing category indexes, corporate pages, social icons, and a quick newsletter subscription action.
 
 ### C. Visual Modules & Card Presets
+
 - **Branch Card**: Displays branch name, street location, business hours, calculated geolocation distance, and a selection trigger.
 - **Search tags**: Modular pill filters for category filtering and search history logs.
 - **Promo Cards**: Dynamic coupon blocks showing discount rates, minimum order criteria, expirations, and a clipboard code copier.

@@ -26,8 +26,13 @@ export const RestaurantDetailPage: React.FC = () => {
       <div className="min-h-screen bg-[#08070F] text-white pt-32 pb-20 px-4">
         <div className="glass-card max-w-lg mx-auto p-10 border border-red-500/10 bg-red-500/[0.02] text-center">
           <p className="text-red-400 font-semibold mb-4 font-display text-2xl">Outlet Not Found</p>
-          <p className="text-neutral-400 text-sm mb-6">The requested outlet details could not be retrieved.</p>
-          <Link to="/menu" className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium inline-block transition-all">
+          <p className="text-neutral-400 text-sm mb-6">
+            The requested outlet details could not be retrieved.
+          </p>
+          <Link
+            to="/menu"
+            className="btn-primary py-2.5 px-6 rounded-lg text-sm font-medium inline-block transition-all"
+          >
             Return to Directory
           </Link>
         </div>
@@ -75,7 +80,7 @@ export const RestaurantDetailPage: React.FC = () => {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#08070F] via-[#08070F]/50 to-transparent" />
-        
+
         {/* Banner Details Overlay */}
         <div className="absolute bottom-0 inset-x-0">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -141,7 +146,9 @@ export const RestaurantDetailPage: React.FC = () => {
           <div className="flex flex-col lg:flex-row gap-8 items-start">
             {/* Sticky categories sidebar navigation */}
             <aside className="w-full lg:w-64 glass-panel p-4 rounded-xl border border-white/5 bg-white/[0.01] sticky top-36 z-20 hidden lg:block">
-              <p className="text-xs font-bold text-primary tracking-widest uppercase mb-4 px-2">Menu Sections</p>
+              <p className="text-xs font-bold text-primary tracking-widest uppercase mb-4 px-2">
+                Menu Sections
+              </p>
               <div className="space-y-1">
                 {categories.map((cat) => (
                   <button
@@ -220,7 +227,7 @@ export const RestaurantDetailPage: React.FC = () => {
                                   >
                                     {product.name}
                                   </Link>
-                                  
+
                                   {/* Favorite Button */}
                                   <button
                                     onClick={(e) => handleFavoriteToggle(product.id, e)}
@@ -244,12 +251,14 @@ export const RestaurantDetailPage: React.FC = () => {
                                 <div className="flex items-center gap-3 text-[10px] text-neutral-400">
                                   {product.calories && (
                                     <span className="flex items-center gap-0.5">
-                                      <Flame className="h-3 w-3 text-amber-500" /> {product.calories} kcal
+                                      <Flame className="h-3 w-3 text-amber-500" />{' '}
+                                      {product.calories} kcal
                                     </span>
                                   )}
                                   {product.preparationTime && (
                                     <span className="flex items-center gap-0.5">
-                                      <Clock className="h-3 w-3 text-primary" /> {product.preparationTime} mins
+                                      <Clock className="h-3 w-3 text-primary" />{' '}
+                                      {product.preparationTime} mins
                                     </span>
                                   )}
                                 </div>

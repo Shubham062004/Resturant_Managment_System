@@ -82,15 +82,16 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout brandTitle="Terminal Onboarding" brandDescription="Register your employee profile node to configure authorizations for the Point of Sale terminals and Kitchen Display systems.">
+    <AuthLayout
+      brandTitle="Terminal Onboarding"
+      brandDescription="Register your employee profile node to configure authorizations for the Point of Sale terminals and Kitchen Display systems."
+    >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">
             Register Account
           </h2>
-          <p className="text-muted-foreground font-sans text-sm">
-            Setup your system access node
-          </p>
+          <p className="text-muted-foreground font-sans text-sm">Setup your system access node</p>
         </div>
 
         {(validationError || error) && (

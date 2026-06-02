@@ -4,7 +4,9 @@ import { useAppSelector } from '../../../app/store';
 
 export interface RoleProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles: Array<'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN'>;
+  allowedRoles: Array<
+    'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN'
+  >;
 }
 
 export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
@@ -22,9 +24,12 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="glass-panel max-w-md w-full p-8 rounded-xl text-center space-y-6 border border-danger/30 shadow-2xl">
           <div className="text-5xl animate-bounce">🚫</div>
-          <h2 className="text-2xl font-bold font-display text-white tracking-tight">Access Denied</h2>
+          <h2 className="text-2xl font-bold font-display text-white tracking-tight">
+            Access Denied
+          </h2>
           <p className="text-muted-foreground font-sans text-sm leading-relaxed">
-            You do not possess the required privilege level to view this terminal node. Please contact your system administrator if you believe this is an error.
+            You do not possess the required privilege level to view this terminal node. Please
+            contact your system administrator if you believe this is an error.
           </p>
           <button
             onClick={() => {

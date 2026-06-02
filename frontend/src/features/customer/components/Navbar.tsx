@@ -65,7 +65,10 @@ export const Navbar: React.FC = () => {
     >
       {/* Brand logo & branch indicator */}
       <div className="flex items-center gap-6">
-        <Link to="/" className="flex items-center gap-2.5 font-display font-extrabold text-xl tracking-tight text-white select-none">
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 font-display font-extrabold text-xl tracking-tight text-white select-none"
+        >
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-md shadow-primary/10">
             <Flame className="w-5.5 h-5.5 text-white" />
           </div>
@@ -73,7 +76,10 @@ export const Navbar: React.FC = () => {
         </Link>
 
         {selectedBranch && (
-          <Link to="/branches" className="hidden lg:flex items-center gap-1.5 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-primary/20 transition-all duration-200">
+          <Link
+            to="/branches"
+            className="hidden lg:flex items-center gap-1.5 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-primary/20 transition-all duration-200"
+          >
             <MapPin size={12} />
             <span>Outpost: {selectedBranch.name.replace('Oven Xpress - ', '')}</span>
           </Link>
@@ -102,10 +108,15 @@ export const Navbar: React.FC = () => {
       <div className="hidden md:flex items-center gap-4">
         {user ? (
           <div className="flex items-center gap-4 select-none">
-            <Link to="/profile" className="flex items-center gap-3.5 hover:opacity-85 transition-opacity">
+            <Link
+              to="/profile"
+              className="flex items-center gap-3.5 hover:opacity-85 transition-opacity"
+            >
               <div className="text-right">
                 <p className="text-sm font-semibold text-white leading-tight">{`${user.firstName} ${user.lastName}`}</p>
-                <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{user.role.replace('_', ' ')}</p>
+                <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                  {user.role.replace('_', ' ')}
+                </p>
               </div>
               <Avatar
                 src={getAvatarSrc()}
@@ -141,7 +152,10 @@ export const Navbar: React.FC = () => {
       {/* Hamburger drawer trigger */}
       <div className="flex md:hidden items-center gap-3.5">
         {selectedBranch && (
-          <Link to="/branches" className="flex items-center gap-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-2.5 py-1 rounded-full">
+          <Link
+            to="/branches"
+            className="flex items-center gap-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-2.5 py-1 rounded-full"
+          >
             <MapPin size={10} />
             <span>{selectedBranch.name.replace('Oven Xpress - ', '').split(' ')[0]}</span>
           </Link>
@@ -202,7 +216,10 @@ export const Navbar: React.FC = () => {
               <div className="flex-grow flex flex-col justify-end">
                 {user ? (
                   <div className="space-y-4">
-                    <Link to="/profile" className="flex items-center gap-3 bg-secondary/35 p-3 rounded-xl border border-border/50">
+                    <Link
+                      to="/profile"
+                      className="flex items-center gap-3 bg-secondary/35 p-3 rounded-xl border border-border/50"
+                    >
                       <Avatar
                         src={getAvatarSrc()}
                         name={`${user.firstName} ${user.lastName}`}
@@ -210,7 +227,9 @@ export const Navbar: React.FC = () => {
                       />
                       <div className="overflow-hidden">
                         <p className="text-sm font-bold text-white truncate">{`${user.firstName} ${user.lastName}`}</p>
-                        <p className="text-[10px] text-muted-foreground font-semibold uppercase">{user.role}</p>
+                        <p className="text-[10px] text-muted-foreground font-semibold uppercase">
+                          {user.role}
+                        </p>
                       </div>
                     </Link>
                     <div className="grid grid-cols-2 gap-2">
