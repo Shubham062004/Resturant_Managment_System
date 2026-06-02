@@ -18,6 +18,7 @@ import adminReducer from '../features/admin/store/adminSlice';
 import staffReducer from '../features/admin/store/staffSlice';
 import organizationReducer from '../features/super-admin/store/organizationSlice';
 import platformReducer from '../features/super-admin/store/platformSlice';
+import notificationReducer from '../features/notifications/store/notificationSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -40,6 +41,7 @@ export const rootReducer = combineReducers({
   staff: staffReducer,
   organizations: organizationReducer,
   platform: platformReducer,
+  notifications: notificationReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
