@@ -1,6 +1,6 @@
-import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Globe, Building2, Store, Activity, Settings } from 'lucide-react';
+import NotificationCenter from '../../notifications/components/NotificationCenter';
 
 export default function SuperAdminLayout() {
   const location = useLocation();
@@ -46,7 +46,8 @@ export default function SuperAdminLayout() {
       <main className="flex-1 flex flex-col overflow-hidden">
         <header className="h-16 bg-slate-800 border-b border-slate-700 flex items-center px-6 justify-between shadow-sm z-10">
           <h1 className="text-xl font-bold text-white">Super Admin Control Center</h1>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
+            <NotificationCenter />
             <span className="text-sm font-medium text-blue-400">Platform Admin</span>
           </div>
         </header>
