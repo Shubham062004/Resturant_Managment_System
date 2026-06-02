@@ -52,6 +52,9 @@ enum Role {
   DELIVERY_PARTNER
   DELIVERY_MANAGER
   CASHIER
+  BRANCH_MANAGER
+  OPERATIONS_MANAGER
+  FINANCE_MANAGER
   SUPER_ADMIN
 }
 
@@ -375,8 +378,21 @@ model Branch {
   tables                Table[]
   reservations          Reservation[]
   waitlistEntries       WaitlistEntry[]
+  settings              RestaurantSettings?
 
   @@index([restaurantId])
+}
+
+model RestaurantSettings {
+  id              String   @id @default(uuid())
+  branchId        String   @unique
+  branch          Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  taxRate         Float    @default(0.0)
+  deliveryFee     Float    @default(0.0)
+  currency        String   @default("USD")
+  autoAcceptOrders Boolean @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Category {

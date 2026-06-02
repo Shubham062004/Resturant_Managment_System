@@ -25,6 +25,7 @@ import reservationRouter from './modules/reservations/reservation.routes';
 import tableRouter from './modules/tables/table.routes';
 import waitlistRouter from './modules/waitlist/waitlist.routes';
 import qrRouter from './modules/qr-ordering/qr.routes';
+import adminRouter from './modules/admin/admin.routes';
 
 // Express application instance
 export const app = express();
@@ -84,6 +85,7 @@ app.use('/api/v1/reservations', reservationRouter);
 app.use('/api/v1/tables', tableRouter);
 app.use('/api/v1/waitlist', waitlistRouter);
 app.use('/api/v1/qr-ordering', qrRouter);
+app.use('/api/v1/admin', adminRouter);
 
 // 4. Fallback Catch-All Route
 app.all('*', (req, res, next) => {
