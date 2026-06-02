@@ -34,6 +34,9 @@ model User {
   deliveryPartner         DeliveryPartner?
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
+
+  posOrders               POSOrder[]
+  cashDrawers             CashDrawer[]
 }
 
 enum Role {
@@ -172,6 +175,7 @@ model Order {
   kitchenOrder  KitchenOrder?
   deliveryAssignment DeliveryAssignment?
   driverEarnings     DriverEarnings?
+  posOrder           POSOrder?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -192,6 +196,7 @@ enum OrderType {
   DINE_IN
   DELIVERY
   PICKUP
+  WALK_IN
 }
 
 model OrderItem {
@@ -295,6 +300,7 @@ model Branch {
   inventoryAlerts       InventoryAlert[]
   transfersOut          InventoryTransfer[] @relation("SourceBranch")
   transfersIn           InventoryTransfer[] @relation("DestinationBranch")
+  terminals             POSTerminal[]
 
   @@index([restaurantId])
 }
@@ -838,4 +844,108 @@ model InventoryAlert {
 
   @@index([ingredientId])
   @@index([branchId])
+}
+
+// ----------------------------------------------------
+// POINT OF SALE (POS) MODELS
+// ----------------------------------------------------
+
+model POSTerminal {
+  id           String       @id @default(uuid())
+  branchId     String
+  branch       Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  terminalName String
+  active       Boolean      @default(true)
+  orders       POSOrder[]
+  cashDrawers  CashDrawer[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([branchId])
+}
+
+model POSOrder {
+  id         String      @id @default(uuid())
+  terminalId String
+  terminal   POSTerminal @relation(fields: [terminalId], references: [id], onDelete: Cascade)
+  cashierId  String
+  cashier    User        @relation(fields: [cashierId], references: [id], onDelete: Cascade)
+  orderId    String      @unique
+  order      Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  status     POSOrderStatus @default(OPEN)
+  payments   POSPayment[]
+  receipt    Receipt?
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([terminalId])
+  @@index([cashierId])
+}
+
+enum POSOrderStatus {
+  OPEN
+  PAID
+  VOIDED
+  REFUNDED
+}
+
+model POSPayment {
+  id                   String     @id @default(uuid())
+  posOrderId           String
+  posOrder             POSOrder   @relation(fields: [posOrderId], references: [id], onDelete: Cascade)
+  method               POSPaymentMethod
+  amount               Decimal    @db.Decimal(10, 2)
+  transactionReference String?
+  status               POSPaymentStatus @default(COMPLETED)
+  createdAt            DateTime   @default(now())
+
+  @@index([posOrderId])
+}
+
+enum POSPaymentMethod {
+  CASH
+  UPI
+  CARD
+  WALLET
+  SPLIT
+}
+
+enum POSPaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Receipt {
+  id            String    @id @default(uuid())
+  posOrderId    String    @unique
+  posOrder      POSOrder  @relation(fields: [posOrderId], references: [id], onDelete: Cascade)
+  receiptNumber String    @unique
+  generatedAt   DateTime  @default(now())
+}
+
+model CashDrawer {
+  id             String      @id @default(uuid())
+  terminalId     String
+  terminal       POSTerminal @relation(fields: [terminalId], references: [id], onDelete: Cascade)
+  cashierId      String
+  cashier        User        @relation(fields: [cashierId], references: [id], onDelete: Cascade)
+  openingAmount  Decimal     @db.Decimal(10, 2)
+  closingAmount  Decimal?    @db.Decimal(10, 2)
+  currentBalance Decimal     @db.Decimal(10, 2)
+  status         ShiftStatus @default(OPEN)
+  openedAt       DateTime    @default(now())
+  closedAt       DateTime?
+  notes          String?
+
+  @@index([terminalId])
+  @@index([cashierId])
+}
+
+enum ShiftStatus {
+  OPEN
+  CLOSED
 }
