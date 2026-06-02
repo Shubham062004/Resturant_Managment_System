@@ -34,10 +34,12 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      const url = originalRequest.url || '';
       const isAuthRoute =
-        originalRequest.url?.includes('/auth/login') ||
-        originalRequest.url?.includes('/auth/register') ||
-        originalRequest.url?.includes('/auth/refresh');
+        url.includes('/auth/login') ||
+        url.includes('/auth/register') ||
+        url.includes('/auth/refresh') ||
+        url.includes('/auth/me');
 
       if (isAuthRoute) {
         return Promise.reject(error);

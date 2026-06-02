@@ -25,7 +25,8 @@ const BranchesPage = React.lazy(() => import('../features/customer/pages/Branche
 const SearchPage = React.lazy(() => import('../features/customer/pages/SearchPage'));
 const OffersPage = React.lazy(() => import('../features/customer/pages/OffersPage'));
 const FavoritesPage = React.lazy(() => import('../features/customer/pages/FavoritesPage'));
-const OrdersPage = React.lazy(() => import('../features/customer/pages/OrdersPage'));
+const OrderListPage = React.lazy(() => import('../features/orders/pages/OrderListPage'));
+const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/OrderTrackingPage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -40,13 +41,10 @@ const AdminPlaceholderPage = React.lazy(
   () => import('../features/customer/pages/AdminPlaceholderPage'),
 );
 
-// Placeholder Future Module Components
-const CartPlaceholderPage = React.lazy(
-  () => import('../features/customer/pages/CartPlaceholderPage'),
-);
-const CheckoutPlaceholderPage = React.lazy(
-  () => import('../features/customer/pages/CheckoutPlaceholderPage'),
-);
+// Cart & Checkout
+const CartPage = React.lazy(() => import('../features/cart/pages/CartPage'));
+const CheckoutPage = React.lazy(() => import('../features/cart/pages/CheckoutPage'));
+const AddressesPage = React.lazy(() => import('../features/cart/pages/AddressesPage'));
 
 // Auth Pages (Lazy)
 const LoginPage = React.lazy(() => import('../features/auth/pages/LoginPage'));
@@ -109,25 +107,17 @@ const AppRouter = () => {
   const dispatch = useAppDispatch();
   const { authStatus } = useAppSelector((state) => state.auth);
 
-  // Restore session from HttpOnly cookies on boot
+  // Restore session from HttpOnly cookies on boot (non-blocking)
   useEffect(() => {
-    if (authStatus === 'idle') {
-      dispatch(refreshSession())
-        .unwrap()
-        .then(() => dispatch(fetchProfile()))
-        .catch(() => {
-          /* no active session */
-        });
-    }
-  }, [authStatus, dispatch]);
+    if (authStatus !== 'idle') return;
 
-  if (authStatus === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
-      </div>
-    );
-  }
+    dispatch(refreshSession())
+      .unwrap()
+      .then(() => dispatch(fetchProfile()))
+      .catch(() => {
+        /* no active session — public routes remain available */
+      });
+  }, [authStatus, dispatch]);
 
   return (
     <BrowserRouter>
@@ -219,9 +209,10 @@ const AppRouter = () => {
                 }
               />
 
-              {/* Future Module Placeholders */}
-              <Route path="/cart" element={<CartPlaceholderPage />} />
-              <Route path="/checkout" element={<CheckoutPlaceholderPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/checkout/address" element={<Navigate to="/checkout" replace />} />
+              <Route path="/checkout/payment" element={<Navigate to="/checkout" replace />} />
 
               {/* Protected Customer Account Pages (nested inside ProfileLayout sidebar) */}
               <Route
@@ -233,9 +224,24 @@ const AppRouter = () => {
               >
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
-                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/orders" element={<OrderListPage />} />
+                <Route path="/addresses" element={<AddressesPage />} />
               </Route>
+
+              {/* Order Tracking - Full page view */}
+              <Route
+                path="/orders/:id"
+                element={
+                  <ProtectedRoute>
+                    <OrderTrackingPage />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
+
+            <Route path="/admin" element={<Navigate to="/admin/restaurants" replace />} />
+            <Route path="/design-system" element={<Navigate to="/staff/design-system" replace />} />
+            <Route path="/500" element={<Navigate to="/server-error" replace />} />
 
             {/* Core Authorized Staff Dashboard Shell */}
             <Route

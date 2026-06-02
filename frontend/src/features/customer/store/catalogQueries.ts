@@ -174,7 +174,26 @@ export const useRestaurants = (filters: {
   });
 };
 
-// 2. Fetch Restaurant by Slug
+// 2. Fetch Branches (paginated)
+export const useBranches = (filters?: {
+  restaurantId?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  return useQuery<{
+    success: boolean;
+    data: Branch[];
+    meta: { total: number; page: number; limit: number; totalPages: number };
+  }>({
+    queryKey: ['branches', filters],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/branches', { params: filters });
+      return data;
+    },
+  });
+};
+
+// 3. Fetch Restaurant by Slug
 export const useRestaurantBySlug = (slug: string) => {
   return useQuery<RestaurantResponse>({
     queryKey: ['restaurant', slug],
@@ -353,11 +372,12 @@ export const useToggleFavorite = () => {
 };
 
 // 12. Fetch Favorites list and sync Redux state
-export const useFavorites = () => {
+export const useFavorites = (enabled = true) => {
   const dispatch = useDispatch();
 
   return useQuery<FavoritesResponse>({
     queryKey: ['favorites'],
+    enabled,
     queryFn: async () => {
       const { data } = await apiClient.get('/catalog/favorites');
       // Sync with Redux cache

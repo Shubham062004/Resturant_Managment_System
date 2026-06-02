@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../app/store';
 import { selectBranch } from '../store/customerSlice';
 import SEO from '../../../shared/components/SEO';
@@ -8,23 +8,59 @@ import Card, { CardContent } from '../../../shared/components/ui/Card';
 import Badge from '../../../shared/components/ui/Badge';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { MapPin, Phone, Clock, Search, Compass, ChevronRight, Navigation } from 'lucide-react';
-import mockBranches, { Branch } from '../../../shared/data/branches';
+import { Branch } from '../../../shared/data/branches';
+import { useBranches } from '../store/catalogQueries';
 
 export const BranchesPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const { selectedBranch } = useAppSelector((state) => state.customer);
 
+  const { data: branchesResponse, isLoading } = useBranches({ page: 1, limit: 100 });
+  const apiBranches = branchesResponse?.data ?? [];
+
+  const mappedBranches: Branch[] = apiBranches.map((b) => ({
+    id: b.id,
+    name: b.name,
+    address: b.address,
+    city: b.city,
+    coords: { lat: b.latitude, lng: b.longitude },
+    openingHours: `${b.openingTime} - ${b.closingTime}`,
+    phone: '',
+    active: b.isActive,
+    distance: undefined,
+  }));
+
   const [searchTerm, setSearchTerm] = useState('');
   const [cityFilter, setCityFilter] = useState('All');
-  const [branches, setBranches] = useState<Branch[]>(mockBranches);
   const [isDetecting, setIsDetecting] = useState(false);
-  const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(
-    selectedBranch || mockBranches[0],
-  );
+  const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(null);
 
-  // Extract unique cities
-  const cities = ['All', ...Array.from(new Set(mockBranches.map((b) => b.city)))];
+  const cities = ['All', ...Array.from(new Set(mappedBranches.map((b) => b.city)))];
+
+  const [branchesWithDistance, setBranchesWithDistance] = useState<Branch[]>([]);
+
+  useEffect(() => {
+    setBranchesWithDistance(mappedBranches);
+  }, [apiBranches.length]);
+
+  const filteredBranches = useMemo(() => {
+    const source = branchesWithDistance.length ? branchesWithDistance : mappedBranches;
+    return source.filter((branch) => {
+      const matchesSearch =
+        !searchTerm ||
+        branch.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        branch.address.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCity = cityFilter === 'All' || branch.city === cityFilter;
+      return matchesSearch && matchesCity;
+    });
+  }, [branchesWithDistance, mappedBranches, searchTerm, cityFilter]);
+
+  useEffect(() => {
+    if (!activeBranchDetail && filteredBranches.length > 0) {
+      setActiveBranchDetail(selectedBranch || filteredBranches[0]);
+    }
+  }, [filteredBranches, selectedBranch, activeBranchDetail]);
 
   // Calculate distance in miles using basic Pythagorean approximation for Manhattan/Jersey City scale
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -47,10 +83,14 @@ export const BranchesPage: React.FC = () => {
       (position) => {
         const { latitude, longitude } = position.coords;
 
-        // Update branch distances based on location
-        const updated = mockBranches
+        const updated = mappedBranches
           .map((b) => {
-            const dist = calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng);
+            const dist = calculateDistance(
+              latitude,
+              longitude,
+              b.coords.lat,
+              b.coords.lng,
+            );
             return {
               ...b,
               distance: parseFloat(dist.toFixed(1)),
@@ -58,7 +98,7 @@ export const BranchesPage: React.FC = () => {
           })
           .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
-        setBranches(updated);
+        setBranchesWithDistance(updated);
         setIsDetecting(false);
         toast.success('Successfully detected location. Outposts sorted by distance.');
       },
@@ -68,15 +108,6 @@ export const BranchesPage: React.FC = () => {
       },
     );
   };
-
-  // Filter outposts
-  const filteredBranches = branches.filter((b) => {
-    const matchesSearch =
-      b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      b.address.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCity = cityFilter === 'All' || b.city === cityFilter;
-    return matchesSearch && matchesCity;
-  });
 
   const handleSelectBranch = (branch: Branch) => {
     dispatch(selectBranch(branch));
@@ -147,7 +178,11 @@ export const BranchesPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Branches list */}
           <div className="lg:col-span-7 space-y-4">
-            {filteredBranches.length === 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center py-16">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
+              </div>
+            ) : filteredBranches.length === 0 ? (
               <div className="text-center py-16 bg-card/45 border border-border/40 rounded-xl space-y-4">
                 <MapPin className="mx-auto text-muted-foreground/60" size={36} />
                 <p className="text-muted-foreground text-sm font-sans">

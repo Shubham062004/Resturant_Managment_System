@@ -193,7 +193,7 @@ const authSlice = createSlice({
         state.authStatus = 'idle';
       })
       .addCase(fetchProfile.pending, (state) => {
-        state.authStatus = 'loading';
+        state.error = null;
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.user = action.payload;

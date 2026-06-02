@@ -12,13 +12,13 @@ import {
   Search as SearchIcon,
   Star,
   Clock,
-  MapPin,
   Trash2,
   X,
   TrendingUp,
   Award,
 } from 'lucide-react';
-import mockRestaurants from '../../../shared/data/restaurants';
+import { useProducts } from '../store/catalogQueries';
+import { Link } from 'react-router-dom';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -57,15 +57,13 @@ export const SearchPage: React.FC = () => {
     dispatch(clearRecentSearches());
   };
 
-  // Perform client-side filtering based on debounced search
-  const filteredRestaurants = mockRestaurants.filter((res) => {
-    const term = debouncedSearch.toLowerCase().trim();
-    if (!term) return true;
-
-    const matchesName = res.name.toLowerCase().includes(term);
-    const matchesCategory = res.categories.some((c) => c.toLowerCase().includes(term));
-    return matchesName || matchesCategory;
+  const searchTerm = debouncedSearch.trim();
+  const { data: productsResponse, isLoading: isSearchLoading } = useProducts({
+    search: searchTerm || undefined,
+    page: 1,
+    limit: 24,
   });
+  const searchProducts = productsResponse?.data ?? [];
 
   return (
     <>
@@ -179,7 +177,11 @@ export const SearchPage: React.FC = () => {
           {/* Search results catalog */}
           <div className="lg:col-span-8 space-y-6">
             <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span>Showing {filteredRestaurants.length} results</span>
+              <span>
+                {isSearchLoading
+                  ? 'Searching...'
+                  : `Showing ${searchProducts.length} product results`}
+              </span>
               {debouncedSearch && (
                 <span>
                   Query: <strong className="text-white">&ldquo;{debouncedSearch}&rdquo;</strong>
@@ -187,11 +189,21 @@ export const SearchPage: React.FC = () => {
               )}
             </div>
 
-            {filteredRestaurants.length === 0 ? (
+            {!searchTerm ? (
               <EmptyState
                 type="search"
-                title="No Kitchen Matches Found"
-                description={`We couldn't match "${debouncedSearch}" with any local restaurants or menu categories. Please refine your query.`}
+                title="Start typing to search"
+                description="Search products across all Oven Xpress restaurant menus."
+              />
+            ) : isSearchLoading ? (
+              <div className="flex justify-center py-16">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
+              </div>
+            ) : searchProducts.length === 0 ? (
+              <EmptyState
+                type="search"
+                title="No Products Found"
+                description={`We couldn't match "${debouncedSearch}" with any menu items. Please refine your query.`}
                 actionLabel="Reset Search"
                 onAction={() => {
                   setInputVal('');
@@ -200,53 +212,45 @@ export const SearchPage: React.FC = () => {
               />
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {filteredRestaurants.map((res) => (
-                  <Card
-                    key={res.id}
-                    variant="default"
-                    className="bg-card/45 border-border/60 flex flex-col justify-between h-full"
-                  >
-                    <div className="relative h-40 w-full overflow-hidden">
-                      <img
-                        src={res.image}
-                        alt={res.name}
-                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                      {res.featured && (
-                        <span className="absolute top-2.5 left-2.5 bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow">
-                          <Award size={10} />
-                          <span>Featured</span>
-                        </span>
-                      )}
-                    </div>
-
-                    <CardContent className="p-4 flex-grow flex flex-col justify-between gap-4">
-                      <div>
-                        <h3 className="font-display font-bold text-sm md:text-base text-white tracking-tight leading-tight">
-                          {res.name}
-                        </h3>
-                        <p className="text-xs text-muted-foreground font-sans mt-1">
-                          {res.categories.join(' • ')}
+                {searchProducts.map((product) => (
+                  <Link key={product.id} to={`/products/${product.slug}`}>
+                    <Card
+                      variant="default"
+                      className="bg-card/45 border-border/60 flex flex-col justify-between h-full hover:border-primary/30 transition-colors"
+                    >
+                      <div className="relative h-40 w-full overflow-hidden">
+                        {product.image && (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        )}
+                        {product.featured && (
+                          <span className="absolute top-2.5 left-2.5 bg-primary text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow">
+                            <Award size={10} />
+                            <span>Featured</span>
+                          </span>
+                        )}
+                      </div>
+                      <CardContent className="p-4 flex-grow space-y-2">
+                        <h3 className="font-display font-bold text-sm text-white">{product.name}</h3>
+                        <p className="text-xs text-muted-foreground line-clamp-2">
+                          {product.shortDescription || product.description}
                         </p>
-                      </div>
-
-                      <div className="flex items-center justify-between border-t border-border/40 pt-3 text-[10px] font-sans text-muted-foreground">
-                        <span className="flex items-center gap-0.5 text-yellow-500 font-bold text-white">
-                          <Star size={12} fill="currentColor" />
-                          {res.rating}
-                        </span>
-                        <span className="flex items-center gap-0.5">
-                          <Clock size={12} />
-                          {res.deliveryTime}
-                        </span>
-                        <span className="flex items-center gap-0.5">
-                          <MapPin size={12} />
-                          {res.distance}
-                        </span>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <div className="flex items-center justify-between pt-2 text-xs">
+                          <span className="flex items-center gap-0.5 text-yellow-500">
+                            <Star size={12} fill="currentColor" />
+                            {product.rating}
+                          </span>
+                          <span className="text-primary font-bold">
+                            ${parseFloat(product.basePrice).toFixed(2)}
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </div>
             )}

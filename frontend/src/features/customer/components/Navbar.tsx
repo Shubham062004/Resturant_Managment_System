@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from '../../../app/store';
 import { logout } from '../../auth/store/authSlice';
 import { useToast } from '../../../shared/components/ui/Toast';
 import Avatar from '../../../shared/components/ui/Avatar';
-import { Menu, X, Flame, Search, MapPin, Tag, Home, LogOut, User } from 'lucide-react';
+import { Menu, X, Flame, Search, MapPin, Tag, Home, LogOut, User, ShoppingBag } from 'lucide-react';
 import { slideLeft } from '../../../shared/theme/animations';
 
 export const Navbar: React.FC = () => {
@@ -21,9 +21,11 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Home', path: '/', icon: Home },
+    { name: 'Menu', path: '/restaurants', icon: Flame },
     { name: 'Offers', path: '/offers', icon: Tag },
     { name: 'Branches', path: '/branches', icon: MapPin },
     { name: 'Search', path: '/search', icon: Search },
+    { name: 'Cart', path: '/cart', icon: ShoppingBag },
   ];
 
   useEffect(() => {

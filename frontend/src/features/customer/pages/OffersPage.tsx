@@ -3,10 +3,11 @@ import SEO from '../../../shared/components/SEO';
 import Card, { CardContent } from '../../../shared/components/ui/Card';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { Tag, Calendar, Copy, Percent, Sparkles } from 'lucide-react';
-import mockOffers from '../../../shared/data/offers';
+import { useActiveCoupons } from '../../cart/store/cartQueries';
 
 export const OffersPage: React.FC = () => {
   const toast = useToast();
+  const { data: coupons = [], isLoading, isError } = useActiveCoupons();
 
   const handleCopyToClipboard = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -22,13 +23,11 @@ export const OffersPage: React.FC = () => {
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-12 font-sans">
-        {/* Banner Promo Showcase */}
         <div className="relative rounded-2xl bg-gradient-to-r from-primary to-primary-hover p-8 md:p-12 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl select-none">
-          <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
           <div className="space-y-4 max-w-xl text-center md:text-left z-10">
             <span className="bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full inline-flex items-center gap-1">
               <Sparkles size={10} />
-              <span>Catering Specials Available</span>
+              <span>Live Promotions</span>
             </span>
             <h1 className="text-3xl md:text-4xl font-display font-extrabold tracking-tight text-white leading-tight">
               Sizzle Up Your Savings
@@ -43,73 +42,69 @@ export const OffersPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Promo Grid */}
         <div className="space-y-6">
           <div className="border-b border-border/40 pb-4">
             <h2 className="text-xl font-display font-bold text-white tracking-wide">
               Active Coupon Codes
             </h2>
-            <p className="text-xs text-muted-foreground mt-1">
-              Copy coupon codes to apply them during your checkout flow.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mockOffers.map((offer) => (
-              <Card
-                key={offer.id}
-                className="bg-card/45 border border-border/60 flex flex-col justify-between h-full hover:border-primary/30 transition-all"
-              >
-                <div className="relative h-40 w-full overflow-hidden select-none">
-                  <img
-                    src={offer.bannerImage}
-                    alt={offer.title}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-3.5 left-3.5 bg-black/60 backdrop-blur text-primary text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 border border-primary/20">
-                    <Tag size={10} />
-                    <span>{offer.discountPercentage}% OFF</span>
-                  </div>
-                </div>
-
-                <CardContent className="p-5 flex-grow flex flex-col justify-between gap-6">
-                  <div className="space-y-2">
-                    <h3 className="font-display font-bold text-sm md:text-base text-white tracking-tight leading-tight">
-                      {offer.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed font-sans">
-                      {offer.description}
-                    </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center text-[10px] font-sans text-muted-foreground border-t border-border/40 pt-4">
-                      <span className="flex items-center gap-1">
-                        <Calendar size={12} />
-                        Expires {offer.expiryDate}
-                      </span>
-                      <span>Min Order: ${offer.minOrderValue.toFixed(2)}</span>
-                    </div>
-
-                    {/* Copy code input box */}
-                    <div className="bg-secondary/70 border border-border/50 rounded-lg p-2 flex items-center justify-between gap-3 font-mono text-xs">
-                      <span className="text-white font-bold select-all tracking-wider px-1">
-                        {offer.code}
-                      </span>
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
+            </div>
+          ) : isError ? (
+            <p className="text-muted-foreground text-sm">Unable to load coupons from server.</p>
+          ) : coupons.length === 0 ? (
+            <p className="text-muted-foreground text-sm">No active coupons at the moment.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {coupons.map((offer) => (
+                <Card
+                  key={offer.id}
+                  className="border border-border/60 bg-card/40 hover:border-primary/30 transition-colors"
+                >
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="space-y-1">
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-primary">
+                          <Tag size={12} />
+                          {offer.discountType.replace('_', ' ')}
+                        </span>
+                        <h3 className="text-lg font-display font-bold text-white">{offer.code}</h3>
+                        {offer.description && (
+                          <p className="text-xs text-muted-foreground">{offer.description}</p>
+                        )}
+                      </div>
                       <button
+                        type="button"
                         onClick={() => handleCopyToClipboard(offer.code)}
-                        className="p-1.5 rounded bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all"
-                        title="Copy promo code"
+                        className="p-2 rounded-lg border border-border/60 hover:bg-secondary/50 text-muted-foreground hover:text-white transition-colors"
+                        aria-label={`Copy code ${offer.code}`}
                       >
-                        <Copy size={12} />
+                        <Copy size={16} />
                       </button>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                      <Calendar size={12} />
+                      <span>
+                        Valid until {new Date(offer.endDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-sm font-semibold text-accent">
+                      {offer.discountType === 'PERCENTAGE'
+                        ? `${offer.discountValue}% off`
+                        : offer.discountType === 'FIXED_AMOUNT'
+                          ? `$${parseFloat(offer.discountValue).toFixed(2)} off`
+                          : 'Free delivery'}
+                      {parseFloat(offer.minimumAmount) > 0 &&
+                        ` · Min order $${parseFloat(offer.minimumAmount).toFixed(2)}`}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -9,6 +9,8 @@ import {
   useUpdateReview,
   useDeleteReview,
 } from '../store/catalogQueries';
+import { useAddToCart } from '../../cart/store/cartQueries';
+import { useToast } from '../../../shared/components/ui/Toast';
 import {
   Star,
   Heart,
@@ -26,8 +28,10 @@ export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const favoritedIds = useAppSelector((state) => state.favorite.favoritedIds);
+  const toast = useToast();
+  const addToCart = useAddToCart();
 
   const { data: response, isLoading, isError, refetch } = useProductBySlug(slug || '');
   const toggleFavoriteMutation = useToggleFavorite();
@@ -379,9 +383,29 @@ export const ProductDetailPage: React.FC = () => {
                 </p>
               </div>
 
-              {/* Cart action is ignored in this PR catalog scope. We render a placeholder customize alert button. */}
-              <button className="py-3.5 px-8 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 text-sm">
-                Add To Cart Selection
+              <button
+                type="button"
+                disabled={addToCart.isPending}
+                onClick={async () => {
+                  if (!isAuthenticated) {
+                    navigate('/login', { state: { from: { pathname: `/products/${slug}` } } });
+                    return;
+                  }
+                  if (!product) return;
+                  try {
+                    await addToCart.mutateAsync({
+                      productId: product.id,
+                      variantId: selectedVariantId || undefined,
+                      quantity: 1,
+                    });
+                    toast.success('Added to cart');
+                  } catch {
+                    toast.error('Failed to add to cart');
+                  }
+                }}
+                className="py-3.5 px-8 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 text-sm disabled:opacity-60"
+              >
+                {addToCart.isPending ? 'Adding...' : 'Add To Cart'}
               </button>
             </div>
           </div>
