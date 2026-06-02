@@ -7,4 +7,8 @@ export interface AuthRequest extends Request {
     email: string;
     role: Role;
   };
+  tenantFilter?: {
+    organizationId?: string;
+    franchiseId?: string;
+  };
 }

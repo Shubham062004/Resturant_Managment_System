@@ -84,8 +84,8 @@ describe('Catalog API Integration Tests', () => {
 
   describe('GET /api/v1/catalog/restaurants', () => {
     it('should retrieve a paginated list of active restaurants', async () => {
-      (prisma.restaurant.count as jest.Mock).mockResolvedValue(1);
-      (prisma.restaurant.findMany as jest.Mock).mockResolvedValue([
+      (prisma.restaurantGroup.count as jest.Mock).mockResolvedValue(1);
+      (prisma.restaurantGroup.findMany as jest.Mock).mockResolvedValue([
         {
           id: RESTAURANT_UUID,
           name: 'Oven Xpress - Firehouse',
@@ -102,13 +102,13 @@ describe('Catalog API Integration Tests', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveLength(1);
       expect(response.body.data[0].name).toBe('Oven Xpress - Firehouse');
-      expect(prisma.restaurant.findMany).toHaveBeenCalled();
+      expect(prisma.restaurantGroup.findMany).toHaveBeenCalled();
     });
   });
 
   describe('GET /api/v1/catalog/restaurants/slug/:slug', () => {
     it('should retrieve full details of restaurant by its slug name', async () => {
-      (prisma.restaurant.findUnique as jest.Mock).mockResolvedValue({
+      (prisma.restaurantGroup.findUnique as jest.Mock).mockResolvedValue({
         id: RESTAURANT_UUID,
         name: 'Oven Xpress - Firehouse',
         slug: 'oven-xpress-firehouse',
@@ -125,11 +125,11 @@ describe('Catalog API Integration Tests', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data.name).toBe('Oven Xpress - Firehouse');
       expect(response.body.data.branches).toHaveLength(1);
-      expect(prisma.restaurant.findUnique).toHaveBeenCalled();
+      expect(prisma.restaurantGroup.findUnique).toHaveBeenCalled();
     });
 
     it('should throw 404 error if restaurant slug is not active/found', async () => {
-      (prisma.restaurant.findUnique as jest.Mock).mockResolvedValue(null);
+      (prisma.restaurantGroup.findUnique as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app).get('/api/v1/catalog/restaurants/slug/non-existent');
 
@@ -214,7 +214,7 @@ describe('Catalog API Integration Tests', () => {
         _avg: { rating: 5.0 },
       });
       (prisma.product.update as jest.Mock).mockResolvedValue({});
-      (prisma.restaurant.update as jest.Mock).mockResolvedValue({});
+      (prisma.restaurantGroup.update as jest.Mock).mockResolvedValue({});
 
       const response = await request(app)
         .post('/api/v1/catalog/reviews')
@@ -226,7 +226,7 @@ describe('Catalog API Integration Tests', () => {
       expect(response.body.data.comment).toBe('Great sourdough crust!');
       expect(prisma.review.create).toHaveBeenCalled();
       expect(prisma.product.update).toHaveBeenCalled();
-      expect(prisma.restaurant.update).toHaveBeenCalled();
+      expect(prisma.restaurantGroup.update).toHaveBeenCalled();
     });
   });
 
@@ -248,3 +248,4 @@ describe('Catalog API Integration Tests', () => {
     });
   });
 });
+

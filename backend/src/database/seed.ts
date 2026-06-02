@@ -13,7 +13,7 @@ async function main() {
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.branch.deleteMany();
-  await prisma.restaurant.deleteMany();
+  await prisma.restaurantGroup.deleteMany();
 
   // Create active system user if not exists to associate reviews
   let mockUser = await prisma.user.findFirst({
@@ -376,7 +376,7 @@ async function main() {
   }
 
   console.log('Inserting restaurants...');
-  await prisma.restaurant.createMany({ data: restaurants });
+  await prisma.restaurantGroup.createMany({ data: restaurants });
 
   console.log('Inserting branches...');
   await prisma.branch.createMany({ data: branches });
@@ -406,3 +406,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
