@@ -14,6 +14,8 @@ import inventoryReducer from '../features/inventory/store/inventorySlice';
 import posReducer from '../features/pos/store/posSlice';
 import reservationReducer from '../features/reservations/store/reservationSlice';
 import tableReducer from '../features/floor-plan/store/tableSlice';
+import adminReducer from '../features/admin/store/adminSlice';
+import staffReducer from '../features/admin/store/staffSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -32,6 +34,8 @@ export const rootReducer = combineReducers({
   pos: posReducer,
   reservations: reservationReducer,
   tables: tableReducer,
+  admin: adminReducer,
+  staff: staffReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -5,10 +5,12 @@ import AppError from '../utils/appError';
 import { AuthRequest } from '../types/express';
 import { extractAccessToken } from '../utils/extractAccessToken';
 
+import { Role } from '@prisma/client';
+
 export interface DecodedToken {
   id: string;
   email: string;
-  role: 'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'HEAD_CHEF' | 'KITCHEN_MANAGER' | 'DELIVERY_PARTNER' | 'DELIVERY_MANAGER' | 'CASHIER' | 'SUPER_ADMIN';
+  role: Role;
   iat: number;
   exp: number;
 }
@@ -45,9 +47,7 @@ export const authGuard = async (
 
 // Authorization Hook: Role-Based Access Controls
 export const restrictTo = (
-  ...roles: Array<
-    'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'HEAD_CHEF' | 'KITCHEN_MANAGER' | 'DELIVERY_PARTNER' | 'DELIVERY_MANAGER' | 'CASHIER' | 'SUPER_ADMIN'
-  >
+  ...roles: Array<Role>
 ) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || !roles.includes(req.user.role)) {

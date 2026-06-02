@@ -34,6 +34,9 @@ const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashb
 const ReservationsPage = React.lazy(() => import('../features/reservations/pages/ReservationsPage'));
 const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
 const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
+const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
+const DashboardPage = React.lazy(() => import('../features/admin/pages/DashboardPage'));
+const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -348,6 +351,21 @@ const AppRouter = () => {
                 </ProtectedRoute>
               }
             />
+
+            {/* Admin Dashboard System */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={['ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'OPERATIONS_MANAGER', 'FINANCE_MANAGER']}>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<DashboardPage />} />
+              <Route path="staff" element={<StaffManagementPage />} />
+              {/* Other admin routes placeholder */}
+              <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
+            </Route>
 
             {/* Error Pages Shell */}
             <Route element={<ErrorLayout />}>
