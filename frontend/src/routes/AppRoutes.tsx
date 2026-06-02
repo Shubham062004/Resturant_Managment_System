@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
+import ThemeProvider from '../shared/theme/theme-provider';
+import { ToastProvider } from '../shared/components/ui/Toast';
+import DesignSystemShowcase from '../shared/components/ui/DesignSystemShowcase';
 
 // Mock component boundaries for initial foundation
 const DashboardView = () => (
@@ -71,19 +74,24 @@ const LoginView = () => (
 
 export const AppRoutes = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginView />} />
+    <ThemeProvider>
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginView />} />
 
-        {/* Core Authorized Shell */}
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<DashboardView />} />
-          <Route path="tables" element={<TablesView />} />
-        </Route>
+            {/* Core Authorized Shell */}
+            <Route path="/" element={<MainLayout />}>
+              <Route index element={<DashboardView />} />
+              <Route path="tables" element={<TablesView />} />
+              <Route path="design-system" element={<DesignSystemShowcase />} />
+            </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
+    </ThemeProvider>
   );
 };
 

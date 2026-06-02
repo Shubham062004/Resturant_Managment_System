@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, TableProperties, LogOut, Menu, X, Flame } from 'lucide-react';
+import { LayoutDashboard, TableProperties, LogOut, Menu, X, Flame, Sparkles } from 'lucide-react';
 
 export const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -10,6 +10,7 @@ export const MainLayout = () => {
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Tables Plan', path: '/tables', icon: TableProperties },
+    { name: 'Design System', path: '/design-system', icon: Sparkles },
   ];
 
   return (
