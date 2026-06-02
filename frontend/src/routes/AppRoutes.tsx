@@ -29,6 +29,7 @@ const OrderListPage = React.lazy(() => import('../features/orders/pages/OrderLis
 const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/OrderTrackingPage'));
 const DeliveryDashboardPage = React.lazy(() => import('../features/delivery/pages/DeliveryDashboardPage'));
 const EarningsDashboardPage = React.lazy(() => import('../features/delivery/pages/EarningsDashboardPage'));
+const InventoryDashboardPage = React.lazy(() => import('../features/inventory/pages/InventoryDashboardPage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -277,6 +278,16 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <KitchenAnalyticsPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Inventory Dashboard System */}
+            <Route
+              path="/admin/inventory"
+              element={
+                <ProtectedRoute>
+                  <InventoryDashboardPage />
                 </ProtectedRoute>
               }
             />

@@ -10,6 +10,7 @@ import refundReducer from '../features/orders/store/refundSlice';
 import kitchenReducer from '../features/kitchen/store/kitchenSlice';
 import stationReducer from '../features/kitchen/store/stationSlice';
 import deliveryReducer from '../features/delivery/store/deliverySlice';
+import inventoryReducer from '../features/inventory/store/inventorySlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -24,6 +25,7 @@ export const rootReducer = combineReducers({
   kitchen: kitchenReducer,
   stations: stationReducer,
   delivery: deliveryReducer,
+  inventory: inventoryReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

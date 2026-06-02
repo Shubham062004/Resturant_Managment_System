@@ -288,6 +288,13 @@ model Branch {
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
   Order          Order[]
+  inventory             Inventory[]
+  purchaseOrders        PurchaseOrder[]
+  stockMovements        StockMovement[]
+  wasteRecords          WasteRecord[]
+  inventoryAlerts       InventoryAlert[]
+  transfersOut          InventoryTransfer[] @relation("SourceBranch")
+  transfersIn           InventoryTransfer[] @relation("DestinationBranch")
 
   @@index([restaurantId])
 }
@@ -337,6 +344,7 @@ model Product {
   updatedAt        DateTime         @updatedAt
   OrderItem        OrderItem[]
   kitchenTasks     KitchenTask[]
+  recipeMappings   RecipeMapping[]
 
   @@unique([restaurantId, slug])
   @@index([restaurantId])
@@ -646,4 +654,188 @@ model DriverEarnings {
   createdAt      DateTime         @default(now())
 
   @@index([driverId])
+}
+
+// ----------------------------------------------------
+// INVENTORY MANAGEMENT MODELS
+// ----------------------------------------------------
+
+model Ingredient {
+  id              String            @id @default(uuid())
+  name            String
+  sku             String            @unique
+  category        String
+  unit            String            // KG, Gram, Liter, ML, Piece, Pack
+  minimumStock    Float
+  reorderPoint    Float
+  active          Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  inventory       Inventory[]
+  purchaseItems   PurchaseOrderItem[]
+  stockMovements  StockMovement[]
+  wasteRecords    WasteRecord[]
+  recipeMappings  RecipeMapping[]
+  alerts          InventoryAlert[]
+  transfers       InventoryTransfer[]
+}
+
+model Inventory {
+  id                String      @id @default(uuid())
+  ingredientId      String
+  ingredient        Ingredient  @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  branchId          String
+  branch            Branch      @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  quantity          Float       @default(0.0)
+  reservedQuantity  Float       @default(0.0)
+  availableQuantity Float       @default(0.0)
+  lastUpdated       DateTime    @default(now())
+
+  @@unique([ingredientId, branchId])
+  @@index([branchId])
+}
+
+model Supplier {
+  id            String          @id @default(uuid())
+  name          String
+  contactPerson String?
+  phone         String?
+  email         String?
+  address       String?
+  rating        Float           @default(0.0)
+  active        Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  purchaseOrders PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id           String              @id @default(uuid())
+  supplierId   String
+  supplier     Supplier            @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  branchId     String
+  branch       Branch              @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  totalAmount  Decimal             @db.Decimal(10, 2)
+  status       PurchaseOrderStatus @default(DRAFT)
+  orderedAt    DateTime            @default(now())
+  receivedAt   DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  items        PurchaseOrderItem[]
+
+  @@index([supplierId])
+  @@index([branchId])
+}
+
+enum PurchaseOrderStatus {
+  DRAFT
+  SENT
+  APPROVED
+  RECEIVED
+  CANCELLED
+}
+
+model PurchaseOrderItem {
+  id              String         @id @default(uuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder  @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  ingredientId    String
+  ingredient      Ingredient     @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  quantity        Float
+  costPrice       Decimal        @db.Decimal(10, 2)
+
+  @@index([purchaseOrderId])
+}
+
+model StockMovement {
+  id           String            @id @default(uuid())
+  ingredientId String
+  ingredient   Ingredient        @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  branchId     String
+  branch       Branch            @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  type         StockMovementType
+  quantity     Float
+  referenceId  String?           // E.g. Order ID or PO ID
+  notes        String?
+  createdAt    DateTime          @default(now())
+
+  @@index([ingredientId])
+  @@index([branchId])
+}
+
+enum StockMovementType {
+  PURCHASE
+  CONSUMPTION
+  WASTE
+  TRANSFER
+  ADJUSTMENT
+}
+
+model WasteRecord {
+  id           String      @id @default(uuid())
+  ingredientId String
+  ingredient   Ingredient  @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  branchId     String
+  branch       Branch      @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  quantity     Float
+  reason       String
+  recordedBy   String      // User ID
+  createdAt    DateTime    @default(now())
+
+  @@index([ingredientId])
+  @@index([branchId])
+}
+
+model InventoryTransfer {
+  id                  String         @id @default(uuid())
+  sourceBranchId      String
+  sourceBranch        Branch         @relation("SourceBranch", fields: [sourceBranchId], references: [id], onDelete: Cascade)
+  destinationBranchId String
+  destinationBranch   Branch         @relation("DestinationBranch", fields: [destinationBranchId], references: [id], onDelete: Cascade)
+  ingredientId        String
+  ingredient          Ingredient     @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  quantity            Float
+  status              TransferStatus @default(PENDING)
+  notes               String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  @@index([sourceBranchId])
+  @@index([destinationBranchId])
+}
+
+enum TransferStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+model RecipeMapping {
+  id               String     @id @default(uuid())
+  productId        String
+  product          Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  ingredientId     String
+  ingredient       Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  quantityRequired Float
+
+  @@unique([productId, ingredientId])
+  @@index([productId])
+}
+
+model InventoryAlert {
+  id           String     @id @default(uuid())
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  branchId     String
+  branch       Branch     @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  alertType    String     // e.g. "LOW_STOCK", "OUT_OF_STOCK"
+  status       String     @default("ACTIVE") // ACTIVE, RESOLVED
+  createdAt    DateTime   @default(now())
+
+  @@index([ingredientId])
+  @@index([branchId])
 }
