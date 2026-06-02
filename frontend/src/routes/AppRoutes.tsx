@@ -27,6 +27,8 @@ const OffersPage = React.lazy(() => import('../features/customer/pages/OffersPag
 const FavoritesPage = React.lazy(() => import('../features/customer/pages/FavoritesPage'));
 const OrderListPage = React.lazy(() => import('../features/orders/pages/OrderListPage'));
 const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/OrderTrackingPage'));
+const DeliveryDashboardPage = React.lazy(() => import('../features/delivery/pages/DeliveryDashboardPage'));
+const EarningsDashboardPage = React.lazy(() => import('../features/delivery/pages/EarningsDashboardPage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -275,6 +277,24 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <KitchenAnalyticsPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Delivery Dashboard System */}
+            <Route
+              path="/delivery"
+              element={
+                <ProtectedRoute>
+                  <DeliveryDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/delivery/earnings"
+              element={
+                <ProtectedRoute>
+                  <EarningsDashboardPage />
                 </ProtectedRoute>
               }
             />

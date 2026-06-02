@@ -31,6 +31,7 @@ model User {
   couponUsages            CouponUsage[]
   orderDrafts             OrderDraft[]
   kitchenOrders           KitchenOrder[]
+  deliveryPartner         DeliveryPartner?
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
 }
@@ -42,6 +43,7 @@ enum Role {
   HEAD_CHEF
   KITCHEN_MANAGER
   DELIVERY_PARTNER
+  DELIVERY_MANAGER
   CASHIER
   SUPER_ADMIN
 }
@@ -168,6 +170,8 @@ model Order {
   refunds       Refund[]
   bills         Bill[]
   kitchenOrder  KitchenOrder?
+  deliveryAssignment DeliveryAssignment?
+  driverEarnings     DriverEarnings?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -572,4 +576,74 @@ model KitchenTask {
 
   @@index([kitchenOrderId])
   @@index([productId])
+}
+
+// ----------------------------------------------------
+// DELIVERY MANAGEMENT MODELS
+// ----------------------------------------------------
+
+model DeliveryPartner {
+  id             String               @id @default(uuid())
+  userId         String               @unique
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicleType    String
+  vehicleNumber  String
+  licenseNumber  String
+  activeStatus   Boolean              @default(true)
+  rating         Float                @default(0.0)
+  assignments    DeliveryAssignment[]
+  earnings       DriverEarnings[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+}
+
+enum DeliveryStatus {
+  ASSIGNED
+  ACCEPTED
+  AT_RESTAURANT
+  PICKED_UP
+  OUT_FOR_DELIVERY
+  DELIVERED
+  FAILED
+}
+
+model DeliveryAssignment {
+  id               String           @id @default(uuid())
+  orderId          String           @unique
+  order            Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  driverId         String
+  driver           DeliveryPartner  @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  status           DeliveryStatus   @default(ASSIGNED)
+  assignedAt       DateTime         @default(now())
+  acceptedAt       DateTime?
+  pickedUpAt       DateTime?
+  deliveredAt      DateTime?
+  proof            DeliveryProof?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([driverId])
+}
+
+model DeliveryProof {
+  id             String             @id @default(uuid())
+  assignmentId   String             @unique
+  assignment     DeliveryAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  imageUrl       String?
+  signatureUrl   String?
+  notes          String?
+  timestamp      DateTime           @default(now())
+}
+
+model DriverEarnings {
+  id             String           @id @default(uuid())
+  driverId       String
+  driver         DeliveryPartner  @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  orderId        String           @unique
+  order          Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  earnings       Decimal          @db.Decimal(10, 2)
+  bonus          Decimal          @default(0.00) @db.Decimal(10, 2)
+  createdAt      DateTime         @default(now())
+
+  @@index([driverId])
 }
