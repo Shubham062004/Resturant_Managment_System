@@ -5,6 +5,7 @@ import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
 import { KitchenOrderStatus, KitchenPriority } from '@prisma/client';
 import { DeliveryService } from '../delivery/delivery.service';
+import { InventoryService } from '../inventory/inventory.service';
 
 export class KitchenService {
   /**
@@ -66,6 +67,12 @@ export class KitchenService {
     const updateData: any = { status };
     if (status === 'COOKING' && !kOrder.startedAt) {
       updateData.startedAt = new Date();
+      // Auto Deduct Inventory when cooking starts
+      try {
+        await InventoryService.deductForOrder(kOrder.orderId);
+      } catch (e: any) {
+        console.error('Failed to auto-deduct inventory:', e.message);
+      }
     }
     if (status === 'COMPLETED' || status === 'PACKED') {
       updateData.completedAt = new Date();
