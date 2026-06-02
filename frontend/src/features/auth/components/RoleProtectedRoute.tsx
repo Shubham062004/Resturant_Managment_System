@@ -13,9 +13,9 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
   children,
   allowedRoles,
 }) => {
-  const { user, accessToken } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  if (!accessToken) {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 

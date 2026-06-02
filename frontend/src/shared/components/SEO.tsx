@@ -8,8 +8,7 @@ export interface SEOProps {
   ogType?: 'website' | 'article' | 'profile';
   ogImage?: string;
   canonicalUrl?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  structuredData?: Record<string, any>;
+  structuredData?: Record<string, unknown>;
 }
 
 export const SEO: React.FC<SEOProps> = ({

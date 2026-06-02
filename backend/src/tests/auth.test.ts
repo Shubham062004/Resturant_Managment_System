@@ -124,9 +124,11 @@ describe('Auth API Integration Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(response.body.data.token).toBeDefined();
+      expect(response.body.data.user).toBeDefined();
       expect(response.headers['set-cookie']).toBeDefined();
-      expect(response.headers['set-cookie'][0]).toContain('refreshToken=');
+      const cookies = [response.headers['set-cookie']].flat().filter(Boolean) as string[];
+      expect(cookies.some((c) => c.includes('refreshToken='))).toBe(true);
+      expect(cookies.some((c) => c.includes('accessToken='))).toBe(true);
       expect(AuditService.registerSession).toHaveBeenCalled();
       expect(AuditService.writeLog).toHaveBeenCalledWith(
         'user-uuid',
@@ -177,8 +179,9 @@ describe('Auth API Integration Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(response.body.data.token).toBeDefined();
-      expect(response.headers['set-cookie']).toBeDefined();
+      expect(response.body.success).toBe(true);
+      const cookies = [response.headers['set-cookie']].flat().filter(Boolean) as string[];
+      expect(cookies.some((c) => c.includes('accessToken='))).toBe(true);
       expect(prisma.refreshToken.update).toHaveBeenCalledWith(
         expect.objectContaining({
           data: { revoked: true },

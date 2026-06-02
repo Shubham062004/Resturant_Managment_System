@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -7,38 +7,70 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Allow cookies to be sent
-  timeout: 10000, // 10 seconds timeout limit
+  withCredentials: true,
+  timeout: 10000,
 });
 
-// Request Interceptor: Attach JWT bearer tokens
-apiClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
+let isRefreshing = false;
+let refreshQueue: Array<(success: boolean) => void> = [];
 
-// Response Interceptor: Manage globally caught HTTP errors
+const processRefreshQueue = (success: boolean) => {
+  refreshQueue.forEach((callback) => callback(success));
+  refreshQueue = [];
+};
+
+const refreshAccessToken = async (): Promise<boolean> => {
+  try {
+    await apiClient.post('/auth/refresh');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error) => {
-    if (error.response) {
-      const { status } = error.response;
-      if (status === 401) {
-        // Automatically purge session tokens and send back to login
-        localStorage.removeItem('token');
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      const isAuthRoute =
+        originalRequest.url?.includes('/auth/login') ||
+        originalRequest.url?.includes('/auth/register') ||
+        originalRequest.url?.includes('/auth/refresh');
+
+      if (isAuthRoute) {
+        return Promise.reject(error);
+      }
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          refreshQueue.push((success) => {
+            if (success) {
+              resolve(apiClient(originalRequest));
+            } else {
+              reject(error);
+            }
+          });
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshed = await refreshAccessToken();
+      isRefreshing = false;
+      processRefreshQueue(refreshed);
+
+      if (refreshed) {
+        return apiClient(originalRequest);
+      }
+
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
       }
     }
+
     return Promise.reject(error);
   },
 );

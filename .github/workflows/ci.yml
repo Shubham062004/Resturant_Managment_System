@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
-          node-size: '18.x'
+          node-version: '18.x'
           cache: 'npm'
 
       - name: Install Workspace Dependencies
@@ -29,6 +29,11 @@ jobs:
 
       - name: Lint Workspace Packages (ESLint)
         run: npm run lint
+
+      - name: Validate Prisma Schema
+        run: |
+          cd backend
+          npx prisma validate --schema src/database/schema.prisma
 
       - name: Generate Backend Relational Database Client
         run: |

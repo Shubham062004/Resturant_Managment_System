@@ -91,3 +91,19 @@ export const updateReviewSchema = z.object({
 export const favoriteToggleSchema = z.object({
   productId: z.string().uuid('Invalid product ID'),
 });
+
+export const paginationQuerySchema = z.object({
+  restaurantId: z.string().uuid('Invalid restaurant ID').optional(),
+  page: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val > 0)
+    .default('1')
+    .optional(),
+  limit: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => !isNaN(val) && val > 0 && val <= 100)
+    .default('20')
+    .optional(),
+});

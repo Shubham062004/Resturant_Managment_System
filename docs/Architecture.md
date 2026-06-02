@@ -77,16 +77,16 @@ sequenceDiagram
     Client->>Server: POST /auth/login (credentials)
     Server->>Server: Verify password hash (bcrypt)
     Server->>DB: Store hashed Refresh Token
-    Server-->>Client: Returns Access Token (JSON) & Refresh Token (HTTP-Only Cookie)
+    Server-->>Client: Sets Access Token (HTTP-Only Cookie) & Refresh Token (HTTP-Only Cookie)
 
-    Note over Client,Server: Client accesses routes using Access Token (15m expiry)
+    Note over Client,Server: Browser sends cookies automatically via withCredentials
 
-    Client->>Server: POST /auth/refresh (with Cookie)
+    Client->>Server: POST /auth/refresh (with Cookies)
     Server->>DB: Lookup Refresh Token Hash
     alt Token is valid & active
         Server->>DB: Mark old token as revoked (revoked = true)
         Server->>DB: Store new rotated Refresh Token Hash
-        Server-->>Client: Returns new Access Token & new Refresh Token Cookie
+        Server-->>Client: Rotates Access Token Cookie & Refresh Token Cookie
     else Token is already revoked (Replay Attack)
         Server->>DB: Revoke ALL refresh tokens for user
         Server->>DB: Mark MongoDB active sessions as logged out
@@ -94,8 +94,8 @@ sequenceDiagram
     end
 ```
 
-1. **Access Token (Short-lived)**: Expiration of 15 minutes, returned in response JSON. Payload: `{ id: userId, email: email, role: role }`.
-2. **Refresh Token (Long-lived)**: Expiration of 7 days, stored exclusively in a secure, HTTP-only, SameSite=Lax cookie.
+1. **Access Token (Short-lived)**: Expiration of 15 minutes, stored in an HttpOnly, Secure (production), SameSite=Lax cookie. Payload: `{ id, email, role }`. Not persisted in `localStorage`.
+2. **Refresh Token (Long-lived)**: Expiration of 7 days, stored in a separate HttpOnly cookie with rotation on every refresh.
 3. **Token Hashing**: Refresh tokens are stored as SHA-256 hashes in PostgreSQL to guarantee database compromise does not leak active tokens.
 4. **Replay Protection**: If a client attempts to refresh using a token already marked as revoked, it indicates a compromise. The server immediately invalidates all active tokens and sessions associated with that user.
 
@@ -128,7 +128,7 @@ Integrated Google Sign-in allows fast single-sign-on (SSO) credentials:
 ### D. Security Hardening Configurations
 
 - **Helmet**: Enforces secure HTTP headers, including clickjacking and Content Security Policy parameters.
-- **IP Rate Limiting**: Throttles brute force requests:
+- **IP Rate Limiting**: Global API limiter (500 req / 15 min) plus route-specific throttles:
   - Auth Pipeline (login, register): 100 requests per 15 minutes.
   - OTP Dispatch: 10 requests per hour.
 - **Sanitization Middleware**: Recursively strips HTML tags from request strings using regex rules to prevent XSS script injections.

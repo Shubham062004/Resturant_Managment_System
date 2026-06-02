@@ -1,5 +1,9 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
+
+type AddressCreateData = Omit<Prisma.AddressUncheckedCreateInput, 'userId'>;
+type AddressUpdateData = Prisma.AddressUpdateInput;
 
 export class AddressService {
   /**
@@ -15,31 +19,30 @@ export class AddressService {
   /**
    * Create a new address
    */
-  public static async createAddress(userId: string, data: Record<string, unknown>) {
-    if (data.isDefault) {
+  public static async createAddress(userId: string, data: AddressCreateData) {
+    const payload: AddressCreateData = { ...data };
+
+    if (payload.isDefault) {
       await prisma.address.updateMany({
         where: { userId, isDefault: true },
         data: { isDefault: false },
       });
     } else {
-      // If no addresses exist, make this default
       const count = await prisma.address.count({ where: { userId } });
-      if (count === 0) data.isDefault = true;
+      if (count === 0) {
+        payload.isDefault = true;
+      }
     }
 
     return prisma.address.create({
-      data: { ...data, userId },
+      data: { ...payload, userId },
     });
   }
 
   /**
    * Update address
    */
-  public static async updateAddress(
-    userId: string,
-    addressId: string,
-    data: Record<string, unknown>,
-  ) {
+  public static async updateAddress(userId: string, addressId: string, data: AddressUpdateData) {
     const existing = await prisma.address.findUnique({ where: { id: addressId } });
     if (!existing || existing.userId !== userId) {
       throw new AppError('Address not found', 404);
@@ -69,7 +72,6 @@ export class AddressService {
 
     await prisma.address.delete({ where: { id: addressId } });
 
-    // If default was deleted, make the most recent one default
     if (existing.isDefault) {
       const recent = await prisma.address.findFirst({
         where: { userId },

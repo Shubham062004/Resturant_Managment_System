@@ -115,6 +115,15 @@ Oven Xpress enforces strict visual formatting and type stability rules.
   ```bash
   npm run lint
   ```
+- **Prisma Validate**: Confirms database schema integrity:
+  ```bash
+  cd backend && npx prisma validate --schema src/database/schema.prisma
+  ```
+- **Type Check**:
+  ```bash
+  cd backend && npx tsc --noEmit
+  cd frontend && npx tsc --noEmit
+  ```
 - **Pre-commit Gatekeeping**: Husky triggers `lint-staged` automatically during git commit operations to format and check modified files before writing changes.
 
 ---
@@ -123,7 +132,7 @@ Oven Xpress enforces strict visual formatting and type stability rules.
 
 We enforce **Conventional Commits** via commitlint hooks. Example message structures:
 
-- **Features**: `feat(auth): integrate token storage in localStorage`
+- **Features**: `feat(auth): migrate access tokens to HttpOnly cookies`
 - **Bug Fixes**: `fix(tables): resolve grid toggle crash on mobile layouts`
 - **Documentation**: `docs(architecture): clarify dual database transaction boundaries`
 - **Refactoring**: `refactor(backend): modularize token generator service class`

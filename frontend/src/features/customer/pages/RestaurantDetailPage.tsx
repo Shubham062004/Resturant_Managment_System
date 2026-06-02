@@ -3,11 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import { useRestaurantBySlug, useToggleFavorite } from '../store/catalogQueries';
 import { useAppSelector } from '../../../app/store';
 import { Star, Heart, Clock, Flame, ChevronRight, MapPin, Phone, Info } from 'lucide-react';
-import { motion } from 'framer-motion';
-
 export const RestaurantDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { data: response, isLoading, isError, refetch } = useRestaurantBySlug(slug || '');
+  const { data: response, isLoading, isError } = useRestaurantBySlug(slug || '');
   const toggleFavoriteMutation = useToggleFavorite();
   const favoritedIds = useAppSelector((state) => state.favorite.favoritedIds);
 

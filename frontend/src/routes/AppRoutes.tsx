@@ -4,13 +4,13 @@ import ThemeProvider from '../shared/theme/theme-provider';
 import { ToastProvider } from '../shared/components/ui/Toast';
 import { HelmetProvider } from 'react-helmet-async';
 import { useAppDispatch, useAppSelector } from '../app/store';
-import { fetchProfile } from '../features/auth/store/authSlice';
+import { refreshSession, fetchProfile } from '../features/auth/store/authSlice';
 
-// Import Layouts
-import CustomerLayout from '../layouts/CustomerLayout';
-import ProfileLayout from '../layouts/ProfileLayout';
-import ErrorLayout from '../layouts/ErrorLayout';
-import MainLayout from '../layouts/MainLayout';
+// Lazy-load layouts for route code splitting
+const CustomerLayout = React.lazy(() => import('../layouts/CustomerLayout'));
+const ProfileLayout = React.lazy(() => import('../layouts/ProfileLayout'));
+const ErrorLayout = React.lazy(() => import('../layouts/ErrorLayout'));
+const MainLayout = React.lazy(() => import('../layouts/MainLayout'));
 
 // Import Route Guards
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
@@ -107,16 +107,21 @@ const RouteLoader = () => (
 
 const AppRouter = () => {
   const dispatch = useAppDispatch();
-  const { accessToken, authStatus } = useAppSelector((state) => state.auth);
+  const { authStatus } = useAppSelector((state) => state.auth);
 
-  // Initialize session profile on boot if a token exists
+  // Restore session from HttpOnly cookies on boot
   useEffect(() => {
-    if (accessToken && authStatus === 'idle') {
-      dispatch(fetchProfile());
+    if (authStatus === 'idle') {
+      dispatch(refreshSession())
+        .unwrap()
+        .then(() => dispatch(fetchProfile()))
+        .catch(() => {
+          /* no active session */
+        });
     }
-  }, [accessToken, authStatus, dispatch]);
+  }, [authStatus, dispatch]);
 
-  if (accessToken && authStatus === 'loading') {
+  if (authStatus === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />

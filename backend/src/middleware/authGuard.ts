@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import env from '../config/env';
 import AppError from '../utils/appError';
 import { AuthRequest } from '../types/express';
+import { extractAccessToken } from '../utils/extractAccessToken';
 
 export interface DecodedToken {
   id: string;
@@ -18,11 +19,7 @@ export const authGuard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // 1. Extract Bearer Token from Request header
-    let token: string | undefined;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
+    const token = extractAccessToken(req);
 
     if (!token) {
       return next(new AppError('Authentication failed. Access token is missing or invalid.', 401));

@@ -278,7 +278,7 @@ export const useCreateReview = () => {
       const { data } = await apiClient.post('/catalog/reviews', reviewData);
       return data;
     },
-    onSuccess: (response, variables) => {
+    onSuccess: () => {
       // Invalidate target product details query to trigger reviews reload and rating recalculation
       queryClient.invalidateQueries({ queryKey: ['product'] });
       queryClient.invalidateQueries({ queryKey: ['restaurant'] });

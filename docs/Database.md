@@ -151,7 +151,22 @@ MongoDB manages rapid read-heavy configurations, dynamic deep-nested catalogs (e
 
 ---
 
-## 3. Relational Mapping & Indexing Rules
+## 3. Catalog Query Optimization
+
+Menu/catalog endpoints use Prisma `select` projections and pagination to avoid over-fetching:
+
+| Endpoint                           | Pagination      | Notes                                        |
+| :--------------------------------- | :-------------- | :------------------------------------------- |
+| `GET /catalog/restaurants`         | `page`, `limit` | Branch hours included via selective `select` |
+| `GET /catalog/products`            | `page`, `limit` | Variants loaded in single query              |
+| `GET /catalog/branches`            | `page`, `limit` | Filterable by `restaurantId`                 |
+| `GET /catalog/categories`          | `page`, `limit` | Filterable by `restaurantId`                 |
+| `GET /catalog/favorites`           | `page`, `limit` | Authenticated; product graph via `select`    |
+| `GET /catalog/reviews/product/:id` | `page`, `limit` | User profile fields selectively loaded       |
+
+---
+
+## 4. Relational Mapping & Indexing Rules
 
 - **Foreign Keys**: Indexes on all foreign key references (`tableId`, `userId`, `orderId`) are mandatory in PostgreSQL.
 - **Compound Indexes**:

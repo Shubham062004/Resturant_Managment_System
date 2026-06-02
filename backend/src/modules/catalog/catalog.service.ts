@@ -69,9 +69,24 @@ export class CatalogService {
     // Fetch restaurants along with branches
     let restaurants = await prisma.restaurant.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        logo: true,
+        coverImage: true,
+        rating: true,
+        status: true,
         branches: {
           where: { isActive: true },
+          select: {
+            id: true,
+            name: true,
+            openingTime: true,
+            closingTime: true,
+            isActive: true,
+          },
         },
       },
       orderBy,
@@ -151,14 +166,68 @@ export class CatalogService {
   public static async getRestaurantBySlug(slug: string) {
     const restaurant = await prisma.restaurant.findUnique({
       where: { slug },
-      include: {
-        branches: { where: { isActive: true } },
-        categories: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        logo: true,
+        coverImage: true,
+        rating: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+        branches: {
+          where: { isActive: true },
+          select: {
+            id: true,
+            name: true,
+            address: true,
+            city: true,
+            state: true,
+            openingTime: true,
+            closingTime: true,
+            isActive: true,
+          },
+        },
+        categories: {
+          where: { isActive: true },
+          orderBy: { sortOrder: 'asc' },
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            description: true,
+            image: true,
+            sortOrder: true,
+          },
+        },
         products: {
           where: { isAvailable: true },
-          include: {
-            variants: true,
-            category: true,
+          take: 50,
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            shortDescription: true,
+            basePrice: true,
+            rating: true,
+            isVeg: true,
+            featured: true,
+            image: true,
+            gallery: true,
+            categoryId: true,
+            category: {
+              select: { id: true, name: true, slug: true },
+            },
+            variants: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                isDefault: true,
+              },
+            },
           },
         },
       },
@@ -174,39 +243,103 @@ export class CatalogService {
   /**
    * Get branches
    */
-  public static async getBranches(restaurantId?: string) {
-    const where: any = { isActive: true };
-    if (restaurantId) {
-      where.restaurantId = restaurantId;
+  public static async getBranches(filters: {
+    restaurantId?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    const page = filters.page || 1;
+    const limit = filters.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const where: { isActive: boolean; restaurantId?: string } = { isActive: true };
+    if (filters.restaurantId) {
+      where.restaurantId = filters.restaurantId;
     }
-    return prisma.branch.findMany({
-      where,
-      include: {
-        restaurant: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            logo: true,
+
+    const [branches, total] = await prisma.$transaction([
+      prisma.branch.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          address: true,
+          city: true,
+          state: true,
+          openingTime: true,
+          closingTime: true,
+          isActive: true,
+          restaurant: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              logo: true,
+            },
           },
         },
+      }),
+      prisma.branch.count({ where }),
+    ]);
+
+    return {
+      branches,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-    });
+    };
   }
 
   /**
    * Get active categories
    */
-  public static async getCategories(restaurantId?: string) {
-    const where: any = { isActive: true };
-    if (restaurantId) {
-      where.restaurantId = restaurantId;
+  public static async getCategories(filters: {
+    restaurantId?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    const page = filters.page || 1;
+    const limit = filters.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const where: { isActive: boolean; restaurantId?: string } = { isActive: true };
+    if (filters.restaurantId) {
+      where.restaurantId = filters.restaurantId;
     }
 
-    return prisma.category.findMany({
-      where,
-      orderBy: { sortOrder: 'asc' },
-    });
+    const [categories, total] = await prisma.$transaction([
+      prisma.category.findMany({
+        where,
+        orderBy: { sortOrder: 'asc' },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          image: true,
+          sortOrder: true,
+          restaurantId: true,
+        },
+      }),
+      prisma.category.count({ where }),
+    ]);
+
+    return {
+      categories,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   /**
@@ -587,21 +720,49 @@ export class CatalogService {
   /**
    * Get reviews by product ID
    */
-  public static async getReviewsByProductId(productId: string) {
-    return prisma.review.findMany({
-      where: { productId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            avatar: true,
+  public static async getReviewsByProductId(
+    productId: string,
+    filters: { page?: number; limit?: number } = {},
+  ) {
+    const page = filters.page || 1;
+    const limit = filters.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const where = { productId };
+
+    const [reviews, total] = await prisma.$transaction([
+      prisma.review.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              avatar: true,
+            },
           },
         },
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.review.count({ where }),
+    ]);
+
+    return {
+      reviews,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-      orderBy: { createdAt: 'desc' },
-    });
+    };
   }
 
   /**
@@ -647,20 +808,65 @@ export class CatalogService {
   /**
    * Get User Favorites list
    */
-  public static async getFavorites(userId: string) {
-    const favorites = await prisma.favorite.findMany({
-      where: { userId },
-      include: {
-        product: {
-          include: {
-            variants: true,
-            restaurant: true,
+  public static async getFavorites(
+    userId: string,
+    filters: { page?: number; limit?: number } = {},
+  ) {
+    const page = filters.page || 1;
+    const limit = filters.limit || 20;
+    const skip = (page - 1) * limit;
+
+    const where = { userId };
+
+    const [favorites, total] = await prisma.$transaction([
+      prisma.favorite.findMany({
+        where,
+        skip,
+        take: limit,
+        select: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              shortDescription: true,
+              basePrice: true,
+              rating: true,
+              isVeg: true,
+              image: true,
+              gallery: true,
+              variants: {
+                select: {
+                  id: true,
+                  name: true,
+                  price: true,
+                  isDefault: true,
+                },
+              },
+              restaurant: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                  logo: true,
+                },
+              },
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.favorite.count({ where }),
+    ]);
 
-    return favorites.map((fav) => fav.product);
+    return {
+      products: favorites.map((fav) => fav.product),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   /**

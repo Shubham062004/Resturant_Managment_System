@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { useRestaurants } from '../store/catalogQueries';
 import {
@@ -10,7 +10,7 @@ import {
   resetFilters,
 } from '../store/restaurantSlice';
 import { Link } from 'react-router-dom';
-import { Star, Search, Filter, RotateCcw, Compass, Clock, CheckCircle } from 'lucide-react';
+import { Star, Search, Filter, RotateCcw, Compass, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const RestaurantsPage: React.FC = () => {
@@ -211,7 +211,6 @@ export const RestaurantsPage: React.FC = () => {
               <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <AnimatePresence mode="popLayout">
                   {data?.data.map((restaurant) => {
-                    const isClosed = false; // Add custom check details if needed
                     return (
                       <motion.div
                         key={restaurant.id}

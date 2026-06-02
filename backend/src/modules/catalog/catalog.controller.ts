@@ -67,12 +67,17 @@ export class CatalogController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { restaurantId } = req.query as { restaurantId?: string };
-      const branches = await CatalogService.getBranches(restaurantId);
+      const filters = req.query as {
+        restaurantId?: string;
+        page?: number;
+        limit?: number;
+      };
+      const result = await CatalogService.getBranches(filters);
 
       res.status(200).json({
         success: true,
-        data: branches,
+        data: result.branches,
+        meta: result.meta,
         message: 'Branches retrieved successfully.',
       });
     } catch (error) {
@@ -86,12 +91,17 @@ export class CatalogController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { restaurantId } = req.query as { restaurantId?: string };
-      const categories = await CatalogService.getCategories(restaurantId);
+      const filters = req.query as {
+        restaurantId?: string;
+        page?: number;
+        limit?: number;
+      };
+      const result = await CatalogService.getCategories(filters);
 
       res.status(200).json({
         success: true,
-        data: categories,
+        data: result.categories,
+        meta: result.meta,
         message: 'Categories retrieved successfully.',
       });
     } catch (error) {
@@ -276,11 +286,13 @@ export class CatalogController {
   ): Promise<void> {
     try {
       const { productId } = req.params;
-      const reviews = await CatalogService.getReviewsByProductId(productId);
+      const filters = req.query as { page?: number; limit?: number };
+      const result = await CatalogService.getReviewsByProductId(productId, filters);
 
       res.status(200).json({
         success: true,
-        data: reviews,
+        data: result.reviews,
+        meta: result.meta,
         message: 'Reviews retrieved successfully.',
       });
     } catch (error) {
@@ -323,11 +335,13 @@ export class CatalogController {
         return;
       }
 
-      const favorites = await CatalogService.getFavorites(req.user.id);
+      const filters = req.query as { page?: number; limit?: number };
+      const result = await CatalogService.getFavorites(req.user.id, filters);
 
       res.status(200).json({
         success: true,
-        data: favorites,
+        data: result.products,
+        meta: result.meta,
         message: 'Favorites retrieved successfully.',
       });
     } catch (error) {

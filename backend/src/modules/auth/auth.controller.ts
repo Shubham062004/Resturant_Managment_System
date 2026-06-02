@@ -6,20 +6,16 @@ import { EmailService } from '../../services/email.service';
 import { GoogleAuthService } from '../../services/googleAuth.service';
 import { AuditService } from '../../services/audit.service';
 import { prisma } from '../../config/db';
-import env from '../../config/env';
 import AppError from '../../utils/appError';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { OtpType, Role } from '@prisma/client';
 import logger from '../../utils/logger';
-
-const cookieOptions = {
-  httpOnly: true,
-  secure: env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  path: '/',
-};
+import {
+  accessTokenCookieOptions,
+  refreshTokenCookieOptions,
+  clearAuthCookieOptions,
+} from '../../utils/authCookies';
 
 export class AuthController {
   public static async register(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
@@ -48,11 +44,12 @@ export class AuthController {
         req.headers['user-agent'] || '',
       );
 
-      res.cookie('refreshToken', refreshToken, cookieOptions);
+      res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
+      res.cookie('accessToken', accessToken, accessTokenCookieOptions);
 
       res.status(200).json({
         success: true,
-        data: { token: accessToken, user },
+        data: { user },
         message: 'Authentication successful.',
       });
     } catch (error) {
@@ -74,11 +71,12 @@ export class AuthController {
         req.headers['user-agent'] || '',
       );
 
-      res.cookie('refreshToken', refreshToken, cookieOptions);
+      res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
+      res.cookie('accessToken', accessToken, accessTokenCookieOptions);
 
       res.status(200).json({
         success: true,
-        data: { token: accessToken },
+        data: null,
         message: 'Access token refreshed successfully.',
       });
     } catch (error) {
@@ -98,7 +96,8 @@ export class AuthController {
         );
       }
 
-      res.clearCookie('refreshToken', { ...cookieOptions, maxAge: 0 });
+      res.clearCookie('refreshToken', { ...clearAuthCookieOptions, maxAge: 0 });
+      res.clearCookie('accessToken', { ...clearAuthCookieOptions, maxAge: 0 });
 
       res.status(200).json({
         success: true,
@@ -126,7 +125,8 @@ export class AuthController {
         req.headers['user-agent'] || '',
       );
 
-      res.clearCookie('refreshToken', { ...cookieOptions, maxAge: 0 });
+      res.clearCookie('refreshToken', { ...clearAuthCookieOptions, maxAge: 0 });
+      res.clearCookie('accessToken', { ...clearAuthCookieOptions, maxAge: 0 });
 
       res.status(200).json({
         success: true,
@@ -502,12 +502,12 @@ export class AuthController {
         },
       );
 
-      res.cookie('refreshToken', refreshToken, cookieOptions);
+      res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
+      res.cookie('accessToken', accessToken, accessTokenCookieOptions);
 
       res.status(200).json({
         success: true,
         data: {
-          token: accessToken,
           user: {
             id: user.id,
             firstName: user.firstName,

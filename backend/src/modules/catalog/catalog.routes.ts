@@ -2,13 +2,14 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import env from '../../config/env';
 import { CatalogController } from './catalog.controller';
-import { authGuard } from '../../middleware/authGuard';
+import { authGuard, DecodedToken } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
 import { sanitizeInput } from '../../middleware/sanitize';
-import { DecodedToken } from '../../middleware/authGuard';
+import { extractAccessToken } from '../../utils/extractAccessToken';
 import {
   restaurantQuerySchema,
   productQuerySchema,
+  paginationQuerySchema,
   createReviewSchema,
   updateReviewSchema,
   favoriteToggleSchema,
@@ -22,10 +23,7 @@ router.use(sanitizeInput);
 // Helper middleware to optionally resolve authenticated user credentials (for logging search/view events)
 const optionalAuth = (req: any, res: any, next: any) => {
   try {
-    let token: string | undefined;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
+    const token = extractAccessToken(req);
     if (token) {
       const decoded = jwt.verify(token, env.JWT_SECRET) as DecodedToken;
       req.user = {
@@ -50,10 +48,14 @@ router.get('/restaurants/slug/:slug', CatalogController.getRestaurantBySlug);
 router.get('/restaurants/:id', CatalogController.getRestaurantById);
 
 // Branch endpoints
-router.get('/branches', CatalogController.getBranches);
+router.get('/branches', validate({ query: paginationQuerySchema }), CatalogController.getBranches);
 
 // Category endpoints
-router.get('/categories', CatalogController.getCategories);
+router.get(
+  '/categories',
+  validate({ query: paginationQuerySchema }),
+  CatalogController.getCategories,
+);
 router.get('/categories/slug/:slug', CatalogController.getCategoryBySlug);
 
 // Product endpoints
@@ -85,7 +87,11 @@ router.put(
   CatalogController.updateReview,
 );
 router.delete('/reviews/:id', authGuard, CatalogController.deleteReview);
-router.get('/reviews/product/:productId', CatalogController.getReviewsByProductId);
+router.get(
+  '/reviews/product/:productId',
+  validate({ query: paginationQuerySchema }),
+  CatalogController.getReviewsByProductId,
+);
 
 // Favorites endpoints (Authenticated)
 router.post(
@@ -94,6 +100,11 @@ router.post(
   validate({ body: favoriteToggleSchema }),
   CatalogController.toggleFavorite,
 );
-router.get('/favorites', authGuard, CatalogController.getFavorites);
+router.get(
+  '/favorites',
+  authGuard,
+  validate({ query: paginationQuerySchema }),
+  CatalogController.getFavorites,
+);
 
 export default router;

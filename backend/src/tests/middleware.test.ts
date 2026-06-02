@@ -30,8 +30,8 @@ describe('Auth Middleware Tests', () => {
       expect(error.message).toContain('Access token is missing');
     });
 
-    it('should verify and attach user details to request if token is valid', async () => {
-      mockRequest.headers!.authorization = 'Bearer valid-jwt-token';
+    it('should verify and attach user details from HttpOnly cookie if token is valid', async () => {
+      mockRequest.cookies = { accessToken: 'valid-jwt-token' };
       const mockDecoded = {
         id: 'user-123',
         email: 'user@example.com',

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../../../services/apiClient';
 
 export interface User {
@@ -15,29 +15,28 @@ export interface User {
 
 export interface AuthState {
   user: User | null;
-  accessToken: string | null;
+  isAuthenticated: boolean;
   authStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  accessToken: localStorage.getItem('token'),
+  isAuthenticated: false,
   authStatus: 'idle',
   error: null,
 };
 
-// Async Thunks
 export const login = createAsyncThunk(
   'auth/login',
-  async (credentials: Record<string, any>, { rejectWithValue }) => {
+  async (credentials: Record<string, string>, { rejectWithValue }) => {
     try {
       const response = await apiClient.post('/auth/login', credentials);
-      const { token, user } = response.data.data;
-      localStorage.setItem('token', token);
-      return { token, user };
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.error?.message || 'Login failed';
+      const { user } = response.data.data;
+      return { user };
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const errorMsg = error.response?.data?.error?.message || 'Login failed';
       return rejectWithValue(errorMsg);
     }
   },
@@ -45,12 +44,13 @@ export const login = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: Record<string, any>, { rejectWithValue }) => {
+  async (userData: Record<string, string>, { rejectWithValue }) => {
     try {
       const response = await apiClient.post('/auth/register', userData);
       return response.data.message;
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.error?.message || 'Registration failed';
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const errorMsg = error.response?.data?.error?.message || 'Registration failed';
       return rejectWithValue(errorMsg);
     }
   },
@@ -61,11 +61,11 @@ export const googleAuthLogin = createAsyncThunk(
   async (token: string, { rejectWithValue }) => {
     try {
       const response = await apiClient.post('/auth/google', { token });
-      const { token: accessToken, user } = response.data.data;
-      localStorage.setItem('token', accessToken);
-      return { token: accessToken, user };
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.error?.message || 'Google login failed';
+      const { user } = response.data.data;
+      return { user };
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const errorMsg = error.response?.data?.error?.message || 'Google login failed';
       return rejectWithValue(errorMsg);
     }
   },
@@ -74,37 +74,28 @@ export const googleAuthLogin = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async () => {
   try {
     await apiClient.post('/auth/logout');
-  } catch (err: any) {
+  } catch {
     // Local cleanups proceed even if API triggers warnings
-  } finally {
-    localStorage.removeItem('token');
   }
 });
 
-export const logoutAllDevices = createAsyncThunk(
-  'auth/logoutAll',
-  async () => {
-    try {
-      await apiClient.post('/auth/logout-all');
-    } catch (err: any) {
-      // Local cleanups proceed
-    } finally {
-      localStorage.removeItem('token');
-    }
-  },
-);
+export const logoutAllDevices = createAsyncThunk('auth/logoutAll', async () => {
+  try {
+    await apiClient.post('/auth/logout-all');
+  } catch {
+    // Local cleanups proceed
+  }
+});
 
 export const refreshSession = createAsyncThunk(
   'auth/refreshSession',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post('/auth/refresh');
-      const { token } = response.data.data;
-      localStorage.setItem('token', token);
-      return token;
-    } catch (err: any) {
-      localStorage.removeItem('token');
-      return rejectWithValue(err.response?.data?.error?.message || 'Session expired');
+      await apiClient.post('/auth/refresh');
+      return true;
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      return rejectWithValue(error.response?.data?.error?.message || 'Session expired');
     }
   },
 );
@@ -115,8 +106,9 @@ export const fetchProfile = createAsyncThunk(
     try {
       const response = await apiClient.get('/auth/me');
       return response.data.data.user;
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.error?.message || 'Failed to fetch profile';
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const errorMsg = error.response?.data?.error?.message || 'Failed to fetch profile';
       return rejectWithValue(errorMsg);
     }
   },
@@ -124,7 +116,7 @@ export const fetchProfile = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   'auth/updateProfile',
-  async (formData: FormData | Record<string, any>, { rejectWithValue }) => {
+  async (formData: FormData | Record<string, unknown>, { rejectWithValue }) => {
     try {
       const isFormData = formData instanceof FormData;
       const response = await apiClient.patch('/users/profile', formData, {
@@ -133,8 +125,9 @@ export const updateProfile = createAsyncThunk(
         },
       });
       return response.data.data.user;
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.error?.message || 'Failed to update profile';
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const errorMsg = error.response?.data?.error?.message || 'Failed to update profile';
       return rejectWithValue(errorMsg);
     }
   },
@@ -147,13 +140,14 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    setToken: (state, action: PayloadAction<string>) => {
-      state.accessToken = action.payload;
+    clearAuth: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
+      state.authStatus = 'idle';
     },
   },
   extraReducers: (builder) => {
     builder
-      // Login
       .addCase(login.pending, (state) => {
         state.authStatus = 'loading';
         state.error = null;
@@ -161,13 +155,12 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.authStatus = 'succeeded';
         state.user = action.payload.user;
-        state.accessToken = action.payload.token;
+        state.isAuthenticated = true;
       })
       .addCase(login.rejected, (state, action) => {
         state.authStatus = 'failed';
         state.error = action.payload as string;
       })
-      // Google Login
       .addCase(googleAuthLogin.pending, (state) => {
         state.authStatus = 'loading';
         state.error = null;
@@ -175,47 +168,48 @@ const authSlice = createSlice({
       .addCase(googleAuthLogin.fulfilled, (state, action) => {
         state.authStatus = 'succeeded';
         state.user = action.payload.user;
-        state.accessToken = action.payload.token;
+        state.isAuthenticated = true;
       })
       .addCase(googleAuthLogin.rejected, (state, action) => {
         state.authStatus = 'failed';
         state.error = action.payload as string;
       })
-      // Logout / Logout All
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
-        state.accessToken = null;
+        state.isAuthenticated = false;
         state.authStatus = 'idle';
       })
       .addCase(logoutAllDevices.fulfilled, (state) => {
         state.user = null;
-        state.accessToken = null;
+        state.isAuthenticated = false;
         state.authStatus = 'idle';
       })
-      // Refresh Session
-      .addCase(refreshSession.fulfilled, (state, action) => {
-        state.accessToken = action.payload;
+      .addCase(refreshSession.fulfilled, (state) => {
+        state.isAuthenticated = true;
       })
       .addCase(refreshSession.rejected, (state) => {
         state.user = null;
-        state.accessToken = null;
-        state.authStatus = 'failed';
+        state.isAuthenticated = false;
+        state.authStatus = 'idle';
       })
-      // Fetch Profile
+      .addCase(fetchProfile.pending, (state) => {
+        state.authStatus = 'loading';
+      })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isAuthenticated = true;
         state.authStatus = 'succeeded';
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.error = action.payload as string;
+        state.isAuthenticated = false;
         state.authStatus = 'failed';
       })
-      // Update Profile
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.user = action.payload;
       });
   },
 });
 
-export const { clearError, setToken } = authSlice.actions;
+export const { clearError, clearAuth } = authSlice.actions;
 export default authSlice.reducer;

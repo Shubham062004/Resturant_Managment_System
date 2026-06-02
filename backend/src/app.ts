@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import errorHandler from './middleware/errorHandler';
+import { apiRateLimiter } from './middleware/rateLimiter';
 import AppError from './utils/appError';
 import logger from './utils/logger';
 import authRouter from './modules/auth/auth.routes';
@@ -23,7 +24,8 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json());
+app.use(apiRateLimiter);
+app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
 // Serve uploaded static avatars

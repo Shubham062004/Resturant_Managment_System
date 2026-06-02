@@ -15,9 +15,11 @@ This document details communication standards, request/response formats, securit
 
 - Request Headers:
   - `Content-Type: application/json`
-  - `Authorization: Bearer <jwt_access_token>`
+  - `Cookie: accessToken=<jwt>; refreshToken=<token>` (preferred — HttpOnly, set by server)
+  - `Authorization: Bearer <jwt_access_token>` (optional fallback for API clients)
 - Response Headers:
   - `Content-Type: application/json`
+  - `Set-Cookie` on auth endpoints for `accessToken` and `refreshToken`
 
 ### Standard Response Envelope
 
