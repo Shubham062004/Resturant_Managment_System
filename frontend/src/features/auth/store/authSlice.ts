@@ -71,7 +71,7 @@ export const googleAuthLogin = createAsyncThunk(
   },
 );
 
-export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
+export const logout = createAsyncThunk('auth/logout', async () => {
   try {
     await apiClient.post('/auth/logout');
   } catch (err: any) {
@@ -83,7 +83,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
 
 export const logoutAllDevices = createAsyncThunk(
   'auth/logoutAll',
-  async (_, { rejectWithValue }) => {
+  async () => {
     try {
       await apiClient.post('/auth/logout-all');
     } catch (err: any) {

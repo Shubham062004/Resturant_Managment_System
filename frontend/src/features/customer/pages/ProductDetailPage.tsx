@@ -21,7 +21,6 @@ import {
   Check,
   AlertCircle,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

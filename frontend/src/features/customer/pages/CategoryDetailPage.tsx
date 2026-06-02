@@ -2,12 +2,11 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCategoryBySlug, useToggleFavorite } from '../store/catalogQueries';
 import { useAppSelector } from '../../../app/store';
-import { Star, Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
 
 export const CategoryDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { data: response, isLoading, isError, refetch } = useCategoryBySlug(slug || '');
+  const { data: response, isLoading, isError } = useCategoryBySlug(slug || '');
   const toggleFavoriteMutation = useToggleFavorite();
   const favoritedIds = useAppSelector((state) => state.favorite.favoritedIds);
 
