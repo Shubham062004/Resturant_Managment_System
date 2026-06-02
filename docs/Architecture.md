@@ -53,8 +53,88 @@ We leverage both relational (SQL) and document (NoSQL) databases to align storag
 
 ### Backend Architecture
 
-1. **Strict Type-Safety**: 100% compiled via TypeScript. Zod schema validators serve as barriers, checking ingress payloads (`req.body`, `req.query`, `req.params`) before controllers run.
-2. **Error Pipeline**: Centralized middleware parsing errors into typed JSON payloads, preventing raw trace leaks in production while logging stack traces to Winston.
-3. **Security Pipeline**:
-   - JWT tokens containing user metadata and roles.
-   - Double-wrapped authentication and authorization middlewares protecting specific routes with role validations (`ADMIN`, `MANAGER`, `SERVER`, `KITCHEN`).
+1. **Strict Type-Safety**: 100% compiled via TypeScript. Zod schema validators serve as boundaries, parsing input payloads (`req.body`, `req.query`, `req.params`) in middlewares before controller routes.
+2. **Error Pipeline**: Centralized error middleware formats exceptions into standard envelopes, preventing server stack trace leaks to client responses while saving logs to Winston.
+3. **Security & Auth Pipelines**:
+   - Double-wrapped guards protecting restricted routes using `authGuard` and `restrictTo` middlewares.
+   - Core user roles: `CUSTOMER`, `ADMIN`, `KITCHEN_STAFF`, `DELIVERY_PARTNER`, `CASHIER`, and `SUPER_ADMIN`.
+
+---
+
+## 4. Authentication, Authorization & Security Specifications
+
+### A. JWT Authentication & Refresh Token Rotation (RTR)
+
+Oven Xpress implements a strict token rotation strategy to prevent XSS session hijackings and token replay attacks.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Client App (React)
+    participant Server as Express Server
+    participant DB as Neon PostgreSQL
+
+    Client->>Server: POST /auth/login (credentials)
+    Server->>Server: Verify password hash (bcrypt)
+    Server->>DB: Store hashed Refresh Token
+    Server-->>Client: Returns Access Token (JSON) & Refresh Token (HTTP-Only Cookie)
+    
+    Note over Client,Server: Client accesses routes using Access Token (15m expiry)
+    
+    Client->>Server: POST /auth/refresh (with Cookie)
+    Server->>DB: Lookup Refresh Token Hash
+    alt Token is valid & active
+        Server->>DB: Mark old token as revoked (revoked = true)
+        Server->>DB: Store new rotated Refresh Token Hash
+        Server-->>Client: Returns new Access Token & new Refresh Token Cookie
+    else Token is already revoked (Replay Attack)
+        Server->>DB: Revoke ALL refresh tokens for user
+        Server->>DB: Mark MongoDB active sessions as logged out
+        Server-->>Client: Throw 401 Unauthorized (Force re-login)
+    end
+```
+
+1. **Access Token (Short-lived)**: Expiration of 15 minutes, returned in response JSON. Payload: `{ id: userId, email: email, role: role }`.
+2. **Refresh Token (Long-lived)**: Expiration of 7 days, stored exclusively in a secure, HTTP-only, SameSite=Lax cookie.
+3. **Token Hashing**: Refresh tokens are stored as SHA-256 hashes in PostgreSQL to guarantee database compromise does not leak active tokens.
+4. **Replay Protection**: If a client attempts to refresh using a token already marked as revoked, it indicates a compromise. The server immediately invalidates all active tokens and sessions associated with that user.
+
+### B. Role-Based Access Controls (RBAC)
+
+Clear privilege hierarchies are enforced across all services:
+- **SUPER_ADMIN**: Absolute system configuration overrides, database migrations, role elevations.
+- **ADMIN**: Branch configurations, employee registries, report reviews, refund authorizations.
+- **CASHIER**: Floor plan management, order creation, bill settlements.
+- **KITCHEN_STAFF**: Kitchen display ticket queue management, status updates.
+- **DELIVERY_PARTNER**: Order delivery assignments, fulfillment tracking.
+- **CUSTOMER**: Order catalog reviews, basket selections, profile updates.
+
+```typescript
+// Enforced at route definition:
+router.patch('/profile', authGuard, restrictTo('CUSTOMER', 'ADMIN', 'CASHIER'));
+```
+
+### C. Google OAuth Flow
+
+Integrated Google Sign-in allows fast single-sign-on (SSO) credentials:
+1. The frontend client triggers Google OAuth consent, returning a verified ID Token (`id_token`).
+2. The client posts the token to `/api/v1/auth/google`.
+3. The backend uses Google's `google-auth-library` to check signatures and extract `email`, name details, and `picture` url.
+4. If the user does not exist, a new account is registered with `isEmailVerified: true` and default role `CUSTOMER`.
+5. Tokens are generated and returned to complete the login sequence.
+
+### D. Security Hardening Configurations
+
+- **Helmet**: Enforces secure HTTP headers, including clickjacking and Content Security Policy parameters.
+- **IP Rate Limiting**: Throttles brute force requests:
+  - Auth Pipeline (login, register): 100 requests per 15 minutes.
+  - OTP Dispatch: 10 requests per hour.
+- **Sanitization Middleware**: Recursively strips HTML tags from request strings using regex rules to prevent XSS script injections.
+- **CORS Configuration**: Explicitly permits credentials exchange (`credentials: true`) with originating ports.
+- **CSRF Ready**: Express session tracking relies on HTTP-only cookie parameters, prepared to couple with CSRF tokens on header requests.
+
+### E. MongoDB Security Audits & Session Logs
+
+Highly sensitive account lifecycle actions write logs directly to MongoDB:
+- **Audit Logs** (`audit_logs` collection): Documents `userId`, `action` (`LOGIN`, `LOGOUT`, `PASSWORD_RESET`, `EMAIL_VERIFICATION`, `ROLE_CHANGE`), client IP, browser, device category, and payload context.
+- **Active Sessions** (`user_sessions` collection): Monitors concurrent device registrations. Tracks device category, browser details, login time, and maps them to refresh token hashes. Allows users to "terminate all other devices" securely.

@@ -4,6 +4,6 @@ export interface AuthRequest extends Request {
   user?: {
     id: string;
     email: string;
-    role: 'ADMIN' | 'MANAGER' | 'SERVER' | 'KITCHEN';
+    role: 'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN';
   };
 }
