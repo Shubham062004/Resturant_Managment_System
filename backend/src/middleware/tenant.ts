@@ -30,6 +30,7 @@ export const tenantGuard = async (req: AuthRequest, res: Response, next: NextFun
     req.tenantFilter = { organizationId: user.organizationId };
 
     // If they are specifically a Franchise Owner, scope further
+    
     if (user.franchiseId && req.user.role === 'FRANCHISE_OWNER') {
       req.tenantFilter = { ...req.tenantFilter, franchiseId: user.franchiseId };
     }
