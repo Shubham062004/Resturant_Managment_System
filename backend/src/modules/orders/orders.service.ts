@@ -67,8 +67,20 @@ export class OrdersService {
             changedBy: userId,
           },
         },
+        kitchenOrder: {
+          create: {
+            priority: 'MEDIUM',
+            status: 'QUEUED',
+            tasks: {
+              create: cart.items.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+              })),
+            },
+          },
+        },
       },
-      include: { items: true },
+      include: { items: true, kitchenOrder: { include: { tasks: true } } },
     });
 
     // Clear cart
@@ -77,6 +89,7 @@ export class OrdersService {
     // Emit Socket.io event to restaurant staff
     try {
       getIO().to('staff_room').emit('new_order', order);
+      getIO().to('staff_room').emit('kds_new_order', order.kitchenOrder);
     } catch (e) {
       logger.error('Socket error emitting new_order', e);
     }

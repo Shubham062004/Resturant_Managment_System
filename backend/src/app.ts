@@ -12,6 +12,12 @@ import authRouter from './modules/auth/auth.routes';
 import usersRouter from './modules/users/users.routes';
 import catalogRouter from './modules/catalog/catalog.routes';
 import cartRouter from './modules/cart/cart.routes';
+import addressRouter from './modules/addresses/addresses.routes';
+import couponRouter from './modules/coupons/coupons.routes';
+import paymentsRouter from './modules/payments/payments.routes';
+import ordersRouter from './modules/orders/orders.routes';
+import refundsRouter from './modules/refunds/refunds.routes';
+import kitchenRouter from './modules/kitchen/kitchen.routes';
 
 // Express application instance
 export const app = express();
@@ -58,16 +64,12 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/catalog', catalogRouter);
 app.use('/api/v1/cart', cartRouter);
-import addressRouter from './modules/addresses/addresses.routes';
 app.use('/api/v1/addresses', addressRouter);
-import couponRouter from './modules/coupons/coupons.routes';
 app.use('/api/v1/coupons', couponRouter);
-import paymentsRouter from './modules/payments/payments.routes';
 app.use('/api/v1/payments', paymentsRouter);
-import ordersRouter from './modules/orders/orders.routes';
 app.use('/api/v1/orders', ordersRouter);
-import refundsRouter from './modules/refunds/refunds.routes';
 app.use('/api/v1/refunds', refundsRouter);
+app.use('/api/v1/kitchen', kitchenRouter);
 
 app.use('/api/v1/tables', (req, res) => {
   res.status(200).json({
