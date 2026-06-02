@@ -1,0 +1,76 @@
+import { Server as HttpServer } from 'http';
+import { Server, Socket } from 'socket.io';
+import jwt from 'jsonwebtoken';
+import env from './env';
+import logger from '../utils/logger';
+
+export interface SocketUser {
+  id: string;
+  role: string;
+  email: string;
+}
+
+let io: Server;
+
+export const initSocket = (server: HttpServer) => {
+  io = new Server(server, {
+    cors: {
+      origin: process.env.CLIENT_URL || 'http://localhost:5173',
+      methods: ['GET', 'POST'],
+      credentials: true,
+    },
+  });
+
+  io.use((socket, next) => {
+    try {
+      const token =
+        socket.handshake.auth?.token || socket.handshake.headers?.authorization?.split(' ')[1];
+
+      if (!token) {
+        return next(new Error('Authentication Error: Token missing'));
+      }
+
+      const decoded = jwt.verify(token, env.JWT_SECRET) as SocketUser;
+      (socket as any).user = decoded;
+      next();
+    } catch {
+      next(new Error('Authentication Error: Invalid token'));
+    }
+  });
+
+  io.on('connection', (socket: Socket) => {
+    const user = (socket as any).user as SocketUser;
+    logger.info(`Socket connected: ${socket.id} (User: ${user.id})`);
+
+    // Users join a personal room to receive their order updates
+    socket.join(`user_${user.id}`);
+
+    // Allow staff/admin to join restaurant-specific rooms
+    if (['ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'CASHIER'].includes(user.role)) {
+      socket.join('staff_room');
+    }
+
+    // Clients can explicitly join a room for a specific order tracking
+    socket.on('join_order_room', (orderId: string) => {
+      socket.join(`order_${orderId}`);
+      logger.info(`User ${user.id} joined tracking room: order_${orderId}`);
+    });
+
+    socket.on('leave_order_room', (orderId: string) => {
+      socket.leave(`order_${orderId}`);
+    });
+
+    socket.on('disconnect', () => {
+      logger.info(`Socket disconnected: ${socket.id}`);
+    });
+  });
+
+  return io;
+};
+
+export const getIO = () => {
+  if (!io) {
+    throw new Error('Socket.io has not been initialized!');
+  }
+  return io;
+};

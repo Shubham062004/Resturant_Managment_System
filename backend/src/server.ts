@@ -1,6 +1,7 @@
 import app from './app';
 import env from './config/env';
 import { connectDatabases, disconnectDatabases } from './config/db';
+import { initSocket } from './config/socket';
 import logger from './utils/logger';
 
 const startServer = async () => {
@@ -14,6 +15,9 @@ const startServer = async () => {
         `🚀 Oven Xpress RMS Service listening on http://localhost:${env.PORT} in [${env.NODE_ENV}] mode`,
       );
     });
+
+    // Initialize Socket.io Real-Time Engine
+    initSocket(server);
 
     // 3. Graceful termination protocols
     const gracefulShutdown = async (signal: string) => {
