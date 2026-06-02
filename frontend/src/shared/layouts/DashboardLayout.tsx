@@ -136,9 +136,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <div className="min-h-screen flex bg-background text-foreground transition-colors duration-300">
       {/* Desktop sidebar */}
-      <div className="hidden lg:block h-screen sticky top-0 flex-shrink-0">
-        {sidebarContent}
-      </div>
+      <div className="hidden lg:block h-screen sticky top-0 flex-shrink-0">{sidebarContent}</div>
 
       {/* Mobile drawer menu */}
       <AnimatePresence>
@@ -190,9 +188,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         </header>
 
         {/* Workspace body */}
-        <main className="flex-1 overflow-y-auto focus:outline-none bg-background">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto focus:outline-none bg-background">{children}</main>
       </div>
     </div>
   );

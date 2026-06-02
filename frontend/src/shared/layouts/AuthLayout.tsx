@@ -30,9 +30,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           <h2 className="text-4xl font-extrabold font-display leading-tight tracking-tight">
             {brandTitle}
           </h2>
-          <p className="text-white/80 font-sans text-base leading-relaxed">
-            {brandDescription}
-          </p>
+          <p className="text-white/80 font-sans text-base leading-relaxed">{brandDescription}</p>
         </div>
 
         {/* Bottom copyright details */}

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 
-export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface CheckboxProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'onChange'
+> {
   label?: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
@@ -46,10 +49,14 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           {label && <span>{label}</span>}
         </label>
 
-        {error && <p className="text-xs font-medium font-sans leading-none text-danger mt-1 pl-8">{error}</p>}
+        {error && (
+          <p className="text-xs font-medium font-sans leading-none text-danger mt-1 pl-8">
+            {error}
+          </p>
+        )}
       </div>
     );
-  }
+  },
 );
 
 Checkbox.displayName = 'Checkbox';

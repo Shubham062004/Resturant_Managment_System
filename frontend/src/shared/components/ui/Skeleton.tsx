@@ -45,7 +45,10 @@ export const DashboardSkeleton: React.FC = () => (
     {/* Grid of stats cards */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="bg-card border border-border/80 p-5 rounded-2xl flex flex-col gap-3">
+        <div
+          key={i}
+          className="bg-card border border-border/80 p-5 rounded-2xl flex flex-col gap-3"
+        >
           <Skeleton variant="text" className="w-1/3 h-4" />
           <Skeleton variant="text" className="w-1/2 h-8" />
         </div>

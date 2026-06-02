@@ -26,9 +26,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   const arrows = {
     top: 'top-full left-1/2 -translate-x-1/2 border-t-card border-x-transparent border-b-transparent border-4',
-    bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-card border-x-transparent border-t-transparent border-4',
+    bottom:
+      'bottom-full left-1/2 -translate-x-1/2 border-b-card border-x-transparent border-t-transparent border-4',
     left: 'left-full top-1/2 -translate-y-1/2 border-l-card border-y-transparent border-r-transparent border-4',
-    right: 'right-full top-1/2 -translate-y-1/2 border-r-card border-y-transparent border-l-transparent border-4',
+    right:
+      'right-full top-1/2 -translate-y-1/2 border-r-card border-y-transparent border-l-transparent border-4',
   };
 
   return (

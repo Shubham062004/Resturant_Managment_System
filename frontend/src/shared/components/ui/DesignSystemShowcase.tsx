@@ -185,62 +185,93 @@ export const DesignSystemShowcase: React.FC = () => {
       content: (
         <div className="space-y-10">
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Color Palettes</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Color Palettes
+            </h4>
             {colorGrid}
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Typography</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Typography
+            </h4>
             <div className="flex flex-col gap-6 bg-card border border-border p-6 rounded-2xl">
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Display XL (Outfit)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Display XL (Outfit)
+                </p>
                 <h1 className={typographyClasses.displayXL}>Oven Flame Roast</h1>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Display LG (Outfit)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Display LG (Outfit)
+                </p>
                 <h2 className={typographyClasses.displayLG}>Gourmet Kitchen Terminal</h2>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Display MD (Outfit)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Display MD (Outfit)
+                </p>
                 <h3 className={typographyClasses.displayMD}>Woodfired Oven Pizzas</h3>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Heading XL (Outfit)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Heading XL (Outfit)
+                </p>
                 <h4 className={typographyClasses.headingXL}>Active Chef Stations</h4>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Heading LG (Outfit)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Heading LG (Outfit)
+                </p>
                 <h5 className={typographyClasses.headingLG}>Order Queue Details</h5>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Heading MD (Inter)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Heading MD (Inter)
+                </p>
                 <h6 className={typographyClasses.headingMD}>Menu Selection Config</h6>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Body LG (Inter)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Body LG (Inter)
+                </p>
                 <p className={typographyClasses.bodyLG}>
-                  This is body large text, optimized for descriptors, card text, or menu item descriptions.
+                  This is body large text, optimized for descriptors, card text, or menu item
+                  descriptions.
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Body MD (Inter)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Body MD (Inter)
+                </p>
                 <p className={typographyClasses.bodyMD}>
-                  This is body medium text. This is the main reading copy for transactional tables, form fields, and sidebar settings.
+                  This is body medium text. This is the main reading copy for transactional tables,
+                  form fields, and sidebar settings.
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Body SM (Inter)</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Body SM (Inter)
+                </p>
                 <p className={typographyClasses.bodySM}>
-                  This is body small text, used for denser receipt items, small details, and KDS card indicators.
+                  This is body small text, used for denser receipt items, small details, and KDS
+                  card indicators.
                 </p>
               </div>
               <div className="flex gap-10">
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Caption</p>
-                  <p className={typographyClasses.caption}>* Mandatory field required for checkout.</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                    Caption
+                  </p>
+                  <p className={typographyClasses.caption}>
+                    * Mandatory field required for checkout.
+                  </p>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Tiny Label</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                    Tiny Label
+                  </p>
                   <p className={typographyClasses.tiny}>Delivered</p>
                 </div>
               </div>
@@ -255,7 +286,9 @@ export const DesignSystemShowcase: React.FC = () => {
       content: (
         <div className="space-y-10">
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Button Variants</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Button Variants
+            </h4>
             <div className="flex flex-wrap gap-4">
               <Button variant="primary">Primary Action</Button>
               <Button variant="secondary">Secondary</Button>
@@ -267,7 +300,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Button Sizes & Icons</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Button Sizes & Icons
+            </h4>
             <div className="flex flex-wrap items-center gap-4">
               <Button size="xs">XS Button</Button>
               <Button size="sm">SM Button</Button>
@@ -282,7 +317,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Button States</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Button States
+            </h4>
             <div className="flex flex-wrap gap-4">
               <Button isLoading>Processing...</Button>
               <Button disabled>Disabled Button</Button>
@@ -290,7 +327,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Form Elements</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Form Elements
+            </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card border border-border p-6 rounded-2xl">
               <Input
                 label="Standard text input"
@@ -299,11 +338,7 @@ export const DesignSystemShowcase: React.FC = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 prefixIcon={<Search size={16} />}
               />
-              <Input
-                label="Password field"
-                type="password"
-                placeholder="Enter secret pass..."
-              />
+              <Input label="Password field" type="password" placeholder="Enter secret pass..." />
               <Input
                 label="Success Validation state"
                 success="Valid customer profile loaded."
@@ -325,7 +360,12 @@ export const DesignSystemShowcase: React.FC = () => {
                   checked={checkboxVal}
                   onChange={setCheckboxVal}
                 />
-                <RadioGroup name="showcase-radio" value={radioVal} onChange={setRadioVal} direction="horizontal">
+                <RadioGroup
+                  name="showcase-radio"
+                  value={radioVal}
+                  onChange={setRadioVal}
+                  direction="horizontal"
+                >
                   <RadioGroupItem value="opt-1" label="Standard Dine-In" />
                   <RadioGroupItem value="opt-2" label="Home Delivery" />
                 </RadioGroup>
@@ -339,7 +379,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Dropdown Selector (Custom Select)</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Dropdown Selector (Custom Select)
+            </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card border border-border p-6 rounded-2xl min-h-[350px]">
               <Select
                 label="Single Select Dropdown (Searchable)"
@@ -368,7 +410,9 @@ export const DesignSystemShowcase: React.FC = () => {
       content: (
         <div className="space-y-10">
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Badges & Avatars</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Badges & Avatars
+            </h4>
             <div className="flex items-center gap-6 flex-wrap bg-card border border-border p-6 rounded-2xl">
               <div className="flex gap-2">
                 <Badge variant="neutral">Neutral</Badge>
@@ -389,7 +433,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">System Alerts</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              System Alerts
+            </h4>
             <div className="flex flex-col gap-4">
               <Alert variant="info" title="System Connection Status">
                 Active POS connection established with Server branch #021.
@@ -407,25 +453,41 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Toasts triggers</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Toasts triggers
+            </h4>
             <div className="flex gap-4 flex-wrap bg-card border border-border p-6 rounded-2xl">
-              <Button variant="success" onClick={() => toast.success('Order completed successfully!')}>
+              <Button
+                variant="success"
+                onClick={() => toast.success('Order completed successfully!')}
+              >
                 Success Toast
               </Button>
-              <Button variant="secondary" onClick={() => toast.warning('Prisma database is rebuilding...')}>
+              <Button
+                variant="secondary"
+                onClick={() => toast.warning('Prisma database is rebuilding...')}
+              >
                 Warning Toast
               </Button>
-              <Button variant="danger" onClick={() => toast.error('Failed to dispatch delivery rider.')}>
+              <Button
+                variant="danger"
+                onClick={() => toast.error('Failed to dispatch delivery rider.')}
+              >
                 Error Toast
               </Button>
-              <Button variant="outline" onClick={() => toast.info('Printer ink low on receipt rolls.')}>
+              <Button
+                variant="outline"
+                onClick={() => toast.info('Printer ink low on receipt rolls.')}
+              >
                 Info Toast
               </Button>
             </div>
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Tooltip floating overlays</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Tooltip floating overlays
+            </h4>
             <div className="flex gap-6 bg-card border border-border p-6 rounded-2xl items-center justify-around">
               <Tooltip content="Helper description at top" position="top">
                 <Button size="sm">Tooltip Top</Button>
@@ -443,7 +505,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Modals & Drawer sheets</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Modals & Drawer sheets
+            </h4>
             <div className="flex gap-4 flex-wrap bg-card border border-border p-6 rounded-2xl">
               <Button variant="primary" onClick={() => setIsModalOpen(true)}>
                 Open Modal
@@ -461,7 +525,11 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           {/* Modal instance */}
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Kitchen Recipe Configuration">
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Kitchen Recipe Configuration"
+          >
             <div className="space-y-4">
               <p>Configure recipe values for dynamic POS pricing systems.</p>
               <Input label="Dish Name" defaultValue="Oven Baked Pepperoni Pizza" />
@@ -469,10 +537,14 @@ export const DesignSystemShowcase: React.FC = () => {
                 <Button variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
                   Cancel
                 </Button>
-                <Button variant="primary" size="sm" onClick={() => {
-                  setIsModalOpen(false);
-                  toast.success('Recipe configured!');
-                }}>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    toast.success('Recipe configured!');
+                  }}
+                >
                   Save Recipes
                 </Button>
               </div>
@@ -498,7 +570,12 @@ export const DesignSystemShowcase: React.FC = () => {
                   <div className="bg-primary h-full w-[34%]" />
                 </div>
               </div>
-              <Button variant="danger" size="sm" className="w-full" onClick={() => setIsDrawerOpen(false)}>
+              <Button
+                variant="danger"
+                size="sm"
+                className="w-full"
+                onClick={() => setIsDrawerOpen(false)}
+              >
                 Shutdown Node
               </Button>
             </div>
@@ -512,7 +589,9 @@ export const DesignSystemShowcase: React.FC = () => {
       content: (
         <div className="space-y-10">
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Breadcrumbs & Pagination</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Breadcrumbs & Pagination
+            </h4>
             <div className="bg-card border border-border p-6 rounded-2xl flex flex-col gap-6">
               <Breadcrumb
                 items={[
@@ -526,7 +605,9 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Empty States</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Empty States
+            </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <EmptyState
                 type="orders"
@@ -538,24 +619,34 @@ export const DesignSystemShowcase: React.FC = () => {
           </section>
 
           <section className="space-y-4">
-            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">Pulse Loading Skeletons</h4>
+            <h4 className="text-lg font-bold font-display border-b border-border/40 pb-2">
+              Pulse Loading Skeletons
+            </h4>
             <div className="space-y-6">
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Card Skeleton</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  Card Skeleton
+                </p>
                 <div className="max-w-md">
                   <CardSkeleton />
                 </div>
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Profile Skeleton</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  Profile Skeleton
+                </p>
                 <ProfileSkeleton />
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Table Skeleton</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  Table Skeleton
+                </p>
                 <TableSkeleton />
               </div>
               <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Product Grid Skeleton</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  Product Grid Skeleton
+                </p>
                 <ProductSkeleton />
               </div>
             </div>
@@ -588,7 +679,9 @@ export const DesignSystemShowcase: React.FC = () => {
                 animate="animate"
                 className="bg-card border border-border p-6 rounded-2xl flex flex-col gap-2"
               >
-                <div className="text-sm font-bold font-display text-primary">Fade Up Transition</div>
+                <div className="text-sm font-bold font-display text-primary">
+                  Fade Up Transition
+                </div>
                 <p className="text-xs text-muted-foreground">
                   Pushes up from bottom with organic spring physics on mount.
                 </p>
@@ -638,7 +731,8 @@ export const DesignSystemShowcase: React.FC = () => {
             Oven Xpress Design System
           </h1>
           <p className="text-white/80 font-sans text-sm md:text-base leading-relaxed">
-            Centralized design token engine, responsive layout frameworks, micro-animations, and reusable components.
+            Centralized design token engine, responsive layout frameworks, micro-animations, and
+            reusable components.
           </p>
         </div>
       </div>

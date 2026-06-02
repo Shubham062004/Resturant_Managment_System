@@ -40,7 +40,10 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   );
 };
 
-export interface RadioGroupItemProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
+export interface RadioGroupItemProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange'
+> {
   value: string;
   label?: string;
 }

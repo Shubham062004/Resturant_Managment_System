@@ -14,12 +14,7 @@ export interface TabsProps {
   className?: string;
 }
 
-export const Tabs: React.FC<TabsProps> = ({
-  tabs,
-  activeTabId,
-  onTabChange,
-  className = '',
-}) => {
+export const Tabs: React.FC<TabsProps> = ({ tabs, activeTabId, onTabChange, className = '' }) => {
   return (
     <div className={`w-full flex flex-col gap-6 ${className}`}>
       {/* Tabs Header bar */}

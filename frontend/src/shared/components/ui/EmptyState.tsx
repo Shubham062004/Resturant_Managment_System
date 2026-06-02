@@ -25,7 +25,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     orders: {
       icon: <ClipboardList size={48} className="text-muted-foreground/60" />,
       title: 'No Orders Found',
-      description: "There are currently no active orders in the queue. They'll show up here once placed.",
+      description:
+        "There are currently no active orders in the queue. They'll show up here once placed.",
     },
     products: {
       icon: <Utensils size={48} className="text-muted-foreground/60" />,
@@ -35,12 +36,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     customers: {
       icon: <Users size={48} className="text-muted-foreground/60" />,
       title: 'No Registered Customers',
-      description: 'Customer profiles list is empty. They will appear here when accounts are initialized.',
+      description:
+        'Customer profiles list is empty. They will appear here when accounts are initialized.',
     },
     search: {
       icon: <Search size={48} className="text-muted-foreground/60" />,
       title: 'No Search Results',
-      description: "We couldn't find any matches for your query. Try searching with different keywords.",
+      description:
+        "We couldn't find any matches for your query. Try searching with different keywords.",
     },
   };
 

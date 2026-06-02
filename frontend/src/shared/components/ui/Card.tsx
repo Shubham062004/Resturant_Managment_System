@@ -8,12 +8,14 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ children, variant = 'default', className = '', ...props }, ref) => {
-    const baseStyles = 'rounded-xl border border-border/80 bg-card text-card-foreground shadow-sm overflow-hidden';
+    const baseStyles =
+      'rounded-xl border border-border/80 bg-card text-card-foreground shadow-sm overflow-hidden';
 
     const variants = {
       default: '',
       elevated: 'shadow-lg border-border/50',
-      interactive: 'hover:shadow-md hover:border-primary/30 transition-all duration-200 cursor-pointer',
+      interactive:
+        'hover:shadow-md hover:border-primary/30 transition-all duration-200 cursor-pointer',
       outline: 'border-2 border-border/80 shadow-none bg-transparent',
     };
 
@@ -35,7 +37,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 Card.displayName = 'Card';
@@ -55,7 +57,10 @@ export const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   className = '',
   ...props
 }) => (
-  <div className={`p-6 font-sans text-sm text-foreground/80 leading-relaxed ${className}`} {...props}>
+  <div
+    className={`p-6 font-sans text-sm text-foreground/80 leading-relaxed ${className}`}
+    {...props}
+  >
     {children}
   </div>
 );
@@ -65,7 +70,10 @@ export const CardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   className = '',
   ...props
 }) => (
-  <div className={`p-6 border-t border-border/40 flex items-center justify-end gap-3 ${className}`} {...props}>
+  <div
+    className={`p-6 border-t border-border/40 flex items-center justify-end gap-3 ${className}`}
+    {...props}
+  >
     {children}
   </div>
 );

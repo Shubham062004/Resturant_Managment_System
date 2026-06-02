@@ -38,7 +38,7 @@ export const Modal: React.FC<ModalProps> = ({
 
         if (e.key === 'Tab' && modalRef.current) {
           const focusableElements = modalRef.current.querySelectorAll(
-            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]'
+            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]',
           );
           if (focusableElements.length === 0) return;
 
@@ -56,16 +56,16 @@ export const Modal: React.FC<ModalProps> = ({
               e.preventDefault();
             }
           }
-        };
+        }
       };
 
       document.addEventListener('keydown', handleKeyDown);
-      
+
       // Focus the first focusable element or modal container
       setTimeout(() => {
         if (modalRef.current) {
           const focusable = modalRef.current.querySelector(
-            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
+            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]',
           ) as HTMLElement;
           if (focusable) {
             focusable.focus();
@@ -132,7 +132,10 @@ export const Modal: React.FC<ModalProps> = ({
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4.5 border-b border-border/40">
               {title ? (
-                <h3 id="modal-title" className="text-xl font-bold font-display tracking-tight text-foreground">
+                <h3
+                  id="modal-title"
+                  className="text-xl font-bold font-display tracking-tight text-foreground"
+                >
                   {title}
                 </h3>
               ) : (

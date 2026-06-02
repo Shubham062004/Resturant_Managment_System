@@ -24,14 +24,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       type = 'button',
       ...props
     },
-    ref
+    ref,
   ) => {
     const baseStyles =
       'inline-flex items-center justify-center font-display font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]';
 
     const variants = {
       primary: 'bg-primary text-white hover:bg-primary-hover shadow-md hover:shadow-primary/20',
-      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border/50',
+      secondary:
+        'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border/50',
       outline: 'bg-transparent text-foreground border-2 border-border hover:bg-secondary/40',
       ghost: 'bg-transparent text-foreground hover:bg-secondary/45',
       success: 'bg-success text-white hover:bg-success/90 shadow-md hover:shadow-success/20',
@@ -55,7 +56,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         viewBox="0 0 24 24"
         aria-hidden="true"
       >
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
         <path
           className="opacity-75"
           fill="currentColor"
@@ -80,7 +88,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {!isLoading && rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
       </motion.button>
     );
-  }
+  },
 );
 
 Button.displayName = 'Button';

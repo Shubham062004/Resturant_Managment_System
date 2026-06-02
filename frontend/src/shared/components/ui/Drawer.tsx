@@ -37,7 +37,7 @@ export const Drawer: React.FC<DrawerProps> = ({
 
         if (e.key === 'Tab' && drawerRef.current) {
           const focusableElements = drawerRef.current.querySelectorAll(
-            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]'
+            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]',
           );
           if (focusableElements.length === 0) return;
 
@@ -63,7 +63,7 @@ export const Drawer: React.FC<DrawerProps> = ({
       setTimeout(() => {
         if (drawerRef.current) {
           const focusable = drawerRef.current.querySelector(
-            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
+            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]',
           ) as HTMLElement;
           if (focusable) {
             focusable.focus();
@@ -128,7 +128,10 @@ export const Drawer: React.FC<DrawerProps> = ({
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4.5 border-b border-border/40">
               {title ? (
-                <h3 id="drawer-title" className="text-lg font-bold font-display tracking-tight text-foreground">
+                <h3
+                  id="drawer-title"
+                  className="text-lg font-bold font-display tracking-tight text-foreground"
+                >
                   {title}
                 </h3>
               ) : (

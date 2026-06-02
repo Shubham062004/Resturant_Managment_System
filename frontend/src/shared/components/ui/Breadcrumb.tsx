@@ -21,7 +21,9 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className = '' })
 
           return (
             <li key={index} className="flex items-center gap-1.5">
-              {index > 0 && <ChevronRight size={14} className="text-muted-foreground/60 flex-shrink-0" />}
+              {index > 0 && (
+                <ChevronRight size={14} className="text-muted-foreground/60 flex-shrink-0" />
+              )}
 
               {isLast ? (
                 <span className="text-foreground font-semibold" aria-current="page">

@@ -64,7 +64,7 @@ export const Select: React.FC<SelectProps> = ({
   }, [isOpen, isSearchable]);
 
   const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(searchQuery.toLowerCase())
+    opt.label.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const isSelected = (val: string) => {
@@ -134,7 +134,9 @@ export const Select: React.FC<SelectProps> = ({
   // Scroll active option into view
   useEffect(() => {
     if (activeIndex >= 0 && optionsRef.current) {
-      const activeEl = optionsRef.current.children[activeIndex + (isSearchable ? 1 : 0)] as HTMLElement;
+      const activeEl = optionsRef.current.children[
+        activeIndex + (isSearchable ? 1 : 0)
+      ] as HTMLElement;
       if (activeEl) {
         activeEl.scrollIntoView({ block: 'nearest' });
       }
@@ -145,7 +147,8 @@ export const Select: React.FC<SelectProps> = ({
   const getDisplayValue = () => {
     if (isMulti) {
       const selectedOpts = options.filter((o) => (value as string[]).includes(o.value));
-      if (selectedOpts.length === 0) return <span className="text-muted-foreground">{placeholder}</span>;
+      if (selectedOpts.length === 0)
+        return <span className="text-muted-foreground">{placeholder}</span>;
       return (
         <div className="flex flex-wrap gap-1.5 max-w-full">
           {selectedOpts.map((opt) => (
@@ -234,7 +237,9 @@ export const Select: React.FC<SelectProps> = ({
               )}
 
               {filteredOptions.length === 0 ? (
-                <div className="p-3.5 text-sm text-muted-foreground text-center">No options found</div>
+                <div className="p-3.5 text-sm text-muted-foreground text-center">
+                  No options found
+                </div>
               ) : (
                 filteredOptions.map((option, idx) => {
                   const selected = isSelected(option.value);
@@ -263,7 +268,9 @@ export const Select: React.FC<SelectProps> = ({
         </AnimatePresence>
       </div>
 
-      {error && <p className="text-xs font-medium font-sans leading-none text-danger mt-0.5">{error}</p>}
+      {error && (
+        <p className="text-xs font-medium font-sans leading-none text-danger mt-0.5">{error}</p>
+      )}
     </div>
   );
 };

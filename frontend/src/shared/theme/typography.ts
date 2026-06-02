@@ -4,18 +4,18 @@ export const typography = {
     display: 'Outfit, sans-serif',
   },
   fontSize: {
-    'display-xl': '3rem',       // 48px
-    'display-lg': '2.25rem',    // 36px
-    'display-md': '1.875rem',   // 30px
-    'heading-xl': '1.5rem',      // 24px
-    'heading-lg': '1.25rem',     // 20px
-    'heading-md': '1.125rem',    // 18px
-    'heading-sm': '1rem',        // 16px
-    'body-lg': '1.125rem',       // 18px
-    'body-md': '1rem',           // 16px
-    'body-sm': '0.875rem',       // 14px
-    caption: '0.75rem',          // 12px
-    tiny: '0.625rem',            // 10px
+    'display-xl': '3rem', // 48px
+    'display-lg': '2.25rem', // 36px
+    'display-md': '1.875rem', // 30px
+    'heading-xl': '1.5rem', // 24px
+    'heading-lg': '1.25rem', // 20px
+    'heading-md': '1.125rem', // 18px
+    'heading-sm': '1rem', // 16px
+    'body-lg': '1.125rem', // 18px
+    'body-md': '1rem', // 16px
+    'body-sm': '0.875rem', // 14px
+    caption: '0.75rem', // 12px
+    tiny: '0.625rem', // 10px
   },
   fontWeight: {
     light: '300',
