@@ -21,6 +21,10 @@ import kitchenRouter from './modules/kitchen/kitchen.routes';
 import deliveryRouter from './modules/delivery/delivery.routes';
 import inventoryRouter from './modules/inventory/inventory.routes';
 import posRouter from './modules/pos/pos.routes';
+import reservationRouter from './modules/reservations/reservation.routes';
+import tableRouter from './modules/tables/table.routes';
+import waitlistRouter from './modules/waitlist/waitlist.routes';
+import qrRouter from './modules/qr-ordering/qr.routes';
 
 // Express application instance
 export const app = express();
@@ -76,13 +80,10 @@ app.use('/api/v1/kitchen', kitchenRouter);
 app.use('/api/v1/delivery', deliveryRouter);
 app.use('/api/v1/inventory', inventoryRouter);
 app.use('/api/v1/pos', posRouter);
-
-app.use('/api/v1/tables', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Tables module foundation active',
-  });
-});
+app.use('/api/v1/reservations', reservationRouter);
+app.use('/api/v1/tables', tableRouter);
+app.use('/api/v1/waitlist', waitlistRouter);
+app.use('/api/v1/qr-ordering', qrRouter);
 
 // 4. Fallback Catch-All Route
 app.all('*', (req, res, next) => {

@@ -31,6 +31,9 @@ const DeliveryDashboardPage = React.lazy(() => import('../features/delivery/page
 const EarningsDashboardPage = React.lazy(() => import('../features/delivery/pages/EarningsDashboardPage'));
 const InventoryDashboardPage = React.lazy(() => import('../features/inventory/pages/InventoryDashboardPage'));
 const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashboardPage'));
+const ReservationsPage = React.lazy(() => import('../features/reservations/pages/ReservationsPage'));
+const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
+const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -317,6 +320,31 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <EarningsDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/reservations"
+              element={
+                <ProtectedRoute>
+                  <ReservationsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/floor-plan"
+              element={
+                <ProtectedRoute>
+                  <FloorPlanPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/takeaway"
+              element={
+                <ProtectedRoute>
+                  <TakeawayQueuePage />
                 </ProtectedRoute>
               }
             />
