@@ -18,6 +18,7 @@ import paymentsRouter from './modules/payments/payments.routes';
 import ordersRouter from './modules/orders/orders.routes';
 import refundsRouter from './modules/refunds/refunds.routes';
 import kitchenRouter from './modules/kitchen/kitchen.routes';
+import deliveryRouter from './modules/delivery/delivery.routes';
 
 // Express application instance
 export const app = express();
@@ -70,6 +71,7 @@ app.use('/api/v1/payments', paymentsRouter);
 app.use('/api/v1/orders', ordersRouter);
 app.use('/api/v1/refunds', refundsRouter);
 app.use('/api/v1/kitchen', kitchenRouter);
+app.use('/api/v1/delivery', deliveryRouter);
 
 app.use('/api/v1/tables', (req, res) => {
   res.status(200).json({

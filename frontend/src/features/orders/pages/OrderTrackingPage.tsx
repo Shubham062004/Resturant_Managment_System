@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { fetchOrderById, cancelOrder } from '../store/orderSlice';
-import { setConnected, updateLiveStatus, addLog } from '../store/trackingSlice';
+import { setConnected, updateLiveStatus, updateDriverLocation, addLog } from '../store/trackingSlice';
 import { io } from 'socket.io-client';
 import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { CheckCircle2, Clock, MapPin, Package, ShoppingBag, Truck, XCircle } from 'lucide-react';
+import { DeliveryTrackingMap } from '../../delivery/components/DeliveryTrackingMap';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const SOCKET_URL = API_BASE_URL;
@@ -16,7 +17,7 @@ export default function OrderTrackingPage() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const { currentOrder, status } = useAppSelector((state) => state.orders);
-  const { liveStatus, connected } = useAppSelector((state) => state.tracking);
+  const { liveStatus, connected, driverLocation } = useAppSelector((state) => state.tracking);
 
   useEffect(() => {
     if (id) {
@@ -42,6 +43,10 @@ export default function OrderTrackingPage() {
 
     newSocket.on('order_status_update', (updatedOrder: any) => {
       dispatch(updateLiveStatus(updatedOrder.status));
+    });
+
+    newSocket.on('driver_location_update', (location: any) => {
+      dispatch(updateDriverLocation({ latitude: location.latitude, longitude: location.longitude }));
     });
 
     newSocket.on('disconnect', () => {
@@ -132,6 +137,20 @@ export default function OrderTrackingPage() {
           </div>
         )}
       </Card>
+
+      {(displayStatus === 'OUT_FOR_DELIVERY' || displayStatus === 'PICKED_UP') && (
+        <Card className="bg-surface/50 border-border/50">
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-white">Live Driver Location</h3>
+          </CardHeader>
+          <CardContent className="p-0 border-t border-border/50">
+            <DeliveryTrackingMap 
+              driverLocation={driverLocation || undefined}
+              destination={currentOrder?.address ? { latitude: currentOrder.address.latitude || 0, longitude: currentOrder.address.longitude || 0 } : undefined}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="bg-surface/50 border-border/50">
         <CardHeader>

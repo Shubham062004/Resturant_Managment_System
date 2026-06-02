@@ -4,6 +4,7 @@ interface TrackingState {
   connected: boolean;
   activeOrderId: string | null;
   liveStatus: string | null;
+  driverLocation: { latitude: number; longitude: number } | null;
   logs: string[];
 }
 
@@ -11,6 +12,7 @@ const initialState: TrackingState = {
   connected: false,
   activeOrderId: null,
   liveStatus: null,
+  driverLocation: null,
   logs: [],
 };
 
@@ -29,11 +31,14 @@ const trackingSlice = createSlice({
       state.liveStatus = action.payload;
       state.logs.push(`Order status updated to: ${action.payload} at ${new Date().toLocaleTimeString()}`);
     },
+    updateDriverLocation: (state, action: PayloadAction<{ latitude: number; longitude: number }>) => {
+      state.driverLocation = action.payload;
+    },
     addLog: (state, action: PayloadAction<string>) => {
       state.logs.push(`${action.payload} at ${new Date().toLocaleTimeString()}`);
     },
   },
 });
 
-export const { setConnected, setActiveOrder, updateLiveStatus, addLog } = trackingSlice.actions;
+export const { setConnected, setActiveOrder, updateLiveStatus, updateDriverLocation, addLog } = trackingSlice.actions;
 export default trackingSlice.reducer;

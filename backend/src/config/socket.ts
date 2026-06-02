@@ -46,8 +46,12 @@ export const initSocket = (server: HttpServer) => {
     socket.join(`user_${user.id}`);
 
     // Allow staff/admin to join restaurant-specific rooms
-    if (['ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'CASHIER'].includes(user.role)) {
+    if (['ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'CASHIER', 'DELIVERY_MANAGER'].includes(user.role)) {
       socket.join('staff_room');
+    }
+
+    if (user.role === 'DELIVERY_PARTNER') {
+      socket.join(`driver_${user.id}`);
     }
 
     // Clients can explicitly join a room for a specific order tracking

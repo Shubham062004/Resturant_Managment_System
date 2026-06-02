@@ -4,6 +4,7 @@ import { KitchenMetric } from '../../database/mongo/KitchenMetric';
 import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
 import { KitchenOrderStatus, KitchenPriority } from '@prisma/client';
+import { DeliveryService } from '../delivery/delivery.service';
 
 export class KitchenService {
   /**
@@ -86,6 +87,16 @@ export class KitchenService {
 
     // Broadcast to KDS via Socket.io
     try { getIO().to('staff_room').emit('kds_status_update', updated); } catch (e) {}
+
+    // Auto-assign delivery driver when packed
+    if (status === 'PACKED') {
+      try {
+        await DeliveryService.assignOrder(updated.orderId);
+      } catch (e: any) {
+        // We log it but do not fail the kitchen update if no driver is available
+        console.error('Failed to auto-assign delivery driver:', e.message);
+      }
+    }
 
     return updated;
   }
