@@ -10,7 +10,7 @@ import Alert from '../../../shared/components/ui/Alert';
 import { User as UserIcon, Phone, Save, ShieldAlert, ShieldCheck, Camera, LogOut } from 'lucide-react';
 
 export const ProfilePage: React.FC = () => {
-  const { user, authStatus } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const toast = useToast();
 
@@ -93,7 +93,7 @@ export const ProfilePage: React.FC = () => {
       } else {
         setValidationError((result.payload as string) || 'Failed to update profile.');
       }
-    } catch (err: any) {
+    } catch (err) {
       setValidationError('An unexpected error occurred while saving your details.');
     } finally {
       setIsLoading(false);

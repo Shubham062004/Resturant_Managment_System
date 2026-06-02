@@ -9,6 +9,7 @@ import AppError from './utils/appError';
 import logger from './utils/logger';
 import authRouter from './modules/auth/auth.routes';
 import usersRouter from './modules/users/users.routes';
+import catalogRouter from './modules/catalog/catalog.routes';
 
 // Express application instance
 export const app = express();
@@ -52,6 +53,7 @@ app.get('/api/v1/health', (req, res) => {
 // 3. Modular Feature Routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/catalog', catalogRouter);
 
 app.use('/api/v1/tables', (req, res) => {
   res.status(200).json({

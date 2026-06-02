@@ -94,3 +94,23 @@ Every component is developed to prioritize accessibility:
 - Active screen-reader properties `aria-invalid`, `aria-busy`, and `aria-expanded` reflecting react states.
 - Portal mounting for modals and drawer panels to prevent structure traps.
 - Focus locking systems and Escape key close handlers.
+- Integrated `sr-only` "Skip to Main Content" links in main layouts to support keyboard-only screen readers.
+
+---
+
+## 7. Customer Experience (PR-004)
+
+### A. Layout System
+- **CustomerLayout / GuestLayout**: Responsive viewport frame mounting sticky headers, a scroll listener, and a global structured directory footer.
+- **ProfileLayout**: Two-column account layout containing a sidebar directory for settings navigation and a main container for child pages.
+- **ErrorLayout**: Blurred-radial dark overlay wrapper for isolating application error boundaries.
+
+### B. Navigation Components
+- **Navbar**: Sticky headers with dynamic scroll transitions. Incorporates a sliding navigation drawer on mobile viewports and a visual branch outpost tag.
+- **Footer**: Multi-column footer directory providing category indexes, corporate pages, social icons, and a quick newsletter subscription action.
+
+### C. Visual Modules & Card Presets
+- **Branch Card**: Displays branch name, street location, business hours, calculated geolocation distance, and a selection trigger.
+- **Search tags**: Modular pill filters for category filtering and search history logs.
+- **Promo Cards**: Dynamic coupon blocks showing discount rates, minimum order criteria, expirations, and a clipboard code copier.
+- **Kitchen Stream timeline**: Progress timeline stepper displaying active order stages (Received, Prep, Baking, Transit).

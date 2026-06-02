@@ -10,6 +10,7 @@
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "prisma:generate": "prisma generate --schema src/database/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema src/database/schema.prisma",
+    "seed": "ts-node-dev --transpile-only src/database/seed.ts",
     "test": "jest"
   },
   "dependencies": {
