@@ -11,7 +11,7 @@ export interface SelectOption {
 export interface SelectProps {
   options: SelectOption[];
   value: string | string[]; // string for single, string[] for multi
-  onChange: (value: any) => void;
+  onChange: (value: string | string[]) => void;
   isMulti?: boolean;
   isSearchable?: boolean;
   placeholder?: string;

@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Sparkles,
-  Search,
-  ChevronRight,
-  Info,
-  Layers,
-  Heart,
-  Plus,
-  Play,
-  Moon,
-  Sun,
-  Monitor,
-} from 'lucide-react';
+import { Sparkles, Search, ChevronRight, Heart, Play } from 'lucide-react';
 
 // Shared components imports
 import Button from './Button';
@@ -24,7 +12,6 @@ import { RadioGroup, RadioGroupItem } from './RadioGroup';
 import Switch from './Switch';
 import Badge from './Badge';
 import Avatar from './Avatar';
-import Card, { CardHeader, CardContent, CardFooter } from './Card';
 import Modal from './Modal';
 import Drawer from './Drawer';
 import Tooltip from './Tooltip';
@@ -33,12 +20,9 @@ import Tabs from './Tabs';
 import Pagination from './Pagination';
 import Alert from './Alert';
 import { useToast } from './Toast';
-import Spinner from './Spinner';
 import EmptyState from './EmptyState';
 import {
-  Skeleton,
   ProductSkeleton,
-  DashboardSkeleton,
   TableSkeleton,
   CardSkeleton,
   ProfileSkeleton,
@@ -46,14 +30,11 @@ import {
 
 // Theme imports
 import { typographyClasses } from '../../theme/typography';
-import { colors } from '../../theme/colors';
-import { useTheme } from '../../theme/theme-provider';
 
 // Animations
 import { fadeUp, springTransition } from '../../theme/animations';
 
 export const DesignSystemShowcase: React.FC = () => {
-  const { theme, setTheme } = useTheme();
   const toast = useToast();
 
   // Component state toggles

@@ -2,9 +2,9 @@ export class AppError extends Error {
   public readonly statusCode: number;
   public readonly status: string;
   public readonly isOperational: boolean;
-  public readonly details: any[];
+  public readonly details: unknown[];
 
-  constructor(message: string, statusCode: number, details: any[] = []) {
+  constructor(message: string, statusCode: number, details: unknown[] = []) {
     super(message);
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';

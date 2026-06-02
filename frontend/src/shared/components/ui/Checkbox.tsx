@@ -16,7 +16,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
     return (
-      <div className="flex flex-col gap-1">
+      <div className={`flex flex-col gap-1 ${className}`}>
         <label
           htmlFor={checkboxId}
           className={`inline-flex items-center gap-3 cursor-pointer select-none text-sm font-sans font-medium text-foreground/90

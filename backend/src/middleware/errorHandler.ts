@@ -1,8 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
-import AppError from '../utils/appError';
 import logger from '../utils/logger';
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+interface OperationalError extends Error {
+  statusCode?: number;
+  status?: string;
+  isOperational?: boolean;
+  code?: string;
+  meta?: unknown;
+  details?: unknown[];
+  errors?: Array<{ path: Array<string | number>; message: string }>;
+}
+
+export const errorHandler = (
+  err: OperationalError,
+  req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
@@ -15,10 +29,11 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
 
   // Handle specific Zod payload validation errors
   if (err.name === 'ZodError') {
-    const details = err.errors.map((e: any) => ({
-      field: e.path.join('.'),
-      issue: e.message,
-    }));
+    const details =
+      err.errors?.map((e) => ({
+        field: e.path.join('.'),
+        issue: e.message,
+      })) || [];
     return res.status(400).json({
       success: false,
       error: {

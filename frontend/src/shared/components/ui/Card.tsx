@@ -22,10 +22,10 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     if (variant === 'interactive') {
       return (
         <motion.div
-          ref={ref as any}
+          ref={ref as React.Ref<HTMLDivElement>}
           className={`${baseStyles} ${variants[variant]} ${className}`}
           {...hoverScalePreset}
-          {...(props as any)}
+          {...(props as React.HTMLAttributes<HTMLDivElement>)}
         >
           {children}
         </motion.div>
