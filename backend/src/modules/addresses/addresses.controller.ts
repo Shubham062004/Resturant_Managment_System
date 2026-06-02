@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../../types/express';
 import { AddressService } from './addresses.service';
 
-export const getAddresses = async (req: Request, res: Response) => {
+export const getAddresses = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const addresses = await AddressService.getAddresses(userId);
 
@@ -11,7 +12,7 @@ export const getAddresses = async (req: Request, res: Response) => {
   });
 };
 
-export const createAddress = async (req: Request, res: Response) => {
+export const createAddress = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const address = await AddressService.createAddress(userId, req.body);
 
@@ -21,7 +22,7 @@ export const createAddress = async (req: Request, res: Response) => {
   });
 };
 
-export const updateAddress = async (req: Request, res: Response) => {
+export const updateAddress = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const addressId = req.params.id;
   const address = await AddressService.updateAddress(userId, addressId, req.body);
@@ -32,7 +33,7 @@ export const updateAddress = async (req: Request, res: Response) => {
   });
 };
 
-export const deleteAddress = async (req: Request, res: Response) => {
+export const deleteAddress = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const addressId = req.params.id;
 

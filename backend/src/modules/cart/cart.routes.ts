@@ -1,5 +1,12 @@
 import { Router } from 'express';
-import { getCart, addItem, updateItemQuantity, removeItem, clearCart, mergeCart } from './cart.controller';
+import {
+  getCart,
+  addItem,
+  updateItemQuantity,
+  removeItem,
+  clearCart,
+  mergeCart,
+} from './cart.controller';
 import { validate } from '../../middleware/validate';
 import { addToCartSchema, updateCartItemSchema, mergeCartSchema } from './cart.validation';
 import { authGuard } from '../../middleware/authGuard';

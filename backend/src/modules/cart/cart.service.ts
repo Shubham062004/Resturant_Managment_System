@@ -22,8 +22,8 @@ export class CartService {
                 basePrice: true,
                 restaurantId: true,
                 restaurant: {
-                  select: { name: true, slug: true }
-                }
+                  select: { name: true, slug: true },
+                },
               },
             },
             variant: {
@@ -41,7 +41,9 @@ export class CartService {
     if (!cart) {
       cart = await prisma.cart.create({
         data: { userId },
-        include: { items: { include: { product: { include: { restaurant: true } }, variant: true } } },
+        include: {
+          items: { include: { product: { include: { restaurant: true } }, variant: true } },
+        },
       });
     }
 
@@ -53,7 +55,7 @@ export class CartService {
    */
   public static async addItem(
     userId: string,
-    data: { productId: string; variantId?: string; quantity: number }
+    data: { productId: string; variantId?: string; quantity: number },
   ) {
     let cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
@@ -85,14 +87,13 @@ export class CartService {
       },
     });
 
-    let cartItem;
     if (existingItem) {
-      cartItem = await prisma.cartItem.update({
+      await prisma.cartItem.update({
         where: { id: existingItem.id },
         data: { quantity: existingItem.quantity + data.quantity },
       });
     } else {
-      cartItem = await prisma.cartItem.create({
+      await prisma.cartItem.create({
         data: {
           cartId: cart.id,
           productId: data.productId,
@@ -111,7 +112,7 @@ export class CartService {
       variantId: data.variantId,
       action: 'ADD',
       quantity: data.quantity,
-    }).catch(err => logger.error('Failed to log cart event', err));
+    }).catch((err) => logger.error('Failed to log cart event', err));
 
     return this.getCart(userId);
   }
@@ -140,7 +141,7 @@ export class CartService {
       variantId: item.variantId || undefined,
       action: 'UPDATE_QUANTITY',
       quantity,
-    }).catch(err => logger.error('Failed to log cart event', err));
+    }).catch((err) => logger.error('Failed to log cart event', err));
 
     return this.getCart(userId);
   }
@@ -165,7 +166,7 @@ export class CartService {
       productId: item.productId,
       variantId: item.variantId || undefined,
       action: 'REMOVE',
-    }).catch(err => logger.error('Failed to log cart event', err));
+    }).catch((err) => logger.error('Failed to log cart event', err));
 
     return this.getCart(userId);
   }
@@ -184,7 +185,7 @@ export class CartService {
       cartId: cart.id,
       productId: 'ALL',
       action: 'CLEAR',
-    }).catch(err => logger.error('Failed to log cart event', err));
+    }).catch((err) => logger.error('Failed to log cart event', err));
 
     return this.getCart(userId);
   }
@@ -192,7 +193,10 @@ export class CartService {
   /**
    * Merge local storage cart after login
    */
-  public static async mergeCart(userId: string, items: Array<{ productId: string; variantId?: string; quantity: number }>) {
+  public static async mergeCart(
+    userId: string,
+    items: Array<{ productId: string; variantId?: string; quantity: number }>,
+  ) {
     let cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
       cart = await prisma.cart.create({ data: { userId } });
@@ -203,7 +207,7 @@ export class CartService {
         productId: item.productId,
         variantId: item.variantId,
         quantity: item.quantity,
-      }).catch(err => logger.warn(`Failed to merge cart item ${item.productId}`, err));
+      }).catch((err) => logger.warn(`Failed to merge cart item ${item.productId}`, err));
     }
 
     return this.getCart(userId);

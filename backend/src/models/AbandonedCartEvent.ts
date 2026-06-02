@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IAbandonedCartEvent extends Document {
   userId?: string;
   cartId?: string;
-  items: any[];
+  items: unknown[];
   totalValue: number;
   timestamp: Date;
 }
@@ -19,9 +19,13 @@ const AbandonedCartEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  }
+  },
 );
 
-export const AbandonedCartEvent = mongoose.model<IAbandonedCartEvent>('AbandonedCartEvent', AbandonedCartEventSchema, 'abandoned_cart_events');
+export const AbandonedCartEvent = mongoose.model<IAbandonedCartEvent>(
+  'AbandonedCartEvent',
+  AbandonedCartEventSchema,
+  'abandoned_cart_events',
+);
 
 export default AbandonedCartEvent;

@@ -15,7 +15,7 @@ export class AddressService {
   /**
    * Create a new address
    */
-  public static async createAddress(userId: string, data: any) {
+  public static async createAddress(userId: string, data: Record<string, unknown>) {
     if (data.isDefault) {
       await prisma.address.updateMany({
         where: { userId, isDefault: true },
@@ -35,7 +35,11 @@ export class AddressService {
   /**
    * Update address
    */
-  public static async updateAddress(userId: string, addressId: string, data: any) {
+  public static async updateAddress(
+    userId: string,
+    addressId: string,
+    data: Record<string, unknown>,
+  ) {
     const existing = await prisma.address.findUnique({ where: { id: addressId } });
     if (!existing || existing.userId !== userId) {
       throw new AppError('Address not found', 404);

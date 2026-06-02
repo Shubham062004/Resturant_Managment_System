@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import { AuthRequest } from '../../types/express';
 import { CouponService } from './coupons.service';
 
-export const validateCoupon = async (req: Request, res: Response) => {
+export const validateCoupon = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const { code, orderAmount } = req.body;
 

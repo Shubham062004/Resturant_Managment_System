@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../../types/express';
 import { CartService } from './cart.service';
 
-export const getCart = async (req: Request, res: Response) => {
+export const getCart = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const cart = await CartService.getCart(userId);
 
@@ -11,7 +12,7 @@ export const getCart = async (req: Request, res: Response) => {
   });
 };
 
-export const addItem = async (req: Request, res: Response) => {
+export const addItem = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const cart = await CartService.addItem(userId, req.body);
 
@@ -21,7 +22,7 @@ export const addItem = async (req: Request, res: Response) => {
   });
 };
 
-export const updateItemQuantity = async (req: Request, res: Response) => {
+export const updateItemQuantity = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const itemId = req.params.id;
   const { quantity } = req.body;
@@ -34,7 +35,7 @@ export const updateItemQuantity = async (req: Request, res: Response) => {
   });
 };
 
-export const removeItem = async (req: Request, res: Response) => {
+export const removeItem = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const itemId = req.params.id;
 
@@ -46,7 +47,7 @@ export const removeItem = async (req: Request, res: Response) => {
   });
 };
 
-export const clearCart = async (req: Request, res: Response) => {
+export const clearCart = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const cart = await CartService.clearCart(userId);
 
@@ -56,7 +57,7 @@ export const clearCart = async (req: Request, res: Response) => {
   });
 };
 
-export const mergeCart = async (req: Request, res: Response) => {
+export const mergeCart = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const { items } = req.body;
 
