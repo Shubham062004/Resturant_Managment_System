@@ -11,10 +11,13 @@ const initialAuthState: AuthState = {
   user: null,
 };
 
-const authReducer = (state = initialAuthState, action: any): AuthState => {
+const authReducer = (
+  state = initialAuthState,
+  action: { type: string; payload?: { id: string; name: string; role: string } },
+): AuthState => {
   switch (action.type) {
     case 'auth/login':
-      return { isAuthenticated: true, user: action.payload };
+      return { isAuthenticated: true, user: action.payload || null };
     case 'auth/logout':
       return { isAuthenticated: false, user: null };
     default:

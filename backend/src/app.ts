@@ -38,14 +38,14 @@ app.get('/api/v1/health', (req, res) => {
 
 // 3. Modular Feature Routes
 // Placeholders for future features
-app.use('/api/v1/auth', (req, res, next) => {
+app.use('/api/v1/auth', (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Auth module foundation active',
   });
 });
 
-app.use('/api/v1/tables', (req, res, next) => {
+app.use('/api/v1/tables', (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Tables module foundation active',

@@ -39,7 +39,7 @@ export const authGuard = async (
     };
 
     next();
-  } catch (error) {
+  } catch {
     return next(
       new AppError('Authentication failed. Access token signature is expired or compromised.', 401),
     );
