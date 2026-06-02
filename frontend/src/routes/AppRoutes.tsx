@@ -30,6 +30,7 @@ const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/Orde
 const DeliveryDashboardPage = React.lazy(() => import('../features/delivery/pages/DeliveryDashboardPage'));
 const EarningsDashboardPage = React.lazy(() => import('../features/delivery/pages/EarningsDashboardPage'));
 const InventoryDashboardPage = React.lazy(() => import('../features/inventory/pages/InventoryDashboardPage'));
+const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashboardPage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -298,6 +299,16 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <DeliveryDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* POS Dashboard System */}
+            <Route
+              path="/pos"
+              element={
+                <ProtectedRoute>
+                  <POSDashboardPage />
                 </ProtectedRoute>
               }
             />
