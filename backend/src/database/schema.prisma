@@ -30,6 +30,7 @@ model User {
   addresses               Address[]
   couponUsages            CouponUsage[]
   orderDrafts             OrderDraft[]
+  kitchenOrders           KitchenOrder[]
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
 }
@@ -38,6 +39,8 @@ enum Role {
   CUSTOMER
   ADMIN
   KITCHEN_STAFF
+  HEAD_CHEF
+  KITCHEN_MANAGER
   DELIVERY_PARTNER
   CASHIER
   SUPER_ADMIN
@@ -164,6 +167,7 @@ model Order {
   statusHistory OrderStatusHistory[]
   refunds       Refund[]
   bills         Bill[]
+  kitchenOrder  KitchenOrder?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -328,6 +332,7 @@ model Product {
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   OrderItem        OrderItem[]
+  kitchenTasks     KitchenTask[]
 
   @@unique([restaurantId, slug])
   @@index([restaurantId])
@@ -501,4 +506,70 @@ model Payment {
 enum PaymentProvider {
   RAZORPAY
   STRIPE
+}
+
+// ----------------------------------------------------
+// KITCHEN DISPLAY SYSTEM (KDS) MODELS
+// ----------------------------------------------------
+
+model KitchenStation {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  description String?
+  active      Boolean        @default(true)
+  orders      KitchenOrder[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+enum KitchenOrderStatus {
+  QUEUED
+  COOKING
+  READY_FOR_PACKING
+  PACKED
+  COMPLETED
+}
+
+enum KitchenPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model KitchenOrder {
+  id          String             @id @default(uuid())
+  orderId     String             @unique
+  order       Order              @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stationId   String?
+  station     KitchenStation?    @relation(fields: [stationId], references: [id], onDelete: SetNull)
+  assignedTo  String?
+  assignedUser User?             @relation(fields: [assignedTo], references: [id], onDelete: SetNull)
+  priority    KitchenPriority    @default(MEDIUM)
+  status      KitchenOrderStatus @default(QUEUED)
+  tasks       KitchenTask[]
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([orderId])
+  @@index([stationId])
+  @@index([assignedTo])
+}
+
+model KitchenTask {
+  id             String       @id @default(uuid())
+  kitchenOrderId String
+  kitchenOrder   KitchenOrder @relation(fields: [kitchenOrderId], references: [id], onDelete: Cascade)
+  productId      String
+  product        Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity       Int
+  notes          String?
+  status         String       @default("PENDING") // PENDING, DONE
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([kitchenOrderId])
+  @@index([productId])
 }

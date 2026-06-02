@@ -8,7 +8,7 @@ import { extractAccessToken } from '../utils/extractAccessToken';
 export interface DecodedToken {
   id: string;
   email: string;
-  role: 'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN';
+  role: 'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'HEAD_CHEF' | 'KITCHEN_MANAGER' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN';
   iat: number;
   exp: number;
 }
@@ -46,7 +46,7 @@ export const authGuard = async (
 // Authorization Hook: Role-Based Access Controls
 export const restrictTo = (
   ...roles: Array<
-    'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN'
+    'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'HEAD_CHEF' | 'KITCHEN_MANAGER' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN'
   >
 ) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {

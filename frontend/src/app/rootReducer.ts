@@ -7,6 +7,8 @@ import searchReducer from '../features/customer/store/searchSlice';
 import orderReducer from '../features/orders/store/orderSlice';
 import trackingReducer from '../features/orders/store/trackingSlice';
 import refundReducer from '../features/orders/store/refundSlice';
+import kitchenReducer from '../features/kitchen/store/kitchenSlice';
+import stationReducer from '../features/kitchen/store/stationSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -14,9 +16,12 @@ export const rootReducer = combineReducers({
   restaurant: restaurantReducer,
   favorite: favoriteReducer,
   search: searchReducer,
+  checkout: checkoutReducer,
   orders: orderReducer,
   tracking: trackingReducer,
   refunds: refundReducer,
+  kitchen: kitchenReducer,
+  stations: stationReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

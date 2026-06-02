@@ -65,6 +65,10 @@ const DesignSystemShowcase = React.lazy(
   () => import('../shared/components/ui/DesignSystemShowcase'),
 );
 
+// Kitchen Views (Lazy)
+const KitchenDashboardPage = React.lazy(() => import('../features/kitchen/pages/KitchenDashboardPage'));
+const KitchenAnalyticsPage = React.lazy(() => import('../features/kitchen/pages/KitchenAnalyticsPage'));
+
 const DashboardView = () => (
   <div className="space-y-6">
     <h1 className="text-3xl font-bold font-display tracking-tight text-white animate-fade-in">
@@ -256,6 +260,24 @@ const AppRouter = () => {
               <Route path="tables" element={<TablesView />} />
               <Route path="design-system" element={<DesignSystemShowcase />} />
             </Route>
+
+            {/* Kitchen Dashboard System */}
+            <Route
+              path="/kitchen"
+              element={
+                <ProtectedRoute>
+                  <KitchenDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/kitchen/analytics"
+              element={
+                <ProtectedRoute>
+                  <KitchenAnalyticsPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Error Pages Shell */}
             <Route element={<ErrorLayout />}>
