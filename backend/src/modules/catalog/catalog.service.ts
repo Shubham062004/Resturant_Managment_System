@@ -254,7 +254,7 @@ export class CatalogService {
       page?: number;
       limit?: number;
     },
-    userId?: string
+    userId?: string,
   ) {
     const page = filters.page || 1;
     const limit = filters.limit || 20;
@@ -423,7 +423,7 @@ export class CatalogService {
       }));
 
       RecommendationEvent.insertMany(records).catch((err) =>
-        logger.error('MongoDB recommendation events logging failed:', err)
+        logger.error('MongoDB recommendation events logging failed:', err),
       );
     }
 
@@ -436,7 +436,11 @@ export class CatalogService {
   /**
    * Record recommendation click in MongoDB
    */
-  public static async trackRecommendationClick(productId: string, recommendedProductId: string, userId?: string) {
+  public static async trackRecommendationClick(
+    productId: string,
+    recommendedProductId: string,
+    userId?: string,
+  ) {
     await RecommendationEvent.create({
       userId: userId || null,
       productId,
@@ -457,7 +461,7 @@ export class CatalogService {
       productId: string;
       rating: number;
       comment: string;
-    }
+    },
   ) {
     // Verify product exists
     const product = await prisma.product.findUnique({
@@ -514,7 +518,7 @@ export class CatalogService {
     data: {
       rating?: number;
       comment?: string;
-    }
+    },
   ) {
     const review = await prisma.review.findUnique({
       where: { id: reviewId },

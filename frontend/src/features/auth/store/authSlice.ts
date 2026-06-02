@@ -40,7 +40,7 @@ export const login = createAsyncThunk(
       const errorMsg = err.response?.data?.error?.message || 'Login failed';
       return rejectWithValue(errorMsg);
     }
-  }
+  },
 );
 
 export const registerUser = createAsyncThunk(
@@ -53,7 +53,7 @@ export const registerUser = createAsyncThunk(
       const errorMsg = err.response?.data?.error?.message || 'Registration failed';
       return rejectWithValue(errorMsg);
     }
-  }
+  },
 );
 
 export const googleAuthLogin = createAsyncThunk(
@@ -68,21 +68,18 @@ export const googleAuthLogin = createAsyncThunk(
       const errorMsg = err.response?.data?.error?.message || 'Google login failed';
       return rejectWithValue(errorMsg);
     }
-  }
+  },
 );
 
-export const logout = createAsyncThunk(
-  'auth/logout',
-  async (_, { rejectWithValue }) => {
-    try {
-      await apiClient.post('/auth/logout');
-    } catch (err: any) {
-      // Local cleanups proceed even if API triggers warnings
-    } finally {
-      localStorage.removeItem('token');
-    }
+export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {
+  try {
+    await apiClient.post('/auth/logout');
+  } catch (err: any) {
+    // Local cleanups proceed even if API triggers warnings
+  } finally {
+    localStorage.removeItem('token');
   }
-);
+});
 
 export const logoutAllDevices = createAsyncThunk(
   'auth/logoutAll',
@@ -94,7 +91,7 @@ export const logoutAllDevices = createAsyncThunk(
     } finally {
       localStorage.removeItem('token');
     }
-  }
+  },
 );
 
 export const refreshSession = createAsyncThunk(
@@ -109,7 +106,7 @@ export const refreshSession = createAsyncThunk(
       localStorage.removeItem('token');
       return rejectWithValue(err.response?.data?.error?.message || 'Session expired');
     }
-  }
+  },
 );
 
 export const fetchProfile = createAsyncThunk(
@@ -122,7 +119,7 @@ export const fetchProfile = createAsyncThunk(
       const errorMsg = err.response?.data?.error?.message || 'Failed to fetch profile';
       return rejectWithValue(errorMsg);
     }
-  }
+  },
 );
 
 export const updateProfile = createAsyncThunk(
@@ -140,7 +137,7 @@ export const updateProfile = createAsyncThunk(
       const errorMsg = err.response?.data?.error?.message || 'Failed to update profile';
       return rejectWithValue(errorMsg);
     }
-  }
+  },
 );
 
 const authSlice = createSlice({

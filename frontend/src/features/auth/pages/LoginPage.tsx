@@ -74,7 +74,10 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout brandTitle="Terminal Verification" brandDescription="Authenticate using your enterprise credentials to access the Oven Xpress floor plans and point-of-sale grids.">
+    <AuthLayout
+      brandTitle="Terminal Verification"
+      brandDescription="Authenticate using your enterprise credentials to access the Oven Xpress floor plans and point-of-sale grids."
+    >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">

@@ -21,7 +21,9 @@ export const FavoritesPage: React.FC = () => {
             <Heart className="text-primary fill-primary" size={22} />
             <span>My Favorite Selections</span>
           </h1>
-          <p className="text-xs text-muted-foreground mt-1">Gourmet modifier setups and dishes saved for rapid checkout.</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Gourmet modifier setups and dishes saved for rapid checkout.
+          </p>
         </div>
 
         {/* Empty state simulation */}

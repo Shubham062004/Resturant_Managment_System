@@ -27,7 +27,9 @@ export const ForgotPasswordPage: React.FC = () => {
 
     try {
       const response = await apiClient.post('/auth/forgot-password', { email });
-      setSuccessMessage(response.data.message || 'If registered, a password reset link has been dispatched.');
+      setSuccessMessage(
+        response.data.message || 'If registered, a password reset link has been dispatched.',
+      );
     } catch (err: any) {
       setError(err.response?.data?.error?.message || 'Failed to request password reset.');
     } finally {
@@ -36,7 +38,10 @@ export const ForgotPasswordPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout brandTitle="Credential Recovery" brandDescription="Initiate the secure reset sequence to update your Oven Xpress system passwords and node access credentials.">
+    <AuthLayout
+      brandTitle="Credential Recovery"
+      brandDescription="Initiate the secure reset sequence to update your Oven Xpress system passwords and node access credentials."
+    >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">
@@ -59,7 +64,8 @@ export const ForgotPasswordPage: React.FC = () => {
               {successMessage}
             </Alert>
             <p className="text-muted-foreground font-sans text-sm leading-relaxed px-1">
-              Please check your system logs or email inbox. The reset link is valid for exactly 1 hour.
+              Please check your system logs or email inbox. The reset link is valid for exactly 1
+              hour.
             </p>
             <Link
               to="/login"

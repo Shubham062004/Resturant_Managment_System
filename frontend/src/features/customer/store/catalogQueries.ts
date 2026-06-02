@@ -254,7 +254,13 @@ export const useProductBySlug = (slug: string) => {
 // 7. Track recommendation click
 export const useTrackRecommendationClick = () => {
   return useMutation({
-    mutationFn: async ({ productId, recommendedProductId }: { productId: string; recommendedProductId: string }) => {
+    mutationFn: async ({
+      productId,
+      recommendedProductId,
+    }: {
+      productId: string;
+      recommendedProductId: string;
+    }) => {
       const { data } = await apiClient.post('/catalog/products/recommendations/click', {
         productId,
         recommendedProductId,
@@ -284,7 +290,15 @@ export const useCreateReview = () => {
 export const useUpdateReview = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, rating, comment }: { id: string; rating: number; comment: string }) => {
+    mutationFn: async ({
+      id,
+      rating,
+      comment,
+    }: {
+      id: string;
+      rating: number;
+      comment: string;
+    }) => {
       const { data } = await apiClient.put(`/catalog/reviews/${id}`, { rating, comment });
       return data;
     },

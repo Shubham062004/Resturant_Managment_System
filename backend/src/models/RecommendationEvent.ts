@@ -19,13 +19,13 @@ const RecommendationEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  }
+  },
 );
 
 export const RecommendationEvent = mongoose.model<IRecommendationEvent>(
   'RecommendationEvent',
   RecommendationEventSchema,
-  'recommendation_events'
+  'recommendation_events',
 );
 
 export default RecommendationEvent;

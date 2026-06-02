@@ -4,7 +4,7 @@ import logger from '../utils/logger';
 // Setup OAuth Client
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID || 'mock_client_id',
-  process.env.GOOGLE_CLIENT_SECRET || 'mock_client_secret'
+  process.env.GOOGLE_CLIENT_SECRET || 'mock_client_secret',
 );
 
 export interface GoogleUserPayload {
@@ -23,7 +23,9 @@ export class GoogleAuthService {
     try {
       // Development bypass fallback if keys are missing
       if (!process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID === 'mock_client_id') {
-        logger.warn('[Google Auth Service] Missing GOOGLE_CLIENT_ID. Running in MOCK fallback mode.');
+        logger.warn(
+          '[Google Auth Service] Missing GOOGLE_CLIENT_ID. Running in MOCK fallback mode.',
+        );
 
         // If the token itself is an email address, use it; otherwise mock default
         let mockEmail = 'google.test.user@ovenxpress.com';
@@ -33,8 +35,12 @@ export class GoogleAuthService {
 
         const username = mockEmail.split('@')[0];
         const nameParts = username.split(/[._-]/);
-        const firstName = nameParts[0] ? nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1) : 'Google';
-        const lastName = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1) : 'User';
+        const firstName = nameParts[0]
+          ? nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1)
+          : 'Google';
+        const lastName = nameParts[1]
+          ? nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1)
+          : 'User';
 
         return {
           email: mockEmail,
@@ -65,7 +71,9 @@ export class GoogleAuthService {
       };
     } catch (error) {
       logger.error('[Google Auth Service] Failed to verify Google token:', error);
-      throw new Error('Google OAuth token verification failed. The signature is invalid or expired.');
+      throw new Error(
+        'Google OAuth token verification failed. The signature is invalid or expired.',
+      );
     }
   }
 }

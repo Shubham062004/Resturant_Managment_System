@@ -7,15 +7,7 @@ import { Input } from '../../../shared/components/ui/Input';
 import Card, { CardContent } from '../../../shared/components/ui/Card';
 import Badge from '../../../shared/components/ui/Badge';
 import { useToast } from '../../../shared/components/ui/Toast';
-import {
-  MapPin,
-  Phone,
-  Clock,
-  Search,
-  Compass,
-  ChevronRight,
-  Navigation
-} from 'lucide-react';
+import { MapPin, Phone, Clock, Search, Compass, ChevronRight, Navigation } from 'lucide-react';
 import mockBranches, { Branch } from '../../../shared/data/branches';
 
 export const BranchesPage: React.FC = () => {
@@ -27,7 +19,9 @@ export const BranchesPage: React.FC = () => {
   const [cityFilter, setCityFilter] = useState('All');
   const [branches, setBranches] = useState<Branch[]>(mockBranches);
   const [isDetecting, setIsDetecting] = useState(false);
-  const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(selectedBranch || mockBranches[0]);
+  const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(
+    selectedBranch || mockBranches[0],
+  );
 
   // Extract unique cities
   const cities = ['All', ...Array.from(new Set(mockBranches.map((b) => b.city)))];
@@ -36,9 +30,8 @@ export const BranchesPage: React.FC = () => {
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const p = 0.017453292519943295; // Math.PI / 180
     const c = Math.cos;
-    const a = 0.5 - c((lat2 - lat1) * p)/2 + 
-            c(lat1 * p) * c(lat2 * p) * 
-            (1 - c((lon2 - lon1) * p))/2;
+    const a =
+      0.5 - c((lat2 - lat1) * p) / 2 + (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
     const km = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
     return km * 0.621371; // Return miles
   };
@@ -55,13 +48,15 @@ export const BranchesPage: React.FC = () => {
         const { latitude, longitude } = position.coords;
 
         // Update branch distances based on location
-        const updated = mockBranches.map((b) => {
-          const dist = calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng);
-          return {
-            ...b,
-            distance: parseFloat(dist.toFixed(1)),
-          };
-        }).sort((a, b) => (a.distance || 0) - (b.distance || 0));
+        const updated = mockBranches
+          .map((b) => {
+            const dist = calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng);
+            return {
+              ...b,
+              distance: parseFloat(dist.toFixed(1)),
+            };
+          })
+          .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
         setBranches(updated);
         setIsDetecting(false);
@@ -70,14 +65,15 @@ export const BranchesPage: React.FC = () => {
       (_error) => {
         setIsDetecting(false);
         toast.error('Failed to retrieve location. Check browser permissions.');
-      }
+      },
     );
   };
 
   // Filter outposts
   const filteredBranches = branches.filter((b) => {
-    const matchesSearch = b.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          b.address.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      b.address.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCity = cityFilter === 'All' || b.city === cityFilter;
     return matchesSearch && matchesCity;
   });
@@ -96,11 +92,12 @@ export const BranchesPage: React.FC = () => {
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-10">
-        
         {/* Header Title */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-border/40 pb-8">
           <div className="space-y-3">
-            <h1 className="text-3xl md:text-4xl font-display font-extrabold tracking-tight text-white">Select Dispatch Outpost</h1>
+            <h1 className="text-3xl md:text-4xl font-display font-extrabold tracking-tight text-white">
+              Select Dispatch Outpost
+            </h1>
             <p className="text-muted-foreground text-sm font-sans max-w-lg">
               Set your target location to access local fire-baked pizza and gourmet burger menus.
             </p>
@@ -148,13 +145,14 @@ export const BranchesPage: React.FC = () => {
 
         {/* Master-Detail Split Pane */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
           {/* Branches list */}
           <div className="lg:col-span-7 space-y-4">
             {filteredBranches.length === 0 ? (
               <div className="text-center py-16 bg-card/45 border border-border/40 rounded-xl space-y-4">
                 <MapPin className="mx-auto text-muted-foreground/60" size={36} />
-                <p className="text-muted-foreground text-sm font-sans">No outposts found matching your filter criteria.</p>
+                <p className="text-muted-foreground text-sm font-sans">
+                  No outposts found matching your filter criteria.
+                </p>
               </div>
             ) : (
               filteredBranches.map((branch) => {
@@ -165,7 +163,9 @@ export const BranchesPage: React.FC = () => {
                   <Card
                     key={branch.id}
                     className={`bg-card/45 border transition-all duration-200 cursor-pointer ${
-                      isFocused ? 'border-primary/50 bg-card/85 shadow-md' : 'border-border/60 hover:border-border'
+                      isFocused
+                        ? 'border-primary/50 bg-card/85 shadow-md'
+                        : 'border-border/60 hover:border-border'
                     }`}
                     onClick={() => setActiveBranchDetail(branch)}
                   >
@@ -176,13 +176,18 @@ export const BranchesPage: React.FC = () => {
                             {branch.name}
                           </h3>
                           {isActiveSelection && (
-                            <Badge variant="success" className="text-[9px] uppercase px-2 py-0.5 font-bold tracking-wider">
+                            <Badge
+                              variant="success"
+                              className="text-[9px] uppercase px-2 py-0.5 font-bold tracking-wider"
+                            >
                               Active Outpost
                             </Badge>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-sans">{branch.address}</p>
-                        
+                        <p className="text-xs text-muted-foreground leading-relaxed font-sans">
+                          {branch.address}
+                        </p>
+
                         <div className="flex flex-wrap items-center gap-4 text-[10px] text-muted-foreground font-sans">
                           <span className="flex items-center gap-1">
                             <Clock size={12} />
@@ -223,9 +228,15 @@ export const BranchesPage: React.FC = () => {
             {activeBranchDetail ? (
               <div className="glass-panel p-6 rounded-2xl border border-border/80 bg-card/90 shadow-xl space-y-6">
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary font-display">Branch Details</span>
-                  <h2 className="font-display font-extrabold text-lg text-white leading-tight">{activeBranchDetail.name}</h2>
-                  <p className="text-xs text-muted-foreground leading-relaxed font-sans">{activeBranchDetail.address}</p>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary font-display">
+                    Branch Details
+                  </span>
+                  <h2 className="font-display font-extrabold text-lg text-white leading-tight">
+                    {activeBranchDetail.name}
+                  </h2>
+                  <p className="text-xs text-muted-foreground leading-relaxed font-sans">
+                    {activeBranchDetail.address}
+                  </p>
                 </div>
 
                 <div className="border-t border-border/40 pt-4 space-y-3.5 text-xs font-sans">
@@ -247,7 +258,8 @@ export const BranchesPage: React.FC = () => {
                   <MapPin size={28} className="text-primary z-10 animate-bounce" />
                   <span className="text-xs font-bold text-white z-10">Smart Map Interface</span>
                   <span className="text-[10px] text-muted-foreground/80 max-w-xs z-10 font-sans">
-                    GPS Coordinates: {activeBranchDetail.coords.lat}, {activeBranchDetail.coords.lng}
+                    GPS Coordinates: {activeBranchDetail.coords.lat},{' '}
+                    {activeBranchDetail.coords.lng}
                   </span>
                 </div>
 
@@ -265,11 +277,12 @@ export const BranchesPage: React.FC = () => {
             ) : (
               <div className="glass-panel p-6 rounded-2xl border border-border/80 bg-card/90 shadow-xl text-center text-muted-foreground py-16">
                 <MapPin className="mx-auto mb-2 text-muted-foreground/50" size={32} />
-                <p className="text-xs font-sans">Select a dispatch outpost from the list to view operations detail.</p>
+                <p className="text-xs font-sans">
+                  Select a dispatch outpost from the list to view operations detail.
+                </p>
               </div>
             )}
           </div>
-
         </div>
       </div>
     </>

@@ -13,7 +13,6 @@ export const AboutPage: React.FC = () => {
       />
 
       <div className="max-w-4xl mx-auto px-6 py-12 md:py-16 space-y-16">
-        
         {/* Header Hero */}
         <div className="text-center space-y-4">
           <motion.div
@@ -38,19 +37,26 @@ export const AboutPage: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-muted-foreground font-sans max-w-xl mx-auto leading-relaxed text-sm md:text-base"
           >
-            We are culinary builders and automation architects, serving fire-baked perfection with absolute delivery reliability.
+            We are culinary builders and automation architects, serving fire-baked perfection with
+            absolute delivery reliability.
           </motion.p>
         </div>
 
         {/* Narrative & History */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center border-t border-border/40 pt-12">
           <div className="space-y-4">
-            <h2 className="text-xl font-display font-bold text-white tracking-wide">The Hearth & The Code</h2>
+            <h2 className="text-xl font-display font-bold text-white tracking-wide">
+              The Hearth & The Code
+            </h2>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-              Oven Xpress began with a single vision: how to serve authentic Neapolitan-style stone crust pizzas and handcrafted gourmet burger blends without the traditional restaurant delays.
+              Oven Xpress began with a single vision: how to serve authentic Neapolitan-style stone
+              crust pizzas and handcrafted gourmet burger blends without the traditional restaurant
+              delays.
             </p>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-              By combining a customized 800°F stone hearth pizza deck with a modular kitchen dispatching system, we unified high-speed culinary prep with live client progress tickets.
+              By combining a customized 800°F stone hearth pizza deck with a modular kitchen
+              dispatching system, we unified high-speed culinary prep with live client progress
+              tickets.
             </p>
           </div>
           <div className="relative rounded-2xl overflow-hidden aspect-video border border-border/60 shadow-lg">
@@ -64,13 +70,16 @@ export const AboutPage: React.FC = () => {
 
         {/* Core Values / Grid */}
         <div className="space-y-8 border-t border-border/40 pt-12">
-          <h2 className="text-center font-display font-bold text-xl text-white tracking-wide">Our Operations Pillars</h2>
+          <h2 className="text-center font-display font-bold text-xl text-white tracking-wide">
+            Our Operations Pillars
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-card/45 border border-border/50 p-6 rounded-xl space-y-3">
               <Target className="text-primary" size={20} />
               <h3 className="font-display font-bold text-sm text-white">Absolute Quality</h3>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Premium unbleached flours, fresh San Marzano tomatoes, and custom blend brisket patties. Never frozen.
+                Premium unbleached flours, fresh San Marzano tomatoes, and custom blend brisket
+                patties. Never frozen.
               </p>
             </div>
 
@@ -78,7 +87,8 @@ export const AboutPage: React.FC = () => {
               <Clock className="text-primary" size={20} />
               <h3 className="font-display font-bold text-sm text-white">Rapid Fulfilment</h3>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Proprietary heat retention boxes and smart logistics ensure food arrives at peak tasting temperature.
+                Proprietary heat retention boxes and smart logistics ensure food arrives at peak
+                tasting temperature.
               </p>
             </div>
 
@@ -86,7 +96,8 @@ export const AboutPage: React.FC = () => {
               <ShieldCheck className="text-primary" size={20} />
               <h3 className="font-display font-bold text-sm text-white">Sanitation Shield</h3>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Rigid temperature logs and contactless handoffs verify safety protocols at every single checkpoint.
+                Rigid temperature logs and contactless handoffs verify safety protocols at every
+                single checkpoint.
               </p>
             </div>
           </div>

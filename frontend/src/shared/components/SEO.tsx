@@ -48,9 +48,7 @@ export const SEO: React.FC<SEOProps> = ({
 
       {/* JSON-LD Schema Structured Data */}
       {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       )}
     </Helmet>
   );

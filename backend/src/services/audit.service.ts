@@ -32,7 +32,7 @@ export class AuditService {
     action: 'LOGIN' | 'LOGOUT' | 'PASSWORD_RESET' | 'EMAIL_VERIFICATION' | 'ROLE_CHANGE',
     ipAddress: string,
     userAgent: string,
-    payload?: Record<string, any>
+    payload?: Record<string, any>,
   ): Promise<void> {
     try {
       await AuditLog.create({
@@ -55,7 +55,7 @@ export class AuditService {
     userId: string,
     ipAddress: string,
     userAgent: string,
-    tokenHash: string
+    tokenHash: string,
   ): Promise<void> {
     try {
       const browser = this.getBrowser(userAgent);
@@ -81,9 +81,11 @@ export class AuditService {
     try {
       await UserSession.updateOne(
         { tokenHash, logoutTime: { $exists: false } },
-        { $set: { logoutTime: new Date() } }
+        { $set: { logoutTime: new Date() } },
       );
-      logger.info(`[Session Service] Session terminated for token hash starting with ${tokenHash.slice(0, 10)}`);
+      logger.info(
+        `[Session Service] Session terminated for token hash starting with ${tokenHash.slice(0, 10)}`,
+      );
     } catch (error) {
       logger.error('[Audit Service] Failed to terminate session in MongoDB:', error);
     }
@@ -96,7 +98,7 @@ export class AuditService {
     try {
       await UserSession.updateMany(
         { userId, logoutTime: { $exists: false } },
-        { $set: { logoutTime: new Date() } }
+        { $set: { logoutTime: new Date() } },
       );
       logger.info(`[Session Service] All active sessions terminated for User [${userId}]`);
     } catch (error) {

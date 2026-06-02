@@ -21,12 +21,7 @@ import Pagination from './Pagination';
 import Alert from './Alert';
 import { useToast } from './Toast';
 import EmptyState from './EmptyState';
-import {
-  ProductSkeleton,
-  TableSkeleton,
-  CardSkeleton,
-  ProfileSkeleton,
-} from './Skeleton';
+import { ProductSkeleton, TableSkeleton, CardSkeleton, ProfileSkeleton } from './Skeleton';
 
 // Theme imports
 import { typographyClasses } from '../../theme/typography';

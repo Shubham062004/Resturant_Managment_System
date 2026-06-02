@@ -7,7 +7,15 @@ import Button from '../../../shared/components/ui/Button';
 import Avatar from '../../../shared/components/ui/Avatar';
 import Badge from '../../../shared/components/ui/Badge';
 import Alert from '../../../shared/components/ui/Alert';
-import { User as UserIcon, Phone, Save, ShieldAlert, ShieldCheck, Camera, LogOut } from 'lucide-react';
+import {
+  User as UserIcon,
+  Phone,
+  Save,
+  ShieldAlert,
+  ShieldCheck,
+  Camera,
+  LogOut,
+} from 'lucide-react';
 
 export const ProfilePage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -19,7 +27,7 @@ export const ProfilePage: React.FC = () => {
   const [phone, setPhone] = useState(user?.phone || '');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -81,7 +89,7 @@ export const ProfilePage: React.FC = () => {
       formData.append('firstName', firstName.trim());
       formData.append('lastName', lastName.trim());
       formData.append('phone', phone.trim());
-      
+
       if (avatarFile) {
         formData.append('avatar', avatarFile);
       }
@@ -101,7 +109,11 @@ export const ProfilePage: React.FC = () => {
   };
 
   const handleLogoutAll = async () => {
-    if (window.confirm('Are you sure you want to terminate all active sessions on other devices? You will be signed out from this client.')) {
+    if (
+      window.confirm(
+        'Are you sure you want to terminate all active sessions on other devices? You will be signed out from this client.',
+      )
+    ) {
       await dispatch(logoutAllDevices());
       toast.success('All active sessions revoked.');
       window.location.href = '/login';
@@ -120,8 +132,12 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold font-display tracking-tight text-white">Profile Node Settings</h1>
-        <p className="text-sm text-muted-foreground font-sans mt-1">Manage system configurations and operational clearances.</p>
+        <h1 className="text-3xl font-bold font-display tracking-tight text-white">
+          Profile Node Settings
+        </h1>
+        <p className="text-sm text-muted-foreground font-sans mt-1">
+          Manage system configurations and operational clearances.
+        </p>
       </div>
 
       {validationError && (
@@ -158,7 +174,9 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center">
-            <Badge variant="primary" className="text-[10px] py-1 font-display">{user.role}</Badge>
+            <Badge variant="primary" className="text-[10px] py-1 font-display">
+              {user.role}
+            </Badge>
             {user.isEmailVerified ? (
               <Badge variant="success" className="text-[10px] py-1 flex items-center gap-1">
                 <ShieldCheck size={10} /> Verified
@@ -174,7 +192,9 @@ export const ProfilePage: React.FC = () => {
 
           {/* Device Actions Panel */}
           <div className="w-full space-y-3">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest text-left">Terminal Security</h3>
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest text-left">
+              Terminal Security
+            </h3>
             <button
               onClick={handleLogoutAll}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-danger/40 hover:bg-danger/10 text-danger text-xs font-semibold transition-colors duration-150"
@@ -186,7 +206,9 @@ export const ProfilePage: React.FC = () => {
 
         {/* Right Column: Update Forms Panel */}
         <div className="lg:col-span-2 glass-panel p-8 rounded-xl">
-          <h2 className="text-xl font-bold font-display text-white mb-6 border-b border-border/40 pb-4">Personal Details</h2>
+          <h2 className="text-xl font-bold font-display text-white mb-6 border-b border-border/40 pb-4">
+            Personal Details
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input

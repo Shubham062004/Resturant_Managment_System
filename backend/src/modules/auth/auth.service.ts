@@ -133,7 +133,11 @@ export class AuthService {
     }
 
     // Generate tokens
-    const accessToken = this.generateAccessToken({ id: user.id, email: user.email, role: user.role });
+    const accessToken = this.generateAccessToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
     const refreshToken = await this.generateRefreshToken(user.id);
     const tokenHash = this.hashToken(refreshToken);
 
@@ -179,14 +183,13 @@ export class AuthService {
         data: { revoked: true },
       });
       await AuditService.terminateAllSessions(storedToken.userId);
-      await AuditService.writeLog(
-        storedToken.userId,
-        'LOGOUT',
-        ipAddress,
-        userAgent,
-        { warn: 'Token replay attack detected. Revoked all active user sessions.' }
+      await AuditService.writeLog(storedToken.userId, 'LOGOUT', ipAddress, userAgent, {
+        warn: 'Token replay attack detected. Revoked all active user sessions.',
+      });
+      throw new AppError(
+        'Security breach detected. Refresh token has already been used. Please log in again.',
+        401,
       );
-      throw new AppError('Security breach detected. Refresh token has already been used. Please log in again.', 401);
     }
 
     // Check expiration
@@ -206,7 +209,11 @@ export class AuthService {
 
     // 2. Generate new tokens
     const user = storedToken.user;
-    const newAccessToken = this.generateAccessToken({ id: user.id, email: user.email, role: user.role });
+    const newAccessToken = this.generateAccessToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
     const newRefreshToken = await this.generateRefreshToken(user.id);
     const newHash = this.hashToken(newRefreshToken);
 

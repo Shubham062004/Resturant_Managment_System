@@ -40,7 +40,12 @@ const upload = multer({
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new AppError('Invalid file type. Only JPEG, PNG, WEBP, and GIF images are allowed.', 400) as any);
+      cb(
+        new AppError(
+          'Invalid file type. Only JPEG, PNG, WEBP, and GIF images are allowed.',
+          400,
+        ) as any,
+      );
     }
   },
 });
@@ -52,7 +57,7 @@ router.patch(
   upload.single('avatar'),
   sanitizeInput,
   validate({ body: updateProfileSchema }),
-  UsersController.updateProfile
+  UsersController.updateProfile,
 );
 
 export default router;

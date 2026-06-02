@@ -19,7 +19,8 @@ export const mockOffers: Offer[] = [
     discountPercentage: 50,
     minOrderValue: 20.0,
     expiryDate: '2026-12-31',
-    bannerImage: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=60',
+    bannerImage:
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=60',
     active: true,
   },
   {
@@ -30,7 +31,8 @@ export const mockOffers: Offer[] = [
     discountPercentage: 20,
     minOrderValue: 15.0,
     expiryDate: '2026-08-31',
-    bannerImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=60',
+    bannerImage:
+      'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=60',
     active: true,
   },
   {
@@ -41,7 +43,8 @@ export const mockOffers: Offer[] = [
     discountPercentage: 100, // Used as delivery fee deduction indicator
     minOrderValue: 25.0,
     expiryDate: '2026-06-30',
-    bannerImage: 'https://images.unsplash.com/photo-1526367790999-0150786486a9?w=600&auto=format&fit=crop&q=60',
+    bannerImage:
+      'https://images.unsplash.com/photo-1526367790999-0150786486a9?w=600&auto=format&fit=crop&q=60',
     active: true,
   },
 ];

@@ -16,7 +16,8 @@ export const GoogleCallbackPage: React.FC = () => {
     // Parse Google payload from hash fragment or query params
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const searchParams = new URLSearchParams(window.location.search);
-    const token = hashParams.get('id_token') || searchParams.get('token') || hashParams.get('access_token');
+    const token =
+      hashParams.get('id_token') || searchParams.get('token') || hashParams.get('access_token');
 
     if (!token) {
       toast.error('Authentication credential was missing from the callback parameters.');
@@ -43,8 +44,12 @@ export const GoogleCallbackPage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background space-y-4">
       <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
-      <h2 className="text-xl font-bold font-display text-white tracking-tight">Verifying Credentials</h2>
-      <p className="text-muted-foreground font-sans text-xs">Exchanging Google assertions and establishing session credentials...</p>
+      <h2 className="text-xl font-bold font-display text-white tracking-tight">
+        Verifying Credentials
+      </h2>
+      <p className="text-muted-foreground font-sans text-xs">
+        Exchanging Google assertions and establishing session credentials...
+      </p>
     </div>
   );
 };

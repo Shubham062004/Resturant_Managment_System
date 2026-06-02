@@ -29,14 +29,24 @@ const OrdersPage = React.lazy(() => import('../features/customer/pages/OrdersPag
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
-const RestaurantDetailPage = React.lazy(() => import('../features/customer/pages/RestaurantDetailPage'));
+const RestaurantDetailPage = React.lazy(
+  () => import('../features/customer/pages/RestaurantDetailPage'),
+);
 const ProductDetailPage = React.lazy(() => import('../features/customer/pages/ProductDetailPage'));
-const CategoryDetailPage = React.lazy(() => import('../features/customer/pages/CategoryDetailPage'));
-const AdminPlaceholderPage = React.lazy(() => import('../features/customer/pages/AdminPlaceholderPage'));
+const CategoryDetailPage = React.lazy(
+  () => import('../features/customer/pages/CategoryDetailPage'),
+);
+const AdminPlaceholderPage = React.lazy(
+  () => import('../features/customer/pages/AdminPlaceholderPage'),
+);
 
 // Placeholder Future Module Components
-const CartPlaceholderPage = React.lazy(() => import('../features/customer/pages/CartPlaceholderPage'));
-const CheckoutPlaceholderPage = React.lazy(() => import('../features/customer/pages/CheckoutPlaceholderPage'));
+const CartPlaceholderPage = React.lazy(
+  () => import('../features/customer/pages/CartPlaceholderPage'),
+);
+const CheckoutPlaceholderPage = React.lazy(
+  () => import('../features/customer/pages/CheckoutPlaceholderPage'),
+);
 
 // Auth Pages (Lazy)
 const LoginPage = React.lazy(() => import('../features/auth/pages/LoginPage'));
@@ -53,7 +63,9 @@ const ServerErrorPage = React.lazy(() => import('../features/customer/pages/Serv
 const OfflinePage = React.lazy(() => import('../features/customer/pages/OfflinePage'));
 
 // Staff dashboard views (inline templates from previous foundation)
-const DesignSystemShowcase = React.lazy(() => import('../shared/components/ui/DesignSystemShowcase'));
+const DesignSystemShowcase = React.lazy(
+  () => import('../shared/components/ui/DesignSystemShowcase'),
+);
 
 const DashboardView = () => (
   <div className="space-y-6">
@@ -75,7 +87,9 @@ const DashboardView = () => (
 
 const TablesView = () => (
   <div className="space-y-6">
-    <h1 className="text-3xl font-bold font-display tracking-tight text-white animate-fade-in">Floor Plan Grid</h1>
+    <h1 className="text-3xl font-bold font-display tracking-tight text-white animate-fade-in">
+      Floor Plan Grid
+    </h1>
     <div className="glass-panel p-8 rounded-lg min-h-[400px] flex items-center justify-center border border-border/40">
       <p className="text-muted-foreground font-sans">
         Active interactive layout blueprint will render here.
@@ -205,7 +219,13 @@ const AppRouter = () => {
               <Route path="/checkout" element={<CheckoutPlaceholderPage />} />
 
               {/* Protected Customer Account Pages (nested inside ProfileLayout sidebar) */}
-              <Route element={<ProtectedRoute><ProfileLayout /></ProtectedRoute>}>
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <ProfileLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/orders" element={<OrdersPage />} />

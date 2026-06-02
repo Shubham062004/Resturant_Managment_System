@@ -27,7 +27,7 @@ export class AuthController {
       const user = await AuthService.registerUser(
         req.body,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || ''
+        req.headers['user-agent'] || '',
       );
 
       res.status(201).json({
@@ -45,7 +45,7 @@ export class AuthController {
       const { accessToken, refreshToken, user } = await AuthService.loginUser(
         req.body,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || ''
+        req.headers['user-agent'] || '',
       );
 
       res.cookie('refreshToken', refreshToken, cookieOptions);
@@ -71,7 +71,7 @@ export class AuthController {
       const { accessToken, refreshToken } = await AuthService.rotateTokens(
         rawRefreshToken,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || ''
+        req.headers['user-agent'] || '',
       );
 
       res.cookie('refreshToken', refreshToken, cookieOptions);
@@ -94,7 +94,7 @@ export class AuthController {
         await AuthService.logoutUser(
           rawRefreshToken,
           req.ip || '127.0.0.1',
-          req.headers['user-agent'] || ''
+          req.headers['user-agent'] || '',
         );
       }
 
@@ -110,7 +110,11 @@ export class AuthController {
     }
   }
 
-  public static async logoutAll(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async logoutAll(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       if (!req.user) {
         return next(new AppError('Unauthenticated.', 401));
@@ -119,7 +123,7 @@ export class AuthController {
       await AuthService.logoutAllDevices(
         req.user.id,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || ''
+        req.headers['user-agent'] || '',
       );
 
       res.clearCookie('refreshToken', { ...cookieOptions, maxAge: 0 });
@@ -134,7 +138,11 @@ export class AuthController {
     }
   }
 
-  public static async forgotPassword(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async forgotPassword(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email } = req.body;
 
@@ -158,9 +166,15 @@ export class AuthController {
 
         // 3. Send mock email link
         await EmailService.sendPasswordResetEmail(user.email, resetToken);
-        await AuditService.writeLog(user.id, 'PASSWORD_RESET', req.ip || '127.0.0.1', req.headers['user-agent'] || '', {
-          message: 'Password reset link requested.',
-        });
+        await AuditService.writeLog(
+          user.id,
+          'PASSWORD_RESET',
+          req.ip || '127.0.0.1',
+          req.headers['user-agent'] || '',
+          {
+            message: 'Password reset link requested.',
+          },
+        );
       }
 
       // Always return 200 to block email scanning audits
@@ -174,7 +188,11 @@ export class AuthController {
     }
   }
 
-  public static async resetPassword(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async resetPassword(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { token, password } = req.body;
 
@@ -205,7 +223,11 @@ export class AuthController {
       await prisma.passwordResetToken.delete({ where: { id: storedToken.id } });
 
       // Force Logout all active devices/sessions on password changes
-      await AuthService.logoutAllDevices(user.id, req.ip || '127.0.0.1', req.headers['user-agent'] || '');
+      await AuthService.logoutAllDevices(
+        user.id,
+        req.ip || '127.0.0.1',
+        req.headers['user-agent'] || '',
+      );
 
       res.status(200).json({
         success: true,
@@ -217,7 +239,11 @@ export class AuthController {
     }
   }
 
-  public static async verifyEmail(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async verifyEmail(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { token } = req.body;
 
@@ -232,7 +258,12 @@ export class AuthController {
 
       if (new Date() > storedToken.expiresAt) {
         await prisma.emailVerificationToken.delete({ where: { id: storedToken.id } });
-        return next(new AppError('Email verification token has expired. Please request a new verification email.', 400));
+        return next(
+          new AppError(
+            'Email verification token has expired. Please request a new verification email.',
+            400,
+          ),
+        );
       }
 
       const user = storedToken.user;
@@ -244,9 +275,15 @@ export class AuthController {
 
       await prisma.emailVerificationToken.delete({ where: { id: storedToken.id } });
 
-      await AuditService.writeLog(user.id, 'EMAIL_VERIFICATION', req.ip || '127.0.0.1', req.headers['user-agent'] || '', {
-        message: 'Email address verified.',
-      });
+      await AuditService.writeLog(
+        user.id,
+        'EMAIL_VERIFICATION',
+        req.ip || '127.0.0.1',
+        req.headers['user-agent'] || '',
+        {
+          message: 'Email address verified.',
+        },
+      );
 
       res.status(200).json({
         success: true,
@@ -258,7 +295,11 @@ export class AuthController {
     }
   }
 
-  public static async resendVerification(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async resendVerification(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email } = req.body;
 
@@ -339,7 +380,11 @@ export class AuthController {
     }
   }
 
-  public static async verifyOtp(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async verifyOtp(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email, phone, code, type } = req.body;
 
@@ -386,7 +431,11 @@ export class AuthController {
     }
   }
 
-  public static async googleAuth(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async googleAuth(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { token } = req.body;
 
@@ -410,25 +459,48 @@ export class AuthController {
             isActive: true,
           },
         });
-        await AuditService.writeLog(user.id, 'EMAIL_VERIFICATION', req.ip || '127.0.0.1', req.headers['user-agent'] || '', {
-          message: 'Account registered and email auto-verified via Google OAuth login callback.',
-        });
+        await AuditService.writeLog(
+          user.id,
+          'EMAIL_VERIFICATION',
+          req.ip || '127.0.0.1',
+          req.headers['user-agent'] || '',
+          {
+            message: 'Account registered and email auto-verified via Google OAuth login callback.',
+          },
+        );
       }
 
       if (!user.isActive) {
-        return next(new AppError('Your account has been deactivated. Please contact support.', 403));
+        return next(
+          new AppError('Your account has been deactivated. Please contact support.', 403),
+        );
       }
 
       // Issue tokens
-      const accessToken = AuthService.generateAccessToken({ id: user.id, email: user.email, role: user.role });
+      const accessToken = AuthService.generateAccessToken({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      });
       const refreshToken = await AuthService.generateRefreshToken(user.id);
       const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
 
       // Record session
-      await AuditService.registerSession(user.id, req.ip || '127.0.0.1', req.headers['user-agent'] || '', tokenHash);
-      await AuditService.writeLog(user.id, 'LOGIN', req.ip || '127.0.0.1', req.headers['user-agent'] || '', {
-        provider: 'google',
-      });
+      await AuditService.registerSession(
+        user.id,
+        req.ip || '127.0.0.1',
+        req.headers['user-agent'] || '',
+        tokenHash,
+      );
+      await AuditService.writeLog(
+        user.id,
+        'LOGIN',
+        req.ip || '127.0.0.1',
+        req.headers['user-agent'] || '',
+        {
+          provider: 'google',
+        },
+      );
 
       res.cookie('refreshToken', refreshToken, cookieOptions);
 

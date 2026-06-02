@@ -48,7 +48,8 @@ async function main() {
       slug: 'oven-xpress-firehouse',
       description: 'Ancient firebrick stone ovens baking artisan pizzas and gourmet burgers.',
       logo: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100&auto=format&fit=crop&q=80',
-      coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80',
+      coverImage:
+        'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80',
       rating: 4.8,
       address: '456 5th Ave',
       city: 'New York',
@@ -62,7 +63,8 @@ async function main() {
       slug: 'pizza-hearth-kitchen',
       description: 'Artisanal sourdough thin crust pizzas baked to perfection at 800°F.',
       logo: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=100&auto=format&fit=crop&q=80',
-      coverImage: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=800&auto=format&fit=crop&q=80',
+      coverImage:
+        'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=800&auto=format&fit=crop&q=80',
       rating: 4.6,
       address: '78 Montague St',
       city: 'Brooklyn',
@@ -76,7 +78,8 @@ async function main() {
       slug: 'beijing-express-bistro',
       description: 'Fast, bold, and fresh Chinese wok favorites and street side delicacies.',
       logo: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=100&auto=format&fit=crop&q=80',
-      coverImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&auto=format&fit=crop&q=80',
+      coverImage:
+        'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&auto=format&fit=crop&q=80',
       rating: 4.5,
       address: '31-15 30th Ave',
       city: 'Astoria',
@@ -88,9 +91,11 @@ async function main() {
     {
       name: 'The Sweet Spot Patisserie',
       slug: 'the-sweet-spot-patisserie',
-      description: 'Gourmet French patisserie serving rich cakes, pastries, and specialty dessert coffees.',
+      description:
+        'Gourmet French patisserie serving rich cakes, pastries, and specialty dessert coffees.',
       logo: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=80',
-      coverImage: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800&auto=format&fit=crop&q=80',
+      coverImage:
+        'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800&auto=format&fit=crop&q=80',
       rating: 4.9,
       address: '210 Hudson St',
       city: 'Jersey City',
@@ -104,24 +109,32 @@ async function main() {
       slug: 'burger-craft-lab',
       description: 'Gourmet dry-aged beef blends and custom hand-cut fry configurations.',
       logo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&auto=format&fit=crop&q=80',
-      coverImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80',
+      coverImage:
+        'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80',
       rating: 4.7,
       address: '120 Broadway',
       city: 'New York',
       state: 'NY',
       lat: 40.7082,
-      lng: -74.0110,
+      lng: -74.011,
       categories: ['Burgers', 'Appetizers', 'Drinks'],
     },
   ];
 
   // Templates for product generation (at least 20 items per restaurant = 100 products total)
   const productTemplates: Record<string, { names: string[]; images: string[] }> = {
-    'Pizza': {
+    Pizza: {
       names: [
-        'Classic Margherita', 'Double Pepperoni', 'Veggie Feast', 'BBQ Chicken', 
-        'Hawaiian Lava', 'Truffle Mushroom', 'Fiery Jalapeno', 'Four Cheese Special', 
-        'Meat Lovers Supreme', 'Spicy Buffalo Pizza'
+        'Classic Margherita',
+        'Double Pepperoni',
+        'Veggie Feast',
+        'BBQ Chicken',
+        'Hawaiian Lava',
+        'Truffle Mushroom',
+        'Fiery Jalapeno',
+        'Four Cheese Special',
+        'Meat Lovers Supreme',
+        'Spicy Buffalo Pizza',
       ],
       images: [
         'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=80',
@@ -129,11 +142,18 @@ async function main() {
         'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500&auto=format&fit=crop&q=80',
       ],
     },
-    'Burgers': {
+    Burgers: {
       names: [
-        'Classic Cheese', 'Double Bacon Stack', 'Smoky BBQ Burger', 'Spicy Avocado Crunch', 
-        'Swiss Mushroom Melt', 'Crispy Chicken Club', 'Vegas Truffle Patty', 'Monster Beef Tower', 
-        'Garden Veggie Patty', 'Aloha Teriyaki Burger'
+        'Classic Cheese',
+        'Double Bacon Stack',
+        'Smoky BBQ Burger',
+        'Spicy Avocado Crunch',
+        'Swiss Mushroom Melt',
+        'Crispy Chicken Club',
+        'Vegas Truffle Patty',
+        'Monster Beef Tower',
+        'Garden Veggie Patty',
+        'Aloha Teriyaki Burger',
       ],
       images: [
         'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=80',
@@ -141,11 +161,18 @@ async function main() {
         'https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&auto=format&fit=crop&q=80',
       ],
     },
-    'Chinese': {
+    Chinese: {
       names: [
-        'General Tso Chicken', 'Kung Pao Shrimp', 'Szechuan Beef', 'Sweet & Sour Pork', 
-        'Vegetable Lo Mein', 'Egg Drop Soup', 'Beijing Roast Duck', 'Crispy Spring Rolls', 
-        'Orange Peel Chicken', 'Steamed Dumplings'
+        'General Tso Chicken',
+        'Kung Pao Shrimp',
+        'Szechuan Beef',
+        'Sweet & Sour Pork',
+        'Vegetable Lo Mein',
+        'Egg Drop Soup',
+        'Beijing Roast Duck',
+        'Crispy Spring Rolls',
+        'Orange Peel Chicken',
+        'Steamed Dumplings',
       ],
       images: [
         'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=80',
@@ -153,11 +180,18 @@ async function main() {
         'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500&auto=format&fit=crop&q=80',
       ],
     },
-    'Desserts': {
+    Desserts: {
       names: [
-        'Decadent Chocolate Fudge', 'Classic New York Cheesecake', 'Warm Apple Crisp', 'Molten Lava Cookie', 
-        'Red Velvet Slice', 'Strawberry Tart', 'Tiramisu Cup', 'Glazed Cinnamon Roll', 
-        'Matcha Mille Crepe', 'Artisanal Gelato Scoop'
+        'Decadent Chocolate Fudge',
+        'Classic New York Cheesecake',
+        'Warm Apple Crisp',
+        'Molten Lava Cookie',
+        'Red Velvet Slice',
+        'Strawberry Tart',
+        'Tiramisu Cup',
+        'Glazed Cinnamon Roll',
+        'Matcha Mille Crepe',
+        'Artisanal Gelato Scoop',
       ],
       images: [
         'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop&q=80',
@@ -165,11 +199,18 @@ async function main() {
         'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&auto=format&fit=crop&q=80',
       ],
     },
-    'Drinks': {
+    Drinks: {
       names: [
-        'Cold Brew Float', 'Sparkling Lemonade', 'Mango Passion Fruit Smoothie', 'Iced Vanilla Latte', 
-        'Classic Milk Tea', 'Hot Matcha Latte', 'Craft Root Beer', 'Sparkling Water Splash', 
-        'Fresh Orange Squeeze', 'Spiced Chai Brew'
+        'Cold Brew Float',
+        'Sparkling Lemonade',
+        'Mango Passion Fruit Smoothie',
+        'Iced Vanilla Latte',
+        'Classic Milk Tea',
+        'Hot Matcha Latte',
+        'Craft Root Beer',
+        'Sparkling Water Splash',
+        'Fresh Orange Squeeze',
+        'Spiced Chai Brew',
       ],
       images: [
         'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&auto=format&fit=crop&q=80',
@@ -177,11 +218,18 @@ async function main() {
         'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&auto=format&fit=crop&q=80',
       ],
     },
-    'Appetizers': {
+    Appetizers: {
       names: [
-        'Mozzarella Stick Stack', 'Garlic Sourdough Knots', 'Cheesy Loaded Waffle Fries', 'BBQ Chicken Wings', 
-        'Crispy Calamari Rings', 'Spicy Jalapeno Poppers', 'Sweet Potato Crisps', 'Onion Ring Tower', 
-        'Stuffed Mushrooms', 'Creamy Tomato Bruschetta'
+        'Mozzarella Stick Stack',
+        'Garlic Sourdough Knots',
+        'Cheesy Loaded Waffle Fries',
+        'BBQ Chicken Wings',
+        'Crispy Calamari Rings',
+        'Spicy Jalapeno Poppers',
+        'Sweet Potato Crisps',
+        'Onion Ring Tower',
+        'Stuffed Mushrooms',
+        'Creamy Tomato Bruschetta',
       ],
       images: [
         'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=500&auto=format&fit=crop&q=80',
@@ -221,7 +269,7 @@ async function main() {
     for (const catName of config.categories) {
       const categoryId = randomUUID();
       const categorySlug = `${catName.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`;
-      
+
       categories.push({
         id: categoryId,
         restaurantId,
@@ -237,10 +285,10 @@ async function main() {
           const productId = randomUUID();
           const prodName = templates.names[i];
           const prodSlug = `${prodName.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`;
-          const basePrice = parseFloat((9.99 + (i * 1.5)).toFixed(2));
-          const calories = 250 + (i * 45);
-          const prepTime = 10 + (i * 2);
-          const rating = parseFloat((4.0 + (i * 0.1)).toFixed(1));
+          const basePrice = parseFloat((9.99 + i * 1.5).toFixed(2));
+          const calories = 250 + i * 45;
+          const prepTime = 10 + i * 2;
+          const rating = parseFloat((4.0 + i * 0.1).toFixed(1));
 
           products.push({
             id: productId,
@@ -253,7 +301,7 @@ async function main() {
             image: templates.images[i % templates.images.length],
             gallery: [
               templates.images[i % templates.images.length],
-              'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&auto=format&fit=crop&q=80'
+              'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&auto=format&fit=crop&q=80',
             ],
             basePrice: new Prisma.Decimal(basePrice),
             rating,
@@ -266,14 +314,44 @@ async function main() {
 
           if (catName === 'Pizza') {
             variants.push(
-              { id: randomUUID(), productId, name: 'Small (10")', price: new Prisma.Decimal(basePrice), isDefault: true },
-              { id: randomUUID(), productId, name: 'Medium (12")', price: new Prisma.Decimal(basePrice + 3.0), isDefault: false },
-              { id: randomUUID(), productId, name: 'Large (14")', price: new Prisma.Decimal(basePrice + 6.0), isDefault: false },
+              {
+                id: randomUUID(),
+                productId,
+                name: 'Small (10")',
+                price: new Prisma.Decimal(basePrice),
+                isDefault: true,
+              },
+              {
+                id: randomUUID(),
+                productId,
+                name: 'Medium (12")',
+                price: new Prisma.Decimal(basePrice + 3.0),
+                isDefault: false,
+              },
+              {
+                id: randomUUID(),
+                productId,
+                name: 'Large (14")',
+                price: new Prisma.Decimal(basePrice + 6.0),
+                isDefault: false,
+              },
             );
           } else if (catName === 'Burgers') {
             variants.push(
-              { id: randomUUID(), productId, name: 'Single Patty', price: new Prisma.Decimal(basePrice), isDefault: true },
-              { id: randomUUID(), productId, name: 'Double Patty', price: new Prisma.Decimal(basePrice + 2.5), isDefault: false },
+              {
+                id: randomUUID(),
+                productId,
+                name: 'Single Patty',
+                price: new Prisma.Decimal(basePrice),
+                isDefault: true,
+              },
+              {
+                id: randomUUID(),
+                productId,
+                name: 'Double Patty',
+                price: new Prisma.Decimal(basePrice + 2.5),
+                isDefault: false,
+              },
             );
           } else {
             variants.push({
@@ -315,7 +393,9 @@ async function main() {
   console.log('Inserting reviews...');
   await prisma.review.createMany({ data: reviews });
 
-  console.log(`Bulk Seeding complete. Seeded ${restaurants.length} Restaurants and ${products.length} Products successfully.`);
+  console.log(
+    `Bulk Seeding complete. Seeded ${restaurants.length} Restaurants and ${products.length} Products successfully.`,
+  );
 }
 
 main()

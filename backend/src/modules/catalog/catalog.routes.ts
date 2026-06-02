@@ -41,7 +41,11 @@ const optionalAuth = (req: any, res: any, next: any) => {
 };
 
 // Restaurant endpoints
-router.get('/restaurants', validate({ query: restaurantQuerySchema }), CatalogController.getRestaurants);
+router.get(
+  '/restaurants',
+  validate({ query: restaurantQuerySchema }),
+  CatalogController.getRestaurants,
+);
 router.get('/restaurants/slug/:slug', CatalogController.getRestaurantBySlug);
 router.get('/restaurants/:id', CatalogController.getRestaurantById);
 
@@ -53,19 +57,43 @@ router.get('/categories', CatalogController.getCategories);
 router.get('/categories/slug/:slug', CatalogController.getCategoryBySlug);
 
 // Product endpoints
-router.get('/products', optionalAuth, validate({ query: productQuerySchema }), CatalogController.getProducts);
+router.get(
+  '/products',
+  optionalAuth,
+  validate({ query: productQuerySchema }),
+  CatalogController.getProducts,
+);
 router.get('/products/featured', CatalogController.getFeaturedProducts);
 router.get('/products/slug/:slug', optionalAuth, CatalogController.getProductBySlug);
-router.post('/products/recommendations/click', optionalAuth, CatalogController.trackRecommendationClick);
+router.post(
+  '/products/recommendations/click',
+  optionalAuth,
+  CatalogController.trackRecommendationClick,
+);
 
 // Review endpoints (Authenticated)
-router.post('/reviews', authGuard, validate({ body: createReviewSchema }), CatalogController.createReview);
-router.put('/reviews/:id', authGuard, validate({ body: updateReviewSchema }), CatalogController.updateReview);
+router.post(
+  '/reviews',
+  authGuard,
+  validate({ body: createReviewSchema }),
+  CatalogController.createReview,
+);
+router.put(
+  '/reviews/:id',
+  authGuard,
+  validate({ body: updateReviewSchema }),
+  CatalogController.updateReview,
+);
 router.delete('/reviews/:id', authGuard, CatalogController.deleteReview);
 router.get('/reviews/product/:productId', CatalogController.getReviewsByProductId);
 
 // Favorites endpoints (Authenticated)
-router.post('/favorites', authGuard, validate({ body: favoriteToggleSchema }), CatalogController.toggleFavorite);
+router.post(
+  '/favorites',
+  authGuard,
+  validate({ body: favoriteToggleSchema }),
+  CatalogController.toggleFavorite,
+);
 router.get('/favorites', authGuard, CatalogController.getFavorites);
 
 export default router;

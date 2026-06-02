@@ -52,15 +52,16 @@ export const ResetPasswordPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout brandTitle="Terminal Verification" brandDescription="Establish a new secure system access password on your employee account node to re-enable operational credentials.">
+    <AuthLayout
+      brandTitle="Terminal Verification"
+      brandDescription="Establish a new secure system access password on your employee account node to re-enable operational credentials."
+    >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">
             Reset Password
           </h2>
-          <p className="text-muted-foreground font-sans text-sm">
-            Save new system credentials
-          </p>
+          <p className="text-muted-foreground font-sans text-sm">Save new system credentials</p>
         </div>
 
         {error && (
@@ -72,7 +73,8 @@ export const ResetPasswordPage: React.FC = () => {
         {!token ? (
           <div className="space-y-4 text-center">
             <p className="text-muted-foreground font-sans text-sm">
-              The reset token parameters are missing from your URL. Request a new password recovery link.
+              The reset token parameters are missing from your URL. Request a new password recovery
+              link.
             </p>
             <Link
               to="/forgot-password"

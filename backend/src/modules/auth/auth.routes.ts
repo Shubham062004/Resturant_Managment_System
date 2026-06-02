@@ -27,10 +27,23 @@ router.post('/refresh', AuthController.refresh);
 router.post('/logout', AuthController.logout);
 router.post('/logout-all', authGuard, AuthController.logoutAll);
 
-router.post('/forgot-password', authRateLimiter, validate({ body: forgotPasswordSchema }), AuthController.forgotPassword);
-router.post('/reset-password', validate({ body: resetPasswordSchema }), AuthController.resetPassword);
+router.post(
+  '/forgot-password',
+  authRateLimiter,
+  validate({ body: forgotPasswordSchema }),
+  AuthController.forgotPassword,
+);
+router.post(
+  '/reset-password',
+  validate({ body: resetPasswordSchema }),
+  AuthController.resetPassword,
+);
 router.post('/verify-email', validate({ body: verifyEmailSchema }), AuthController.verifyEmail);
-router.post('/resend-verification', validate({ body: resendVerificationSchema }), AuthController.resendVerification);
+router.post(
+  '/resend-verification',
+  validate({ body: resendVerificationSchema }),
+  AuthController.resendVerification,
+);
 
 router.post('/send-otp', otpRateLimiter, validate({ body: sendOtpSchema }), AuthController.sendOtp);
 router.post('/verify-otp', validate({ body: verifyOtpSchema }), AuthController.verifyOtp);

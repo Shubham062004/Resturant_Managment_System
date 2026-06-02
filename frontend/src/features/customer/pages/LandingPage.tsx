@@ -20,7 +20,7 @@ import {
   Smartphone,
   Play,
   Mail,
-  Flame
+  Flame,
 } from 'lucide-react';
 import mockCategories from '../../../shared/data/categories';
 import mockRestaurants from '../../../shared/data/restaurants';
@@ -65,7 +65,6 @@ export const LandingPage: React.FC = () => {
         <section className="relative min-h-[85vh] flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background py-20 px-6 border-b border-border/40">
           <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
           <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
             {/* Branding & Value Proposition */}
             <div className="lg:col-span-7 space-y-8 text-center lg:text-left z-10">
               <motion.div
@@ -84,7 +83,8 @@ export const LandingPage: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.15 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-white leading-[1.1]"
               >
-                Craving Fire-baked <span className="text-primary bg-clip-text">Pizza</span> or Gourmet <span className="text-primary bg-clip-text">Burgers</span>?
+                Craving Fire-baked <span className="text-primary bg-clip-text">Pizza</span> or
+                Gourmet <span className="text-primary bg-clip-text">Burgers</span>?
               </motion.h1>
 
               <motion.p
@@ -93,7 +93,8 @@ export const LandingPage: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans"
               >
-                Order from local Oven Xpress outposts with lightning fast delivery, real-time smart kitchen tracking, and customizable meal modifications.
+                Order from local Oven Xpress outposts with lightning fast delivery, real-time smart
+                kitchen tracking, and customizable meal modifications.
               </motion.p>
 
               {/* Global Search Entry Point */}
@@ -134,12 +135,20 @@ export const LandingPage: React.FC = () => {
                 className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2"
               >
                 <Link to="/branches">
-                  <Button variant="outline" size="sm" className="border-border/60 hover:bg-secondary/40 font-semibold text-white">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-border/60 hover:bg-secondary/40 font-semibold text-white"
+                  >
                     Select Outpost
                   </Button>
                 </Link>
                 <Link to="/offers">
-                  <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/5 flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-primary hover:bg-primary/5 flex items-center gap-1"
+                  >
                     View Promotion Coupons
                   </Button>
                 </Link>
@@ -164,19 +173,24 @@ export const LandingPage: React.FC = () => {
                     <Flame size={12} className="animate-bounce" />
                     <span>Freshly Baked</span>
                   </div>
-                  <h3 className="font-display font-extrabold text-xl text-white">Gourmet Pepperoni Double Crust</h3>
-                  <p className="text-xs text-foreground/80 font-sans mt-1">Baked in our smart stone ovens at 800°F</p>
+                  <h3 className="font-display font-extrabold text-xl text-white">
+                    Gourmet Pepperoni Double Crust
+                  </h3>
+                  <p className="text-xs text-foreground/80 font-sans mt-1">
+                    Baked in our smart stone ovens at 800°F
+                  </p>
                 </div>
               </motion.div>
             </div>
-
           </div>
         </section>
 
         {/* POPULAR CATEGORIES CAROUSEL/GRID */}
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="text-center space-y-3 mb-12">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">Popular Categories</h2>
+            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
+              Popular Categories
+            </h2>
             <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
               Skip search and jump straight into our chef-curated selections.
             </p>
@@ -194,7 +208,10 @@ export const LandingPage: React.FC = () => {
                 className="group"
               >
                 <Link to={`/search?category=${category.slug}`} className="block">
-                  <Card variant="interactive" className="h-full bg-card/60 hover:bg-card border-border/60 hover:border-primary/30 flex flex-col items-center p-5 text-center">
+                  <Card
+                    variant="interactive"
+                    className="h-full bg-card/60 hover:bg-card border-border/60 hover:border-primary/30 flex flex-col items-center p-5 text-center"
+                  >
                     <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-border/60 group-hover:border-primary/50 transition-colors mb-4 shadow">
                       <img
                         src={category.image}
@@ -217,13 +234,20 @@ export const LandingPage: React.FC = () => {
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-12">
             <div className="space-y-3 text-left">
-              <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">Featured Restaurants & Outposts</h2>
+              <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
+                Featured Restaurants & Outposts
+              </h2>
               <p className="text-muted-foreground text-sm font-sans max-w-md">
-                Pre-selected and audited kitchen nodes maintaining peak delivery speed and high-level sanitization ratings.
+                Pre-selected and audited kitchen nodes maintaining peak delivery speed and
+                high-level sanitization ratings.
               </p>
             </div>
             <Link to="/branches">
-              <Button variant="outline" size="sm" className="text-xs border-border/60 text-white font-semibold flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs border-border/60 text-white font-semibold flex items-center gap-1"
+              >
                 <span>View All Outposts</span>
                 <ArrowRight size={14} />
               </Button>
@@ -232,7 +256,11 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {mockRestaurants.slice(0, 3).map((res) => (
-              <Card key={res.id} variant="default" className="flex flex-col bg-card/50 border-border/80 shadow-md">
+              <Card
+                key={res.id}
+                variant="default"
+                className="flex flex-col bg-card/50 border-border/80 shadow-md"
+              >
                 <div className="relative h-48 w-full overflow-hidden">
                   <img
                     src={res.image}
@@ -253,7 +281,9 @@ export const LandingPage: React.FC = () => {
 
                 <CardContent className="flex-grow flex flex-col justify-between p-5 space-y-4">
                   <div>
-                    <h3 className="font-display font-bold text-base text-white tracking-tight leading-tight">{res.name}</h3>
+                    <h3 className="font-display font-bold text-base text-white tracking-tight leading-tight">
+                      {res.name}
+                    </h3>
                     <p className="text-xs text-muted-foreground font-sans mt-1.5 flex flex-wrap gap-1">
                       {res.categories.join(' • ')}
                     </p>
@@ -283,7 +313,9 @@ export const LandingPage: React.FC = () => {
         {/* WHY CHOOSE US */}
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="text-center space-y-3 mb-12">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">Why Oven Xpress?</h2>
+            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
+              Why Oven Xpress?
+            </h2>
             <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
               Combining ancient culinary baking secrets with cutting-edge kitchen logistics.
             </p>
@@ -296,7 +328,8 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-lg text-white">800°F Stone Hearth</h3>
               <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                Our proprietary stone ovens bake each custom pizza in less than 3 minutes, locked under supreme temperature controls for the perfect crust.
+                Our proprietary stone ovens bake each custom pizza in less than 3 minutes, locked
+                under supreme temperature controls for the perfect crust.
               </p>
             </div>
 
@@ -306,7 +339,8 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-lg text-white">Smart Kitchen Tracking</h3>
               <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                Watch your order progress through prep, baking, packing, and dispatch with our live-updating digital kitchen ticket dashboards.
+                Watch your order progress through prep, baking, packing, and dispatch with our
+                live-updating digital kitchen ticket dashboards.
               </p>
             </div>
 
@@ -316,7 +350,8 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-lg text-white">Eco-friendly Delivery</h3>
               <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                All outposts utilize optimized electric courier routes, delivering food hot in thermally sealed containers with minimum carbon impact.
+                All outposts utilize optimized electric courier routes, delivering food hot in
+                thermally sealed containers with minimum carbon impact.
               </p>
             </div>
           </div>
@@ -325,7 +360,9 @@ export const LandingPage: React.FC = () => {
         {/* HOW IT WORKS */}
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="text-center space-y-3 mb-16">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">How It Works</h2>
+            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
+              How It Works
+            </h2>
             <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
               Get premium gourmet meals delivered directly to your doorstep in 3 simple steps.
             </p>
@@ -339,7 +376,8 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-base text-white">Pick Nearest Outpost</h3>
               <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Check our branches map. Select the closest Oven Xpress outpost to unlock its customized food catalog.
+                Check our branches map. Select the closest Oven Xpress outpost to unlock its
+                customized food catalog.
               </p>
             </div>
 
@@ -350,7 +388,8 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-base text-white">Customize & Order</h3>
               <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Build your perfect pizzas or burgers. Modify toppings, apply checkout coupons, and pay securely.
+                Build your perfect pizzas or burgers. Modify toppings, apply checkout coupons, and
+                pay securely.
               </p>
             </div>
 
@@ -361,7 +400,8 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-base text-white">Live Tracking & Savor</h3>
               <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Watch the prep dashboard live. Savor delicious fire-baked culinary creations delivered blazing hot.
+                Watch the prep dashboard live. Savor delicious fire-baked culinary creations
+                delivered blazing hot.
               </p>
             </div>
           </div>
@@ -370,7 +410,9 @@ export const LandingPage: React.FC = () => {
         {/* CUSTOMER TESTIMONIALS */}
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="text-center space-y-3 mb-12">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">What Our Foodies Say</h2>
+            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
+              What Our Foodies Say
+            </h2>
             <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
               Hear directly from some of our verified customers and active food critics.
             </p>
@@ -378,7 +420,10 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {mockTestimonials.map((t) => (
-              <Card key={t.id} className="bg-card/45 border-border/60 p-6 flex flex-col justify-between space-y-6">
+              <Card
+                key={t.id}
+                className="bg-card/45 border-border/60 p-6 flex flex-col justify-between space-y-6"
+              >
                 <p className="text-sm text-foreground/80 font-sans italic leading-relaxed">
                   &ldquo;{t.comment}&rdquo;
                 </p>
@@ -406,16 +451,23 @@ export const LandingPage: React.FC = () => {
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/35 border border-border/60 p-8 md:p-12 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
             <div className="space-y-6 max-w-xl text-center md:text-left z-10">
-              <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">Order Faster on the Oven Xpress App</h2>
+              <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
+                Order Faster on the Oven Xpress App
+              </h2>
               <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                Download our companion mobile application for iOS and Android. Save favorite addresses, manage payment cards, receive local deals, and unlock one-tap reorders.
+                Download our companion mobile application for iOS and Android. Save favorite
+                addresses, manage payment cards, receive local deals, and unlock one-tap reorders.
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                 <Button variant="primary" size="sm" className="flex items-center gap-2">
                   <Smartphone size={16} />
                   <span>Download App Store</span>
                 </Button>
-                <Button variant="outline" size="sm" className="border-border/60 text-white flex items-center gap-2 hover:bg-secondary/40">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-border/60 text-white flex items-center gap-2 hover:bg-secondary/40"
+                >
                   <Play size={14} fill="currentColor" />
                   <span>Google Play Store</span>
                 </Button>
@@ -428,8 +480,12 @@ export const LandingPage: React.FC = () => {
                 <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mx-auto mt-4">
                   <Flame size={12} className="text-primary" />
                 </div>
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider block mt-2">Oven Xpress Mobile</span>
-                <span className="text-[8px] text-muted-foreground block font-sans">Active Location: Midtown</span>
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider block mt-2">
+                  Oven Xpress Mobile
+                </span>
+                <span className="text-[8px] text-muted-foreground block font-sans">
+                  Active Location: Midtown
+                </span>
                 <div className="bg-primary hover:bg-primary-hover text-[8px] text-white py-1.5 px-3 rounded-md mt-auto font-display font-bold">
                   Quick Track #7209
                 </div>
@@ -444,9 +500,12 @@ export const LandingPage: React.FC = () => {
             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mx-auto border border-primary/20 shadow-sm">
               <Mail size={22} />
             </div>
-            <h2 className="text-2xl font-display font-extrabold tracking-tight text-white">Join the Newsletter</h2>
+            <h2 className="text-2xl font-display font-extrabold tracking-tight text-white">
+              Join the Newsletter
+            </h2>
             <p className="text-xs text-muted-foreground leading-relaxed font-sans">
-              Stay in the loop with weekly discounts, new chef recipes, and upcoming branch openings.
+              Stay in the loop with weekly discounts, new chef recipes, and upcoming branch
+              openings.
             </p>
           </div>
 
