@@ -1,0 +1,10 @@
+process.env.PORT = '5001';
+process.env.NODE_ENV = 'test';
+process.env.DATABASE_URL = 'postgresql://mock:mock@localhost:5432/mock';
+process.env.MONGODB_URI = 'mongodb://mock:mock@localhost:27017/mock';
+process.env.JWT_SECRET = 'z0ePWDFIAsT5xpvvThkTZi1ejwDKbznb0q1teEkPtLg';
+process.env.JWT_REFRESH_SECRET = '^6v%K,<tLv{uxz}mtj%$MITtLA<!*P@@m72?k{zd{]-';
+process.env.JWT_EXPIRES_IN = '15m';
+process.env.JWT_REFRESH_EXPIRES_IN = '7d';
+process.env.GOOGLE_CLIENT_ID = 'mock_client_id';
+process.env.GOOGLE_CLIENT_SECRET = 'mock_client_secret';

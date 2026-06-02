@@ -7,7 +7,7 @@ import { AuthRequest } from '../types/express';
 export interface DecodedToken {
   id: string;
   email: string;
-  role: 'ADMIN' | 'MANAGER' | 'SERVER' | 'KITCHEN';
+  role: 'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN';
   iat: number;
   exp: number;
 }
@@ -47,7 +47,7 @@ export const authGuard = async (
 };
 
 // Authorization Hook: Role-Based Access Controls
-export const restrictTo = (...roles: Array<'ADMIN' | 'MANAGER' | 'SERVER' | 'KITCHEN'>) => {
+export const restrictTo = (...roles: Array<'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN'>) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || !roles.includes(req.user.role)) {
       return next(

@@ -2,17 +2,30 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import path from 'path';
 import errorHandler from './middleware/errorHandler';
 import AppError from './utils/appError';
 import logger from './utils/logger';
+import authRouter from './modules/auth/auth.routes';
+import usersRouter from './modules/users/users.routes';
 
 // Express application instance
 export const app = express();
 
 // 1. Global Middleware Pipelines
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
+
+// Serve uploaded static avatars
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Log HTTP transactions with Winston logger
 app.use(
@@ -37,13 +50,8 @@ app.get('/api/v1/health', (req, res) => {
 });
 
 // 3. Modular Feature Routes
-// Placeholders for future features
-app.use('/api/v1/auth', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Auth module foundation active',
-  });
-});
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', usersRouter);
 
 app.use('/api/v1/tables', (req, res) => {
   res.status(200).json({

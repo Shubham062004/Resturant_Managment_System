@@ -1,17 +1,36 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, TableProperties, LogOut, Menu, X, Flame, Sparkles } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../app/store';
+import { logout } from '../features/auth/store/authSlice';
+import Avatar from '../shared/components/ui/Avatar';
+import { LayoutDashboard, TableProperties, LogOut, Menu, X, Flame, Sparkles, User as UserIcon } from 'lucide-react';
 
 export const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
 
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Tables Plan', path: '/tables', icon: TableProperties },
+    { name: 'My Profile', path: '/profile', icon: UserIcon },
     { name: 'Design System', path: '/design-system', icon: Sparkles },
   ];
+
+  const handleLogout = async () => {
+    await dispatch(logout());
+    navigate('/login');
+  };
+
+  const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const getAvatarSrc = () => {
+    if (!user || !user.avatar) return undefined;
+    if (user.avatar.startsWith('http')) return user.avatar;
+    return `${apiBaseUrl}${user.avatar}`;
+  };
 
   return (
     <div className="min-h-screen bg-background flex text-foreground overflow-hidden">
@@ -60,12 +79,13 @@ export const MainLayout = () => {
 
             {/* Logout Panel Footer */}
             <div className="p-4 border-t border-border">
-              <Link to="/login">
-                <button className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-muted-foreground hover:bg-red-500/10 hover:text-red-400 font-medium transition-colors">
-                  <LogOut className="w-5 h-5" />
-                  <span className="font-display">Logout Client</span>
-                </button>
-              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl text-muted-foreground hover:bg-red-500/10 hover:text-red-400 font-medium transition-colors"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="font-display">Logout Client</span>
+              </button>
             </div>
           </motion.aside>
         )}
@@ -87,13 +107,22 @@ export const MainLayout = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold text-white">Alex Mercer</p>
-              <p className="text-xs text-muted-foreground font-medium">Floor Staff</p>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center font-display font-semibold text-primary">
-              AM
-            </div>
+            {user && (
+              <Link to="/profile" className="flex items-center gap-3.5 hover:opacity-85 transition-all select-none">
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-semibold text-white">{`${user.firstName} ${user.lastName}`}</p>
+                  <p className="text-xs text-muted-foreground font-medium capitalize">
+                    {user.role.toLowerCase().replace('_', ' ')}
+                  </p>
+                </div>
+                <Avatar
+                  src={getAvatarSrc()}
+                  name={`${user.firstName} ${user.lastName}`}
+                  size="sm"
+                  className="border border-border/80"
+                />
+              </Link>
+            )}
           </div>
         </header>
 

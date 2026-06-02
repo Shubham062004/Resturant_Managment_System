@@ -8,22 +8,92 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String
-  role      Role     @default(SERVER)
-  isActive  Boolean  @default(true)
-  orders    Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                      String                   @id @default(uuid())
+  email                   String                   @unique
+  phone                   String?                  @unique
+  firstName               String
+  lastName                String
+  passwordHash            String?
+  avatar                  String?
+  role                    Role                     @default(CUSTOMER)
+  isEmailVerified         Boolean                  @default(false)
+  isPhoneVerified         Boolean                  @default(false)
+  isActive                Boolean                  @default(true)
+  orders                  Order[]
+  refreshTokens           RefreshToken[]
+  passwordResetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  otps                    Otp[]
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
 }
 
 enum Role {
+  CUSTOMER
   ADMIN
-  MANAGER
-  SERVER
-  KITCHEN
+  KITCHEN_STAFF
+  DELIVERY_PARTNER
+  CASHIER
+  SUPER_ADMIN
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email     String?
+  phone     String?
+  codeHash  String
+  type      OtpType
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([email])
+  @@index([phone])
+}
+
+enum OtpType {
+  EMAIL_VERIFICATION
+  PHONE_VERIFICATION
+  LOGIN_2FA
+  PASSWORD_RESET
 }
 
 model Table {
