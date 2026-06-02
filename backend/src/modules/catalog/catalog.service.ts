@@ -64,10 +64,10 @@ export class CatalogService {
     }
 
     // Get total count
-    const total = await prisma.restaurant.count({ where });
+    const total = await prisma.restaurantGroup.count({ where });
 
     // Fetch restaurants along with branches
-    let restaurants = await prisma.restaurant.findMany({
+    let restaurants = await prisma.restaurantGroup.findMany({
       where,
       select: {
         id: true,
@@ -113,8 +113,8 @@ export class CatalogService {
         return hours * 60 + minutes;
       };
 
-      restaurants = restaurants.filter((restaurant) => {
-        return restaurant.branches.some((branch) => {
+      restaurants = restaurants.filter((restaurantGroup: any) => {
+        return restaurantGroup.branches.some((branch: any) => {
           const openMins = parseTimeToMinutes(branch.openingTime);
           const closeMins = parseTimeToMinutes(branch.closingTime);
           if (closeMins > openMins) {
@@ -144,7 +144,7 @@ export class CatalogService {
    * Get restaurant by ID
    */
   public static async getRestaurantById(id: string) {
-    const restaurant = await prisma.restaurant.findUnique({
+    const restaurant = await prisma.restaurantGroup.findUnique({
       where: { id },
       include: {
         branches: { where: { isActive: true } },
@@ -164,7 +164,7 @@ export class CatalogService {
    * Get restaurant by slug
    */
   public static async getRestaurantBySlug(slug: string) {
-    const restaurant = await prisma.restaurant.findUnique({
+    const restaurant = await prisma.restaurantGroup.findUnique({
       where: { slug },
       select: {
         id: true,
@@ -898,7 +898,7 @@ export class CatalogService {
 
       const avgRestaurantRating = restaurantProducts._avg.rating || 0;
 
-      await prisma.restaurant.update({
+      await prisma.restaurantGroup.update({
         where: { id: restaurantId },
         data: {
           rating: parseFloat(avgRestaurantRating.toFixed(1)),
@@ -909,3 +909,4 @@ export class CatalogService {
     }
   }
 }
+

@@ -16,6 +16,8 @@ import reservationReducer from '../features/reservations/store/reservationSlice'
 import tableReducer from '../features/floor-plan/store/tableSlice';
 import adminReducer from '../features/admin/store/adminSlice';
 import staffReducer from '../features/admin/store/staffSlice';
+import organizationReducer from '../features/super-admin/store/organizationSlice';
+import platformReducer from '../features/super-admin/store/platformSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -36,6 +38,8 @@ export const rootReducer = combineReducers({
   tables: tableReducer,
   admin: adminReducer,
   staff: staffReducer,
+  organizations: organizationReducer,
+  platform: platformReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

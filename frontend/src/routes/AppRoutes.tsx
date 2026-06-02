@@ -38,6 +38,11 @@ const AdminLayout = React.lazy(() => import('../features/admin/components/AdminL
 const DashboardPage = React.lazy(() => import('../features/admin/pages/DashboardPage'));
 const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
 
+// Super Admin Pages
+const SuperAdminLayout = React.lazy(() => import('../features/super-admin/components/SuperAdminLayout'));
+const GlobalDashboardPage = React.lazy(() => import('../features/super-admin/pages/GlobalDashboardPage'));
+const OrganizationManagementPage = React.lazy(() => import('../features/super-admin/pages/OrganizationManagementPage'));
+
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
 const RestaurantDetailPage = React.lazy(
@@ -365,6 +370,20 @@ const AppRouter = () => {
               <Route path="staff" element={<StaffManagementPage />} />
               {/* Other admin routes placeholder */}
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
+            </Route>
+
+            {/* Super Admin Dashboard System */}
+            <Route
+              path="/super-admin"
+              element={
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}>
+                  <SuperAdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<GlobalDashboardPage />} />
+              <Route path="organizations" element={<OrganizationManagementPage />} />
+              <Route path="*" element={<div className="p-6 text-slate-100">Page not found in Super Admin Panel</div>} />
             </Route>
 
             {/* Error Pages Shell */}
