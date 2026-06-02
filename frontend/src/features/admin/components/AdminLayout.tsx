@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Home, Users, Settings, BarChart2, Briefcase, Box } from 'lucide-react';
+import NotificationCenter from '../../notifications/components/NotificationCenter';
 
 export default function AdminLayout() {
   const location = useLocation();
@@ -45,13 +46,11 @@ export default function AdminLayout() {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center px-6 justify-between">
-          <h1 className="text-xl font-semibold text-slate-800">Control Center</h1>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm font-medium text-slate-600">Admin Mode</span>
-            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
-              A
-            </div>
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center px-6 justify-between shadow-sm z-10">
+          <h1 className="text-xl font-bold text-slate-800">Admin Control Center</h1>
+          <div className="flex items-center space-x-6">
+            <NotificationCenter />
+            <span className="text-sm font-medium text-slate-500">Branch Manager</span>
           </div>
         </header>
         <div className="flex-1 overflow-auto p-6">

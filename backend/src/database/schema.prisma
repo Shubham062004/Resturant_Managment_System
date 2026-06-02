@@ -45,6 +45,9 @@ model User {
   guestProfile    GuestProfile?
   reservations    Reservation[]
   waitlistEntries WaitlistEntry[]
+
+  notifications          Notification[]
+  notificationPreference NotificationPreference?
 }
 
 enum Role {
@@ -1089,4 +1092,61 @@ model CashDrawer {
 enum ShiftStatus {
   OPEN
   CLOSED
+}
+
+// ---------------------------------------------------------------------
+// NOTIFICATIONS & CAMPAIGNS
+// ---------------------------------------------------------------------
+
+model Notification {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String
+  channel     String
+  title       String
+  message     String    @db.Text
+  status      String    @default("PENDING")
+  priority    String    @default("NORMAL")
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model NotificationPreference {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailEnabled     Boolean  @default(true)
+  smsEnabled       Boolean  @default(true)
+  whatsappEnabled  Boolean  @default(false)
+  pushEnabled      Boolean  @default(true)
+  marketingEnabled Boolean  @default(false)
+  quietHoursStart  String?
+  quietHoursEnd    String?
+  updatedAt        DateTime @updatedAt
+}
+
+model NotificationTemplate {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  eventType String
+  subject   String?
+  content   String   @db.Text
+  channel   String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Campaign {
+  id             String    @id @default(uuid())
+  name           String
+  type           String
+  targetAudience String
+  status         String    @default("DRAFT")
+  scheduledAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

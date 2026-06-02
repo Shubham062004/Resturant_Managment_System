@@ -27,6 +27,7 @@ import waitlistRouter from './modules/waitlist/waitlist.routes';
 import qrRouter from './modules/qr-ordering/qr.routes';
 import adminRouter from './modules/admin/admin.routes';
 import superAdminRouter from './modules/super-admin/superadmin.routes';
+import notificationRouter from './modules/notifications/notification.routes';
 
 // Express application instance
 export const app = express();
@@ -88,6 +89,7 @@ app.use('/api/v1/waitlist', waitlistRouter);
 app.use('/api/v1/qr-ordering', qrRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/super-admin', superAdminRouter);
+app.use('/api/v1/notifications', notificationRouter);
 
 // 4. Fallback Catch-All Route
 app.all('*', (req, res, next) => {
