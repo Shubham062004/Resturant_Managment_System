@@ -16,7 +16,7 @@ export class RefundsService {
       throw new AppError('Order not found', 404);
     }
 
-    const totalRefunded = order.refunds.reduce((sum, r) => sum + Number(r.amount), 0);
+    const totalRefunded = order.refunds.reduce((sum: number, r: any) => sum + Number(r.amount), 0);
     if (totalRefunded + amount > Number(order.totalAmount)) {
       throw new AppError('Refund amount exceeds order total', 400);
     }

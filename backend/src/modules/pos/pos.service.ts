@@ -166,8 +166,8 @@ export class POSService {
     if (posOrder.status === 'PAID') throw new AppError('Order is already paid', 400);
 
     const requiredTotal = Number(posOrder.order.totalAmount);
-    const existingPaymentsTotal = posOrder.payments.reduce((sum, p) => sum + Number(p.amount), 0);
-    const incomingTotal = payments.reduce((sum, p) => sum + Number(p.amount), 0);
+    const existingPaymentsTotal = posOrder.payments.reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+    const incomingTotal = payments.reduce((sum: number, p: any) => sum + Number(p.amount), 0);
 
     if (existingPaymentsTotal + incomingTotal < requiredTotal) {
       // It's a partial payment
@@ -292,7 +292,7 @@ export class POSService {
       include: { order: true, payments: true },
     });
 
-    const totalSales = posOrders.reduce((sum, o) => sum + Number(o.order.totalAmount), 0);
+    const totalSales = posOrders.reduce((sum: number, o: any) => sum + Number(o.order.totalAmount), 0);
     const orderCount = posOrders.length;
 
     let cashSales = 0;

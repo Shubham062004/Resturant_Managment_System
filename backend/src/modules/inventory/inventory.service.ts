@@ -54,7 +54,7 @@ export class InventoryService {
 
   static async createPurchaseOrder(data: { supplierId: string; branchId: string; items: any[] }) {
     // Calculate total
-    const totalAmount = data.items.reduce((sum, item) => sum + item.quantity * item.costPrice, 0);
+    const totalAmount = data.items.reduce((sum: number, item: any) => sum + item.quantity * item.costPrice, 0);
 
     const po = await prisma.purchaseOrder.create({
       data: {

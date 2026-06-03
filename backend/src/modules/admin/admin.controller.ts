@@ -19,7 +19,7 @@ export class AdminController {
           status: { in: ['DELIVERED', 'PICKED_UP'] },
         },
       });
-      const revenueToday = todaysOrders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
+      const revenueToday = todaysOrders.reduce((sum: number, order: any) => sum + Number(order.totalAmount), 0);
 
       // 2. Orders Count Today
       const ordersTodayCount = await prisma.order.count({

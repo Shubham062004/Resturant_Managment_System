@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc && prisma generate --schema src/database/schema.prisma",
+    "build": "prisma generate --schema src/database/schema.prisma && tsc",
     "start": "node dist/server.js",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "prisma:generate": "prisma generate --schema src/database/schema.prisma",

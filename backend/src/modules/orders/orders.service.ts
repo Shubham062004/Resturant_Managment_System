@@ -29,7 +29,7 @@ export class OrdersService {
     }
 
     // Calculate totals
-    const subtotal = cart.items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+    const subtotal = cart.items.reduce((sum: number, item: any) => sum + Number(item.price) * item.quantity, 0);
     const tax = subtotal * 0.05; // Fixed 5% tax for simplicity
     const deliveryFee = data.orderType === 'DELIVERY' ? 5.0 : 0.0;
     const discount = 0.0; // Extend to support coupons later
