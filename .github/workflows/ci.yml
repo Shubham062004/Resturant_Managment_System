@@ -21,10 +21,25 @@ jobs:
           node-version: '18.x'
           cache: 'npm'
 
-      - name: Install Workspace Dependencies
-        run: npm install
+      - name: Install Dependencies
+        run: npm ci
 
-      - name: Verify Code Formatting (Prettier)
+      - name: Run Backend Unit Tests (Vitest)
+        run: npm run test
+        working-directory: ./backend
+
+      - name: Run Frontend Unit Tests (Vitest)
+        run: npm run test
+        working-directory: ./frontend
+
+      - name: Run Playwright E2E Tests
+        run: npx playwright test
+        continue-on-error: true
+
+      - name: Security Scan
+        run: npm audit --audit-level=high
+
+      - name: Build Projects Formatting (Prettier)
         run: npm run format:check
 
       - name: Lint Workspace Packages (ESLint)

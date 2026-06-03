@@ -25,6 +25,7 @@ import aiReducer from '../features/ai/store/aiSlice';
 import recommendationReducer from '../features/ai/store/recommendationSlice';
 import assistantReducer from '../features/ai/store/assistantSlice';
 import forecastReducer from '../features/ai/store/forecastSlice';
+import qaReducer from '../features/qa/store/qaSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -53,6 +54,7 @@ export const rootReducer = combineReducers({
   recommendation: recommendationReducer,
   assistant: assistantReducer,
   forecast: forecastReducer,
+  qa: qaReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -8,3 +8,10 @@ process.env.JWT_EXPIRES_IN = '15m';
 process.env.JWT_REFRESH_EXPIRES_IN = '7d';
 process.env.GOOGLE_CLIENT_ID = 'mock_client_id';
 process.env.GOOGLE_CLIENT_SECRET = 'mock_client_secret';
+
+import { beforeEach, vi } from 'vitest';
+import { prismaMock } from './prisma.mock';
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
