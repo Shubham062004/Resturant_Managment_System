@@ -43,7 +43,7 @@ export default function SystemHealthPage() {
           <CardContent className="p-6">
             <h3 className="text-sm text-muted-foreground font-bold mb-2">Test Coverage</h3>
             <span className="text-2xl font-bold text-primary">{coverage.lines}%</span>
-            <p className="text-xs text-muted-foreground mt-1">Goal: >90%</p>
+            <p className="text-xs text-muted-foreground mt-1">Goal: &gt;90%</p>
           </CardContent>
         </Card>
 

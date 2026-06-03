@@ -23,7 +23,7 @@ export const CheckoutPage: React.FC = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [paymentProvider, setPaymentProvider] = useState<'RAZORPAY' | 'STRIPE'>('RAZORPAY');
+  const [paymentProvider, setPaymentProvider] = useState<'STRIPE'>('STRIPE');
 
   if (!isAuthenticated) {
     navigate('/login', { state: { from: { pathname: '/checkout' } } });
@@ -180,7 +180,7 @@ export const CheckoutPage: React.FC = () => {
                   Payment Method
                 </h2>
                 <div className="flex gap-3">
-                  {(['RAZORPAY', 'STRIPE'] as const).map((provider) => (
+                  {(['STRIPE'] as const).map((provider) => (
                     <button
                       key={provider}
                       type="button"
