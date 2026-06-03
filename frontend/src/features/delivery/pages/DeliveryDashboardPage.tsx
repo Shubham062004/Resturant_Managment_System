@@ -20,7 +20,7 @@ export default function DeliveryDashboardPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) return undefined;
     
     const token = localStorage.getItem('token');
     const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
@@ -48,7 +48,7 @@ export default function DeliveryDashboardPage() {
     switch (status) {
       case 'ASSIGNED': return { label: 'Accept Order', icon: CheckCircle2, variant: 'primary' as const };
       case 'ACCEPTED': 
-      case 'AT_RESTAURANT': return { label: 'Confirm Pickup', icon: Package, variant: 'warning' as const };
+      case 'AT_RESTAURANT': return { label: 'Confirm Pickup', icon: Package, variant: 'outline' as const };
       case 'PICKED_UP': 
       case 'OUT_FOR_DELIVERY': return { label: 'Mark Delivered', icon: Navigation, variant: 'success' as const };
       default: return { label: 'Completed', icon: CheckCircle2, variant: 'secondary' as const };

@@ -47,7 +47,7 @@ export default function ReservationsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <h2 className="text-xl font-semibold text-slate-800">Upcoming Reservations</h2>
-          {reservations.map((res) => (
+          {reservations.map((res: any) => (
             <Card key={res.id} className="p-4 flex items-center justify-between">
               <div>
                 <p className="font-semibold text-lg">{res.customer?.firstName} {res.customer?.lastName}</p>
@@ -55,7 +55,7 @@ export default function ReservationsPage() {
                 <p className="text-sm text-slate-500">Guests: {res.guestCount}</p>
               </div>
               <div className="text-right">
-                <Badge variant={res.status === 'PENDING' ? 'warning' : res.status === 'CONFIRMED' ? 'success' : 'default'} className="mb-2 block">
+                <Badge variant={res.status === 'PENDING' ? 'warning' : res.status === 'CONFIRMED' ? 'success' : 'neutral'} className="mb-2 block">
                   {res.status}
                 </Badge>
                 {res.status === 'CONFIRMED' && (
@@ -69,7 +69,7 @@ export default function ReservationsPage() {
 
         <div>
           <h2 className="text-xl font-semibold text-slate-800 mb-6">Waitlist Queue</h2>
-          {waitlist.map((entry) => (
+          {waitlist.map((entry: any) => (
             <Card key={entry.id} className="p-4 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <p className="font-semibold">{entry.customer?.firstName}</p>

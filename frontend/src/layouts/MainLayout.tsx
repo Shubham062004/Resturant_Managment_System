@@ -15,7 +15,7 @@ import {
   User as UserIcon,
 } from 'lucide-react';
 
-export const MainLayout = () => {
+export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -140,7 +140,7 @@ export const MainLayout = () => {
 
         {/* Dynamic Outlet Area */}
         <main className="flex-1 overflow-y-auto bg-background/50 p-6 md:p-10">
-          <Outlet />
+          {children || <Outlet />}
         </main>
       </div>
     </div>

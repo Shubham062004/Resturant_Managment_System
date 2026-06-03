@@ -26,7 +26,7 @@ export default function OrderTrackingPage() {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (!currentOrder) return;
+    if (!currentOrder) return undefined;
 
     // Initialize Socket.io
     const token = localStorage.getItem('token'); // Fallback if using cookie
@@ -146,7 +146,7 @@ export default function OrderTrackingPage() {
           <CardContent className="p-0 border-t border-border/50">
             <DeliveryTrackingMap 
               driverLocation={driverLocation || undefined}
-              destination={currentOrder?.address ? { latitude: currentOrder.address.latitude || 0, longitude: currentOrder.address.longitude || 0 } : undefined}
+              destination={(currentOrder as any)?.address ? { latitude: (currentOrder as any).address.latitude || 0, longitude: (currentOrder as any).address.longitude || 0 } : undefined}
             />
           </CardContent>
         </Card>
@@ -157,7 +157,7 @@ export default function OrderTrackingPage() {
           <h3 className="text-lg font-semibold text-white">Order Items</h3>
         </CardHeader>
         <CardContent className="space-y-4">
-          {currentOrder.items.map((item) => (
+          {currentOrder.items.map((item: any) => (
             <div key={item.id} className="flex justify-between text-sm">
               <span className="text-white">{item.quantity} x {item.product.name}</span>
               <span className="text-muted-foreground">${(Number(item.price) * item.quantity).toFixed(2)}</span>

@@ -141,7 +141,7 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       {validationError && (
-        <Alert variant="danger" title="Save Refused">
+        <Alert variant="error" title="Save Refused">
           {validationError}
         </Alert>
       )}
@@ -174,7 +174,7 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center">
-            <Badge variant="primary" className="text-[10px] py-1 font-display">
+            <Badge variant="info" className="text-[10px] py-1 font-display">
               {user.role}
             </Badge>
             {user.isEmailVerified ? (

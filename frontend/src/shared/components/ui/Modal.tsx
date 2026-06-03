@@ -26,63 +26,63 @@ export const Modal: React.FC<ModalProps> = ({
 
   // Focus trap and ESC key handler
   useEffect(() => {
-    if (isOpen) {
-      previousFocus.current = document.activeElement as HTMLElement;
-      document.body.style.overflow = 'hidden';
+    if (!isOpen) return undefined;
+    
+    previousFocus.current = document.activeElement as HTMLElement;
+    document.body.style.overflow = 'hidden';
 
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          onClose();
-          return;
-        }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
 
-        if (e.key === 'Tab' && modalRef.current) {
-          const focusableElements = modalRef.current.querySelectorAll(
-            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]',
-          );
-          if (focusableElements.length === 0) return;
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll(
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]',
+        );
+        if (focusableElements.length === 0) return;
 
-          const firstElement = focusableElements[0] as HTMLElement;
-          const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
-          if (e.shiftKey) {
-            if (document.activeElement === firstElement) {
-              lastElement.focus();
-              e.preventDefault();
-            }
-          } else {
-            if (document.activeElement === lastElement) {
-              firstElement.focus();
-              e.preventDefault();
-            }
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
           }
         }
-      };
+      }
+    };
 
-      document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
-      // Focus the first focusable element or modal container
-      setTimeout(() => {
-        if (modalRef.current) {
-          const focusable = modalRef.current.querySelector(
-            'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]',
-          ) as HTMLElement;
-          if (focusable) {
-            focusable.focus();
-          } else {
-            modalRef.current.focus();
-          }
+    // Focus the first focusable element or modal container
+    setTimeout(() => {
+      if (modalRef.current) {
+        const focusable = modalRef.current.querySelector(
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]',
+        ) as HTMLElement;
+        if (focusable) {
+          focusable.focus();
+        } else {
+          modalRef.current.focus();
         }
-      }, 50);
+      }
+    }, 50);
 
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = '';
-        if (previousFocus.current) {
-          previousFocus.current.focus();
-        }
-      };
-    }
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+      if (previousFocus.current) {
+        previousFocus.current.focus();
+      }
+    };
   }, [isOpen, onClose]);
 
   const sizes = {

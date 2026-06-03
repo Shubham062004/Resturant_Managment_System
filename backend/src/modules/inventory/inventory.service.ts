@@ -75,7 +75,7 @@ export class InventoryService {
     return po;
   }
 
-  static async updatePurchaseOrderStatus(id: string, status: any, userId: string) {
+  static async updatePurchaseOrderStatus(id: string, status: any, _userId: string) {
     const po = await prisma.purchaseOrder.findUnique({
       where: { id },
       include: { items: true },

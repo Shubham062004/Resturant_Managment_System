@@ -61,7 +61,7 @@ export default function KitchenDashboardPage() {
   const handleDrop = async (e: React.DragEvent, targetStatus: string) => {
     e.preventDefault();
     if (draggedOrderId) {
-      const order = orders.find((o) => o.id === draggedOrderId);
+      const order = orders.find((o: any) => o.id === draggedOrderId);
       if (order && order.status !== targetStatus) {
         await dispatch(updateOrderStatus({ id: draggedOrderId, status: targetStatus }));
       }
@@ -110,13 +110,13 @@ export default function KitchenDashboardPage() {
             <div className="p-4 border-b border-border/50 bg-card/50 flex justify-between items-center shrink-0">
               <h2 className="font-bold text-white tracking-wide">{col.title}</h2>
               <span className="bg-secondary px-2.5 py-1 rounded-full text-xs font-bold text-muted-foreground">
-                {orders.filter((o) => o.status === col.id).length}
+                {orders.filter((o: any) => o.status === col.id).length}
               </span>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {orders
-                .filter((o) => o.status === col.id)
-                .map((order) => (
+                .filter((o: any) => o.status === col.id)
+                .map((order: any) => (
                   <OrderTicket key={order.id} order={order} onDragStart={handleDragStart} />
                 ))}
             </div>

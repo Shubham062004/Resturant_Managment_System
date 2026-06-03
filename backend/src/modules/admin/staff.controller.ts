@@ -27,7 +27,7 @@ export class StaffController {
 
   public static async createStaff(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, firstName, lastName, role, password } = req.body;
+      const { email, firstName, lastName, role, password: _password } = req.body;
       
       const exists = await prisma.user.findUnique({ where: { email } });
       if (exists) throw new AppError('User already exists', 400);

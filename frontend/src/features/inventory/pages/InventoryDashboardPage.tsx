@@ -19,7 +19,7 @@ export default function InventoryDashboardPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!user) return;
+    if (status !== 'idle') return undefined;
     const token = localStorage.getItem('token');
     const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
 

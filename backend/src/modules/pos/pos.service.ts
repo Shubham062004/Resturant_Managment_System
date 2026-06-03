@@ -1,7 +1,7 @@
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
-import { OrderStatus, OrderType, POSOrderStatus, POSPaymentMethod } from '@prisma/client';
+import { OrderStatus } from '@prisma/client';
 import { InventoryService } from '../inventory/inventory.service';
 import { POSActivityLog } from '../../database/mongo/POSActivityLog';
 import { POSAnalyticsEvent } from '../../database/mongo/POSAnalyticsEvent';

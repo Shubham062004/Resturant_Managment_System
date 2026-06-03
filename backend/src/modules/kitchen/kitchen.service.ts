@@ -93,7 +93,7 @@ export class KitchenService {
     });
 
     // Broadcast to KDS via Socket.io
-    try { getIO().to('staff_room').emit('kds_status_update', updated); } catch (e) {}
+    try { getIO().to('staff_room').emit('kds_status_update', updated); } catch {}
 
     // Auto-assign delivery driver when packed
     if (status === 'PACKED') {
@@ -135,7 +135,7 @@ export class KitchenService {
     });
 
     // Broadcast
-    try { getIO().to('staff_room').emit('kds_assignment_update', updated); } catch (e) {}
+    try { getIO().to('staff_room').emit('kds_assignment_update', updated); } catch {}
 
     return updated;
   }

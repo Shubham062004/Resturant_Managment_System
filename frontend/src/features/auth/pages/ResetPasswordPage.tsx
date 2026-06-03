@@ -65,7 +65,7 @@ export const ResetPasswordPage: React.FC = () => {
         </div>
 
         {error && (
-          <Alert variant="danger" title="Password Reset Refused">
+          <Alert variant="error" title="Verification Failed">
             {error}
           </Alert>
         )}

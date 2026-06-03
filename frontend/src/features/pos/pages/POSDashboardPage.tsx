@@ -61,7 +61,7 @@ export default function POSDashboardPage() {
               onChange={(e) => setSelectedTerminal(e.target.value)}
             >
               <option value="">-- Choose Terminal --</option>
-              {terminals.map(t => (
+              {terminals.map((t: any) => (
                 <option key={t.id} value={t.id}>{t.terminalName}</option>
               ))}
               {/* Fallback option for demo if no terminals fetched yet */}
@@ -87,7 +87,7 @@ export default function POSDashboardPage() {
 
   const filteredProducts = activeCategory === 'all' 
     ? products 
-    : products.filter(p => p.categoryId === activeCategory);
+    : products.filter((p: any) => p.categoryId === activeCategory);
 
   return (
     <div className="h-[calc(100vh-5rem)] flex gap-6 overflow-hidden animate-fade-in p-4">
@@ -96,16 +96,16 @@ export default function POSDashboardPage() {
         {/* Categories */}
         <div className="p-4 border-b border-border/50 overflow-x-auto flex gap-3 hide-scrollbar">
           <Badge 
-            variant={activeCategory === 'all' ? 'default' : 'outline'} 
+            variant={activeCategory === 'all' ? 'info' : 'neutral'} 
             className="cursor-pointer whitespace-nowrap text-sm px-4 py-2"
             onClick={() => setActiveCategory('all')}
           >
             All Items
           </Badge>
-          {categories.map(cat => (
+          {categories.map((cat: any) => (
             <Badge 
               key={cat.id} 
-              variant={activeCategory === cat.id ? 'default' : 'outline'}
+              variant={activeCategory === cat.id ? 'info' : 'neutral'}
               className="cursor-pointer whitespace-nowrap text-sm px-4 py-2"
               onClick={() => setActiveCategory(cat.id)}
             >
@@ -116,7 +116,7 @@ export default function POSDashboardPage() {
 
         {/* Product Grid */}
         <div className="flex-1 overflow-y-auto p-4 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 content-start">
-          {filteredProducts.map(product => (
+          {filteredProducts.map((product: any) => (
             <Card 
               key={product.id} 
               className="bg-background/50 border-border/50 hover:border-primary/50 cursor-pointer transition-colors p-3 flex flex-col justify-between aspect-square"
@@ -156,7 +156,7 @@ export default function POSDashboardPage() {
               <p>No items in current order</p>
             </div>
           ) : (
-            cart.items.map(item => (
+            cart.items.map((item: any) => (
               <div key={item.productId} className="flex items-center justify-between bg-background/50 p-3 rounded-lg border border-border/30">
                 <div className="flex-1 pr-2">
                   <h4 className="text-white font-medium text-sm line-clamp-1">{item.name}</h4>

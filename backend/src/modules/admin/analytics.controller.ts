@@ -42,7 +42,7 @@ export class AnalyticsController {
 
   public static async getPopularProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const branchId = req.query.branchId as string;
+      const _branchId = req.query.branchId as string;
       // Note: This relies on aggregating order items. For simplicity, we just fetch a mockup or basic raw query.
       const items = await prisma.orderItem.groupBy({
         by: ['productId'],

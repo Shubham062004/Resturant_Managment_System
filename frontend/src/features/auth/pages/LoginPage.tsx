@@ -65,7 +65,7 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
-    const payload = loginMethod === 'email' ? { email, password } : { phone, password };
+    const payload: Record<string, string> = loginMethod === 'email' ? { email, password } : { phone, password };
 
     const result = await dispatch(login(payload));
     if (login.fulfilled.match(result)) {
@@ -116,7 +116,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Errors notifications */}
         {(validationError || error) && (
-          <Alert variant="danger" title="Authentication Blocked">
+          <Alert variant="error" title="Authentication Blocked">
             {validationError || error}
           </Alert>
         )}

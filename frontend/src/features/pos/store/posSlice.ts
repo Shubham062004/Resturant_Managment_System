@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import api from '../../../shared/api/axios';
+import api from '../../../services/apiClient';
 
 interface POSState {
   terminals: any[];

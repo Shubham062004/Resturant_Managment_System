@@ -6,7 +6,7 @@ import { prisma } from '../config/db';
 const redisConnection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379');
 
 export const emailWorker = new Worker('emailQueue', async (job) => {
-  const { notificationId, to, subject, body } = job.data;
+  const { notificationId, to, subject, body: _body } = job.data;
   
   try {
     // 1. Send via Resend/SendGrid (Mocked for now unless API key provided)

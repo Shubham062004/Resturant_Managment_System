@@ -37,7 +37,7 @@ export default function OrderListPage() {
       )}
 
       <div className="space-y-4">
-        {orders.map((order) => (
+        {orders.map((order: any) => (
           <Card key={order.id} className="bg-surface/50 border-border/50">
             <CardHeader className="flex flex-row justify-between items-center">
               <div>
