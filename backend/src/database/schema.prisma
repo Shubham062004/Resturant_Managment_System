@@ -215,6 +215,8 @@ model Reservation {
   @@index([customerId])
   @@index([branchId])
   @@index([tableId])
+  @@index([branchId, status])
+  @@index([reservationDate, reservationTime])
 }
 
 enum ReservationStatus {
@@ -300,6 +302,12 @@ model Order {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([branchId])
+  @@index([restaurantId])
+  @@index([branchId, status])
+  @@index([createdAt])
 }
 
 enum OrderStatus {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { logout } from '../features/auth/store/authSlice';
 import Avatar from '../shared/components/ui/Avatar';
@@ -46,6 +47,12 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen bg-background flex text-foreground overflow-hidden">
+      <Helmet>
+        <title>Oven Xpress - Restaurant Management System</title>
+        <meta name="description" content="Enterprise-grade Restaurant Management System featuring AI insights, live kitchen displays, and seamless delivery integration." />
+        <html lang="en" />
+      </Helmet>
+      
       {/* Side Navigation Panel */}
       <AnimatePresence mode="wait">
         {isSidebarOpen && (
