@@ -1,43 +1,34 @@
-import winston from 'winston';
+import pino from 'pino';
+import { Logtail } from '@logtail/node';
+import { LogtailTransport } from '@logtail/pino';
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4,
-};
+const isProduction = process.env.NODE_ENV === 'production';
 
-const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'white',
-};
+let logtailTransport;
+if (isProduction && process.env.LOGTAIL_SOURCE_TOKEN) {
+  const logtail = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN);
+  logtailTransport = new LogtailTransport(logtail);
+}
 
-winston.addColors(colors);
+const streams: any[] = [];
+if (isProduction) {
+  streams.push({ stream: process.stdout });
+  if (logtailTransport) {
+    streams.push(logtailTransport);
+  }
+}
 
-const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.colorize({ all: true }),
-  winston.format.printf((info) => `[${info.timestamp}] [${info.level}]: ${info.message}`),
+export const logger = pino(
+  {
+    level: process.env.LOG_LEVEL || 'info',
+    base: { env: process.env.NODE_ENV },
+  },
+  isProduction
+    ? pino.multistream(streams)
+    : pino.transport({
+        target: 'pino-pretty',
+        options: { colorize: true, translateTime: 'SYS:standard' },
+      })
 );
-
-const transports = [
-  new winston.transports.Console(),
-  new winston.transports.File({
-    filename: 'logs/error.log',
-    level: 'error',
-  }),
-  new winston.transports.File({ filename: 'logs/combined.log' }),
-];
-
-export const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
-  levels,
-  format,
-  transports,
-});
 
 export default logger;
