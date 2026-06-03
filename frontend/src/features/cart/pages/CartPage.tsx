@@ -7,6 +7,7 @@ import { useToast } from '../../../shared/components/ui/Toast';
 import { useCart, useUpdateCartItem, useRemoveCartItem, useClearCart } from '../store/cartQueries';
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 import { useAppSelector } from '../../../app/store';
+import SmartComboSuggestion from '../../ai/components/SmartComboSuggestion';
 
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();
@@ -96,6 +97,10 @@ export const CartPage: React.FC = () => {
             </Button>
           )}
         </div>
+
+        {cart.items.length > 0 && (
+          <SmartComboSuggestion cartItemIds={cart.items.map((item) => item.product.id)} />
+        )}
 
         {cart.items.length === 0 ? (
           <EmptyState

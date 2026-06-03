@@ -11,6 +11,7 @@ import EmptyState from '../../../shared/components/ui/EmptyState';
 import { Search as SearchIcon, Star, Clock, Trash2, X, TrendingUp, Award } from 'lucide-react';
 import { useProducts } from '../store/catalogQueries';
 import { Link } from 'react-router-dom';
+import PersonalizedRecommendations from '../../ai/components/PersonalizedRecommendations';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -109,6 +110,9 @@ export const SearchPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Sidebar tags & logs */}
           <div className="lg:col-span-4 space-y-6">
+            {/* Personalized AI Recommendations */}
+            {!searchTerm && <PersonalizedRecommendations />}
+
             {/* Recent Searches */}
             <div className="bg-card/45 border border-border/60 rounded-xl p-5 space-y-4">
               <div className="flex items-center justify-between">

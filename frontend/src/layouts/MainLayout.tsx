@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { logout } from '../features/auth/store/authSlice';
 import Avatar from '../shared/components/ui/Avatar';
+import AIRestaurantAssistant from '../features/ai/components/AIRestaurantAssistant';
 import {
   LayoutDashboard,
   TableProperties,
@@ -144,6 +145,7 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
         <main className="flex-1 overflow-y-auto bg-background/50 p-6 md:p-10">
           {children || <Outlet />}
         </main>
+        <AIRestaurantAssistant />
       </div>
     </div>
   );
