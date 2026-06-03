@@ -2,7 +2,7 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 # Generate Prisma Client and compile TypeScript
 RUN npx prisma generate --schema src/database/schema.prisma
@@ -15,7 +15,7 @@ ENV NODE_ENV=production
 
 # Install only production-level dependencies
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Copy compiled code and Prisma schemas
 COPY --from=builder /app/dist ./dist
