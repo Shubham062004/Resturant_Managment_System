@@ -32,10 +32,7 @@ export class KitchenService {
         assignedUser: true,
         tasks: true,
       },
-      orderBy: [
-        { priority: 'desc' },
-        { createdAt: 'asc' },
-      ],
+      orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
     });
   }
 
@@ -93,7 +90,9 @@ export class KitchenService {
     });
 
     // Broadcast to KDS via Socket.io
-    try { getIO().to('staff_room').emit('kds_status_update', updated); } catch {}
+    try {
+      getIO().to('staff_room').emit('kds_status_update', updated);
+    } catch {}
 
     // Auto-assign delivery driver when packed
     if (status === 'PACKED') {
@@ -111,7 +110,12 @@ export class KitchenService {
   /**
    * Assign order to station or chef, and update priority
    */
-  public static async assignOrder(id: string, stationId?: string, assignedTo?: string, priority?: KitchenPriority) {
+  public static async assignOrder(
+    id: string,
+    stationId?: string,
+    assignedTo?: string,
+    priority?: KitchenPriority,
+  ) {
     const kOrder = await prisma.kitchenOrder.findUnique({ where: { id } });
     if (!kOrder) throw new AppError('Kitchen order not found', 404);
 
@@ -135,7 +139,9 @@ export class KitchenService {
     });
 
     // Broadcast
-    try { getIO().to('staff_room').emit('kds_assignment_update', updated); } catch {}
+    try {
+      getIO().to('staff_room').emit('kds_assignment_update', updated);
+    } catch {}
 
     return updated;
   }

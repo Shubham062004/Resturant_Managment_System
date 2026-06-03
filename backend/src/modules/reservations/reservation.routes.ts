@@ -13,7 +13,16 @@ router.post('/', validate(createReservationSchema), ReservationController.create
 router.get('/my', ReservationController.getCustomerReservations);
 
 // Staff facing routes
-router.get('/branch', restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'), ReservationController.getBranchReservations);
-router.patch('/:id', restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'), validate(updateReservationStatusSchema), ReservationController.updateReservationStatus);
+router.get(
+  '/branch',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
+  ReservationController.getBranchReservations,
+);
+router.patch(
+  '/:id',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
+  validate(updateReservationStatusSchema),
+  ReservationController.updateReservationStatus,
+);
 
 export default router;

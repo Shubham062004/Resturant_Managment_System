@@ -19,7 +19,10 @@ const CampaignAnalyticsSchema: Schema = new Schema({
   totalClicked: { type: Number, default: 0 },
   totalFailed: { type: Number, default: 0 },
   unsubscribed: { type: Number, default: 0 },
-  lastCalculatedAt: { type: Date, default: Date.now }
+  lastCalculatedAt: { type: Date, default: Date.now },
 });
 
-export const CampaignAnalytics = mongoose.model<ICampaignAnalytics>('CampaignAnalytics', CampaignAnalyticsSchema);
+export const CampaignAnalytics = mongoose.model<ICampaignAnalytics>(
+  'CampaignAnalytics',
+  CampaignAnalyticsSchema,
+);

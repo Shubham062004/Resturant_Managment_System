@@ -40,35 +40,46 @@ const initialState: OrderState = {
   error: null,
 };
 
-export const fetchMyOrders = createAsyncThunk('orders/fetchMyOrders', async (_, { rejectWithValue }) => {
-  try {
-    const response = await apiClient.get('/orders');
-    return response.data.data.orders;
-  } catch (err: unknown) {
-    const error = err as { response?: { data?: { error?: { message?: string } } } };
-    return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch orders');
-  }
-});
+export const fetchMyOrders = createAsyncThunk(
+  'orders/fetchMyOrders',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get('/orders');
+      return response.data.data.orders;
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch orders');
+    }
+  },
+);
 
-export const fetchOrderById = createAsyncThunk('orders/fetchOrderById', async (id: string, { rejectWithValue }) => {
-  try {
-    const response = await apiClient.get(`/orders/${id}`);
-    return response.data.data.order;
-  } catch (err: unknown) {
-    const error = err as { response?: { data?: { error?: { message?: string } } } };
-    return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch order details');
-  }
-});
+export const fetchOrderById = createAsyncThunk(
+  'orders/fetchOrderById',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get(`/orders/${id}`);
+      return response.data.data.order;
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to fetch order details',
+      );
+    }
+  },
+);
 
-export const cancelOrder = createAsyncThunk('orders/cancelOrder', async (id: string, { rejectWithValue }) => {
-  try {
-    const response = await apiClient.post(`/orders/${id}/cancel`);
-    return response.data.data.order;
-  } catch (err: unknown) {
-    const error = err as { response?: { data?: { error?: { message?: string } } } };
-    return rejectWithValue(error.response?.data?.error?.message || 'Failed to cancel order');
-  }
-});
+export const cancelOrder = createAsyncThunk(
+  'orders/cancelOrder',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.post(`/orders/${id}/cancel`);
+      return response.data.data.order;
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      return rejectWithValue(error.response?.data?.error?.message || 'Failed to cancel order');
+    }
+  },
+);
 
 const orderSlice = createSlice({
   name: 'orders',

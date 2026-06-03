@@ -175,11 +175,7 @@ export const useRestaurants = (filters: {
 };
 
 // 2. Fetch Branches (paginated)
-export const useBranches = (filters?: {
-  restaurantId?: string;
-  page?: number;
-  limit?: number;
-}) => {
+export const useBranches = (filters?: { restaurantId?: string; page?: number; limit?: number }) => {
   return useQuery<{
     success: boolean;
     data: Branch[];

@@ -9,11 +9,11 @@ export class NotificationController {
       const notifications = await prisma.notification.findMany({
         where: { userId: req.user!.id, channel: 'IN_APP' },
         orderBy: { createdAt: 'desc' },
-        take: 50
+        take: 50,
       });
 
       const unreadCount = await prisma.notification.count({
-        where: { userId: req.user!.id, channel: 'IN_APP', status: { not: 'READ' } }
+        where: { userId: req.user!.id, channel: 'IN_APP', status: { not: 'READ' } },
       });
 
       res.status(200).json({ status: 'success', data: { notifications, unreadCount } });
@@ -27,7 +27,7 @@ export class NotificationController {
       const { id } = req.params;
       await prisma.notification.updateMany({
         where: { id, userId: req.user!.id },
-        data: { status: 'READ' }
+        data: { status: 'READ' },
       });
       res.status(200).json({ status: 'success' });
     } catch (error) {
@@ -43,7 +43,7 @@ export class NotificationController {
         type: 'TEST',
         title,
         message,
-        channels: channels || ['IN_APP']
+        channels: channels || ['IN_APP'],
       });
       res.status(200).json({ status: 'success', data: { sentChannels } });
     } catch (error) {

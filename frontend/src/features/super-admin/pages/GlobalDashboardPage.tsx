@@ -17,10 +17,26 @@ export default function GlobalDashboardPage() {
   }
 
   const metrics = [
-    { label: 'Total Revenue', value: `$${dashboard.globalRevenue.toLocaleString()}`, icon: <DollarSign size={24} className="text-emerald-400" /> },
-    { label: 'Organizations', value: dashboard.totalOrganizations, icon: <Building2 size={24} className="text-blue-400" /> },
-    { label: 'Active Branches', value: dashboard.totalBranches, icon: <Store size={24} className="text-indigo-400" /> },
-    { label: 'Platform Orders', value: dashboard.totalOrders, icon: <Globe size={24} className="text-purple-400" /> },
+    {
+      label: 'Total Revenue',
+      value: `$${dashboard.globalRevenue.toLocaleString()}`,
+      icon: <DollarSign size={24} className="text-emerald-400" />,
+    },
+    {
+      label: 'Organizations',
+      value: dashboard.totalOrganizations,
+      icon: <Building2 size={24} className="text-blue-400" />,
+    },
+    {
+      label: 'Active Branches',
+      value: dashboard.totalBranches,
+      icon: <Store size={24} className="text-indigo-400" />,
+    },
+    {
+      label: 'Platform Orders',
+      value: dashboard.totalOrders,
+      icon: <Globe size={24} className="text-purple-400" />,
+    },
   ];
 
   return (
@@ -31,7 +47,10 @@ export default function GlobalDashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((m, idx) => (
-          <Card key={idx} className="p-6 bg-slate-800 border-slate-700 flex flex-col justify-center items-start">
+          <Card
+            key={idx}
+            className="p-6 bg-slate-800 border-slate-700 flex flex-col justify-center items-start"
+          >
             <div className="flex items-center space-x-4 mb-4">
               <div className="p-3 bg-slate-900 rounded-lg">{m.icon}</div>
               <h3 className="text-slate-400 text-sm font-medium">{m.label}</h3>

@@ -7,12 +7,14 @@ const router = Router();
 
 export const placeQROrderSchema = {
   body: z.object({
-    items: z.array(z.object({
-      productId: z.string().uuid(),
-      variantId: z.string().uuid().optional(),
-      quantity: z.number().int().positive(),
-      price: z.number().positive(),
-    })),
+    items: z.array(
+      z.object({
+        productId: z.string().uuid(),
+        variantId: z.string().uuid().optional(),
+        quantity: z.number().int().positive(),
+        price: z.number().positive(),
+      }),
+    ),
     subtotal: z.number().positive(),
     tax: z.number().nonnegative(),
     totalAmount: z.number().positive(),

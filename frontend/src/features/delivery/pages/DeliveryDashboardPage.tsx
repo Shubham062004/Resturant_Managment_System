@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchAssignedOrders, acceptOrder, pickupOrder, deliverOrder, socketAssignmentUpdate, DeliveryAssignment } from '../store/deliverySlice';
+import {
+  fetchAssignedOrders,
+  acceptOrder,
+  pickupOrder,
+  deliverOrder,
+  socketAssignmentUpdate,
+  DeliveryAssignment,
+} from '../store/deliverySlice';
 import { io } from 'socket.io-client';
 import { Card } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
@@ -21,7 +28,7 @@ export default function DeliveryDashboardPage() {
 
   useEffect(() => {
     if (!user) return undefined;
-    
+
     const token = localStorage.getItem('token');
     const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
 
@@ -40,18 +47,24 @@ export default function DeliveryDashboardPage() {
     } else if (assignment.status === 'ACCEPTED' || assignment.status === 'AT_RESTAURANT') {
       await dispatch(pickupOrder(assignment.orderId));
     } else if (assignment.status === 'PICKED_UP' || assignment.status === 'OUT_FOR_DELIVERY') {
-      await dispatch(deliverOrder({ orderId: assignment.orderId, proof: { notes: 'Delivered safely' } }));
+      await dispatch(
+        deliverOrder({ orderId: assignment.orderId, proof: { notes: 'Delivered safely' } }),
+      );
     }
   };
 
   const getButtonProps = (status: string) => {
     switch (status) {
-      case 'ASSIGNED': return { label: 'Accept Order', icon: CheckCircle2, variant: 'primary' as const };
-      case 'ACCEPTED': 
-      case 'AT_RESTAURANT': return { label: 'Confirm Pickup', icon: Package, variant: 'outline' as const };
-      case 'PICKED_UP': 
-      case 'OUT_FOR_DELIVERY': return { label: 'Mark Delivered', icon: Navigation, variant: 'success' as const };
-      default: return { label: 'Completed', icon: CheckCircle2, variant: 'secondary' as const };
+      case 'ASSIGNED':
+        return { label: 'Accept Order', icon: CheckCircle2, variant: 'primary' as const };
+      case 'ACCEPTED':
+      case 'AT_RESTAURANT':
+        return { label: 'Confirm Pickup', icon: Package, variant: 'outline' as const };
+      case 'PICKED_UP':
+      case 'OUT_FOR_DELIVERY':
+        return { label: 'Mark Delivered', icon: Navigation, variant: 'success' as const };
+      default:
+        return { label: 'Completed', icon: CheckCircle2, variant: 'secondary' as const };
     }
   };
 
@@ -77,39 +90,52 @@ export default function DeliveryDashboardPage() {
             </Card>
           ) : (
             <div className="space-y-4">
-              {assignments.filter(a => !['DELIVERED', 'FAILED'].includes(a.status)).map(assignment => {
-                const btnProps = getButtonProps(assignment.status);
-                const BtnIcon = btnProps.icon;
-                return (
-                  <Card key={assignment.id} className="bg-surface/50 border-border/50 p-6 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center hover:border-primary/50 transition-colors">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-bold text-white text-lg">Order #{assignment.order.orderNumber}</h3>
-                        <Badge variant="info">{assignment.status.replace(/_/g, ' ')}</Badge>
+              {assignments
+                .filter((a) => !['DELIVERED', 'FAILED'].includes(a.status))
+                .map((assignment) => {
+                  const btnProps = getButtonProps(assignment.status);
+                  const BtnIcon = btnProps.icon;
+                  return (
+                    <Card
+                      key={assignment.id}
+                      className="bg-surface/50 border-border/50 p-6 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center hover:border-primary/50 transition-colors"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                          <h3 className="font-bold text-white text-lg">
+                            Order #{assignment.order.orderNumber}
+                          </h3>
+                          <Badge variant="info">{assignment.status.replace(/_/g, ' ')}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="font-medium text-white">Pickup:</span>{' '}
+                          {assignment.order.restaurant?.name || 'Oven Xpress Kitchen'}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="font-medium text-white">Dropoff:</span>{' '}
+                          {assignment.order.address?.addressLine1}, {assignment.order.address?.city}
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-white">Pickup:</span> {assignment.order.restaurant?.name || 'Oven Xpress Kitchen'}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-white">Dropoff:</span> {assignment.order.address?.addressLine1}, {assignment.order.address?.city}
-                      </p>
-                    </div>
-                    <Button variant={btnProps.variant} onClick={() => handleAction(assignment)} className="w-full md:w-auto shrink-0 shadow-lg">
-                      <BtnIcon className="w-4 h-4 mr-2" />
-                      {btnProps.label}
-                    </Button>
-                  </Card>
-                );
-              })}
+                      <Button
+                        variant={btnProps.variant}
+                        onClick={() => handleAction(assignment)}
+                        className="w-full md:w-auto shrink-0 shadow-lg"
+                      >
+                        <BtnIcon className="w-4 h-4 mr-2" />
+                        {btnProps.label}
+                      </Button>
+                    </Card>
+                  );
+                })}
             </div>
           )}
         </div>
-        
+
         <div className="space-y-6">
           <h2 className="text-xl font-bold text-white">Live Navigation</h2>
-          <DeliveryTrackingMap 
-            driverLocation={{ latitude: 0, longitude: 0 }} 
-            destination={{ latitude: 1, longitude: 1 }} 
+          <DeliveryTrackingMap
+            driverLocation={{ latitude: 0, longitude: 0 }}
+            destination={{ latitude: 1, longitude: 1 }}
           />
         </div>
       </div>

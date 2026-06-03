@@ -26,7 +26,7 @@ export const Drawer: React.FC<DrawerProps> = ({
 
   useEffect(() => {
     if (!isOpen) return undefined;
-    
+
     previousFocus.current = document.activeElement as HTMLElement;
     document.body.style.overflow = 'hidden';
 

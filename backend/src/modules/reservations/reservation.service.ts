@@ -15,7 +15,7 @@ export class ReservationService {
         specialRequest: data.specialRequest,
         status: 'PENDING',
       },
-      include: { customer: true, table: true }
+      include: { customer: true, table: true },
     });
 
     getIO().to(`branch_${data.branchId}`).emit('reservation-created', reservation);
@@ -26,7 +26,7 @@ export class ReservationService {
     return prisma.reservation.findMany({
       where: { customerId },
       include: { branch: true, table: true },
-      orderBy: [{ reservationDate: 'desc' }, { reservationTime: 'desc' }]
+      orderBy: [{ reservationDate: 'desc' }, { reservationTime: 'desc' }],
     });
   }
 
@@ -38,11 +38,14 @@ export class ReservationService {
     return prisma.reservation.findMany({
       where: whereClause,
       include: { customer: true, table: true },
-      orderBy: [{ reservationDate: 'asc' }, { reservationTime: 'asc' }]
+      orderBy: [{ reservationDate: 'asc' }, { reservationTime: 'asc' }],
     });
   }
 
-  public static async updateReservationStatus(reservationId: string, data: { status: any, tableId?: string }) {
+  public static async updateReservationStatus(
+    reservationId: string,
+    data: { status: any; tableId?: string },
+  ) {
     const existing = await prisma.reservation.findUnique({ where: { id: reservationId } });
     if (!existing) throw new AppError('Reservation not found', 404);
 
@@ -50,20 +53,20 @@ export class ReservationService {
       where: { id: reservationId },
       data: {
         status: data.status,
-        ...(data.tableId ? { tableId: data.tableId } : {})
+        ...(data.tableId ? { tableId: data.tableId } : {}),
       },
-      include: { customer: true, table: true }
+      include: { customer: true, table: true },
     });
 
     // Handle side effects like Table status updates
     if (data.status === 'CHECKED_IN' && updated.tableId) {
       await prisma.table.update({
         where: { id: updated.tableId },
-        data: { status: 'OCCUPIED' }
+        data: { status: 'OCCUPIED' },
       });
       getIO().to(`branch_${updated.branchId}`).emit('table-occupied', { tableId: updated.tableId });
     }
-    
+
     if (data.status === 'CONFIRMED') {
       getIO().to(`branch_${updated.branchId}`).emit('reservation-confirmed', updated);
     }
@@ -71,7 +74,7 @@ export class ReservationService {
     if (data.status === 'COMPLETED' && updated.tableId) {
       await prisma.table.update({
         where: { id: updated.tableId },
-        data: { status: 'CLEANING' }
+        data: { status: 'CLEANING' },
       });
     }
 

@@ -36,9 +36,12 @@ export default function TakeawayQueuePage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/v1/orders?branchId=${branchId}&orderType=PICKUP`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${API_BASE_URL}/api/v1/orders?branchId=${branchId}&orderType=PICKUP`,
+        {
+          withCredentials: true,
+        },
+      );
       setOrders(response.data.data.orders || []);
     } catch (err) {
       console.error('Failed to fetch takeaway orders', err);
@@ -47,7 +50,11 @@ export default function TakeawayQueuePage() {
 
   const updateOrderStatus = async (id: string, status: string) => {
     try {
-      await axios.patch(`${API_BASE_URL}/api/v1/orders/${id}/status`, { status }, { withCredentials: true });
+      await axios.patch(
+        `${API_BASE_URL}/api/v1/orders/${id}/status`,
+        { status },
+        { withCredentials: true },
+      );
       fetchOrders();
     } catch (err) {
       console.error('Failed to update status', err);
@@ -68,24 +75,46 @@ export default function TakeawayQueuePage() {
         {columns.map((col) => (
           <div key={col.status} className="bg-slate-200 rounded-xl p-4 min-h-[500px]">
             <h2 className="text-lg font-bold text-slate-700 mb-4">{col.title}</h2>
-            {orders.filter((o) => o.status === col.status).map((order) => (
-              <Card key={order.id} className="p-4 mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-lg">#{order.orderNumber.substring(0, 8)}</span>
-                </div>
-                <p className="text-sm text-slate-600 mb-4">{order.customer?.firstName} {order.customer?.lastName}</p>
-                
-                {col.status === 'PLACED' && (
-                  <Button variant="primary" className="w-full" onClick={() => updateOrderStatus(order.id, 'PREPARING')}>Start Preparing</Button>
-                )}
-                {col.status === 'PREPARING' && (
-                  <Button variant="primary" className="w-full" onClick={() => updateOrderStatus(order.id, 'READY_FOR_PICKUP')}>Mark Ready</Button>
-                )}
-                {col.status === 'READY_FOR_PICKUP' && (
-                  <Button variant="success" className="w-full" onClick={() => updateOrderStatus(order.id, 'PICKED_UP')}>Handed Over</Button>
-                )}
-              </Card>
-            ))}
+            {orders
+              .filter((o) => o.status === col.status)
+              .map((order) => (
+                <Card key={order.id} className="p-4 mb-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-lg">#{order.orderNumber.substring(0, 8)}</span>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-4">
+                    {order.customer?.firstName} {order.customer?.lastName}
+                  </p>
+
+                  {col.status === 'PLACED' && (
+                    <Button
+                      variant="primary"
+                      className="w-full"
+                      onClick={() => updateOrderStatus(order.id, 'PREPARING')}
+                    >
+                      Start Preparing
+                    </Button>
+                  )}
+                  {col.status === 'PREPARING' && (
+                    <Button
+                      variant="primary"
+                      className="w-full"
+                      onClick={() => updateOrderStatus(order.id, 'READY_FOR_PICKUP')}
+                    >
+                      Mark Ready
+                    </Button>
+                  )}
+                  {col.status === 'READY_FOR_PICKUP' && (
+                    <Button
+                      variant="success"
+                      className="w-full"
+                      onClick={() => updateOrderStatus(order.id, 'PICKED_UP')}
+                    >
+                      Handed Over
+                    </Button>
+                  )}
+                </Card>
+              ))}
           </div>
         ))}
       </div>

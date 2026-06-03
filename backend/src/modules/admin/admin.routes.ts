@@ -11,14 +11,20 @@ const router = Router();
 
 // Protect all admin routes
 router.use(authGuard);
-router.use(restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'OPERATIONS_MANAGER', 'FINANCE_MANAGER'));
+router.use(
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'OPERATIONS_MANAGER', 'FINANCE_MANAGER'),
+);
 
 // Dashboard Overview
 router.get('/dashboard', AdminController.getDashboardOverview);
 
 // Settings
 router.get('/settings/:branchId', SettingsController.getSettings);
-router.patch('/settings/:branchId', restrictTo('ADMIN', 'SUPER_ADMIN'), SettingsController.updateSettings);
+router.patch(
+  '/settings/:branchId',
+  restrictTo('ADMIN', 'SUPER_ADMIN'),
+  SettingsController.updateSettings,
+);
 
 // Analytics
 router.get('/analytics/executive', AnalyticsController.getExecutiveSummary);
@@ -32,12 +38,28 @@ router.get('/analytics/popular-products', AnalyticsController.getProductAnalytic
 router.get('/reports/daily', ReportsController.getDailyReport);
 
 // Staff
-router.get('/staff', restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'), StaffController.getAllStaff);
+router.get(
+  '/staff',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  StaffController.getAllStaff,
+);
 router.post('/staff', restrictTo('ADMIN', 'SUPER_ADMIN'), StaffController.createStaff);
-router.patch('/staff/:id/role', restrictTo('ADMIN', 'SUPER_ADMIN'), StaffController.updateStaffRole);
+router.patch(
+  '/staff/:id/role',
+  restrictTo('ADMIN', 'SUPER_ADMIN'),
+  StaffController.updateStaffRole,
+);
 
 // Customers
-router.get('/customers', restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'), CustomersController.getAllCustomers);
-router.get('/customers/:id', restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'), CustomersController.getCustomerDetails);
+router.get(
+  '/customers',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  CustomersController.getAllCustomers,
+);
+router.get(
+  '/customers/:id',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  CustomersController.getCustomerDetails,
+);
 
 export default router;

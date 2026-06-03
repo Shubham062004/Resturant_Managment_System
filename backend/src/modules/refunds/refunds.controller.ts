@@ -7,7 +7,7 @@ export class RefundsController {
     try {
       const { orderId, amount, reason } = req.body;
       const refund = await RefundsService.processRefund(orderId, amount, reason);
-      
+
       res.status(201).json({
         success: true,
         data: { refund },

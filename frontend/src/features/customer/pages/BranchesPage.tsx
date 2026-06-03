@@ -85,12 +85,7 @@ export const BranchesPage: React.FC = () => {
 
         const updated = mappedBranches
           .map((b) => {
-            const dist = calculateDistance(
-              latitude,
-              longitude,
-              b.coords.lat,
-              b.coords.lng,
-            );
+            const dist = calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng);
             return {
               ...b,
               distance: parseFloat(dist.toFixed(1)),

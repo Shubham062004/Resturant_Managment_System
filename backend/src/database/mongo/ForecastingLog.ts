@@ -22,4 +22,7 @@ const ForecastingLogSchema: Schema = new Schema({
 
 ForecastingLogSchema.index({ ingredientId: 1, branchId: 1, targetDate: 1 });
 
-export const ForecastingLog = mongoose.model<IForecastingLog>('ForecastingLog', ForecastingLogSchema);
+export const ForecastingLog = mongoose.model<IForecastingLog>(
+  'ForecastingLog',
+  ForecastingLogSchema,
+);

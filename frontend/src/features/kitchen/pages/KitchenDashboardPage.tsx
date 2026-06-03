@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchActiveOrders, updateOrderStatus, receiveNewOrder, receiveOrderStatusUpdate } from '../store/kitchenSlice';
+import {
+  fetchActiveOrders,
+  updateOrderStatus,
+  receiveNewOrder,
+  receiveOrderStatusUpdate,
+} from '../store/kitchenSlice';
 import OrderTicket from '../components/OrderTicket';
 import { io } from 'socket.io-client';
 import { Flame, Activity } from 'lucide-react';
@@ -70,7 +75,11 @@ export default function KitchenDashboardPage() {
   };
 
   if (status === 'loading' && orders.length === 0) {
-    return <div className="p-8 text-white flex items-center justify-center min-h-screen">Loading Kitchen Board...</div>;
+    return (
+      <div className="p-8 text-white flex items-center justify-center min-h-screen">
+        Loading Kitchen Board...
+      </div>
+    );
   }
 
   return (
@@ -85,14 +94,20 @@ export default function KitchenDashboardPage() {
             <h1 className="text-2xl font-bold text-white font-display">Kitchen Display System</h1>
             <div className="flex items-center gap-2 text-sm">
               <span className="flex items-center gap-1.5 text-muted-foreground">
-                <Activity size={14} className={socketConnected ? 'text-green-500' : 'text-red-500'} />
+                <Activity
+                  size={14}
+                  className={socketConnected ? 'text-green-500' : 'text-red-500'}
+                />
                 {socketConnected ? 'Live Sync Active' : 'Offline'}
               </span>
             </div>
           </div>
         </div>
         <div className="flex gap-3">
-          <Link to="/" className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/80 font-medium">
+          <Link
+            to="/"
+            className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/80 font-medium"
+          >
             Exit KDS
           </Link>
         </div>

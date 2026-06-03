@@ -52,7 +52,9 @@ const analyticsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchExecutiveSummary.pending, (state) => { state.status = 'loading'; })
+      .addCase(fetchExecutiveSummary.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(fetchExecutiveSummary.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.executive = action.payload;

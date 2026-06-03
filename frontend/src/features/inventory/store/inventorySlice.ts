@@ -46,7 +46,7 @@ const inventorySlice = createSlice({
   initialState,
   reducers: {
     socketInventoryUpdate: (state, action: PayloadAction<any>) => {
-      const idx = state.inventory.findIndex(i => i.id === action.payload.id);
+      const idx = state.inventory.findIndex((i) => i.id === action.payload.id);
       if (idx !== -1) {
         state.inventory[idx] = action.payload;
       } else {
@@ -54,15 +54,17 @@ const inventorySlice = createSlice({
       }
     },
     socketPurchaseReceived: (state, action: PayloadAction<any>) => {
-      const idx = state.purchaseOrders.findIndex(p => p.id === action.payload.id);
+      const idx = state.purchaseOrders.findIndex((p) => p.id === action.payload.id);
       if (idx !== -1) {
         state.purchaseOrders[idx] = action.payload;
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchInventory.pending, (state) => { state.status = 'loading'; })
+      .addCase(fetchInventory.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(fetchInventory.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.inventory = action.payload;
@@ -76,7 +78,7 @@ const inventorySlice = createSlice({
       .addCase(fetchAnalytics.fulfilled, (state, action) => {
         state.analytics = action.payload;
       });
-  }
+  },
 });
 
 export const { socketInventoryUpdate, socketPurchaseReceived } = inventorySlice.actions;

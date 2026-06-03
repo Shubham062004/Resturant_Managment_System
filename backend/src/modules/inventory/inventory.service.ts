@@ -54,7 +54,7 @@ export class InventoryService {
 
   static async createPurchaseOrder(data: { supplierId: string; branchId: string; items: any[] }) {
     // Calculate total
-    const totalAmount = data.items.reduce((sum, item) => sum + (item.quantity * item.costPrice), 0);
+    const totalAmount = data.items.reduce((sum, item) => sum + item.quantity * item.costPrice, 0);
 
     const po = await prisma.purchaseOrder.create({
       data: {
@@ -63,7 +63,7 @@ export class InventoryService {
         totalAmount,
         status: 'DRAFT',
         items: {
-          create: data.items.map(item => ({
+          create: data.items.map((item) => ({
             ingredientId: item.ingredientId,
             quantity: item.quantity,
             costPrice: item.costPrice,
@@ -106,7 +106,7 @@ export class InventoryService {
           type: 'PURCHASE',
         });
       }
-      
+
       const io = getIO();
       io.to('staff_room').emit('purchase-received', updated);
     }
@@ -159,7 +159,9 @@ export class InventoryService {
     if (newQuantity < 0) {
       // For some scenarios we might allow negative stock, but usually it's bad.
       // We will just log a warning but allow it for auto-deduction sync issues.
-      console.warn(`Inventory dropped below zero for ingredient ${ingredientId} in branch ${branchId}`);
+      console.warn(
+        `Inventory dropped below zero for ingredient ${ingredientId} in branch ${branchId}`,
+      );
     }
 
     // Update Prisma
@@ -199,14 +201,14 @@ export class InventoryService {
     if (updated.availableQuantity <= updated.ingredient.reorderPoint) {
       const io = getIO();
       io.to('staff_room').emit('stock-low', updated);
-      
+
       // Could also generate InventoryAlert in Prisma here if needed.
       await prisma.inventoryAlert.create({
         data: {
           ingredientId,
           branchId,
           alertType: 'LOW_STOCK',
-        }
+        },
       });
     }
 
@@ -263,7 +265,13 @@ export class InventoryService {
   // ---------------------------------------------------------------------------
   // WASTE MANAGEMENT
   // ---------------------------------------------------------------------------
-  static async logWaste(data: { ingredientId: string; branchId: string; quantity: number; reason: string; userId: string }) {
+  static async logWaste(data: {
+    ingredientId: string;
+    branchId: string;
+    quantity: number;
+    reason: string;
+    userId: string;
+  }) {
     await prisma.wasteRecord.create({
       data: {
         ingredientId: data.ingredientId,
@@ -286,7 +294,13 @@ export class InventoryService {
   // ---------------------------------------------------------------------------
   // INVENTORY TRANSFERS
   // ---------------------------------------------------------------------------
-  static async transferInventory(data: { sourceBranchId: string; destinationBranchId: string; ingredientId: string; quantity: number; notes?: string }) {
+  static async transferInventory(data: {
+    sourceBranchId: string;
+    destinationBranchId: string;
+    ingredientId: string;
+    quantity: number;
+    notes?: string;
+  }) {
     // Immediately deduct from source
     await this.adjustInventory({
       ingredientId: data.ingredientId,

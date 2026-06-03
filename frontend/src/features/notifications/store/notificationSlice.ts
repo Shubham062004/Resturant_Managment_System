@@ -4,14 +4,23 @@ import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const fetchNotifications = createAsyncThunk('notifications/fetchAll', async () => {
-  const response = await axios.get(`${API_BASE_URL}/api/v1/notifications`, { withCredentials: true });
+  const response = await axios.get(`${API_BASE_URL}/api/v1/notifications`, {
+    withCredentials: true,
+  });
   return response.data.data; // { notifications: [], unreadCount: number }
 });
 
-export const markNotificationRead = createAsyncThunk('notifications/markRead', async (id: string) => {
-  await axios.patch(`${API_BASE_URL}/api/v1/notifications/${id}/read`, {}, { withCredentials: true });
-  return id;
-});
+export const markNotificationRead = createAsyncThunk(
+  'notifications/markRead',
+  async (id: string) => {
+    await axios.patch(
+      `${API_BASE_URL}/api/v1/notifications/${id}/read`,
+      {},
+      { withCredentials: true },
+    );
+    return id;
+  },
+);
 
 const notificationSlice = createSlice({
   name: 'notifications',
@@ -24,7 +33,7 @@ const notificationSlice = createSlice({
     addRealtimeNotification: (state, action) => {
       state.list.unshift(action.payload);
       state.unreadCount += 1;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,7 +49,7 @@ const notificationSlice = createSlice({
           state.unreadCount = Math.max(0, state.unreadCount - 1);
         }
       });
-  }
+  },
 });
 
 export const { addRealtimeNotification } = notificationSlice.actions;

@@ -37,7 +37,9 @@ export default function StaffManagementPage() {
           <tbody>
             {staffList.map((staff: any) => (
               <tr key={staff.id} className="border-b border-slate-100 hover:bg-slate-50">
-                <td className="p-4 font-medium text-slate-800">{staff.firstName} {staff.lastName}</td>
+                <td className="p-4 font-medium text-slate-800">
+                  {staff.firstName} {staff.lastName}
+                </td>
                 <td className="p-4 text-slate-600">{staff.email}</td>
                 <td className="p-4">
                   <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full font-bold">
@@ -45,12 +47,16 @@ export default function StaffManagementPage() {
                   </span>
                 </td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 text-xs rounded-full font-bold ${staff.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full font-bold ${staff.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                  >
                     {staff.isActive ? 'Active' : 'Inactive'}
                   </span>
                 </td>
                 <td className="p-4 text-right">
-                  <Button variant="outline" size="sm">Edit Role</Button>
+                  <Button variant="outline" size="sm">
+                    Edit Role
+                  </Button>
                 </td>
               </tr>
             ))}

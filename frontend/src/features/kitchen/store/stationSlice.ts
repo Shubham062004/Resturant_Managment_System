@@ -30,7 +30,7 @@ export const fetchStations = createAsyncThunk(
       const error = err as { response?: { data?: { error?: { message?: string } } } };
       return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch stations');
     }
-  }
+  },
 );
 
 const stationSlice = createSlice({

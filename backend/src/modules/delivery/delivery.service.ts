@@ -15,7 +15,8 @@ export class DeliveryService {
         include: { assignments: { where: { status: { notIn: ['DELIVERED', 'FAILED'] } } } },
       });
 
-      if (availableDrivers.length === 0) throw new AppError('No drivers available for auto-assignment', 404);
+      if (availableDrivers.length === 0)
+        throw new AppError('No drivers available for auto-assignment', 404);
 
       // Simple heuristic: pick driver with fewest active assignments
       availableDrivers.sort((a: any, b: any) => a.assignments.length - b.assignments.length);
@@ -80,7 +81,8 @@ export class DeliveryService {
 
     if (!assignment) throw new AppError('Assignment not found', 404);
     if (assignment.driverId !== driver.id) throw new AppError('Unauthorized', 403);
-    if (assignment.status !== 'ASSIGNED') throw new AppError('Order already accepted or processed', 400);
+    if (assignment.status !== 'ASSIGNED')
+      throw new AppError('Order already accepted or processed', 400);
 
     const updated = await prisma.deliveryAssignment.update({
       where: { id: assignment.id },
@@ -176,7 +178,7 @@ export class DeliveryService {
 
     // Calculate Earnings (Flat 5 + 5% of order subtotal)
     const orderValue = Number(assignment.order.subtotal);
-    const earningsAmount = 5.00 + (orderValue * 0.05);
+    const earningsAmount = 5.0 + orderValue * 0.05;
 
     await prisma.driverEarnings.create({
       data: {
@@ -230,7 +232,10 @@ export class DeliveryService {
       include: { order: true },
     });
 
-    const totalEarnings = earnings.reduce((sum: number, e: any) => sum + Number(e.earnings) + Number(e.bonus || 0), 0);
+    const totalEarnings = earnings.reduce(
+      (sum: number, e: any) => sum + Number(e.earnings) + Number(e.bonus || 0),
+      0,
+    );
 
     return { totalEarnings, history: earnings };
   }

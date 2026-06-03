@@ -1,10 +1,20 @@
 import React from 'react';
 import { useAppSelector } from '../../../app/store';
 import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Area,
+  AreaChart,
+} from 'recharts';
 
 export default function RevenueChart() {
-  const { revenueTrends } = useAppSelector(state => state.analytics);
+  const { revenueTrends } = useAppSelector((state) => state.analytics);
 
   if (!revenueTrends || revenueTrends.length === 0) {
     return <div className="text-white p-4">No revenue data available.</div>;
@@ -26,18 +36,42 @@ export default function RevenueChart() {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" vertical={false} />
-              <XAxis dataKey="date" stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #333', borderRadius: '8px', color: '#fff' }}
+              <XAxis
+                dataKey="date"
+                stroke="#ffffff60"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#ffffff60"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `$${value}`}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333',
+                  borderRadius: '8px',
+                  color: '#fff',
+                }}
                 itemStyle={{ color: '#FF8C42' }}
               />
-              <Area type="monotone" dataKey="revenue" stroke="#B22222" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+              <Area
+                type="monotone"
+                dataKey="revenue"
+                stroke="#B22222"
+                strokeWidth={3}
+                fillOpacity={1}
+                fill="url(#colorRevenue)"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
-      
+
       <Card className="bg-surface/50 border-border/50">
         <CardHeader>
           <h3 className="text-lg font-bold text-white">7-Day Order Volume</h3>
@@ -46,12 +80,29 @@ export default function RevenueChart() {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={revenueTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" vertical={false} />
-              <XAxis dataKey="date" stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #333', borderRadius: '8px', color: '#fff' }}
+              <XAxis
+                dataKey="date"
+                stroke="#ffffff60"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
               />
-              <Line type="monotone" dataKey="orders" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4, fill: '#3B82F6', strokeWidth: 0 }} />
+              <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333',
+                  borderRadius: '8px',
+                  color: '#fff',
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="orders"
+                stroke="#3B82F6"
+                strokeWidth={3}
+                dot={{ r: 4, fill: '#3B82F6', strokeWidth: 0 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>

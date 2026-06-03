@@ -44,11 +44,14 @@ const initialState: ReservationState = {
 export const fetchBranchReservations = createAsyncThunk(
   'reservations/fetchBranch',
   async (branchId: string) => {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/reservations/branch?branchId=${branchId}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `${API_BASE_URL}/api/v1/reservations/branch?branchId=${branchId}`,
+      {
+        withCredentials: true,
+      },
+    );
     return response.data.data;
-  }
+  },
 );
 
 export const fetchWaitlist = createAsyncThunk(
@@ -58,27 +61,35 @@ export const fetchWaitlist = createAsyncThunk(
       withCredentials: true,
     });
     return response.data.data;
-  }
+  },
 );
 
 export const updateReservationStatus = createAsyncThunk(
   'reservations/updateStatus',
   async ({ id, status, tableId }: { id: string; status: string; tableId?: string }) => {
-    const response = await axios.patch(`${API_BASE_URL}/api/v1/reservations/${id}`, { status, tableId }, {
-      withCredentials: true,
-    });
+    const response = await axios.patch(
+      `${API_BASE_URL}/api/v1/reservations/${id}`,
+      { status, tableId },
+      {
+        withCredentials: true,
+      },
+    );
     return response.data.data;
-  }
+  },
 );
 
 export const updateWaitlistStatus = createAsyncThunk(
   'reservations/updateWaitlist',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await axios.patch(`${API_BASE_URL}/api/v1/waitlist/${id}`, { status }, {
-      withCredentials: true,
-    });
+    const response = await axios.patch(
+      `${API_BASE_URL}/api/v1/waitlist/${id}`,
+      { status },
+      {
+        withCredentials: true,
+      },
+    );
     return response.data.data;
-  }
+  },
 );
 
 const reservationSlice = createSlice({

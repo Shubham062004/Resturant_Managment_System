@@ -6,13 +6,16 @@ export class QROrderingService {
   public static async getMenuForTable(qrCode: string) {
     const table = await prisma.table.findUnique({
       where: { qrCode, active: true },
-      include: { branch: true }
+      include: { branch: true },
     });
 
     if (!table) throw new AppError('Invalid or inactive QR Code', 404);
 
     // Fetch active categories and products
-    const categories = await prisma.category.findMany({ where: { isActive: true }, include: { products: true } });
+    const categories = await prisma.category.findMany({
+      where: { isActive: true },
+      include: { products: true },
+    });
     return { table, categories };
   }
 
@@ -29,8 +32,8 @@ export class QROrderingService {
           email: 'guest@ovenxpress.local',
           firstName: 'Guest',
           lastName: 'User',
-          role: 'CUSTOMER'
-        }
+          role: 'CUSTOMER',
+        },
       });
     }
 
@@ -49,11 +52,11 @@ export class QROrderingService {
             productId: item.productId,
             variantId: item.variantId,
             quantity: item.quantity,
-            price: item.price
-          }))
-        }
+            price: item.price,
+          })),
+        },
       },
-      include: { table: true, items: true }
+      include: { table: true, items: true },
     });
 
     // Notify kitchen

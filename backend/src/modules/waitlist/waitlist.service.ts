@@ -6,7 +6,7 @@ export class WaitlistService {
   public static async joinWaitlist(customerId: string, data: any) {
     // Basic calculation for estimated wait time (e.g. 15 mins per current waitlist entry)
     const existingEntries = await prisma.waitlistEntry.count({
-      where: { branchId: data.branchId, status: 'WAITING' }
+      where: { branchId: data.branchId, status: 'WAITING' },
     });
 
     const estimatedWaitTime = (existingEntries + 1) * 15;
@@ -17,9 +17,9 @@ export class WaitlistService {
         branchId: data.branchId,
         guestCount: data.guestCount,
         estimatedWaitTime,
-        status: 'WAITING'
+        status: 'WAITING',
       },
-      include: { customer: true }
+      include: { customer: true },
     });
 
     getIO().to(`branch_${data.branchId}`).emit('waitlist-updated', entry);
@@ -30,7 +30,7 @@ export class WaitlistService {
     return prisma.waitlistEntry.findMany({
       where: { branchId, status: { in: ['WAITING', 'NOTIFIED'] } },
       include: { customer: true },
-      orderBy: { joinedAt: 'asc' }
+      orderBy: { joinedAt: 'asc' },
     });
   }
 
@@ -46,7 +46,7 @@ export class WaitlistService {
     const updated = await prisma.waitlistEntry.update({
       where: { id: entryId },
       data: updates,
-      include: { customer: true }
+      include: { customer: true },
     });
 
     getIO().to(`branch_${updated.branchId}`).emit('waitlist-updated', updated);

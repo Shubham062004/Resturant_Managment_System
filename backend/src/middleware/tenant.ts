@@ -18,7 +18,7 @@ export const tenantGuard = async (req: AuthRequest, res: Response, next: NextFun
     // Identify user from DB to get their organizationId if not in token
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      select: { organizationId: true, franchiseId: true }
+      select: { organizationId: true, franchiseId: true },
     });
 
     if (!user || !user.organizationId) {
@@ -30,7 +30,7 @@ export const tenantGuard = async (req: AuthRequest, res: Response, next: NextFun
     req.tenantFilter = { organizationId: user.organizationId };
 
     // If they are specifically a Franchise Owner, scope further
-    
+
     if (user.franchiseId && req.user.role === 'FRANCHISE_OWNER') {
       req.tenantFilter = { ...req.tenantFilter, franchiseId: user.franchiseId };
     }

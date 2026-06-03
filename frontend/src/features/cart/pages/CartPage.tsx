@@ -4,12 +4,7 @@ import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import EmptyState from '../../../shared/components/ui/EmptyState';
 import { useToast } from '../../../shared/components/ui/Toast';
-import {
-  useCart,
-  useUpdateCartItem,
-  useRemoveCartItem,
-  useClearCart,
-} from '../store/cartQueries';
+import { useCart, useUpdateCartItem, useRemoveCartItem, useClearCart } from '../store/cartQueries';
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 import { useAppSelector } from '../../../app/store';
 

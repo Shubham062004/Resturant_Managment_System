@@ -8,15 +8,7 @@ import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import Card, { CardContent } from '../../../shared/components/ui/Card';
 import EmptyState from '../../../shared/components/ui/EmptyState';
-import {
-  Search as SearchIcon,
-  Star,
-  Clock,
-  Trash2,
-  X,
-  TrendingUp,
-  Award,
-} from 'lucide-react';
+import { Search as SearchIcon, Star, Clock, Trash2, X, TrendingUp, Award } from 'lucide-react';
 import { useProducts } from '../store/catalogQueries';
 import { Link } from 'react-router-dom';
 
@@ -235,7 +227,9 @@ export const SearchPage: React.FC = () => {
                         )}
                       </div>
                       <CardContent className="p-4 flex-grow space-y-2">
-                        <h3 className="font-display font-bold text-sm text-white">{product.name}</h3>
+                        <h3 className="font-display font-bold text-sm text-white">
+                          {product.name}
+                        </h3>
                         <p className="text-xs text-muted-foreground line-clamp-2">
                           {product.shortDescription || product.description}
                         </p>

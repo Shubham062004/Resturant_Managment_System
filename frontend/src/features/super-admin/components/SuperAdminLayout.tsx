@@ -29,7 +29,9 @@ export default function SuperAdminLayout() {
                   <Link
                     to={link.path}
                     className={`flex items-center px-3 py-2 rounded-md transition-colors ${
-                      active ? 'bg-blue-600 text-white font-semibold' : 'hover:bg-slate-800 hover:text-white text-slate-400'
+                      active
+                        ? 'bg-blue-600 text-white font-semibold'
+                        : 'hover:bg-slate-800 hover:text-white text-slate-400'
                     }`}
                   >
                     <span className="mr-3">{link.icon}</span>

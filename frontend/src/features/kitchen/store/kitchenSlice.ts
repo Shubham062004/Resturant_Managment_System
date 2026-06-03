@@ -53,9 +53,11 @@ export const fetchActiveOrders = createAsyncThunk(
       return response.data.data.orders;
     } catch (err: unknown) {
       const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch kitchen orders');
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to fetch kitchen orders',
+      );
     }
-  }
+  },
 );
 
 export const updateOrderStatus = createAsyncThunk(
@@ -66,9 +68,11 @@ export const updateOrderStatus = createAsyncThunk(
       return response.data.data.order;
     } catch (err: unknown) {
       const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Failed to update order status');
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to update order status',
+      );
     }
-  }
+  },
 );
 
 const kitchenSlice = createSlice({
@@ -79,7 +83,7 @@ const kitchenSlice = createSlice({
       state.orders.push(action.payload);
     },
     receiveOrderStatusUpdate: (state, action: PayloadAction<KitchenOrder>) => {
-      const index = state.orders.findIndex(o => o.id === action.payload.id);
+      const index = state.orders.findIndex((o) => o.id === action.payload.id);
       if (index !== -1) {
         if (action.payload.status === 'COMPLETED') {
           state.orders.splice(index, 1);
@@ -89,7 +93,7 @@ const kitchenSlice = createSlice({
       } else if (action.payload.status !== 'COMPLETED') {
         state.orders.push(action.payload);
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -105,13 +109,13 @@ const kitchenSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
-        const index = state.orders.findIndex(o => o.id === action.payload.id);
+        const index = state.orders.findIndex((o) => o.id === action.payload.id);
         if (index !== -1) {
-           if (action.payload.status === 'COMPLETED') {
-             state.orders.splice(index, 1);
-           } else {
-             state.orders[index] = action.payload;
-           }
+          if (action.payload.status === 'COMPLETED') {
+            state.orders.splice(index, 1);
+          } else {
+            state.orders[index] = action.payload;
+          }
         }
       });
   },

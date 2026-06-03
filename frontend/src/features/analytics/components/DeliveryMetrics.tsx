@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Car
 import Avatar from '../../../shared/components/ui/Avatar';
 
 export default function DeliveryMetrics() {
-  const { delivery } = useAppSelector(state => state.analytics);
+  const { delivery } = useAppSelector((state) => state.analytics);
 
   if (!delivery) {
     return <div className="text-white p-4">No delivery data available.</div>;
@@ -37,7 +37,10 @@ export default function DeliveryMetrics() {
         <CardContent>
           <div className="space-y-4">
             {topDrivers.map((driver: any, i: number) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-secondary/30 rounded-xl border border-border/50">
+              <div
+                key={i}
+                className="flex items-center justify-between p-4 bg-secondary/30 rounded-xl border border-border/50"
+              >
                 <div className="flex items-center gap-4">
                   <Avatar name={driver.name} />
                   <div>

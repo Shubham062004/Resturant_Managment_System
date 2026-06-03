@@ -14,10 +14,10 @@ export class CustomersController {
           phone: true,
           createdAt: true,
           _count: {
-            select: { orders: true }
-          }
+            select: { orders: true },
+          },
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       });
       res.status(200).json({ status: 'success', data: customers });
     } catch (error) {
@@ -32,10 +32,10 @@ export class CustomersController {
         include: {
           orders: {
             orderBy: { createdAt: 'desc' },
-            take: 10
+            take: 10,
           },
-          addresses: true
-        }
+          addresses: true,
+        },
       });
       res.status(200).json({ status: 'success', data: customer });
     } catch (error) {

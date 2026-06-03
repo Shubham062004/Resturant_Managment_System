@@ -9,7 +9,16 @@ const router = Router();
 router.use(authGuard);
 
 router.post('/', validate(joinWaitlistSchema), WaitlistController.joinWaitlist);
-router.get('/branch/:branchId', restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'), WaitlistController.getBranchWaitlist);
-router.patch('/:id', restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'), validate(updateWaitlistStatusSchema), WaitlistController.updateWaitlistStatus);
+router.get(
+  '/branch/:branchId',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
+  WaitlistController.getBranchWaitlist,
+);
+router.patch(
+  '/:id',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
+  validate(updateWaitlistStatusSchema),
+  WaitlistController.updateWaitlistStatus,
+);
 
 export default router;

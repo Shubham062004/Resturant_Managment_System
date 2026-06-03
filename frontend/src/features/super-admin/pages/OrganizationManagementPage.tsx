@@ -43,12 +43,18 @@ export default function OrganizationManagementPage() {
                 <td className="p-4 text-center text-slate-300">{org._count?.branches || 0}</td>
                 <td className="p-4 text-center text-slate-300">{org._count?.users || 0}</td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 text-xs rounded-full font-bold ${org.status === 'ACTIVE' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-red-900/50 text-red-400'}`}>
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full font-bold ${org.status === 'ACTIVE' ? 'bg-emerald-900/50 text-emerald-400' : 'bg-red-900/50 text-red-400'}`}
+                  >
                     {org.status}
                   </span>
                 </td>
                 <td className="p-4 text-right">
-                  <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-600">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-600 text-slate-300 hover:bg-slate-600"
+                  >
                     Manage
                   </Button>
                 </td>
@@ -57,7 +63,9 @@ export default function OrganizationManagementPage() {
           </tbody>
         </table>
         {orgs.length === 0 && (
-          <div className="p-6 text-center text-slate-500">No organizations found on the platform.</div>
+          <div className="p-6 text-center text-slate-500">
+            No organizations found on the platform.
+          </div>
         )}
       </Card>
     </div>

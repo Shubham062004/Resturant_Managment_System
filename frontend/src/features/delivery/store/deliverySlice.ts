@@ -5,7 +5,14 @@ export interface DeliveryAssignment {
   id: string;
   orderId: string;
   driverId: string;
-  status: 'ASSIGNED' | 'ACCEPTED' | 'AT_RESTAURANT' | 'PICKED_UP' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'FAILED';
+  status:
+    | 'ASSIGNED'
+    | 'ACCEPTED'
+    | 'AT_RESTAURANT'
+    | 'PICKED_UP'
+    | 'OUT_FOR_DELIVERY'
+    | 'DELIVERED'
+    | 'FAILED';
   order: any;
   createdAt: string;
 }
@@ -41,10 +48,13 @@ export const pickupOrder = createAsyncThunk('delivery/pickupOrder', async (order
   return response.data.data.order;
 });
 
-export const deliverOrder = createAsyncThunk('delivery/deliverOrder', async ({ orderId, proof }: { orderId: string; proof: any }) => {
-  const response = await api.patch(`/delivery/orders/${orderId}/deliver`, proof);
-  return response.data.data.order;
-});
+export const deliverOrder = createAsyncThunk(
+  'delivery/deliverOrder',
+  async ({ orderId, proof }: { orderId: string; proof: any }) => {
+    const response = await api.patch(`/delivery/orders/${orderId}/deliver`, proof);
+    return response.data.data.order;
+  },
+);
 
 export const fetchEarnings = createAsyncThunk('delivery/fetchEarnings', async () => {
   const response = await api.get('/delivery/earnings');
@@ -67,7 +77,7 @@ const deliverySlice = createSlice({
       } else {
         state.assignments.unshift(action.payload);
       }
-      
+
       if (state.activeAssignment?.id === action.payload.id) {
         state.activeAssignment = { ...state.activeAssignment, ...action.payload };
       }

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Car
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export default function CustomerMetrics() {
-  const { customer } = useAppSelector(state => state.analytics);
+  const { customer } = useAppSelector((state) => state.analytics);
 
   if (!customer) {
     return <div className="text-white p-4">No customer data available.</div>;
@@ -12,12 +12,12 @@ export default function CustomerMetrics() {
 
   const retentionData = [
     { name: 'New Customers', value: customer.retention.new },
-    { name: 'Returning', value: customer.retention.returning }
+    { name: 'Returning', value: customer.retention.returning },
   ];
 
   const demoData = customer.demographics.map((d: any) => ({
     name: d.segment,
-    value: d.percentage
+    value: d.percentage,
   }));
 
   const COLORS = ['#FF8C42', '#3B82F6', '#22C55E', '#F59E0B', '#EF4444'];
@@ -44,13 +44,25 @@ export default function CustomerMetrics() {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #333', borderRadius: '8px', color: '#fff' }} />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: '#fff' }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333',
+                  borderRadius: '8px',
+                  color: '#fff',
+                }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                height={36}
+                iconType="circle"
+                wrapperStyle={{ color: '#fff' }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
-      
+
       <Card className="bg-surface/50 border-border/50">
         <CardHeader>
           <h3 className="text-lg font-bold text-white">Demographics</h3>
@@ -70,8 +82,20 @@ export default function CustomerMetrics() {
                   <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #333', borderRadius: '8px', color: '#fff' }} />
-              <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ color: '#fff' }} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1A1A1A',
+                  border: '1px solid #333',
+                  borderRadius: '8px',
+                  color: '#fff',
+                }}
+              />
+              <Legend
+                verticalAlign="bottom"
+                height={36}
+                iconType="circle"
+                wrapperStyle={{ color: '#fff' }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>

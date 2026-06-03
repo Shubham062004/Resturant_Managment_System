@@ -65,7 +65,8 @@ export const LoginPage: React.FC = () => {
       return;
     }
 
-    const payload: Record<string, string> = loginMethod === 'email' ? { email, password } : { phone, password };
+    const payload: Record<string, string> =
+      loginMethod === 'email' ? { email, password } : { phone, password };
 
     const result = await dispatch(login(payload));
     if (login.fulfilled.match(result)) {

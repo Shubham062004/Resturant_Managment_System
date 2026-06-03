@@ -46,11 +46,15 @@ export const createPurchaseOrderSchema = {
   body: z.object({
     supplierId: z.string().uuid(),
     branchId: z.string().uuid(),
-    items: z.array(z.object({
-      ingredientId: z.string().uuid(),
-      quantity: z.number().positive(),
-      costPrice: z.number().positive(),
-    })).min(1),
+    items: z
+      .array(
+        z.object({
+          ingredientId: z.string().uuid(),
+          quantity: z.number().positive(),
+          costPrice: z.number().positive(),
+        }),
+      )
+      .min(1),
   }),
 };
 

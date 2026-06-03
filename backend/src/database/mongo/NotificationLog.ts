@@ -21,7 +21,10 @@ const NotificationLogSchema: Schema = new Schema({
   status: { type: String, required: true, default: 'DELIVERED' },
   providerResponse: { type: Schema.Types.Mixed },
   error: { type: String },
-  createdAt: { type: Date, default: Date.now, expires: '90d' } // Auto-delete logs after 90 days
+  createdAt: { type: Date, default: Date.now, expires: '90d' }, // Auto-delete logs after 90 days
 });
 
-export const NotificationLog = mongoose.model<INotificationLog>('NotificationLog', NotificationLogSchema);
+export const NotificationLog = mongoose.model<INotificationLog>(
+  'NotificationLog',
+  NotificationLogSchema,
+);

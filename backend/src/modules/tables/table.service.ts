@@ -17,7 +17,7 @@ export class TableService {
         x: data.x,
         y: data.y,
         qrCode,
-      }
+      },
     });
 
     getIO().to(`branch_${data.branchId}`).emit('table-updated', table);
@@ -27,7 +27,7 @@ export class TableService {
   public static async getBranchTables(branchId: string) {
     return prisma.table.findMany({
       where: { branchId, active: true },
-      orderBy: { number: 'asc' }
+      orderBy: { number: 'asc' },
     });
   }
 
@@ -37,15 +37,15 @@ export class TableService {
 
     const table = await prisma.table.update({
       where: { id },
-      data
+      data,
     });
 
     getIO().to(`branch_${table.branchId}`).emit('table-updated', table);
 
     if (data.status === 'AVAILABLE') {
-       getIO().to(`branch_${table.branchId}`).emit('table-available', table);
+      getIO().to(`branch_${table.branchId}`).emit('table-available', table);
     } else if (data.status === 'OCCUPIED') {
-       getIO().to(`branch_${table.branchId}`).emit('table-occupied', table);
+      getIO().to(`branch_${table.branchId}`).emit('table-occupied', table);
     }
 
     return table;

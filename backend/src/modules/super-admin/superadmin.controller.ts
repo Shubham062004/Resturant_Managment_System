@@ -7,20 +7,20 @@ export class SuperAdminController {
       const totalOrganizations = await prisma.organization.count();
       const totalBranches = await prisma.branch.count();
       const totalOrders = await prisma.order.count();
-      
+
       const revenueAggr = await prisma.order.aggregate({
         _sum: { totalAmount: true },
-        where: { status: { in: ['DELIVERED', 'PICKED_UP'] } }
+        where: { status: { in: ['DELIVERED', 'PICKED_UP'] } },
       });
-      
+
       res.status(200).json({
         status: 'success',
         data: {
           totalOrganizations,
           totalBranches,
           totalOrders,
-          globalRevenue: revenueAggr._sum.totalAmount ? Number(revenueAggr._sum.totalAmount) : 0
-        }
+          globalRevenue: revenueAggr._sum.totalAmount ? Number(revenueAggr._sum.totalAmount) : 0,
+        },
       });
     } catch (error) {
       next(error);
@@ -36,8 +36,8 @@ export class SuperAdminController {
           api: 'HEALTHY',
           database: 'HEALTHY',
           redis: 'HEALTHY',
-          activeConnections: Math.floor(Math.random() * 1000)
-        }
+          activeConnections: Math.floor(Math.random() * 1000),
+        },
       });
     } catch (error) {
       next(error);

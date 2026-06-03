@@ -12,16 +12,16 @@ export class ReportsController {
 
       const orders = await prisma.order.findMany({
         where: { ...branchFilter, createdAt: { gte: today } },
-        include: { user: true }
+        include: { user: true },
       });
 
-      const reportData = orders.map(o => ({
+      const reportData = orders.map((o) => ({
         orderNumber: o.orderNumber,
         customerName: o.user.firstName + ' ' + o.user.lastName,
         amount: o.totalAmount,
         type: o.orderType,
         status: o.status,
-        time: o.createdAt.toISOString()
+        time: o.createdAt.toISOString(),
       }));
 
       res.status(200).json({ status: 'success', data: reportData });

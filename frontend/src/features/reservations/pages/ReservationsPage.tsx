@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchBranchReservations, fetchWaitlist, updateReservationStatus, updateWaitlistStatus, reservationCreated, reservationUpdated, waitlistUpdated } from '../store/reservationSlice';
+import {
+  fetchBranchReservations,
+  fetchWaitlist,
+  updateReservationStatus,
+  updateWaitlistStatus,
+  reservationCreated,
+  reservationUpdated,
+  waitlistUpdated,
+} from '../store/reservationSlice';
 import { Card } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
 import { Badge } from '../../../shared/components/ui/Badge';
@@ -50,21 +58,38 @@ export default function ReservationsPage() {
           {reservations.map((res: any) => (
             <Card key={res.id} className="p-4 flex items-center justify-between">
               <div>
-                <p className="font-semibold text-lg">{res.customer?.firstName} {res.customer?.lastName}</p>
-                <p className="text-sm text-slate-500">{res.reservationDate} at {res.reservationTime}</p>
+                <p className="font-semibold text-lg">
+                  {res.customer?.firstName} {res.customer?.lastName}
+                </p>
+                <p className="text-sm text-slate-500">
+                  {res.reservationDate} at {res.reservationTime}
+                </p>
                 <p className="text-sm text-slate-500">Guests: {res.guestCount}</p>
               </div>
               <div className="text-right">
-                <Badge variant={res.status === 'PENDING' ? 'warning' : res.status === 'CONFIRMED' ? 'success' : 'neutral'} className="mb-2 block">
+                <Badge
+                  variant={
+                    res.status === 'PENDING'
+                      ? 'warning'
+                      : res.status === 'CONFIRMED'
+                        ? 'success'
+                        : 'neutral'
+                  }
+                  className="mb-2 block"
+                >
                   {res.status}
                 </Badge>
                 {res.status === 'CONFIRMED' && (
-                  <Button variant="primary" size="sm" onClick={() => handleCheckIn(res.id)}>Check In</Button>
+                  <Button variant="primary" size="sm" onClick={() => handleCheckIn(res.id)}>
+                    Check In
+                  </Button>
                 )}
               </div>
             </Card>
           ))}
-          {reservations.length === 0 && <p className="text-slate-500 italic">No upcoming reservations.</p>}
+          {reservations.length === 0 && (
+            <p className="text-slate-500 italic">No upcoming reservations.</p>
+          )}
         </div>
 
         <div>
@@ -73,12 +98,21 @@ export default function ReservationsPage() {
             <Card key={entry.id} className="p-4 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <p className="font-semibold">{entry.customer?.firstName}</p>
-                <Badge variant={entry.status === 'WAITING' ? 'warning' : 'success'}>{entry.status}</Badge>
+                <Badge variant={entry.status === 'WAITING' ? 'warning' : 'success'}>
+                  {entry.status}
+                </Badge>
               </div>
               <p className="text-sm text-slate-500">Guests: {entry.guestCount}</p>
               <p className="text-sm text-slate-500">Est. Wait: {entry.estimatedWaitTime} mins</p>
               {entry.status === 'WAITING' && (
-                <Button variant="outline" size="sm" className="mt-4 w-full" onClick={() => handleSeatWaitlist(entry.id)}>Seat Guest</Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-4 w-full"
+                  onClick={() => handleSeatWaitlist(entry.id)}
+                >
+                  Seat Guest
+                </Button>
               )}
             </Card>
           ))}

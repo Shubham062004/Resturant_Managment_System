@@ -27,7 +27,7 @@ export const Modal: React.FC<ModalProps> = ({
   // Focus trap and ESC key handler
   useEffect(() => {
     if (!isOpen) return undefined;
-    
+
     previousFocus.current = document.activeElement as HTMLElement;
     document.body.style.overflow = 'hidden';
 
