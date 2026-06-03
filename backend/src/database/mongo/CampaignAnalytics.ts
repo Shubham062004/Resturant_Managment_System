@@ -22,7 +22,7 @@ const CampaignAnalyticsSchema: Schema = new Schema({
   lastCalculatedAt: { type: Date, default: Date.now },
 });
 
-export const CampaignAnalytics = mongoose.model<ICampaignAnalytics>(
+export const CampaignAnalytics = mongoose.models.CampaignAnalytics || mongoose.model<ICampaignAnalytics>(
   'CampaignAnalytics',
   CampaignAnalyticsSchema,
 );

@@ -82,6 +82,7 @@ const AddressesPage = React.lazy(() => import('../features/cart/pages/AddressesP
 
 // Auth Pages (Lazy)
 const LoginPage = React.lazy(() => import('../features/auth/pages/LoginPage'));
+const VerifyOtpPage = React.lazy(() => import('../features/auth/pages/VerifyOtpPage'));
 const RegisterPage = React.lazy(() => import('../features/auth/pages/RegisterPage'));
 const ForgotPasswordPage = React.lazy(() => import('../features/auth/pages/ForgotPasswordPage'));
 const ResetPasswordPage = React.lazy(() => import('../features/auth/pages/ResetPasswordPage'));
@@ -172,6 +173,14 @@ const AppRouter = () => {
               element={
                 <PublicRoute>
                   <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/verify-login-otp"
+              element={
+                <PublicRoute>
+                  <VerifyOtpPage />
                 </PublicRoute>
               }
             />

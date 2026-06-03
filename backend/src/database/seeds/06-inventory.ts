@@ -32,6 +32,9 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
       costPerUnit: Math.random() * 10 + 1,
       minStockLevel: 50,
       maxStockLevel: 500,
+      category: 'GENERAL',
+      minimumStock: 50,
+      reorderPoint: 50,
     });
   }
 

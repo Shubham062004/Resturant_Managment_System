@@ -22,7 +22,7 @@ const RecommendationEventSchema: Schema = new Schema(
   },
 );
 
-export const RecommendationEvent = mongoose.model<IRecommendationEvent>(
+export const RecommendationEvent = mongoose.models.RecommendationEvent || mongoose.model<IRecommendationEvent>(
   'RecommendationEvent',
   RecommendationEventSchema,
   'recommendation_events',

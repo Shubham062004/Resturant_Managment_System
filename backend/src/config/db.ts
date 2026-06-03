@@ -21,7 +21,7 @@ export const connectDatabases = async (): Promise<void> => {
     await mongoose.connect(env.MONGODB_URI);
     logger.info('✅ MongoDB database connected successfully.');
   } catch (error) {
-    logger.error('❌ Failed to establish dual-database connection sessions:', error);
+    logger.error(error, '❌ Failed to establish dual-database connection sessions:');
     process.exit(1);
   }
 };
@@ -32,6 +32,6 @@ export const disconnectDatabases = async (): Promise<void> => {
     await mongoose.disconnect();
     logger.info('🔌 Successfully closed database connections.');
   } catch (error) {
-    logger.error('❌ Error closing database connections:', error);
+    logger.error(error, '❌ Error closing database connections:');
   }
 };

@@ -39,7 +39,7 @@ const CheckoutEventSchema: Schema = new Schema(
   },
 );
 
-export const CheckoutEvent = mongoose.model<ICheckoutEvent>(
+export const CheckoutEvent = mongoose.models.CheckoutEvent || mongoose.model<ICheckoutEvent>(
   'CheckoutEvent',
   CheckoutEventSchema,
   'checkout_events',

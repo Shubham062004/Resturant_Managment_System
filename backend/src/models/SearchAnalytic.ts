@@ -20,7 +20,7 @@ const SearchAnalyticSchema: Schema = new Schema(
   },
 );
 
-export const SearchAnalytic = mongoose.model<ISearchAnalytic>(
+export const SearchAnalytic = mongoose.models.SearchAnalytic || mongoose.model<ISearchAnalytic>(
   'SearchAnalytic',
   SearchAnalyticSchema,
   'search_analytics',

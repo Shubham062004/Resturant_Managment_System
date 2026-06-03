@@ -8,125 +8,66 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
   await prisma.user.deleteMany();
 
   const salt = bcrypt.genSaltSync(10);
-  const hashes = {
-    super: bcrypt.hashSync('SuperAdmin@123', salt),
-    owner: bcrypt.hashSync('Owner@123', salt),
-    manager: bcrypt.hashSync('Manager@123', salt),
-    kitchen: bcrypt.hashSync('Kitchen@123', salt),
-    delivery: bcrypt.hashSync('Delivery@123', salt),
-    cashier: bcrypt.hashSync('Cashier@123', salt),
-    customer: bcrypt.hashSync('Customer@123', salt),
-  };
+  
+  // Specific Requested Credentials
+  const explicitUsers = [
+    { email: 'customer@ovenxpress.com', password: 'Customer@123', phone: '9000000001', role: Role.CUSTOMER, otpEnabled: false, firstName: 'Standard', lastName: 'Customer' },
+    { email: 'vipcustomer@ovenxpress.com', password: 'Customer@123', phone: '9000000002', role: Role.CUSTOMER, otpEnabled: false, firstName: 'VIP', lastName: 'Customer' },
+    { email: 'cashier@ovenxpress.com', password: 'Cashier@123', phone: '9000000010', role: Role.CASHIER, otpEnabled: true, firstName: 'Main', lastName: 'Cashier' },
+    { email: 'kitchen@ovenxpress.com', password: 'Kitchen@123', phone: '9000000011', role: Role.KITCHEN_STAFF, otpEnabled: true, firstName: 'Line', lastName: 'Cook' },
+    { email: 'chef@ovenxpress.com', password: 'Chef@123', phone: '9000000012', role: Role.HEAD_CHEF, otpEnabled: true, firstName: 'Head', lastName: 'Chef' },
+    { email: 'kitchenmanager@ovenxpress.com', password: 'KitchenManager@123', phone: '9000000013', role: Role.KITCHEN_MANAGER, otpEnabled: true, firstName: 'Kitchen', lastName: 'Manager' },
+    { email: 'driver@ovenxpress.com', password: 'Driver@123', phone: '9000000014', role: Role.DELIVERY_PARTNER, otpEnabled: true, firstName: 'Delivery', lastName: 'Partner' },
+    { email: 'deliverymanager@ovenxpress.com', password: 'DeliveryManager@123', phone: '9000000015', role: Role.DELIVERY_MANAGER, otpEnabled: true, firstName: 'Delivery', lastName: 'Manager' },
+    { email: 'branchmanager@ovenxpress.com', password: 'BranchManager@123', phone: '9000000016', role: Role.BRANCH_MANAGER, otpEnabled: true, firstName: 'Branch', lastName: 'Manager' },
+    { email: 'operations@ovenxpress.com', password: 'Operations@123', phone: '9000000017', role: Role.OPERATIONS_MANAGER, otpEnabled: true, firstName: 'Operations', lastName: 'Manager' },
+    { email: 'finance@ovenxpress.com', password: 'Finance@123', phone: '9000000018', role: Role.FINANCE_MANAGER, otpEnabled: true, firstName: 'Finance', lastName: 'Manager' },
+    { email: 'admin@ovenxpress.com', password: 'Admin@123', phone: '9000000019', role: Role.ADMIN, otpEnabled: true, firstName: 'System', lastName: 'Admin' },
+    { email: 'franchise@ovenxpress.com', password: 'Franchise@123', phone: '9000000020', role: Role.FRANCHISE_OWNER, otpEnabled: true, firstName: 'Franchise', lastName: 'Owner' },
+    { email: 'owner@ovenxpress.com', password: 'Owner@123', phone: '9000000021', role: Role.ORGANIZATION_OWNER, otpEnabled: true, firstName: 'Organization', lastName: 'Owner' },
+    { email: 'superadmin@ovenxpress.com', password: 'SuperAdmin@123', phone: '9000000022', role: Role.SUPER_ADMIN, otpEnabled: true, firstName: 'Super', lastName: 'Admin' },
+  ];
 
-  const usersToCreate = [];
-
-  // Super Admin
-  usersToCreate.push({
+  const usersToCreate = explicitUsers.map(u => ({
     id: randomUUID(),
-    email: 'superadmin@ovenxpress.com',
-    firstName: 'System',
-    lastName: 'Admin',
-    role: Role.SUPER_ADMIN,
-    passwordHash: hashes.super,
+    email: u.email,
+    firstName: u.firstName,
+    lastName: u.lastName,
+    phone: u.phone,
+    role: u.role,
+    otpEnabled: u.otpEnabled,
+    passwordHash: bcrypt.hashSync(u.password, salt),
+    organizationId: u.role === Role.SUPER_ADMIN ? null : orgId,
     isEmailVerified: true,
-  });
+    isPhoneVerified: true,
+  }));
 
-  // Owner
-  usersToCreate.push({
-    id: randomUUID(),
-    email: 'owner@ovenxpress.com',
-    firstName: 'Group',
-    lastName: 'Owner',
-    role: Role.ORGANIZATION_OWNER,
-    organizationId: orgId,
-    passwordHash: hashes.owner,
-    isEmailVerified: true,
-  });
+  // Arrays to return for other seeders
+  const managers = usersToCreate.filter(u => u.role === Role.BRANCH_MANAGER).map(u => u.id);
+  const kitchenStaff = usersToCreate.filter(u => u.role === Role.KITCHEN_STAFF || u.role === Role.HEAD_CHEF).map(u => u.id);
+  const deliveryStaff = usersToCreate.filter(u => u.role === Role.DELIVERY_PARTNER).map(u => u.id);
+  const cashiers = usersToCreate.filter(u => u.role === Role.CASHIER).map(u => u.id);
+  const customers = usersToCreate.filter(u => u.role === Role.CUSTOMER).map(u => u.id);
 
-  // 6 Branch Managers
-  const managers = [];
-  for (const branch of branches) {
-    const userId = randomUUID();
-    usersToCreate.push({
-      id: userId,
-      email: `manager.${branch.city.toLowerCase()}@ovenxpress.com`,
-      firstName: branch.city,
-      lastName: 'Manager',
-      role: Role.BRANCH_MANAGER,
-      organizationId: orgId,
-      passwordHash: hashes.manager,
-      isEmailVerified: true,
-    });
-    managers.push(userId);
+  // Generate a few extra customers and staff to ensure seeders have enough data to distribute
+  for (let i = 1; i <= 5; i++) {
+    const managerId = randomUUID();
+    usersToCreate.push({ id: managerId, email: `branch.mgr${i}@ovenxpress.com`, firstName: `Branch`, lastName: `Manager ${i}`, phone: `91000000${i}`, role: Role.BRANCH_MANAGER, otpEnabled: true, passwordHash: bcrypt.hashSync('Manager@123', salt), organizationId: orgId, isEmailVerified: true, isPhoneVerified: true });
+    managers.push(managerId);
+
+    const chefId = randomUUID();
+    usersToCreate.push({ id: chefId, email: `cook${i}@ovenxpress.com`, firstName: `Cook`, lastName: `${i}`, phone: `92000000${i}`, role: Role.KITCHEN_STAFF, otpEnabled: true, passwordHash: bcrypt.hashSync('Kitchen@123', salt), organizationId: orgId, isEmailVerified: true, isPhoneVerified: true });
+    kitchenStaff.push(chefId);
+
+    const driverId = randomUUID();
+    usersToCreate.push({ id: driverId, email: `rider${i}@ovenxpress.com`, firstName: `Rider`, lastName: `${i}`, phone: `93000000${i}`, role: Role.DELIVERY_PARTNER, otpEnabled: true, passwordHash: bcrypt.hashSync('Driver@123', salt), organizationId: orgId, isEmailVerified: true, isPhoneVerified: true });
+    deliveryStaff.push(driverId);
   }
 
-  // 15 Kitchen Staff
-  const kitchenStaff = [];
-  for (let i = 1; i <= 15; i++) {
-    const userId = randomUUID();
-    usersToCreate.push({
-      id: userId,
-      email: `kitchen${i}@ovenxpress.com`,
-      firstName: 'Chef',
-      lastName: `${i}`,
-      role: Role.KITCHEN_STAFF,
-      organizationId: orgId,
-      passwordHash: hashes.kitchen,
-      isEmailVerified: true,
-    });
-    kitchenStaff.push(userId);
-  }
-
-  // 20 Delivery Partners
-  const deliveryStaff = [];
   for (let i = 1; i <= 20; i++) {
-    const userId = randomUUID();
-    usersToCreate.push({
-      id: userId,
-      email: `driver${i}@ovenxpress.com`,
-      firstName: 'Rider',
-      lastName: `${i}`,
-      role: Role.DELIVERY_PARTNER,
-      organizationId: orgId,
-      passwordHash: hashes.delivery,
-      isEmailVerified: true,
-    });
-    deliveryStaff.push(userId);
-  }
-
-  // 10 Cashiers
-  const cashiers = [];
-  for (let i = 1; i <= 10; i++) {
-    const userId = randomUUID();
-    usersToCreate.push({
-      id: userId,
-      email: `cashier${i}@ovenxpress.com`,
-      firstName: 'Cashier',
-      lastName: `${i}`,
-      role: Role.CASHIER,
-      organizationId: orgId,
-      passwordHash: hashes.cashier,
-      isEmailVerified: true,
-    });
-    cashiers.push(userId);
-  }
-
-  // 100 Customers
-  const customers = [];
-  for (let i = 1; i <= 100; i++) {
-    const userId = randomUUID();
-    usersToCreate.push({
-      id: userId,
-      email: `customer${i}@test.com`,
-      firstName: 'Demo',
-      lastName: `Customer ${i}`,
-      phone: `+9198765${i.toString().padStart(5, '0')}`,
-      role: Role.CUSTOMER,
-      passwordHash: hashes.customer,
-      isEmailVerified: true,
-      isPhoneVerified: true,
-    });
-    customers.push(userId);
+    const custId = randomUUID();
+    usersToCreate.push({ id: custId, email: `guest${i}@test.com`, firstName: `Guest`, lastName: `${i}`, phone: `+9198000${i.toString().padStart(5, '0')}`, role: Role.CUSTOMER, otpEnabled: false, passwordHash: bcrypt.hashSync('Customer@123', salt), organizationId: null, isEmailVerified: true, isPhoneVerified: true });
+    customers.push(custId);
   }
 
   // Batch insert

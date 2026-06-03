@@ -20,7 +20,7 @@ const ProductViewEventSchema: Schema = new Schema(
   },
 );
 
-export const ProductViewEvent = mongoose.model<IProductViewEvent>(
+export const ProductViewEvent = mongoose.models.ProductViewEvent || mongoose.model<IProductViewEvent>(
   'ProductViewEvent',
   ProductViewEventSchema,
   'product_view_events',

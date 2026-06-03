@@ -20,6 +20,9 @@ import {
 export class AuthController {
   public static async register(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
+      // Force customer role for public registration
+      req.body.role = Role.CUSTOMER;
+      
       const user = await AuthService.registerUser(
         req.body,
         req.ip || '127.0.0.1',
@@ -38,7 +41,37 @@ export class AuthController {
 
   public static async login(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { accessToken, refreshToken, user } = await AuthService.loginUser(
+      const result = await AuthService.loginUser(
+        req.body,
+        req.ip || '127.0.0.1',
+        req.headers['user-agent'] || '',
+      );
+
+      if (result.requireOtp) {
+        res.status(200).json({
+          success: true,
+          data: { requireOtp: true, email: result.email, phone: result.phone },
+          message: result.message,
+        });
+        return;
+      }
+
+      res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+      res.cookie('accessToken', result.accessToken, accessTokenCookieOptions);
+
+      res.status(200).json({
+        success: true,
+        data: { user: result.user },
+        message: 'Authentication successful.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async verifyLoginOtp(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { accessToken, refreshToken, user } = await AuthService.verifyLoginOtpUser(
         req.body,
         req.ip || '127.0.0.1',
         req.headers['user-agent'] || '',
@@ -50,7 +83,7 @@ export class AuthController {
       res.status(200).json({
         success: true,
         data: { user },
-        message: 'Authentication successful.',
+        message: 'OTP verified. Authentication successful.',
       });
     } catch (error) {
       next(error);
@@ -361,7 +394,8 @@ export class AuthController {
         if (user) identifier.userId = user.id;
       }
 
-      const otp = await OtpService.generateOtp(type as OtpType, identifier);
+      const otp = OtpService.generateOtp();
+      await OtpService.saveOtp(identifier, otp);
 
       // Trigger Dispatch
       if (email) {
@@ -400,10 +434,10 @@ export class AuthController {
         if (user) identifier.userId = user.id;
       }
 
-      const verification = await OtpService.verifyOtp(type as OtpType, identifier, code);
+      const isValid = await OtpService.verifyOtp(identifier, code);
 
-      if (!verification.success) {
-        return next(new AppError(verification.message, 400));
+      if (!isValid) {
+        return next(new AppError('Invalid or expired OTP', 400));
       }
 
       // If verifying email registration OTP, auto-verify user email/phone
@@ -424,7 +458,7 @@ export class AuthController {
       res.status(200).json({
         success: true,
         data: null,
-        message: verification.message,
+        message: 'OTP verified successfully.',
       });
     } catch (error) {
       next(error);

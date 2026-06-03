@@ -88,7 +88,7 @@ export class OrdersService {
       getIO().to('staff_room').emit('new_order', order);
       getIO().to('staff_room').emit('kds_new_order', order.kitchenOrder);
     } catch (e) {
-      logger.error('Socket error emitting new_order', e);
+      logger.error(e, 'Socket error emitting new_order');
     }
 
     return order;
@@ -163,7 +163,7 @@ export class OrdersService {
     try {
       getIO().to(`order_${orderId}`).emit('order_status_update', updated);
     } catch (e) {
-      logger.error('Socket error emitting order_status_update', e);
+      logger.error(e, 'Socket error emitting order_status_update');
     }
 
     return updated;
@@ -204,7 +204,7 @@ export class OrdersService {
       getIO().to(`order_${orderId}`).emit('order_status_update', updated);
       getIO().to('staff_room').emit('order_cancelled', updated);
     } catch (e) {
-      logger.error('Socket error emitting order_cancelled', e);
+      logger.error(e, 'Socket error emitting order_cancelled');
     }
 
     return updated;

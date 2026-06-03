@@ -33,4 +33,4 @@ ChatLogSchema.pre('save', function(next) {
   next();
 });
 
-export const ChatLog = mongoose.model<IChatLog>('ChatLog', ChatLogSchema);
+export const ChatLog = mongoose.models.ChatLog || mongoose.model<IChatLog>('ChatLog', ChatLogSchema);

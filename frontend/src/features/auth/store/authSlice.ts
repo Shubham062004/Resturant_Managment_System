@@ -32,11 +32,29 @@ export const login = createAsyncThunk(
   async (credentials: Record<string, string>, { rejectWithValue }) => {
     try {
       const response = await apiClient.post('/auth/login', credentials);
+      if (response.data.data.requireOtp) {
+        return { requireOtp: true, email: response.data.data.email, phone: response.data.data.phone };
+      }
+      const { user } = response.data.data;
+      return { requireOtp: false, user };
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const errorMsg = error.response?.data?.error?.message || 'Login failed';
+      return rejectWithValue(errorMsg);
+    }
+  },
+);
+
+export const verifyOtp = createAsyncThunk(
+  'auth/verifyOtp',
+  async (credentials: Record<string, string>, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.post('/auth/verify-login-otp', credentials);
       const { user } = response.data.data;
       return { user };
     } catch (err: unknown) {
       const error = err as { response?: { data?: { error?: { message?: string } } } };
-      const errorMsg = error.response?.data?.error?.message || 'Login failed';
+      const errorMsg = error.response?.data?.error?.message || 'OTP verification failed';
       return rejectWithValue(errorMsg);
     }
   },
@@ -90,6 +108,9 @@ export const logoutAllDevices = createAsyncThunk('auth/logoutAll', async () => {
 export const refreshSession = createAsyncThunk(
   'auth/refreshSession',
   async (_, { rejectWithValue }) => {
+    if (!localStorage.getItem('hasSession')) {
+      return rejectWithValue('No active session found locally');
+    }
     try {
       await apiClient.post('/auth/refresh');
       return true;
@@ -144,6 +165,7 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.authStatus = 'idle';
+      localStorage.removeItem('hasSession');
     },
   },
   extraReducers: (builder) => {
@@ -154,10 +176,27 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.authStatus = 'succeeded';
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
+        if (!action.payload.requireOtp) {
+          state.user = action.payload.user as User;
+          state.isAuthenticated = true;
+          localStorage.setItem('hasSession', 'true');
+        }
       })
       .addCase(login.rejected, (state, action) => {
+        state.authStatus = 'failed';
+        state.error = action.payload as string;
+      })
+      .addCase(verifyOtp.pending, (state) => {
+        state.authStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(verifyOtp.fulfilled, (state, action) => {
+        state.authStatus = 'succeeded';
+        state.user = action.payload.user as User;
+        state.isAuthenticated = true;
+        localStorage.setItem('hasSession', 'true');
+      })
+      .addCase(verifyOtp.rejected, (state, action) => {
         state.authStatus = 'failed';
         state.error = action.payload as string;
       })
@@ -178,19 +217,23 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         state.authStatus = 'idle';
+        localStorage.removeItem('hasSession');
       })
       .addCase(logoutAllDevices.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.authStatus = 'idle';
+        localStorage.removeItem('hasSession');
       })
       .addCase(refreshSession.fulfilled, (state) => {
         state.isAuthenticated = true;
+        localStorage.setItem('hasSession', 'true');
       })
       .addCase(refreshSession.rejected, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.authStatus = 'idle';
+        localStorage.removeItem('hasSession');
       })
       .addCase(fetchProfile.pending, (state) => {
         state.error = null;

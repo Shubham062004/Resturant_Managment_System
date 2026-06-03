@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { prisma } from '../../config/db';
+import { PaymentStatus } from '@prisma/client';
 import AppError from '../../utils/appError';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
@@ -113,10 +114,9 @@ export class PaymentsService {
         return;
       }
 
-      // Update Payment Status
       await prisma.payment.updateMany({
         where: { transactionId: paymentIntent.id },
-        data: { status: 'SUCCESS' },
+        data: { status: PaymentStatus.PAID },
       });
 
       // Update OrderDraft Status
@@ -182,10 +182,9 @@ export class PaymentsService {
       }
     } else if (event.type === 'payment_intent.payment_failed') {
       const paymentIntent = event.data.object as any;
-      
       await prisma.payment.updateMany({
         where: { transactionId: paymentIntent.id },
-        data: { status: 'FAILED' },
+        data: { status: PaymentStatus.UNPAID },
       });
     }
 

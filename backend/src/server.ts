@@ -48,19 +48,19 @@ const startServer = async () => {
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
   } catch (error) {
-    logger.error('❌ Root bootstrapper crashed during startup sequence:', error);
+    logger.error(error, '❌ Root bootstrapper crashed during startup sequence:');
     process.exit(1);
   }
 };
 
 // Handle unhandled exceptions globally
 process.on('uncaughtException', (err) => {
-  logger.error('💥 UNCAUGHT EXCEPTION! Shutting down server...', err);
+  logger.error(err, '💥 UNCAUGHT EXCEPTION! Shutting down server...');
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error('💥 UNHANDLED REJECTION! Shutting down server...', { reason, promise });
+  logger.error({ reason, promise }, '💥 UNHANDLED REJECTION! Shutting down server...');
   process.exit(1);
 });
 

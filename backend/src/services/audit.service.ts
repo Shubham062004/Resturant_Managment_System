@@ -44,7 +44,7 @@ export class AuditService {
       });
       logger.info(`[Audit Log] Action [${action}] recorded for User [${userId}]`);
     } catch (error) {
-      logger.error('[Audit Service] Failed to write audit log in MongoDB:', error);
+      logger.error(error, '[Audit Service] Failed to write audit log in MongoDB:');
     }
   }
 
@@ -70,7 +70,7 @@ export class AuditService {
       });
       logger.info(`[Session Service] User [${userId}] session registered (${device} / ${browser})`);
     } catch (error) {
-      logger.error('[Audit Service] Failed to register session in MongoDB:', error);
+      logger.error(error, '[Audit Service] Failed to register session in MongoDB:');
     }
   }
 
@@ -87,7 +87,7 @@ export class AuditService {
         `[Session Service] Session terminated for token hash starting with ${tokenHash.slice(0, 10)}`,
       );
     } catch (error) {
-      logger.error('[Audit Service] Failed to terminate session in MongoDB:', error);
+      logger.error(error, '[Audit Service] Failed to terminate session in MongoDB:');
     }
   }
 
@@ -102,7 +102,7 @@ export class AuditService {
       );
       logger.info(`[Session Service] All active sessions terminated for User [${userId}]`);
     } catch (error) {
-      logger.error('[Audit Service] Failed to terminate all user sessions in MongoDB:', error);
+      logger.error(error, '[Audit Service] Failed to terminate all user sessions in MongoDB:');
     }
   }
 }

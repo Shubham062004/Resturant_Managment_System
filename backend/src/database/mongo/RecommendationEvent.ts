@@ -20,4 +20,4 @@ const RecommendationEventSchema = new Schema<IRecommendationEvent>({
   metadata: { type: Schema.Types.Mixed }
 });
 
-export const RecommendationEvent = mongoose.model<IRecommendationEvent>('RecommendationEvent', RecommendationEventSchema);
+export const RecommendationEvent = mongoose.models.RecommendationEvent || mongoose.model<IRecommendationEvent>('RecommendationEvent', RecommendationEventSchema);

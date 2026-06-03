@@ -20,4 +20,4 @@ const PredictionLogSchema = new Schema<IPredictionLog>({
   generatedAt: { type: Date, default: Date.now }
 });
 
-export const PredictionLog = mongoose.model<IPredictionLog>('PredictionLog', PredictionLogSchema);
+export const PredictionLog = mongoose.models.PredictionLog || mongoose.model<IPredictionLog>('PredictionLog', PredictionLogSchema);

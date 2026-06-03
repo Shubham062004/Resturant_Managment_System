@@ -70,7 +70,17 @@ export const LoginPage: React.FC = () => {
 
     const result = await dispatch(login(payload));
     if (login.fulfilled.match(result)) {
-      navigate(from, { replace: true });
+      if (result.payload.requireOtp) {
+        navigate('/verify-login-otp', {
+          state: {
+            email: result.payload.email,
+            phone: result.payload.phone,
+            from: from,
+          },
+        });
+      } else {
+        navigate(from, { replace: true });
+      }
     }
   };
 

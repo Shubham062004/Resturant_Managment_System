@@ -7,6 +7,7 @@ import AppError from '../../utils/appError';
 import { Role } from '@prisma/client';
 import { EmailService } from '../../services/email.service';
 import { AuditService } from '../../services/audit.service';
+import { OtpService } from '../../services/otp.service';
 
 export interface TokenPayload {
   id: string;
@@ -109,7 +110,7 @@ export class AuthService {
   }
 
   /**
-   * Login standard credentials and return session tokens
+   * Login standard credentials and conditionally issue OTP or session tokens
    */
   public static async loginUser(data: any, ipAddress: string, userAgent: string) {
     const { email, phone, password } = data;
@@ -119,6 +120,7 @@ export class AuthService {
     });
 
     if (!user || !user.passwordHash) {
+      if (user) await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'FAILED', error: 'Incorrect password' });
       throw new AppError('Incorrect credentials. Access denied.', 401);
     }
 
@@ -129,7 +131,77 @@ export class AuthService {
     // Compare passwords
     const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordCorrect) {
+      await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'FAILED', error: 'Incorrect password' });
       throw new AppError('Incorrect credentials. Access denied.', 401);
+    }
+
+    // Update lastLoginAt
+    await prisma.user.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+
+    // OTP Requirement Check for Staff
+    if (user.role !== Role.CUSTOMER) {
+      // Generate & Dispatch OTP
+      const otp = OtpService.generateOtp();
+      await OtpService.saveOtp({ userId: user.id, email: user.email, phone: user.phone || undefined }, otp);
+      await OtpService.dispatchOtp(user.phone || user.email, otp, 'MOCK'); // or SMS provider
+      
+      await AuditService.writeLog(user.id, 'PASSWORD_RESET', ipAddress, userAgent, { status: 'OTP_REQUESTED' }); // using existing types or custom
+
+      return {
+        requireOtp: true,
+        email: user.email,
+        phone: user.phone,
+        message: 'OTP sent to your registered device.',
+      };
+    }
+
+    // Generate tokens for Customers directly
+    const accessToken = this.generateAccessToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
+    const refreshToken = await this.generateRefreshToken(user.id);
+    const tokenHash = this.hashToken(refreshToken);
+
+    // Write login session to MongoDB & audit logs
+    await AuditService.registerSession(user.id, ipAddress, userAgent, tokenHash);
+    await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'SUCCESS' });
+
+    return {
+      requireOtp: false,
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+      },
+    };
+  }
+
+  /**
+   * Verifies staff OTP and issues JWT
+   */
+  public static async verifyLoginOtpUser(data: any, ipAddress: string, userAgent: string) {
+    const { email, phone, otp } = data;
+
+    const user = await prisma.user.findFirst({
+      where: email ? { email } : { phone },
+    });
+
+    if (!user) {
+      throw new AppError('User not found.', 404);
+    }
+
+    const isValid = await OtpService.verifyOtp({ email, phone }, otp);
+    
+    if (!isValid) {
+      await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'FAILED', error: 'Invalid OTP' });
+      throw new AppError('Invalid or expired OTP.', 401);
     }
 
     // Generate tokens
@@ -141,9 +213,8 @@ export class AuthService {
     const refreshToken = await this.generateRefreshToken(user.id);
     const tokenHash = this.hashToken(refreshToken);
 
-    // Write login session to MongoDB & audit logs
     await AuditService.registerSession(user.id, ipAddress, userAgent, tokenHash);
-    await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent);
+    await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'SUCCESS' });
 
     return {
       accessToken,

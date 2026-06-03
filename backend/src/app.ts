@@ -52,12 +52,13 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms', {
     stream: {
-      write: (message: string) => logger.http(message.trim()),
+      write: (message: string) => logger.info(message.trim()),
     },
   }),
 );
 
 // 2. Health Monitoring Route
+app.use('/health', healthRouter);
 app.use('/api/v1/health', healthRouter);
 app.use('/api/health', healthRouter);
 

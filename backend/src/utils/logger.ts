@@ -1,13 +1,13 @@
 import pino from 'pino';
 import { Logtail } from '@logtail/node';
-import { LogtailTransport } from '@logtail/pino';
+import LogtailTransport from '@logtail/pino';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 let logtailTransport;
 if (isProduction && process.env.LOGTAIL_SOURCE_TOKEN) {
   const logtail = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN);
-  logtailTransport = new LogtailTransport(logtail);
+  logtailTransport = (LogtailTransport as any)(logtail);
 }
 
 const streams: any[] = [];

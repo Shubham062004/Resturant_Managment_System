@@ -16,7 +16,7 @@ export class AnalyticsController {
           where: {
             ...branchFilter,
             createdAt: { gte: today },
-            status: { in: ['DELIVERED', 'PICKED_UP', 'COMPLETED'] },
+            status: { in: ['DELIVERED'] },
           },
         }),
         prisma.order.count({
@@ -34,7 +34,7 @@ export class AnalyticsController {
       res.status(200).json({
         status: 'success',
         data: {
-          revenueToday: revenueToday._sum.totalAmount || 0,
+          revenueToday: revenueToday._sum?.totalAmount || 0,
           totalOrdersToday: totalOrders,
           activeStaffCount: activeStaff,
           activeCustomers: 45, // mock data for now
@@ -69,7 +69,7 @@ export class AnalyticsController {
             where: {
               ...branchFilter,
               createdAt: { gte: day, lt: nextDay },
-              status: { in: ['DELIVERED', 'PICKED_UP', 'COMPLETED'] },
+              status: { in: ['DELIVERED'] },
             },
           });
 
@@ -121,7 +121,7 @@ export class AnalyticsController {
 
       const items = await prisma.orderItem.groupBy({
         by: ['productId'],
-        _sum: { quantity: true, subtotal: true },
+        _sum: { quantity: true },
         orderBy: { _sum: { quantity: 'desc' } },
         take: 8,
       });
@@ -132,7 +132,7 @@ export class AnalyticsController {
           return {
             productName: product?.name || 'Unknown Product',
             quantity: item._sum.quantity || 0,
-            revenue: item._sum.subtotal ? Number(item._sum.subtotal) : 0,
+            revenue: 0,
             category: product?.categoryId || 'Unknown',
           };
         }),

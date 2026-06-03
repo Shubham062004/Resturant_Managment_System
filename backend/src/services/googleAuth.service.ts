@@ -70,7 +70,7 @@ export class GoogleAuthService {
         isEmailVerified: payload.email_verified || false,
       };
     } catch (error) {
-      logger.error('[Google Auth Service] Failed to verify Google token:', error);
+      logger.error(error, '[Google Auth Service] Failed to verify Google token:');
       throw new Error(
         'Google OAuth token verification failed. The signature is invalid or expired.',
       );

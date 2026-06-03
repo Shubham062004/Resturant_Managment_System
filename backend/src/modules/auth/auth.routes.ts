@@ -23,6 +23,7 @@ router.use(sanitizeInput);
 
 router.post('/register', validate({ body: registerSchema }), AuthController.register);
 router.post('/login', authRateLimiter, validate({ body: loginSchema }), AuthController.login);
+router.post('/verify-login-otp', authRateLimiter, AuthController.verifyLoginOtp);
 router.post('/refresh', AuthController.refresh);
 router.post('/logout', AuthController.logout);
 router.post('/logout-all', authGuard, AuthController.logoutAll);

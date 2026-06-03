@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, TableStatus } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
 export async function seedPOS(prisma: PrismaClient, branches: any[], cashiers: string[]) {
@@ -13,7 +13,7 @@ export async function seedPOS(prisma: PrismaClient, branches: any[], cashiers: s
       terminals.push({
         id: randomUUID(),
         branchId: branch.id,
-        name: `Terminal ${i} - ${branch.name}`,
+        terminalName: `Terminal ${i} - ${branch.name}`,
         deviceInfo: JSON.stringify({ os: 'iOS', type: 'iPad' }),
       });
     }
@@ -23,9 +23,9 @@ export async function seedPOS(prisma: PrismaClient, branches: any[], cashiers: s
       tables.push({
         id: randomUUID(),
         branchId: branch.id,
-        number: i,
+        number: i.toString(),
         capacity: i % 2 === 0 ? 4 : 2,
-        status: 'AVAILABLE'
+        status: TableStatus.AVAILABLE
       });
     }
   }

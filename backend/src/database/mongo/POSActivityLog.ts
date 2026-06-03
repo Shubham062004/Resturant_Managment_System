@@ -20,7 +20,7 @@ POSActivityLogSchema.index({ terminalId: 1, timestamp: -1 });
 POSActivityLogSchema.index({ cashierId: 1, timestamp: -1 });
 POSActivityLogSchema.index({ action: 1 });
 
-export const POSActivityLog = mongoose.model<IPOSActivityLog>(
+export const POSActivityLog = mongoose.models.POSActivityLog || mongoose.model<IPOSActivityLog>(
   'POSActivityLog',
   POSActivityLogSchema,
 );

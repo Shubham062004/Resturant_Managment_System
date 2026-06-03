@@ -20,10 +20,14 @@ const processRefreshQueue = (success: boolean) => {
 };
 
 const refreshAccessToken = async (): Promise<boolean> => {
+  if (!localStorage.getItem('hasSession')) {
+    return false;
+  }
   try {
     await apiClient.post('/auth/refresh');
     return true;
   } catch {
+    localStorage.removeItem('hasSession');
     return false;
   }
 };
@@ -68,7 +72,7 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       }
 
-      if (window.location.pathname !== '/login') {
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
         window.location.href = '/login';
       }
     }

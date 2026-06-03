@@ -16,4 +16,4 @@ const DeliveryEventSchema: Schema = new Schema({
   timestamp: { type: Date, default: Date.now, index: true },
 });
 
-export const DeliveryEvent = mongoose.model<IDeliveryEvent>('DeliveryEvent', DeliveryEventSchema);
+export const DeliveryEvent = mongoose.models.DeliveryEvent || mongoose.model<IDeliveryEvent>('DeliveryEvent', DeliveryEventSchema);

@@ -905,7 +905,7 @@ export class CatalogService {
         },
       });
     } catch (err) {
-      logger.error('Failed to update rating averages for product/restaurant:', err);
+      logger.error(err, 'Failed to update rating averages for product/restaurant:');
     }
   }
 }

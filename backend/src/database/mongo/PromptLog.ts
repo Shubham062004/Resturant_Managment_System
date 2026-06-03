@@ -34,4 +34,4 @@ const PromptLogSchema = new Schema<IPromptLog>({
   timestamp: { type: Date, default: Date.now }
 });
 
-export const PromptLog = mongoose.model<IPromptLog>('PromptLog', PromptLogSchema);
+export const PromptLog = mongoose.models.PromptLog || mongoose.model<IPromptLog>('PromptLog', PromptLogSchema);

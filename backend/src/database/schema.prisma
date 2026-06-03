@@ -38,6 +38,11 @@ model User {
   deliveryPartner         DeliveryPartner?
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
+  
+  // Auth Tracking
+  otpEnabled              Boolean                  @default(false)
+  lastLoginAt             DateTime?
+  createdById             String?
 
   posOrders   POSOrder[]
   cashDrawers CashDrawer[]
@@ -54,20 +59,18 @@ model User {
 
 enum Role {
   CUSTOMER
-  ADMIN
+  CASHIER
   KITCHEN_STAFF
   HEAD_CHEF
   KITCHEN_MANAGER
   DELIVERY_PARTNER
   DELIVERY_MANAGER
-  CASHIER
   BRANCH_MANAGER
   OPERATIONS_MANAGER
   FINANCE_MANAGER
-  ORGANIZATION_OWNER
+  ADMIN
   FRANCHISE_OWNER
-  PLATFORM_ADMIN
-  AUDITOR
+  ORGANIZATION_OWNER
   SUPER_ADMIN
 }
 

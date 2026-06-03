@@ -27,11 +27,6 @@ export const RegisterPage: React.FC = () => {
 
   const roleOptions = [
     { label: 'Customer', value: 'CUSTOMER' },
-    { label: 'Administrator', value: 'ADMIN' },
-    { label: 'Kitchen Staff', value: 'KITCHEN_STAFF' },
-    { label: 'Delivery Partner', value: 'DELIVERY_PARTNER' },
-    { label: 'Cashier / Front House', value: 'CASHIER' },
-    { label: 'Super Admin', value: 'SUPER_ADMIN' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,13 +134,6 @@ export const RegisterPage: React.FC = () => {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             prefixIcon={<Phone size={16} />}
-          />
-
-          <Select
-            label="System Role"
-            options={roleOptions}
-            value={role}
-            onChange={(val) => setRole(val as string)}
           />
 
           <Input

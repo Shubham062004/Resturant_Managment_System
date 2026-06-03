@@ -24,7 +24,7 @@ const AdminNotificationSchema: Schema = new Schema(
   },
 );
 
-export const AdminNotification = mongoose.model<IAdminNotification>(
+export const AdminNotification = mongoose.models.AdminNotification || mongoose.model<IAdminNotification>(
   'AdminNotification',
   AdminNotificationSchema,
 );

@@ -17,7 +17,7 @@ describe('OrdersService', () => {
     // Mock the transaction
     prismaMock.$transaction.mockResolvedValue(mockOrder as any);
 
-    const result = await OrdersService.createOrder({
+    const result = await OrdersService.createOrderFromCart('u1', {
       userId: 'user-1',
       branchId: 'branch-1',
       orderType: 'DELIVERY',

@@ -22,4 +22,4 @@ const AuditLogSchema: Schema = new Schema(
   },
 );
 
-export const AuditLog = mongoose.model<IAuditLog>('AuditLog', AuditLogSchema);
+export const AuditLog = mongoose.models.AuditLog || mongoose.model<IAuditLog>('AuditLog', AuditLogSchema);

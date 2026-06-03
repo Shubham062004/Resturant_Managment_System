@@ -22,4 +22,4 @@ const AIAnalyticsSchema = new Schema<IAIAnalytics>({
   updatedAt: { type: Date, default: Date.now }
 });
 
-export const AIAnalytics = mongoose.model<IAIAnalytics>('AIAnalytics', AIAnalyticsSchema);
+export const AIAnalytics = mongoose.models.AIAnalytics || mongoose.model<IAIAnalytics>('AIAnalytics', AIAnalyticsSchema);

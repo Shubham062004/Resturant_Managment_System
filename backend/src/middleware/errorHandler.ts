@@ -22,7 +22,7 @@ export const errorHandler = (
 
   // Log deep trace internally for critical errors
   if (err.statusCode === 500) {
-    logger.error(`💥 CRITICAL ERROR LOG: ${err.message}`, { stack: err.stack });
+    logger.error({ stack: err.stack }, `💥 CRITICAL ERROR LOG: ${err.message}`);
   } else {
     logger.warn(`Operational Warn [${err.statusCode}] - ${err.message}`);
   }
