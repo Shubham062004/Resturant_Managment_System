@@ -48,6 +48,7 @@ const StaffManagementPage = React.lazy(() => import('../features/admin/pages/Sta
 const AnalyticsDashboardPage = React.lazy(
   () => import('../features/analytics/pages/AnalyticsDashboardPage'),
 );
+const AdminAIInsightsPage = React.lazy(() => import('../features/ai/pages/AdminAIInsightsPage'));
 
 // Super Admin Pages
 const SuperAdminLayout = React.lazy(
@@ -396,7 +397,10 @@ const AppRouter = () => {
               }
             >
               <Route path="/admin" element={<DashboardPage />} />
-              <Route path="/analytics" element={<AnalyticsDashboardPage />} />
+              <Route path="customers" element={<div>Customers Page</div>} />
+              <Route path="analytics" element={<AnalyticsDashboardPage />} />
+              <Route path="ai-insights" element={<AdminAIInsightsPage />} />
+              <Route path="settings" element={<div>Settings Page</div>} />
               <Route path="/admin/staff" element={<StaffManagementPage />} />
               {/* Other admin routes placeholder */}
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />

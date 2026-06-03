@@ -21,6 +21,10 @@ import platformReducer from '../features/super-admin/store/platformSlice';
 import notificationReducer from '../features/notifications/store/notificationSlice';
 import menuReducer from '../features/menu/store/menuSlice';
 import analyticsReducer from '../features/analytics/store/analyticsSlice';
+import aiReducer from '../features/ai/store/aiSlice';
+import recommendationReducer from '../features/ai/store/recommendationSlice';
+import assistantReducer from '../features/ai/store/assistantSlice';
+import forecastReducer from '../features/ai/store/forecastSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -45,6 +49,10 @@ export const rootReducer = combineReducers({
   organizations: organizationReducer,
   platform: platformReducer,
   notifications: notificationReducer,
+  ai: aiReducer,
+  recommendation: recommendationReducer,
+  assistant: assistantReducer,
+  forecast: forecastReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
