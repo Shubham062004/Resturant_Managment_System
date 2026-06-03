@@ -5,12 +5,7 @@ import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import EmptyState from '../../../shared/components/ui/EmptyState';
 import { useToast } from '../../../shared/components/ui/Toast';
-import {
-  useCart,
-  useAddresses,
-  useValidateCoupon,
-  type Address,
-} from '../store/cartQueries';
+import { useCart, useAddresses, useValidateCoupon, type Address } from '../store/cartQueries';
 import { useAppSelector } from '../../../app/store';
 import { Tag, MapPin, CreditCard, CheckCircle2 } from 'lucide-react';
 

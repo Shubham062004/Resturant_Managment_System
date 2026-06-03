@@ -25,7 +25,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
           ref={ref as React.Ref<HTMLDivElement>}
           className={`${baseStyles} ${variants[variant]} ${className}`}
           {...hoverScalePreset}
-          {...(props as React.HTMLAttributes<HTMLDivElement>)}
+          {...(props as any)}
         >
           {children}
         </motion.div>

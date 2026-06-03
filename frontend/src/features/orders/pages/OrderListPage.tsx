@@ -15,15 +15,24 @@ export default function OrderListPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'PLACED': return 'primary';
-      case 'ACCEPTED': return 'info';
-      case 'PREPARING': return 'warning';
-      case 'READY': return 'success';
-      case 'OUT_FOR_DELIVERY': return 'info';
-      case 'DELIVERED': return 'success';
-      case 'CANCELLED': return 'danger';
-      case 'REFUNDED': return 'secondary';
-      default: return 'default';
+      case 'PLACED':
+        return 'primary';
+      case 'ACCEPTED':
+        return 'info';
+      case 'PREPARING':
+        return 'warning';
+      case 'READY':
+        return 'success';
+      case 'OUT_FOR_DELIVERY':
+        return 'info';
+      case 'DELIVERED':
+        return 'success';
+      case 'CANCELLED':
+        return 'danger';
+      case 'REFUNDED':
+        return 'secondary';
+      default:
+        return 'default';
     }
   };
 
@@ -37,7 +46,7 @@ export default function OrderListPage() {
       )}
 
       <div className="space-y-4">
-        {orders.map((order) => (
+        {orders.map((order: any) => (
           <Card key={order.id} className="bg-surface/50 border-border/50">
             <CardHeader className="flex flex-row justify-between items-center">
               <div>
@@ -53,7 +62,9 @@ export default function OrderListPage() {
                 <span className="text-muted-foreground">
                   {order.items.length} item(s) from {order.restaurant?.name || 'Oven Xpress'}
                 </span>
-                <span className="font-bold text-white">${Number(order.totalAmount).toFixed(2)}</span>
+                <span className="font-bold text-white">
+                  ${Number(order.totalAmount).toFixed(2)}
+                </span>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">

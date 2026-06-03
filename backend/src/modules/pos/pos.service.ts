@@ -1,7 +1,7 @@
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
-import { OrderStatus, OrderType, POSOrderStatus, POSPaymentMethod } from '@prisma/client';
+import { OrderStatus } from '@prisma/client';
 import { InventoryService } from '../inventory/inventory.service';
 import { POSActivityLog } from '../../database/mongo/POSActivityLog';
 import { POSAnalyticsEvent } from '../../database/mongo/POSAnalyticsEvent';
@@ -17,7 +17,7 @@ export class POSService {
 
   public static async startShift(cashierId: string, terminalId: string, openingAmount: number) {
     const activeDrawer = await prisma.cashDrawer.findFirst({
-      where: { terminalId, status: 'OPEN' }
+      where: { terminalId, status: 'OPEN' },
     });
 
     if (activeDrawer) {
@@ -30,12 +30,15 @@ export class POSService {
         cashierId,
         openingAmount,
         currentBalance: openingAmount,
-      }
+      },
     });
   }
 
   public static async endShift(drawerId: string, closingAmount: number, notes?: string) {
-    const drawer = await prisma.cashDrawer.findUnique({ where: { id: drawerId }, include: { terminal: true } });
+    const drawer = await prisma.cashDrawer.findUnique({
+      where: { id: drawerId },
+      include: { terminal: true },
+    });
     if (!drawer) throw new AppError('Drawer not found.', 404);
     if (drawer.status === 'CLOSED') throw new AppError('Shift already closed.', 400);
 
@@ -45,8 +48,8 @@ export class POSService {
         closingAmount,
         status: 'CLOSED',
         closedAt: new Date(),
-        notes
-      }
+        notes,
+      },
     });
 
     await POSAnalyticsEvent.create({
@@ -54,7 +57,11 @@ export class POSService {
       branchId: drawer.terminal.branchId,
       cashierId: drawer.cashierId,
       eventType: 'SHIFT_ENDED',
-      metrics: { expected: Number(drawer.currentBalance), actual: closingAmount, variance: closingAmount - Number(drawer.currentBalance) }
+      metrics: {
+        expected: Number(drawer.currentBalance),
+        actual: closingAmount,
+        variance: closingAmount - Number(drawer.currentBalance),
+      },
     });
 
     return updated;
@@ -66,7 +73,7 @@ export class POSService {
 
     // Calculate totals
     const products = await prisma.product.findMany({
-      where: { id: { in: data.items.map((i: any) => i.productId) } }
+      where: { id: { in: data.items.map((i: any) => i.productId) } },
     });
 
     let subtotal = 0;
@@ -74,11 +81,11 @@ export class POSService {
     const kitchenTasksForCreate: any[] = [];
 
     for (const item of data.items) {
-      const product = products.find(p => p.id === item.productId);
+      const product = products.find((p) => p.id === item.productId);
       if (!product) continue;
       // In reality, match variant price if present. Fallback to basePrice.
       subtotal += Number(product.basePrice) * item.quantity;
-      
+
       orderItemsForCreate.push({
         productId: item.productId,
         variantId: item.variantId,
@@ -89,7 +96,7 @@ export class POSService {
       kitchenTasksForCreate.push({
         productId: item.productId,
         quantity: item.quantity,
-        notes: item.notes
+        notes: item.notes,
       });
     }
 
@@ -115,11 +122,11 @@ export class POSService {
           create: {
             priority: 'MEDIUM',
             status: 'QUEUED',
-            tasks: { create: kitchenTasksForCreate }
-          }
-        }
+            tasks: { create: kitchenTasksForCreate },
+          },
+        },
       },
-      include: { items: true, kitchenOrder: true }
+      include: { items: true, kitchenOrder: true },
     });
 
     const posOrder = await prisma.pOSOrder.create({
@@ -127,9 +134,9 @@ export class POSService {
         terminalId: terminal.id,
         cashierId,
         orderId: coreOrder.id,
-        status: 'OPEN'
+        status: 'OPEN',
       },
-      include: { order: { include: { items: true, kitchenOrder: true } } }
+      include: { order: { include: { items: true, kitchenOrder: true } } },
     });
 
     getIO().to(`branch_${terminal.branchId}`).emit('pos-order-created', posOrder);
@@ -144,15 +151,15 @@ export class POSService {
         order: { include: { items: { include: { product: true } }, table: true } },
         payments: true,
         receipt: true,
-        terminal: true
-      }
+        terminal: true,
+      },
     });
   }
 
   public static async processPayment(cashierId: string, posOrderId: string, payments: any[]) {
     const posOrder = await prisma.pOSOrder.findUnique({
       where: { id: posOrderId },
-      include: { order: { include: { kitchenOrder: true } }, terminal: true, payments: true }
+      include: { order: { include: { kitchenOrder: true } }, terminal: true, payments: true },
     });
 
     if (!posOrder) throw new AppError('POS Order not found', 404);
@@ -165,29 +172,48 @@ export class POSService {
     if (existingPaymentsTotal + incomingTotal < requiredTotal) {
       // It's a partial payment
       await prisma.$transaction(
-        payments.map(p => prisma.pOSPayment.create({
-          data: { posOrderId, method: p.method, amount: p.amount, transactionReference: p.transactionReference }
-        }))
+        payments.map((p) =>
+          prisma.pOSPayment.create({
+            data: {
+              posOrderId,
+              method: p.method,
+              amount: p.amount,
+              transactionReference: p.transactionReference,
+            },
+          }),
+        ),
       );
-      
+
       // Update cash drawer for cash payments
       for (const p of payments) {
         if (p.method === 'CASH') {
           await prisma.cashDrawer.updateMany({
             where: { terminalId: posOrder.terminalId, status: 'OPEN' },
-            data: { currentBalance: { increment: p.amount } }
+            data: { currentBalance: { increment: p.amount } },
           });
         }
       }
 
-      return { status: 'PARTIAL', remaining: requiredTotal - existingPaymentsTotal - incomingTotal };
+      return {
+        status: 'PARTIAL',
+        remaining: requiredTotal - existingPaymentsTotal - incomingTotal,
+      };
     }
 
     // Fully Paid
     const createdPayments = await prisma.$transaction(async (tx) => {
-      const pmts = await Promise.all(payments.map(p => tx.pOSPayment.create({
-        data: { posOrderId, method: p.method, amount: p.amount, transactionReference: p.transactionReference }
-      })));
+      const pmts = await Promise.all(
+        payments.map((p) =>
+          tx.pOSPayment.create({
+            data: {
+              posOrderId,
+              method: p.method,
+              amount: p.amount,
+              transactionReference: p.transactionReference,
+            },
+          }),
+        ),
+      );
 
       // Mark POS Order as Paid
       await tx.pOSOrder.update({ where: { id: posOrderId }, data: { status: 'PAID' } });
@@ -195,7 +221,7 @@ export class POSService {
       // Mark Core Order as ACCEPTED/PREPARING
       await tx.order.update({
         where: { id: posOrder.orderId },
-        data: { status: OrderStatus.PREPARING }
+        data: { status: OrderStatus.PREPARING },
       });
 
       // Update cash drawer
@@ -203,7 +229,7 @@ export class POSService {
         if (p.method === 'CASH') {
           await tx.cashDrawer.updateMany({
             where: { terminalId: posOrder.terminalId, status: 'OPEN' },
-            data: { currentBalance: { increment: p.amount } }
+            data: { currentBalance: { increment: p.amount } },
           });
         }
       }
@@ -211,14 +237,19 @@ export class POSService {
       // Generate Receipt
       const receiptNumber = `REC-${Date.now().toString().slice(-6)}`;
       await tx.receipt.create({
-        data: { posOrderId, receiptNumber }
+        data: { posOrderId, receiptNumber },
       });
 
       return pmts;
     });
 
     // Post Transaction side effects
-    await POSActivityLog.create({ terminalId: posOrder.terminalId, cashierId, action: 'PAYMENT_COMPLETED', details: { posOrderId, amount: incomingTotal } });
+    await POSActivityLog.create({
+      terminalId: posOrder.terminalId,
+      cashierId,
+      action: 'PAYMENT_COMPLETED',
+      details: { posOrderId, amount: incomingTotal },
+    });
 
     // Deduct Inventory automatically since it's going straight to prep
     try {
@@ -228,7 +259,9 @@ export class POSService {
     }
 
     // Emit real-time events
-    getIO().to(`branch_${posOrder.terminal.branchId}`).emit('payment-completed', { posOrderId, status: 'PAID' });
+    getIO()
+      .to(`branch_${posOrder.terminal.branchId}`)
+      .emit('payment-completed', { posOrderId, status: 'PAID' });
     getIO().to('staff_room').emit('kds_new_order', posOrder.order.kitchenOrder);
 
     return { status: 'PAID', payments: createdPayments };
@@ -243,10 +276,10 @@ export class POSService {
             order: { include: { items: { include: { product: true } } } },
             payments: true,
             terminal: true,
-            cashier: true
-          }
-        }
-      }
+            cashier: true,
+          },
+        },
+      },
     });
   }
 
@@ -256,17 +289,17 @@ export class POSService {
 
     const posOrders = await prisma.pOSOrder.findMany({
       where: { terminal: { branchId }, createdAt: { gte: today }, status: 'PAID' },
-      include: { order: true, payments: true }
+      include: { order: true, payments: true },
     });
 
     const totalSales = posOrders.reduce((sum, o) => sum + Number(o.order.totalAmount), 0);
     const orderCount = posOrders.length;
-    
+
     let cashSales = 0;
     let digitalSales = 0;
 
-    posOrders.forEach(o => {
-      o.payments.forEach(p => {
+    posOrders.forEach((o) => {
+      o.payments.forEach((p) => {
         if (p.method === 'CASH') cashSales += Number(p.amount);
         else digitalSales += Number(p.amount);
       });

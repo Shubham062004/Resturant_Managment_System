@@ -16,14 +16,10 @@ router.patch('/orders/:id/pickup', controller.pickupOrder);
 router.patch(
   '/orders/:id/deliver',
   validate(validation.deliveryProofSchema),
-  controller.deliverOrder
+  controller.deliverOrder,
 );
 
-router.post(
-  '/location',
-  validate(validation.locationUpdateSchema),
-  controller.updateLocation
-);
+router.post('/location', validate(validation.locationUpdateSchema), controller.updateLocation);
 
 router.get('/earnings', controller.getEarnings);
 

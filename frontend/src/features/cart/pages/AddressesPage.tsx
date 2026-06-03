@@ -161,9 +161,7 @@ export const AddressesPage: React.FC = () => {
                 <div className="text-sm">
                   <p className="font-semibold text-white">
                     {addr.fullName}
-                    {addr.isDefault && (
-                      <span className="ml-2 text-xs text-primary">(Default)</span>
-                    )}
+                    {addr.isDefault && <span className="ml-2 text-xs text-primary">(Default)</span>}
                   </p>
                   <p className="text-muted-foreground mt-1">
                     {addr.addressLine1}

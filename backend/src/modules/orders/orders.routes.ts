@@ -19,7 +19,7 @@ router.patch(
   '/:id/status',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'DELIVERY_PARTNER'),
   validate(updateOrderStatusSchema),
-  OrdersController.updateOrderStatus
+  OrdersController.updateOrderStatus,
 );
 
 export default router;

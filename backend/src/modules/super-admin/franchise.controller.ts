@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { prisma } from '../../config/db';
 import { AuthRequest } from '../../types/express';
 
@@ -10,10 +10,10 @@ export class FranchiseController {
         include: {
           organization: true,
           _count: {
-            select: { branches: true }
-          }
+            select: { branches: true },
+          },
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       });
       res.status(200).json({ status: 'success', data: franchises });
     } catch (error) {
@@ -25,7 +25,7 @@ export class FranchiseController {
     try {
       const { ownerName, organizationId } = req.body;
       const franchise = await prisma.franchise.create({
-        data: { ownerName, organizationId }
+        data: { ownerName, organizationId },
       });
       res.status(201).json({ status: 'success', data: franchise });
     } catch (error) {

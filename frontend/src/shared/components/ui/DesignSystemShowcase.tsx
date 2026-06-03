@@ -363,7 +363,7 @@ export const DesignSystemShowcase: React.FC = () => {
                 label="Single Select Dropdown (Searchable)"
                 options={selectOptions}
                 value={selectSingle}
-                onChange={setSelectSingle}
+                onChange={(val) => setSelectSingle(val as string)}
                 isSearchable
                 placeholder="Select dish..."
               />
@@ -371,7 +371,7 @@ export const DesignSystemShowcase: React.FC = () => {
                 label="Multi Select Dropdown"
                 options={selectOptions}
                 value={selectMulti}
-                onChange={setSelectMulti}
+                onChange={(val) => setSelectMulti(val as string[])}
                 isMulti
                 placeholder="Pick multiple dishes..."
               />

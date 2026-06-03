@@ -27,21 +27,38 @@ const OffersPage = React.lazy(() => import('../features/customer/pages/OffersPag
 const FavoritesPage = React.lazy(() => import('../features/customer/pages/FavoritesPage'));
 const OrderListPage = React.lazy(() => import('../features/orders/pages/OrderListPage'));
 const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/OrderTrackingPage'));
-const DeliveryDashboardPage = React.lazy(() => import('../features/delivery/pages/DeliveryDashboardPage'));
-const EarningsDashboardPage = React.lazy(() => import('../features/delivery/pages/EarningsDashboardPage'));
-const InventoryDashboardPage = React.lazy(() => import('../features/inventory/pages/InventoryDashboardPage'));
+const DeliveryDashboardPage = React.lazy(
+  () => import('../features/delivery/pages/DeliveryDashboardPage'),
+);
+const EarningsDashboardPage = React.lazy(
+  () => import('../features/delivery/pages/EarningsDashboardPage'),
+);
+const InventoryDashboardPage = React.lazy(
+  () => import('../features/inventory/pages/InventoryDashboardPage'),
+);
 const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashboardPage'));
-const ReservationsPage = React.lazy(() => import('../features/reservations/pages/ReservationsPage'));
+const ReservationsPage = React.lazy(
+  () => import('../features/reservations/pages/ReservationsPage'),
+);
 const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
 const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
 const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
 const DashboardPage = React.lazy(() => import('../features/admin/pages/DashboardPage'));
 const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
+const AnalyticsDashboardPage = React.lazy(
+  () => import('../features/analytics/pages/AnalyticsDashboardPage'),
+);
 
 // Super Admin Pages
-const SuperAdminLayout = React.lazy(() => import('../features/super-admin/components/SuperAdminLayout'));
-const GlobalDashboardPage = React.lazy(() => import('../features/super-admin/pages/GlobalDashboardPage'));
-const OrganizationManagementPage = React.lazy(() => import('../features/super-admin/pages/OrganizationManagementPage'));
+const SuperAdminLayout = React.lazy(
+  () => import('../features/super-admin/components/SuperAdminLayout'),
+);
+const GlobalDashboardPage = React.lazy(
+  () => import('../features/super-admin/pages/GlobalDashboardPage'),
+);
+const OrganizationManagementPage = React.lazy(
+  () => import('../features/super-admin/pages/OrganizationManagementPage'),
+);
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
@@ -81,8 +98,12 @@ const DesignSystemShowcase = React.lazy(
 );
 
 // Kitchen Views (Lazy)
-const KitchenDashboardPage = React.lazy(() => import('../features/kitchen/pages/KitchenDashboardPage'));
-const KitchenAnalyticsPage = React.lazy(() => import('../features/kitchen/pages/KitchenAnalyticsPage'));
+const KitchenDashboardPage = React.lazy(
+  () => import('../features/kitchen/pages/KitchenDashboardPage'),
+);
+const KitchenAnalyticsPage = React.lazy(
+  () => import('../features/kitchen/pages/KitchenAnalyticsPage'),
+);
 
 const DashboardView = () => (
   <div className="space-y-6">
@@ -361,13 +382,22 @@ const AppRouter = () => {
             <Route
               path="/admin"
               element={
-                <ProtectedRoute allowedRoles={['ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'OPERATIONS_MANAGER', 'FINANCE_MANAGER']}>
+                <ProtectedRoute
+                  allowedRoles={[
+                    'ADMIN',
+                    'SUPER_ADMIN',
+                    'BRANCH_MANAGER',
+                    'OPERATIONS_MANAGER',
+                    'FINANCE_MANAGER',
+                  ]}
+                >
                   <AdminLayout />
                 </ProtectedRoute>
               }
             >
-              <Route index element={<DashboardPage />} />
-              <Route path="staff" element={<StaffManagementPage />} />
+              <Route path="/admin" element={<DashboardPage />} />
+              <Route path="/analytics" element={<AnalyticsDashboardPage />} />
+              <Route path="/admin/staff" element={<StaffManagementPage />} />
               {/* Other admin routes placeholder */}
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
             </Route>
@@ -383,7 +413,12 @@ const AppRouter = () => {
             >
               <Route index element={<GlobalDashboardPage />} />
               <Route path="organizations" element={<OrganizationManagementPage />} />
-              <Route path="*" element={<div className="p-6 text-slate-100">Page not found in Super Admin Panel</div>} />
+              <Route
+                path="*"
+                element={
+                  <div className="p-6 text-slate-100">Page not found in Super Admin Panel</div>
+                }
+              />
             </Route>
 
             {/* Error Pages Shell */}

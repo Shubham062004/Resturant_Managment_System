@@ -30,11 +30,7 @@ export class OrdersController {
 
   public static async getOrderById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const order = await OrdersService.getOrderById(
-        req.params.id,
-        req.user!.id,
-        req.user!.role
-      );
+      const order = await OrdersService.getOrderById(req.params.id, req.user!.id, req.user!.role);
       res.status(200).json({
         success: true,
         data: { order },
@@ -49,7 +45,7 @@ export class OrdersController {
       const order = await OrdersService.updateOrderStatus(
         req.params.id,
         req.body.status,
-        req.user!.id
+        req.user!.id,
       );
       res.status(200).json({
         success: true,
@@ -63,11 +59,7 @@ export class OrdersController {
 
   public static async cancelOrder(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const order = await OrdersService.cancelOrder(
-        req.params.id,
-        req.user!.id,
-        req.user!.role
-      );
+      const order = await OrdersService.cancelOrder(req.params.id, req.user!.id, req.user!.role);
       res.status(200).json({
         success: true,
         data: { order },

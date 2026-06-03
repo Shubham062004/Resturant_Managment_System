@@ -7,7 +7,7 @@ export class StaffController {
     try {
       const staff = await prisma.user.findMany({
         where: {
-          role: { not: 'CUSTOMER' }
+          role: { not: 'CUSTOMER' },
         },
         select: {
           id: true,
@@ -16,8 +16,8 @@ export class StaffController {
           email: true,
           phone: true,
           role: true,
-          isActive: true
-        }
+          isActive: true,
+        },
       });
       res.status(200).json({ status: 'success', data: staff });
     } catch (error) {
@@ -27,8 +27,8 @@ export class StaffController {
 
   public static async createStaff(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, firstName, lastName, role, password } = req.body;
-      
+      const { email, firstName, lastName, role, password: _password } = req.body;
+
       const exists = await prisma.user.findUnique({ where: { email } });
       if (exists) throw new AppError('User already exists', 400);
 
@@ -40,8 +40,8 @@ export class StaffController {
           lastName,
           role,
           passwordHash: 'dummy-hashed-password',
-          isEmailVerified: true
-        }
+          isEmailVerified: true,
+        },
       });
 
       res.status(201).json({ status: 'success', data: staff });
@@ -56,7 +56,7 @@ export class StaffController {
       const staff = await prisma.user.update({
         where: { id: req.params.id },
         data: { role },
-        select: { id: true, firstName: true, role: true }
+        select: { id: true, firstName: true, role: true },
       });
       res.status(200).json({ status: 'success', data: staff });
     } catch (error) {

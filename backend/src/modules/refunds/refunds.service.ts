@@ -6,11 +6,7 @@ export class RefundsService {
   /**
    * Create a new refund (Mock for Stripe/Razorpay)
    */
-  public static async processRefund(
-    orderId: string,
-    amount: number,
-    reason?: string
-  ) {
+  public static async processRefund(orderId: string, amount: number, reason?: string) {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
       include: { refunds: true },

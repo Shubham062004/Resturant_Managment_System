@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import api from '../../../shared/api/axios';
+import api from '../../../services/apiClient';
 
 interface POSState {
   terminals: any[];
@@ -31,7 +31,7 @@ const initialState: POSState = {
     discount: 0,
     subtotal: 0,
     tax: 0,
-    total: 0
+    total: 0,
   },
   activeOrder: null,
   receipts: [],
@@ -45,33 +45,45 @@ export const fetchTerminals = createAsyncThunk('pos/fetchTerminals', async (bran
   return response.data.data;
 });
 
-export const startShift = createAsyncThunk('pos/startShift', async (data: { terminalId: string; openingAmount: number }) => {
-  const response = await api.post('/pos/shifts/start', data);
-  return response.data.data;
-});
+export const startShift = createAsyncThunk(
+  'pos/startShift',
+  async (data: { terminalId: string; openingAmount: number }) => {
+    const response = await api.post('/pos/shifts/start', data);
+    return response.data.data;
+  },
+);
 
-export const endShift = createAsyncThunk('pos/endShift', async (data: { drawerId: string; closingAmount: number; notes?: string }) => {
-  const response = await api.post(`/pos/shifts/end/${data.drawerId}`, data);
-  return response.data.data;
-});
+export const endShift = createAsyncThunk(
+  'pos/endShift',
+  async (data: { drawerId: string; closingAmount: number; notes?: string }) => {
+    const response = await api.post(`/pos/shifts/end/${data.drawerId}`, data);
+    return response.data.data;
+  },
+);
 
-export const checkoutPOS = createAsyncThunk('pos/checkout', async (data: any, { getState }: any) => {
-  const { pos } = getState();
-  const payload = {
-    terminalId: pos.activeTerminal.id,
-    orderType: pos.cart.orderType,
-    tableId: pos.cart.tableId,
-    items: pos.cart.items,
-    discount: pos.cart.discount,
-  };
-  const response = await api.post('/pos/orders', payload);
-  return response.data.data;
-});
+export const checkoutPOS = createAsyncThunk(
+  'pos/checkout',
+  async (data: any, { getState }: any) => {
+    const { pos } = getState();
+    const payload = {
+      terminalId: pos.activeTerminal.id,
+      orderType: pos.cart.orderType,
+      tableId: pos.cart.tableId,
+      items: pos.cart.items,
+      discount: pos.cart.discount,
+    };
+    const response = await api.post('/pos/orders', payload);
+    return response.data.data;
+  },
+);
 
-export const processPayment = createAsyncThunk('pos/processPayment', async (data: { posOrderId: string; payments: any[] }) => {
-  const response = await api.post('/pos/payments', data);
-  return response.data.data; // { status, remaining or payments }
-});
+export const processPayment = createAsyncThunk(
+  'pos/processPayment',
+  async (data: { posOrderId: string; payments: any[] }) => {
+    const response = await api.post('/pos/payments', data);
+    return response.data.data; // { status, remaining or payments }
+  },
+);
 
 const calculateTotals = (cart: any) => {
   let subtotal = 0;
@@ -97,7 +109,7 @@ const posSlice = createSlice({
       state.cart.tableId = action.payload;
     },
     addToCart: (state, action: PayloadAction<any>) => {
-      const existing = state.cart.items.find(i => i.productId === action.payload.productId);
+      const existing = state.cart.items.find((i) => i.productId === action.payload.productId);
       if (existing) {
         existing.quantity += action.payload.quantity;
       } else {
@@ -105,18 +117,20 @@ const posSlice = createSlice({
       }
       calculateTotals(state.cart);
     },
-    updateQuantity: (state, action: PayloadAction<{ productId: string, quantity: number }>) => {
-      const item = state.cart.items.find(i => i.productId === action.payload.productId);
+    updateQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
+      const item = state.cart.items.find((i) => i.productId === action.payload.productId);
       if (item) {
         item.quantity = action.payload.quantity;
         if (item.quantity <= 0) {
-          state.cart.items = state.cart.items.filter(i => i.productId !== action.payload.productId);
+          state.cart.items = state.cart.items.filter(
+            (i) => i.productId !== action.payload.productId,
+          );
         }
       }
       calculateTotals(state.cart);
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state.cart.items = state.cart.items.filter(i => i.productId !== action.payload);
+      state.cart.items = state.cart.items.filter((i) => i.productId !== action.payload);
       calculateTotals(state.cart);
     },
     clearCart: (state) => {
@@ -124,7 +138,7 @@ const posSlice = createSlice({
       state.cart.discount = 0;
       state.activeOrder = null;
       calculateTotals(state.cart);
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -146,8 +160,16 @@ const posSlice = createSlice({
           // Cart clearing can be dispatched after
         }
       });
-  }
+  },
 });
 
-export const { setActiveTerminal, setOrderType, setTableId, addToCart, updateQuantity, removeFromCart, clearCart } = posSlice.actions;
+export const {
+  setActiveTerminal,
+  setOrderType,
+  setTableId,
+  addToCart,
+  updateQuantity,
+  removeFromCart,
+  clearCart,
+} = posSlice.actions;
 export default posSlice.reducer;

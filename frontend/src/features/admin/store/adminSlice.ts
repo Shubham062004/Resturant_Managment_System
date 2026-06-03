@@ -24,11 +24,14 @@ const initialState: AdminState = {
 export const fetchDashboardOverview = createAsyncThunk(
   'admin/fetchDashboard',
   async (branchId: string) => {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/admin/dashboard?branchId=${branchId}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `${API_BASE_URL}/api/v1/admin/dashboard?branchId=${branchId}`,
+      {
+        withCredentials: true,
+      },
+    );
     return response.data.data;
-  }
+  },
 );
 
 const adminSlice = createSlice({
@@ -37,12 +40,14 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDashboardOverview.pending, (state) => { state.status = 'loading'; })
+      .addCase(fetchDashboardOverview.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(fetchDashboardOverview.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.dashboard = action.payload;
       });
-  }
+  },
 });
 
 export default adminSlice.reducer;

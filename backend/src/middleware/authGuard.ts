@@ -46,9 +46,7 @@ export const authGuard = async (
 };
 
 // Authorization Hook: Role-Based Access Controls
-export const restrictTo = (
-  ...roles: Array<Role>
-) => {
+export const restrictTo = (...roles: Array<Role>) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user || !roles.includes(req.user.role)) {
       return next(

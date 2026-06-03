@@ -80,7 +80,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...(disabled || isLoading ? {} : hoverScalePreset)}
         aria-busy={isLoading}
-        {...props}
+        {...(props as any)}
       >
         {isLoading && <Spinner />}
         {!isLoading && leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}

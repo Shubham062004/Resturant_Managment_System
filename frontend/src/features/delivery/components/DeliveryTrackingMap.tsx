@@ -7,15 +7,21 @@ interface DeliveryTrackingMapProps {
   destination?: { latitude: number; longitude: number };
 }
 
-export const DeliveryTrackingMap: React.FC<DeliveryTrackingMapProps> = ({ driverLocation, destination }) => {
+export const DeliveryTrackingMap: React.FC<DeliveryTrackingMapProps> = ({
+  driverLocation,
+  destination,
+}) => {
   return (
     <Card className="bg-surface/50 border-border/50 p-0 overflow-hidden relative min-h-[300px] flex items-center justify-center">
       {/* Mock Map Background */}
-      <div className="absolute inset-0 bg-[#1e293b] opacity-80" style={{
-        backgroundImage: 'radial-gradient(#334155 1px, transparent 1px)',
-        backgroundSize: '20px 20px'
-      }} />
-      
+      <div
+        className="absolute inset-0 bg-[#1e293b] opacity-80"
+        style={{
+          backgroundImage: 'radial-gradient(#334155 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+        }}
+      />
+
       <div className="relative z-10 text-center space-y-4">
         <div className="flex items-center justify-center gap-8">
           {driverLocation && (
@@ -27,9 +33,7 @@ export const DeliveryTrackingMap: React.FC<DeliveryTrackingMapProps> = ({ driver
             </div>
           )}
 
-          {driverLocation && destination && (
-            <div className="w-24 h-0.5 bg-dashed bg-border/50" />
-          )}
+          {driverLocation && destination && <div className="w-24 h-0.5 bg-dashed bg-border/50" />}
 
           {destination && (
             <div className="flex flex-col items-center">

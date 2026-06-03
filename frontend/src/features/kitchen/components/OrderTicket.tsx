@@ -39,8 +39,12 @@ export const OrderTicket: React.FC<OrderTicketProps> = ({ order, onDragStart }) 
     >
       <div className="flex justify-between items-start mb-3">
         <div>
-          <h3 className="font-bold text-white text-lg">#{order.order.orderNumber.substring(0, 8)}</h3>
-          <span className="text-xs uppercase tracking-wider font-semibold opacity-80">{order.order.orderType}</span>
+          <h3 className="font-bold text-white text-lg">
+            #{order.order.orderNumber.substring(0, 8)}
+          </h3>
+          <span className="text-xs uppercase tracking-wider font-semibold opacity-80">
+            {order.order.orderType}
+          </span>
         </div>
         <div className="flex items-center gap-1.5 bg-black/40 px-2 py-1 rounded-md">
           <Clock size={14} />

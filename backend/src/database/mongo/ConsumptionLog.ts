@@ -18,4 +18,7 @@ const ConsumptionLogSchema: Schema = new Schema({
 
 ConsumptionLogSchema.index({ branchId: 1, ingredientId: 1, timestamp: -1 });
 
-export const ConsumptionLog = mongoose.model<IConsumptionLog>('ConsumptionLog', ConsumptionLogSchema);
+export const ConsumptionLog = mongoose.model<IConsumptionLog>(
+  'ConsumptionLog',
+  ConsumptionLogSchema,
+);

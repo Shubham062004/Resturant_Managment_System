@@ -13,7 +13,7 @@ router.post(
   '/',
   restrictTo('ADMIN', 'SUPER_ADMIN'),
   validate(createRefundSchema),
-  RefundsController.processRefund
+  RefundsController.processRefund,
 );
 
 router.get('/:id', RefundsController.getRefundById);

@@ -26,7 +26,7 @@ export class ReservationController {
       const { branchId, date } = req.query;
       const reservations = await ReservationService.getBranchReservations(
         branchId as string,
-        date as string | undefined
+        date as string | undefined,
       );
       res.status(200).json({ status: 'success', data: reservations });
     } catch (error) {

@@ -95,7 +95,7 @@ export const RegisterPage: React.FC = () => {
         </div>
 
         {(validationError || error) && (
-          <Alert variant="danger" title="Registration Refused">
+          <Alert variant="error" title="Registration Failed">
             {validationError || error}
           </Alert>
         )}

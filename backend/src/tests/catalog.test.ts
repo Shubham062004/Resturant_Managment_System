@@ -248,4 +248,3 @@ describe('Catalog API Integration Tests', () => {
     });
   });
 });
-

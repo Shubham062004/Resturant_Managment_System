@@ -11,8 +11,22 @@ router.get('/qr/:qrCode', TableController.getTableByQR);
 
 router.use(authGuard);
 
-router.post('/', restrictTo('ADMIN', 'SUPER_ADMIN'), validate(createTableSchema), TableController.createTable);
-router.get('/branch/:branchId', restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER', 'KITCHEN_MANAGER'), TableController.getBranchTables);
-router.patch('/:id', restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'), validate(updateTableSchema), TableController.updateTable);
+router.post(
+  '/',
+  restrictTo('ADMIN', 'SUPER_ADMIN'),
+  validate(createTableSchema),
+  TableController.createTable,
+);
+router.get(
+  '/branch/:branchId',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER', 'KITCHEN_MANAGER'),
+  TableController.getBranchTables,
+);
+router.patch(
+  '/:id',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
+  validate(updateTableSchema),
+  TableController.updateTable,
+);
 
 export default router;

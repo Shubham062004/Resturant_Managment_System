@@ -23,10 +23,19 @@ export class POSController {
 
   public static async startShift(req: Request, res: Response, next: NextFunction) {
     try {
-      const drawer = await POSService.startShift((req as any).user!.id, req.body.terminalId, req.body.openingAmount);
-      
-      await POSActivityLog.create({ terminalId: req.body.terminalId, cashierId: (req as any).user!.id, action: 'SHIFT_START', details: { openingAmount: req.body.openingAmount } });
-      
+      const drawer = await POSService.startShift(
+        (req as any).user!.id,
+        req.body.terminalId,
+        req.body.openingAmount,
+      );
+
+      await POSActivityLog.create({
+        terminalId: req.body.terminalId,
+        cashierId: (req as any).user!.id,
+        action: 'SHIFT_START',
+        details: { openingAmount: req.body.openingAmount },
+      });
+
       res.status(201).json({ status: 'success', data: drawer });
     } catch (error) {
       next(error);
@@ -35,9 +44,18 @@ export class POSController {
 
   public static async endShift(req: Request, res: Response, next: NextFunction) {
     try {
-      const drawer = await POSService.endShift(req.params.drawerId, req.body.closingAmount, req.body.notes);
-      
-      await POSActivityLog.create({ terminalId: drawer.terminalId, cashierId: (req as any).user!.id, action: 'SHIFT_END', details: { closingAmount: req.body.closingAmount, expected: drawer.currentBalance } });
+      const drawer = await POSService.endShift(
+        req.params.drawerId,
+        req.body.closingAmount,
+        req.body.notes,
+      );
+
+      await POSActivityLog.create({
+        terminalId: drawer.terminalId,
+        cashierId: (req as any).user!.id,
+        action: 'SHIFT_END',
+        details: { closingAmount: req.body.closingAmount, expected: drawer.currentBalance },
+      });
 
       res.status(200).json({ status: 'success', data: drawer });
     } catch (error) {
@@ -48,8 +66,13 @@ export class POSController {
   public static async createPOSOrder(req: Request, res: Response, next: NextFunction) {
     try {
       const posOrder = await POSService.createPOSOrder((req as any).user!.id, req.body);
-      
-      await POSActivityLog.create({ terminalId: req.body.terminalId, cashierId: (req as any).user!.id, action: 'CREATE_ORDER', details: { posOrderId: posOrder.id } });
+
+      await POSActivityLog.create({
+        terminalId: req.body.terminalId,
+        cashierId: (req as any).user!.id,
+        action: 'CREATE_ORDER',
+        details: { posOrderId: posOrder.id },
+      });
 
       res.status(201).json({ status: 'success', data: posOrder });
     } catch (error) {
@@ -68,8 +91,12 @@ export class POSController {
 
   public static async processPayment(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await POSService.processPayment((req as any).user!.id, req.body.posOrderId, req.body.payments);
-      
+      const result = await POSService.processPayment(
+        (req as any).user!.id,
+        req.body.posOrderId,
+        req.body.payments,
+      );
+
       res.status(200).json({ status: 'success', data: result });
     } catch (error) {
       next(error);

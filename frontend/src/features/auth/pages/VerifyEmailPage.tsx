@@ -105,7 +105,7 @@ export const VerifyEmailPage: React.FC = () => {
             <div className="flex justify-center">
               <AlertOctagon size={50} className="text-danger" />
             </div>
-            <Alert variant="danger" title="Verification Rejected">
+            <Alert variant="error" title="Verification Refused">
               {message}
             </Alert>
             <div className="border-t border-border/40 my-4" />
@@ -115,7 +115,7 @@ export const VerifyEmailPage: React.FC = () => {
 
             {resendStatus && (
               <Alert
-                variant={resendStatus.type === 'success' ? 'success' : 'danger'}
+                variant={resendStatus.type === 'success' ? 'success' : 'error'}
                 title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}
               >
                 {resendStatus.msg}
@@ -155,7 +155,7 @@ export const VerifyEmailPage: React.FC = () => {
 
             {resendStatus && (
               <Alert
-                variant={resendStatus.type === 'success' ? 'success' : 'danger'}
+                variant={resendStatus.type === 'success' ? 'success' : 'error'}
                 title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}
               >
                 {resendStatus.msg}

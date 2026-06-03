@@ -13,9 +13,10 @@ import {
   Flame,
   Sparkles,
   User as UserIcon,
+  BarChart3,
 } from 'lucide-react';
 
-export const MainLayout = () => {
+export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ export const MainLayout = () => {
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Tables Plan', path: '/tables', icon: TableProperties },
+    { name: 'Analytics', path: '/analytics', icon: BarChart3 },
     { name: 'My Profile', path: '/profile', icon: UserIcon },
     { name: 'Design System', path: '/design-system', icon: Sparkles },
   ];
@@ -140,7 +142,7 @@ export const MainLayout = () => {
 
         {/* Dynamic Outlet Area */}
         <main className="flex-1 overflow-y-auto bg-background/50 p-6 md:p-10">
-          <Outlet />
+          {children || <Outlet />}
         </main>
       </div>
     </div>

@@ -9,7 +9,7 @@ export const pushQueue = new Queue('pushQueue', { connection: redisConnection })
 
 export async function addNotificationJob(channel: string, payload: any, delay?: number) {
   const options = delay ? { delay } : {};
-  
+
   switch (channel) {
     case 'EMAIL':
       return await emailQueue.add('send-email', payload, options);

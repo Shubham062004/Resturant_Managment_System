@@ -19,6 +19,8 @@ import staffReducer from '../features/admin/store/staffSlice';
 import organizationReducer from '../features/super-admin/store/organizationSlice';
 import platformReducer from '../features/super-admin/store/platformSlice';
 import notificationReducer from '../features/notifications/store/notificationSlice';
+import menuReducer from '../features/menu/store/menuSlice';
+import analyticsReducer from '../features/analytics/store/analyticsSlice';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -26,7 +28,7 @@ export const rootReducer = combineReducers({
   restaurant: restaurantReducer,
   favorite: favoriteReducer,
   search: searchReducer,
-  checkout: checkoutReducer,
+  menu: menuReducer,
   orders: orderReducer,
   tracking: trackingReducer,
   refunds: refundReducer,
@@ -38,6 +40,7 @@ export const rootReducer = combineReducers({
   reservations: reservationReducer,
   tables: tableReducer,
   admin: adminReducer,
+  analytics: analyticsReducer,
   staff: staffReducer,
   organizations: organizationReducer,
   platform: platformReducer,

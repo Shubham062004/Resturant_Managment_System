@@ -14,12 +14,14 @@ const staffSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllStaff.pending, (state) => { state.status = 'loading'; })
+      .addCase(fetchAllStaff.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(fetchAllStaff.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.list = action.payload;
       });
-  }
+  },
 });
 
 export default staffSlice.reducer;

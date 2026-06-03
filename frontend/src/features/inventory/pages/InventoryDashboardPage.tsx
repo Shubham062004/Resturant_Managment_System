@@ -19,7 +19,7 @@ export default function InventoryDashboardPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!user) return;
+    if (status !== 'idle') return undefined;
     const token = localStorage.getItem('token');
     const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
 
@@ -27,17 +27,23 @@ export default function InventoryDashboardPage() {
       dispatch(socketInventoryUpdate(updatedInv));
     });
 
-    return () => { newSocket.disconnect(); };
+    return () => {
+      newSocket.disconnect();
+    };
   }, [user, dispatch]);
 
-  const lowStockItems = inventory.filter(inv => inv.availableQuantity <= (inv.ingredient?.reorderPoint || 0));
+  const lowStockItems = inventory.filter(
+    (inv) => inv.availableQuantity <= (inv.ingredient?.reorderPoint || 0),
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8 animate-fade-in">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-display font-bold text-white">Inventory Management</h1>
-          <p className="text-muted-foreground mt-1">Real-time stock, suppliers, and waste analytics</p>
+          <p className="text-muted-foreground mt-1">
+            Real-time stock, suppliers, and waste analytics
+          </p>
         </div>
       </div>
 
@@ -49,7 +55,7 @@ export default function InventoryDashboardPage() {
           </div>
           <p className="text-4xl font-bold text-white">{analytics.totalIngredients || 0}</p>
         </Card>
-        
+
         <Card className="bg-surface/50 border-border/50 p-6 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-2">
             <AlertTriangle className="text-warning w-5 h-5" />
@@ -57,7 +63,7 @@ export default function InventoryDashboardPage() {
           </div>
           <p className="text-4xl font-bold text-warning">{lowStockItems.length}</p>
         </Card>
-        
+
         <Card className="bg-surface/50 border-border/50 p-6 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-2">
             <ShoppingCart className="text-success w-5 h-5" />
@@ -96,7 +102,9 @@ export default function InventoryDashboardPage() {
                     const isLow = inv.availableQuantity <= (inv.ingredient?.reorderPoint || 0);
                     return (
                       <tr key={inv.id || i} className="hover:bg-surface/50 transition-colors">
-                        <td className="px-6 py-4 font-medium text-white">{inv.ingredient?.name || 'Unknown'}</td>
+                        <td className="px-6 py-4 font-medium text-white">
+                          {inv.ingredient?.name || 'Unknown'}
+                        </td>
                         <td className="px-6 py-4">{inv.ingredient?.sku || '-'}</td>
                         <td className="px-6 py-4 font-medium">
                           {inv.availableQuantity.toFixed(2)} {inv.ingredient?.unit}
@@ -113,7 +121,9 @@ export default function InventoryDashboardPage() {
                   })}
                   {inventory.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center">No inventory records found.</td>
+                      <td colSpan={4} className="px-6 py-8 text-center">
+                        No inventory records found.
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -126,21 +136,27 @@ export default function InventoryDashboardPage() {
           <h2 className="text-xl font-bold text-white">Quick Actions</h2>
           <div className="space-y-4">
             <Card className="bg-surface/50 border-border/50 p-4 hover:border-primary/50 cursor-pointer transition-colors flex items-center gap-4">
-              <div className="bg-primary/20 p-3 rounded-lg"><ShoppingCart className="text-primary w-5 h-5" /></div>
+              <div className="bg-primary/20 p-3 rounded-lg">
+                <ShoppingCart className="text-primary w-5 h-5" />
+              </div>
               <div>
                 <h3 className="text-white font-medium">New Purchase Order</h3>
                 <p className="text-xs text-muted-foreground">Order from supplier</p>
               </div>
             </Card>
             <Card className="bg-surface/50 border-border/50 p-4 hover:border-primary/50 cursor-pointer transition-colors flex items-center gap-4">
-              <div className="bg-warning/20 p-3 rounded-lg"><ArrowRightLeft className="text-warning w-5 h-5" /></div>
+              <div className="bg-warning/20 p-3 rounded-lg">
+                <ArrowRightLeft className="text-warning w-5 h-5" />
+              </div>
               <div>
                 <h3 className="text-white font-medium">Transfer Stock</h3>
                 <p className="text-xs text-muted-foreground">Move items between branches</p>
               </div>
             </Card>
             <Card className="bg-surface/50 border-border/50 p-4 hover:border-primary/50 cursor-pointer transition-colors flex items-center gap-4">
-              <div className="bg-destructive/20 p-3 rounded-lg"><Trash2 className="text-destructive w-5 h-5" /></div>
+              <div className="bg-destructive/20 p-3 rounded-lg">
+                <Trash2 className="text-destructive w-5 h-5" />
+              </div>
               <div>
                 <h3 className="text-white font-medium">Log Waste</h3>
                 <p className="text-xs text-muted-foreground">Record spoiled/damaged items</p>

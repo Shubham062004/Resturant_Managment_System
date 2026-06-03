@@ -40,8 +40,8 @@ export class NotificationService {
           title,
           message,
           priority,
-          status: 'PENDING'
-        }
+          status: 'PENDING',
+        },
       });
 
       // 4. Enqueue Job to BullMQ
@@ -54,7 +54,7 @@ export class NotificationService {
           subject: title,
           body: message,
           message,
-          ...payload
+          ...payload,
         });
       }
 
@@ -62,9 +62,9 @@ export class NotificationService {
       if (channel === 'IN_APP') {
         const updated = await prisma.notification.update({
           where: { id: notification.id },
-          data: { status: 'DELIVERED', sentAt: new Date() }
+          data: { status: 'DELIVERED', sentAt: new Date() },
         });
-        
+
         // Emit to user's personal room
         try {
           const io = getIO();
@@ -72,7 +72,7 @@ export class NotificationService {
             io.to(`user_${userId}`).emit('notification-created', updated);
           }
         } catch (err) {
-          console.error("Socket error", err);
+          console.error('Socket error', err);
         }
       }
 

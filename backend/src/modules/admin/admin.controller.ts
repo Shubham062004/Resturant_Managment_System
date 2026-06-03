@@ -16,29 +16,33 @@ export class AdminController {
         where: {
           ...branchFilter,
           createdAt: { gte: today },
-          status: { in: ['DELIVERED', 'PICKED_UP'] }
-        }
+          status: { in: ['DELIVERED', 'PICKED_UP'] },
+        },
       });
       const revenueToday = todaysOrders.reduce((sum, order) => sum + Number(order.totalAmount), 0);
 
       // 2. Orders Count Today
       const ordersTodayCount = await prisma.order.count({
-        where: { ...branchFilter, createdAt: { gte: today } }
+        where: { ...branchFilter, createdAt: { gte: today } },
       });
 
       // 3. Active Deliveries
       const activeDeliveries = await prisma.deliveryAssignment.count({
-        where: { status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] } }
+        where: { status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] } },
       });
 
       // 4. Kitchen Status
       const activeKitchenOrders = await prisma.kitchenOrder.count({
-        where: { status: { in: ['QUEUED', 'COOKING'] } }
+        where: { status: { in: ['QUEUED', 'COOKING'] } },
       });
 
       // 5. Active Reservations
       const activeReservations = await prisma.reservation.count({
-        where: { ...branchFilter, status: 'CONFIRMED', reservationDate: today.toISOString().split('T')[0] }
+        where: {
+          ...branchFilter,
+          status: 'CONFIRMED',
+          reservationDate: today.toISOString().split('T')[0],
+        },
       });
 
       res.status(200).json({
@@ -48,8 +52,8 @@ export class AdminController {
           ordersTodayCount,
           activeDeliveries,
           activeKitchenOrders,
-          activeReservations
-        }
+          activeReservations,
+        },
       });
     } catch (error) {
       next(error);

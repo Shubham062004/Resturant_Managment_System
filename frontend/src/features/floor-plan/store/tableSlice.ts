@@ -27,34 +27,39 @@ const initialState: TableState = {
   error: null,
 };
 
-export const fetchTables = createAsyncThunk(
-  'tables/fetchBranch',
-  async (branchId: string) => {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/tables/branch/${branchId}`, {
-      withCredentials: true,
-    });
-    return response.data.data;
-  }
-);
+export const fetchTables = createAsyncThunk('tables/fetchBranch', async (branchId: string) => {
+  const response = await axios.get(`${API_BASE_URL}/api/v1/tables/branch/${branchId}`, {
+    withCredentials: true,
+  });
+  return response.data.data;
+});
 
 export const updateTablePosition = createAsyncThunk(
   'tables/updatePosition',
   async ({ id, x, y }: { id: string; x: number; y: number }) => {
-    const response = await axios.patch(`${API_BASE_URL}/api/v1/tables/${id}`, { x, y }, {
-      withCredentials: true,
-    });
+    const response = await axios.patch(
+      `${API_BASE_URL}/api/v1/tables/${id}`,
+      { x, y },
+      {
+        withCredentials: true,
+      },
+    );
     return response.data.data;
-  }
+  },
 );
 
 export const updateTableStatus = createAsyncThunk(
   'tables/updateStatus',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await axios.patch(`${API_BASE_URL}/api/v1/tables/${id}`, { status }, {
-      withCredentials: true,
-    });
+    const response = await axios.patch(
+      `${API_BASE_URL}/api/v1/tables/${id}`,
+      { status },
+      {
+        withCredentials: true,
+      },
+    );
     return response.data.data;
-  }
+  },
 );
 
 const tableSlice = createSlice({

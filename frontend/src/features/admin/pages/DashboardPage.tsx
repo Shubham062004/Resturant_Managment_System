@@ -21,7 +21,7 @@ export default function DashboardPage() {
     // Refresh dashboard on key events
     socket.on('order-updated', () => dispatch(fetchDashboardOverview(branchId)));
     socket.on('reservation-created', () => dispatch(fetchDashboardOverview(branchId)));
-    
+
     return () => {
       socket.disconnect();
     };
@@ -32,11 +32,31 @@ export default function DashboardPage() {
   }
 
   const kpis = [
-    { title: "Today's Revenue", value: `$${dashboard.revenueToday.toFixed(2)}`, icon: <DollarSign size={24} className="text-emerald-500" /> },
-    { title: "Today's Orders", value: dashboard.ordersTodayCount, icon: <ShoppingBag size={24} className="text-blue-500" /> },
-    { title: "Active Deliveries", value: dashboard.activeDeliveries, icon: <Activity size={24} className="text-indigo-500" /> },
-    { title: "Kitchen Queue", value: dashboard.activeKitchenOrders, icon: <Clock size={24} className="text-orange-500" /> },
-    { title: "Reservations", value: dashboard.activeReservations, icon: <Users size={24} className="text-purple-500" /> },
+    {
+      title: "Today's Revenue",
+      value: `$${dashboard.revenueToday.toFixed(2)}`,
+      icon: <DollarSign size={24} className="text-emerald-500" />,
+    },
+    {
+      title: "Today's Orders",
+      value: dashboard.ordersTodayCount,
+      icon: <ShoppingBag size={24} className="text-blue-500" />,
+    },
+    {
+      title: 'Active Deliveries',
+      value: dashboard.activeDeliveries,
+      icon: <Activity size={24} className="text-indigo-500" />,
+    },
+    {
+      title: 'Kitchen Queue',
+      value: dashboard.activeKitchenOrders,
+      icon: <Clock size={24} className="text-orange-500" />,
+    },
+    {
+      title: 'Reservations',
+      value: dashboard.activeReservations,
+      icon: <Users size={24} className="text-purple-500" />,
+    },
   ];
 
   return (

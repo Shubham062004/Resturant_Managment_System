@@ -53,7 +53,7 @@ export const ForgotPasswordPage: React.FC = () => {
         </div>
 
         {error && (
-          <Alert variant="danger" title="Recovery Interrupted">
+          <Alert variant="error" title="Recovery Interrupted">
             {error}
           </Alert>
         )}

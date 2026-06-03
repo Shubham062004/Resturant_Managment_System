@@ -6,12 +6,12 @@ export class PreferenceController {
   public static async getPreferences(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       let prefs = await prisma.notificationPreference.findUnique({
-        where: { userId: req.user!.id }
+        where: { userId: req.user!.id },
       });
 
       if (!prefs) {
         prefs = await prisma.notificationPreference.create({
-          data: { userId: req.user!.id }
+          data: { userId: req.user!.id },
         });
       }
 
@@ -28,8 +28,8 @@ export class PreferenceController {
         update: req.body,
         create: {
           userId: req.user!.id,
-          ...req.body
-        }
+          ...req.body,
+        },
       });
       res.status(200).json({ status: 'success', data: prefs });
     } catch (error) {

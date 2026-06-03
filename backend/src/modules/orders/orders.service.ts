@@ -17,7 +17,7 @@ export class OrdersService {
       paymentId?: string;
       orderType?: OrderType;
       notes?: string;
-    }
+    },
   ) {
     const cart = await prisma.cart.findUnique({
       where: { userId },
@@ -29,10 +29,7 @@ export class OrdersService {
     }
 
     // Calculate totals
-    const subtotal = cart.items.reduce(
-      (sum, item) => sum + Number(item.price) * item.quantity,
-      0
-    );
+    const subtotal = cart.items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
     const tax = subtotal * 0.05; // Fixed 5% tax for simplicity
     const deliveryFee = data.orderType === 'DELIVERY' ? 5.0 : 0.0;
     const discount = 0.0; // Extend to support coupons later
@@ -142,7 +139,7 @@ export class OrdersService {
   public static async updateOrderStatus(
     orderId: string,
     newStatus: OrderStatus,
-    changerId: string
+    changerId: string,
   ) {
     const existing = await prisma.order.findUnique({ where: { id: orderId } });
     if (!existing) throw new AppError('Order not found', 404);

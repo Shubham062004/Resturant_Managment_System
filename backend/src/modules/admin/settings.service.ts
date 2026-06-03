@@ -11,18 +11,18 @@ export class SettingsService {
 
   public static async updateSettings(branchId: string, data: any) {
     let settings = await prisma.restaurantSettings.findUnique({ where: { branchId } });
-    
+
     if (settings) {
       return prisma.restaurantSettings.update({
         where: { branchId },
-        data
+        data,
       });
     } else {
       return prisma.restaurantSettings.create({
         data: {
           branchId,
-          ...data
-        }
+          ...data,
+        },
       });
     }
   }

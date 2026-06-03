@@ -87,9 +87,7 @@ export const OffersPage: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                       <Calendar size={12} />
-                      <span>
-                        Valid until {new Date(offer.endDate).toLocaleDateString()}
-                      </span>
+                      <span>Valid until {new Date(offer.endDate).toLocaleDateString()}</span>
                     </div>
                     <p className="text-sm font-semibold text-accent">
                       {offer.discountType === 'PERCENTAGE'

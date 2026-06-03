@@ -16,7 +16,9 @@ export const updateTableSchema = {
     capacity: z.number().int().positive().optional(),
     x: z.number().optional(),
     y: z.number().optional(),
-    status: z.enum(['AVAILABLE', 'RESERVED', 'OCCUPIED', 'BILLING', 'CLEANING', 'OUT_OF_SERVICE']).optional(),
+    status: z
+      .enum(['AVAILABLE', 'RESERVED', 'OCCUPIED', 'BILLING', 'CLEANING', 'OUT_OF_SERVICE'])
+      .optional(),
     active: z.boolean().optional(),
   }),
 };

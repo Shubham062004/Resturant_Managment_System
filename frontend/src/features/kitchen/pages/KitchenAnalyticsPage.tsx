@@ -23,14 +23,18 @@ export default function KitchenAnalyticsPage() {
   }, []);
 
   if (loading) {
-    return <MainLayout><div className="p-8 text-white">Loading Analytics...</div></MainLayout>;
+    return (
+      <MainLayout>
+        <div className="p-8 text-white">Loading Analytics...</div>
+      </MainLayout>
+    );
   }
 
   return (
     <MainLayout>
       <div className="max-w-7xl mx-auto space-y-6">
         <h1 className="text-3xl font-display font-bold text-white mb-8">Kitchen Analytics</h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="bg-primary/10 border-primary/20">
             <CardContent className="p-6">
