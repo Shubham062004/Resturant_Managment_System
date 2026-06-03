@@ -37,7 +37,11 @@ export const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: true,
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app'
+    ],
     credentials: true,
   }),
 );
