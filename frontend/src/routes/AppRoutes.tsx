@@ -49,6 +49,7 @@ const AnalyticsDashboardPage = React.lazy(
   () => import('../features/analytics/pages/AnalyticsDashboardPage'),
 );
 const AdminAIInsightsPage = React.lazy(() => import('../features/ai/pages/AdminAIInsightsPage'));
+const SystemHealthPage = React.lazy(() => import('../features/qa/pages/SystemHealthPage'));
 
 // Super Admin Pages
 const SuperAdminLayout = React.lazy(
@@ -400,6 +401,7 @@ const AppRouter = () => {
               <Route path="customers" element={<div>Customers Page</div>} />
               <Route path="analytics" element={<AnalyticsDashboardPage />} />
               <Route path="ai-insights" element={<AdminAIInsightsPage />} />
+              <Route path="system-health" element={<SystemHealthPage />} />
               <Route path="settings" element={<div>Settings Page</div>} />
               <Route path="/admin/staff" element={<StaffManagementPage />} />
               {/* Other admin routes placeholder */}
