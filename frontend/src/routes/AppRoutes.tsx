@@ -37,6 +37,7 @@ const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/Ta
 const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
 const DashboardPage = React.lazy(() => import('../features/admin/pages/DashboardPage'));
 const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
+const AnalyticsDashboardPage = React.lazy(() => import('../features/analytics/pages/AnalyticsDashboardPage'));
 
 // Super Admin Pages
 const SuperAdminLayout = React.lazy(() => import('../features/super-admin/components/SuperAdminLayout'));
@@ -366,8 +367,9 @@ const AppRouter = () => {
                 </ProtectedRoute>
               }
             >
-              <Route index element={<DashboardPage />} />
-              <Route path="staff" element={<StaffManagementPage />} />
+              <Route path="/admin" element={<DashboardPage />} />
+              <Route path="/analytics" element={<AnalyticsDashboardPage />} />
+              <Route path="/admin/staff" element={<StaffManagementPage />} />
               {/* Other admin routes placeholder */}
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
             </Route>

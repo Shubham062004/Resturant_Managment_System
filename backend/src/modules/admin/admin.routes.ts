@@ -21,8 +21,12 @@ router.get('/settings/:branchId', SettingsController.getSettings);
 router.patch('/settings/:branchId', restrictTo('ADMIN', 'SUPER_ADMIN'), SettingsController.updateSettings);
 
 // Analytics
+router.get('/analytics/executive', AnalyticsController.getExecutiveSummary);
 router.get('/analytics/sales-trends', AnalyticsController.getSalesTrends);
-router.get('/analytics/popular-products', AnalyticsController.getPopularProducts);
+router.get('/analytics/customer', AnalyticsController.getCustomerAnalytics);
+router.get('/analytics/product', AnalyticsController.getProductAnalytics);
+router.get('/analytics/delivery', AnalyticsController.getDeliveryAnalytics);
+router.get('/analytics/popular-products', AnalyticsController.getProductAnalytics); // alias
 
 // Reports
 router.get('/reports/daily', ReportsController.getDailyReport);

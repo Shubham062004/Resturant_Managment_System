@@ -13,6 +13,7 @@ import {
   Flame,
   Sparkles,
   User as UserIcon,
+  BarChart3,
 } from 'lucide-react';
 
 export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
@@ -25,6 +26,7 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'Tables Plan', path: '/tables', icon: TableProperties },
+    { name: 'Analytics', path: '/analytics', icon: BarChart3 },
     { name: 'My Profile', path: '/profile', icon: UserIcon },
     { name: 'Design System', path: '/design-system', icon: Sparkles },
   ];
