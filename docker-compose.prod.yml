@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: oven-xpress-backend-prod
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      # Production secrets should be injected via a .env file or CI secrets manager
+      # DATABASE_URL: ${DATABASE_URL}
+      # MONGODB_URI: ${MONGODB_URI}
+      # JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - '5000:5000'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: oven-xpress-frontend-prod
+    restart: always
+    ports:
+      - '80:80'
+    depends_on:
+      backend:
+        condition: service_healthy

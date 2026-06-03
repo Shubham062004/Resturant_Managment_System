@@ -28,6 +28,7 @@ import qrRouter from './modules/qr-ordering/qr.routes';
 import adminRouter from './modules/admin/admin.routes';
 import superAdminRouter from './modules/super-admin/superadmin.routes';
 import notificationRouter from './modules/notifications/notification.routes';
+import healthRouter from './routes/health.routes';
 
 // Express application instance
 export const app = express();
@@ -57,17 +58,8 @@ app.use(
 );
 
 // 2. Health Monitoring Route
-app.get('/api/v1/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    data: {
-      status: 'UP',
-      uptime: process.uptime(),
-      timestamp: new Date().toISOString(),
-    },
-    message: 'Oven Xpress Core Node API is fully operational',
-  });
-});
+app.use('/api/v1/health', healthRouter);
+app.use('/api/health', healthRouter);
 
 // 3. Modular Feature Routes
 app.use('/api/v1/auth', authRouter);
