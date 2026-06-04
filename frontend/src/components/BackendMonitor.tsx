@@ -12,7 +12,7 @@ const BackendMonitor: React.FC<BackendMonitorProps> = ({ children }) => {
     const checkHealth = async () => {
       try {
         const response = await apiClient.get('/health', {
-          baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000', // Override to use root
+          baseURL: import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com', // Override to use root
         });
         if (response.data.status === 'ok') {
           setIsBackendOnline(true);
@@ -39,7 +39,7 @@ const BackendMonitor: React.FC<BackendMonitorProps> = ({ children }) => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#111827', color: '#f87171', fontFamily: 'sans-serif' }}>
         <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Backend Offline</h1>
-        <p style={{ color: '#9ca3af' }}>Cannot reach the server at {import.meta.env.VITE_API_URL || 'http://localhost:5000'}. Please ensure the backend is running.</p>
+        <p style={{ color: '#9ca3af' }}>Cannot reach the server at {import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com'}. Please ensure the backend is running.</p>
         <button 
           onClick={() => window.location.reload()} 
           style={{ marginTop: '2rem', padding: '0.75rem 1.5rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '0.375rem', cursor: 'pointer' }}

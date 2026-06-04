@@ -15,7 +15,7 @@ import { Badge } from '../../../shared/components/ui/Badge';
 import { Package, Navigation, CheckCircle2 } from 'lucide-react';
 import { DeliveryTrackingMap } from '../components/DeliveryTrackingMap';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
 
 export default function DeliveryDashboardPage() {
   const dispatch = useAppDispatch();

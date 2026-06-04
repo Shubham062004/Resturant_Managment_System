@@ -15,7 +15,7 @@ import { Badge } from '../../../shared/components/ui/Badge';
 import { CheckCircle2, Clock, MapPin, Package, ShoppingBag, Truck, XCircle } from 'lucide-react';
 import { DeliveryTrackingMap } from '../../delivery/components/DeliveryTrackingMap';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
 const SOCKET_URL = API_BASE_URL;
 
 export default function OrderTrackingPage() {
