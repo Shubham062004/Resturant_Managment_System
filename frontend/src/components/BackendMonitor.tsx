@@ -11,7 +11,7 @@ const BackendMonitor: React.FC<BackendMonitorProps> = ({ children }) => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const response = await apiClient.get('/health', {
+        const response = await apiClient.get('/ping', {
           baseURL: import.meta.env.VITE_API_URL.replace('/api/v1', ''), // Override to use root
         });
         if (response.data.status === 'ok') {

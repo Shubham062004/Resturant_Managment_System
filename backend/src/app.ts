@@ -65,6 +65,9 @@ app.use(
 app.use('/health', healthRouter);
 app.use('/api/v1/health', healthRouter);
 app.use('/api/health', healthRouter);
+app.use('/ping', healthRouter);
+app.use('/api/v1/ping', healthRouter);
+app.use('/api/ping', healthRouter);
 
 // 3. Modular Feature Routes
 app.use('/api/v1/auth', authRouter);
