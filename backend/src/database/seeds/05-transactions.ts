@@ -12,7 +12,7 @@ export async function seedTransactions(
   await prisma.order.deleteMany();
 
   const orders = [];
-  const statuses = ['DELIVERED', 'CANCELLED', 'REFUNDED', 'COMPLETED', 'PLACED', 'PREPARING'];
+  const statuses = ['DELIVERED', 'CANCELLED', 'REFUNDED', 'PICKED_UP', 'PLACED', 'PREPARING'];
 
   for (let i = 0; i < 1000; i++) {
     const restaurant = restaurants[i % restaurants.length];
@@ -30,7 +30,7 @@ export async function seedTransactions(
 
     // Distribution: 50% Delivery, 20% Takeaway, 20% Dine-In, 10% Walk-In
     let orderType = 'DELIVERY';
-    if (i >= 500 && i < 700) orderType = 'TAKEAWAY';
+    if (i >= 500 && i < 700) orderType = 'PICKUP';
     else if (i >= 700 && i < 900) orderType = 'DINE_IN';
     else if (i >= 900) orderType = 'WALK_IN';
 

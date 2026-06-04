@@ -12,6 +12,7 @@ export async function seedKitchen(prisma: PrismaClient) {
     { id: randomUUID(), name: 'Dessert Prep', description: 'Sweets and Shakes' }
   ];
 
+  await prisma.kitchenStation.deleteMany();
   await prisma.kitchenStation.createMany({ data: stations });
 
   return { stations };

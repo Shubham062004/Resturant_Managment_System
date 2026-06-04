@@ -17,6 +17,7 @@ export async function seedDelivery(prisma: PrismaClient, deliveryStaffIds: strin
     });
   }
 
+  await prisma.deliveryPartner.deleteMany();
   await prisma.deliveryPartner.createMany({ data: partners });
 
   // Assignments will be created dynamically with Orders in 05-transactions or generated here for past orders.

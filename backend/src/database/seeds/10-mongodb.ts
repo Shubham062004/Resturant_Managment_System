@@ -24,7 +24,7 @@ export async function seedMongoDB(customerIds: string[]) {
       productId: `prod-${i % 100}`,
       action: i % 10 === 0 ? 'REMOVE' : 'ADD',
       quantity: Math.floor(Math.random() * 3) + 1,
-      createdAt: eventDate,
+      timestamp: eventDate,
     });
   }
 
@@ -34,24 +34,30 @@ export async function seedMongoDB(customerIds: string[]) {
     eventDate.setDate(eventDate.getDate() - Math.floor(Math.random() * 365));
     
     checkoutEvents.push({
-      orderId: `ord-${i}`,
       userId: customerIds[i % customerIds.length],
-      cartId: `cart-${i % 500}`,
-      totalAmount: Math.random() * 100 + 20,
-      paymentMethod: i % 2 === 0 ? 'STRIPE' : 'CASH',
-      status: i % 20 === 0 ? 'FAILED' : 'SUCCESS',
-      createdAt: eventDate,
+      orderDraftId: `draft-${i}`,
+      step: i % 20 === 0 ? 'PAYMENT_FAILED' : 'PAYMENT_COMPLETED',
+      timestamp: eventDate,
+      metadata: {
+        totalAmount: Math.random() * 100 + 20,
+        paymentMethod: i % 2 === 0 ? 'STRIPE' : 'CASH',
+        cartId: `cart-${i % 500}`,
+      },
     });
   }
 
   // Search Analytics
   const searchTerms = ['vegan pizza', 'spicy burger', 'garlic bread', 'coke', 'pasta', 'gluten free', 'wings'];
-  const searchAnalytics = searchTerms.map(term => ({
-    term,
-    count: Math.floor(Math.random() * 5000) + 100,
-    uniqueUsers: Math.floor(Math.random() * 1000) + 50,
-    lastSearchedAt: new Date()
-  }));
+  const searchAnalytics = [];
+  for (let i = 0; i < 500; i++) {
+    const term = searchTerms[i % searchTerms.length];
+    searchAnalytics.push({
+      query: term,
+      resultsCount: Math.floor(Math.random() * 20),
+      timestamp: new Date(),
+      userId: customerIds[i % customerIds.length],
+    });
+  }
 
   await CartEvent.insertMany(cartEvents);
   await CheckoutEvent.insertMany(checkoutEvents);

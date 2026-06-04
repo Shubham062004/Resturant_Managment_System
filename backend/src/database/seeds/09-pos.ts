@@ -14,22 +14,25 @@ export async function seedPOS(prisma: PrismaClient, branches: any[], _cashiers: 
         id: randomUUID(),
         branchId: branch.id,
         terminalName: `Terminal ${i} - ${branch.name}`,
-        deviceInfo: JSON.stringify({ os: 'iOS', type: 'iPad' }),
       });
     }
 
     // 10 Tables per branch
     for (let i = 1; i <= 10; i++) {
+      // Use branch name prefix to satisfy global unique constraint on Table.number
+      const branchPrefix = branch.name.replace(/[^a-zA-Z0-9]/g, '');
       tables.push({
         id: randomUUID(),
         branchId: branch.id,
-        number: i.toString(),
+        number: `${branchPrefix}-T${i}`,
         capacity: i % 2 === 0 ? 4 : 2,
         status: TableStatus.AVAILABLE
       });
     }
   }
 
+  await prisma.pOSTerminal.deleteMany();
+  await prisma.table.deleteMany();
   await prisma.pOSTerminal.createMany({ data: terminals });
   await prisma.table.createMany({ data: tables });
 

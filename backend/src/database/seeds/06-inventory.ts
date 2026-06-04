@@ -4,6 +4,10 @@ import { randomUUID } from 'crypto';
 export async function seedInventory(prisma: PrismaClient, branches: any[]) {
   console.log('🌱 Seeding Inventory (Ingredients, Suppliers, POs)...');
 
+  await prisma.inventory.deleteMany();
+  await prisma.ingredient.deleteMany();
+  await prisma.supplier.deleteMany();
+
   // Skip if models are stripped, but assume full schema
   const suppliers = [];
   const ingredients = [];
@@ -12,11 +16,11 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
     suppliers.push({
       id: randomUUID(),
       name: `Supplier ${i} Wholesale`,
-      contactName: `Contact ${i}`,
+      contactPerson: `Contact ${i}`,
       email: `supplier${i}@wholesale.com`,
       phone: `555-010${i}`,
       address: `123 Distribution Way, Warehouse ${i}`,
-      isActive: true,
+      active: true,
     });
   }
   
@@ -29,9 +33,6 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
       name: `Ingredient ${i} (Flour/Tomato/Cheese)`,
       sku: `ING-${i.toString().padStart(4, '0')}`,
       unit: 'KG',
-      costPerUnit: Math.random() * 10 + 1,
-      minStockLevel: 50,
-      maxStockLevel: 500,
       category: 'GENERAL',
       minimumStock: 50,
       reorderPoint: 50,
@@ -44,12 +45,14 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
   const inventoryItems = [];
   for (const branch of branches) {
     for (const ing of ingredients) {
+      const quantity = Math.floor(Math.random() * 400) + 50;
       inventoryItems.push({
         id: randomUUID(),
         branchId: branch.id,
         ingredientId: ing.id,
-        quantity: Math.floor(Math.random() * 400) + 50,
-        lastRestockDate: new Date(),
+        quantity: quantity,
+        availableQuantity: quantity,
+        reservedQuantity: 0.0,
       });
     }
   }
