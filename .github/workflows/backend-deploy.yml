@@ -15,4 +15,8 @@ jobs:
       - name: Trigger Render Deploy Hook
         # Using a deploy hook URL provided by Render dashboard
         run: |
+          if [ -z "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            echo "Missing Render Deploy Hook"
+            exit 1
+          fi
           curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
