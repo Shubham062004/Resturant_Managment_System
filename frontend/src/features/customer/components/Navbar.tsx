@@ -53,7 +53,7 @@ export const Navbar: React.FC = () => {
   const getAvatarSrc = () => {
     if (!user || !user.avatar) return undefined;
     if (user.avatar.startsWith('http')) return user.avatar;
-    const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
+    const apiBaseUrl = import.meta.env.VITE_API_URL;
     return `${apiBaseUrl}${user.avatar}`;
   };
 

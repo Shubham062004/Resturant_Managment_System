@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { fetchTables, updateTablePosition, tableUpdated } from '../store/tableSlice';
 import { io } from 'socket.io-client';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function FloorPlanPage() {
   const dispatch = useAppDispatch();

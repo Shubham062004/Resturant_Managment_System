@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../app/store';
 import { googleAuthLogin } from '../store/authSlice';
+import { getDashboardRouteByRole } from '../utils/roleRouting';
 import { useToast } from '../../../shared/components/ui/Toast';
 
 export const GoogleCallbackPage: React.FC = () => {
@@ -31,10 +32,11 @@ export const GoogleCallbackPage: React.FC = () => {
 
       if (googleAuthLogin.fulfilled.match(result)) {
         toast.success('Successfully logged in via Google OAuth!');
-        navigate('/');
+        const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
+        navigate(dashboardRoute, { replace: true });
       } else {
         toast.error((result.payload as string) || 'Google authentication failed.');
-        navigate('/login');
+        navigate('/login', { replace: true });
       }
     };
 

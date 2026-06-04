@@ -121,7 +121,7 @@ export const ProfilePage: React.FC = () => {
   };
 
   // Base URL mapping for images
-  const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
+  const apiBaseUrl = import.meta.env.VITE_API_URL;
   const getAvatarSrc = () => {
     if (avatarPreview) return avatarPreview;
     if (!user.avatar) return undefined;

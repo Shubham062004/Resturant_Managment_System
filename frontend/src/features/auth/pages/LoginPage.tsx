@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { login, clearError } from '../store/authSlice';
+import { getDashboardRouteByRole } from '../utils/roleRouting';
 import AuthLayout from '../../../shared/layouts/AuthLayout';
 import Input from '../../../shared/components/ui/Input';
 import Button from '../../../shared/components/ui/Button';
@@ -79,7 +80,9 @@ export const LoginPage: React.FC = () => {
           },
         });
       } else {
-        navigate(from, { replace: true });
+        const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
+        const destination = from === '/' ? dashboardRoute : from;
+        navigate(destination, { replace: true });
       }
     }
   };

@@ -14,7 +14,7 @@ import { Button } from '../../../shared/components/ui/Button';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { io } from 'socket.io-client';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function ReservationsPage() {
   const dispatch = useAppDispatch();

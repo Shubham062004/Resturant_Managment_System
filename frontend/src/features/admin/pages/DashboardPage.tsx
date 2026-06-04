@@ -5,7 +5,7 @@ import { Card } from '../../../shared/components/ui/Card';
 import { Activity, DollarSign, ShoppingBag, Users, Clock } from 'lucide-react';
 import { io } from 'socket.io-client';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://resturant-managment-system-qkow.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();

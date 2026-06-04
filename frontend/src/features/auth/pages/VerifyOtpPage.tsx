@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { verifyOtp, clearError } from '../store/authSlice';
+import { getDashboardRouteByRole } from '../utils/roleRouting';
 import AuthLayout from '../../../shared/layouts/AuthLayout';
 import Input from '../../../shared/components/ui/Input';
 import Button from '../../../shared/components/ui/Button';
@@ -42,7 +43,9 @@ export const VerifyOtpPage: React.FC = () => {
     const result = await dispatch(verifyOtp(payload as any));
     if (verifyOtp.fulfilled.match(result)) {
       const from = location.state?.from || '/';
-      navigate(from, { replace: true });
+      const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
+      const destination = from === '/' ? dashboardRoute : from;
+      navigate(destination, { replace: true });
     }
   };
 
