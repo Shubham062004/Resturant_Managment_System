@@ -23,7 +23,7 @@ export class GeminiProvider implements AIProvider {
     return `[Mock Gemini Response] Based on the context: "${prompt.substring(0, 50)}...", here is the generated output.`;
   }
 
-  async chat(messages: AIChatMessage[], options?: AICompletionOptions): Promise<string> {
+  async chat(messages: AIChatMessage[], _options?: AICompletionOptions): Promise<string> {
     console.log(`[GeminiProvider] Chat session with ${messages.length} messages.`);
     const lastMessage = messages[messages.length - 1];
     

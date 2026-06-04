@@ -10,7 +10,6 @@ process.env.GOOGLE_CLIENT_ID = 'mock_client_id';
 process.env.GOOGLE_CLIENT_SECRET = 'mock_client_secret';
 
 import { beforeEach, vi } from 'vitest';
-import { prismaMock } from './prisma.mock';
 
 beforeEach(() => {
   vi.clearAllMocks();

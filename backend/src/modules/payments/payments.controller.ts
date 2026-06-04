@@ -39,7 +39,7 @@ export class PaymentsController {
   public static async stripeWebhook(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    _next: NextFunction,
   ): Promise<void> {
     try {
       const signature = req.headers['stripe-signature'] as string;

@@ -8,7 +8,7 @@ import { seedInventory } from './seeds/06-inventory';
 import { seedDelivery } from './seeds/07-delivery';
 import { seedKitchen } from './seeds/08-kitchen';
 import { seedPOS } from './seeds/09-pos';
-import { connectDatabases, disconnectDatabases } from '../config/db';
+import { connectDatabases } from '../config/db';
 import { seedMongoDB } from './seeds/10-mongodb';
 
 async function main() {

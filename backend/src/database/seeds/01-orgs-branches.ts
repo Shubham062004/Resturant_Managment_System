@@ -12,7 +12,7 @@ export async function seedOrgsAndBranches(prisma: PrismaClient) {
 
   // Create Parent Organization
   const orgId = randomUUID();
-  const org = await prisma.organization.create({
+  await prisma.organization.create({
     data: {
       id: orgId,
       name: 'Oven Xpress Group',

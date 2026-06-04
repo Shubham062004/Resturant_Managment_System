@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import request from 'supertest';
-import { app } from '../../app'; // Assuming app is exported from server or app.ts
-import { prismaMock } from '../prisma.mock';
+// import request from 'supertest';
+// import { app } from '../../app'; // Assuming app is exported from server or app.ts
+// import { prismaMock } from '../prisma.mock';
 
 // We mock app here just for the example structure, assuming supertest wraps an Express instance.
 // If app is not directly importable without starting the server, we might need a separate app.ts file.

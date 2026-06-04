@@ -22,7 +22,7 @@ export class OpenAIProvider implements AIProvider {
     return `[Mock OpenAI Response] Processing your prompt: "${prompt.substring(0, 50)}...". Result generated successfully.`;
   }
 
-  async chat(messages: AIChatMessage[], options?: AICompletionOptions): Promise<string> {
+  async chat(messages: AIChatMessage[], _options?: AICompletionOptions): Promise<string> {
     console.log(`[OpenAIProvider] Chat session with ${messages.length} messages.`);
     const lastMessage = messages[messages.length - 1];
     

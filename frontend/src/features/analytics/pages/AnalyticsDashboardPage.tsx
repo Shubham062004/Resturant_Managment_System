@@ -13,8 +13,6 @@ import RevenueChart from '../components/RevenueChart';
 import CustomerMetrics from '../components/CustomerMetrics';
 import ProductMetrics from '../components/ProductMetrics';
 import DeliveryMetrics from '../components/DeliveryMetrics';
-import { BarChart3, TrendingUp, Users, ShoppingBag } from 'lucide-react';
-
 export default function AnalyticsDashboardPage() {
   const dispatch = useAppDispatch();
   const { executive, status } = useAppSelector((state) => state.analytics);
@@ -37,7 +35,7 @@ export default function AnalyticsDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="bg-primary/10 border-primary/20">
               <CardContent className="p-6">
-                <p className="text-primary font-medium mb-1">Today's Revenue</p>
+                <p className="text-primary font-medium mb-1">{"Today's Revenue"}</p>
                 <h3 className="text-3xl font-bold text-white">
                   ${executive?.revenueToday?.toFixed(2) || '0.00'}
                 </h3>

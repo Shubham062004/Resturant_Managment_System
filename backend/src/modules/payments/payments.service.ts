@@ -87,7 +87,7 @@ export class PaymentsService {
   /**
    * Securely calculate cart totals from Postgres and generate Razorpay Order
    */
-  public static async createRazorpayOrder(userId: string) {
+  public static async createRazorpayOrder(_userId: string) {
     throw new AppError('Razorpay integration is temporarily disabled', 501);
   }
 

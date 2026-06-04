@@ -13,7 +13,6 @@ export async function seedTransactions(
 
   const orders = [];
   const statuses = ['DELIVERED', 'CANCELLED', 'REFUNDED', 'COMPLETED', 'PLACED', 'PREPARING'];
-  const types = ['DELIVERY', 'TAKEAWAY', 'DINE_IN'];
 
   for (let i = 0; i < 1000; i++) {
     const restaurant = restaurants[i % restaurants.length];

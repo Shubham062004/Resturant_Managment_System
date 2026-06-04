@@ -380,7 +380,7 @@ export class AuthController {
 
   public static async sendOtp(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { email, phone, type } = req.body;
+      const { email, phone, _type } = req.body;
 
       let identifier: { email?: string; phone?: string; userId?: string } = {};
 

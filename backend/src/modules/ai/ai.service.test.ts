@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { aiService } from './ai.service';
 import { GeminiProvider } from './providers/GeminiProvider';
-import { OpenAIProvider } from './providers/OpenAIProvider';
 
 describe('aiService', () => {
   it('should initialize with Gemini as default provider', () => {

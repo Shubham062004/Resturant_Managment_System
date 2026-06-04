@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppSelector } from '../../../app/store';
 import { ShieldCheck, Activity, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
+import { Card, CardContent } from '../../../shared/components/ui/Card';
 
 export default function SystemHealthPage() {
   const { systemHealth, coverage, lastBuildStatus, testResults } = useAppSelector(state => state.qa);

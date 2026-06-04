@@ -11,7 +11,7 @@ export default function ProductMetrics() {
     return <div className="text-white p-4">No product data available.</div>;
   }
 
-  const { topProducts, categories } = product;
+  const { topProducts } = product;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

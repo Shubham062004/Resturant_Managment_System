@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import AppError from '../utils/appError';
 import { prisma } from '../config/db';
 import logger from '../utils/logger';
 import { OtpType } from '@prisma/client';

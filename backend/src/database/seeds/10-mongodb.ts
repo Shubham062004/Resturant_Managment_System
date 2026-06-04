@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import CartEvent from '../../models/CartEvent';
 import CheckoutEvent from '../../models/CheckoutEvent';
 import SearchAnalytic from '../../models/SearchAnalytic';

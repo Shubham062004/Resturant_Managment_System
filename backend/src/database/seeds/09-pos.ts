@@ -1,7 +1,7 @@
 import { PrismaClient, TableStatus } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
-export async function seedPOS(prisma: PrismaClient, branches: any[], cashiers: string[]) {
+export async function seedPOS(prisma: PrismaClient, branches: any[], _cashiers: string[]) {
   console.log('🌱 Seeding POS (Terminals, Tables, Drawers)...');
 
   const terminals = [];

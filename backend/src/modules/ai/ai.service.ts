@@ -59,12 +59,12 @@ export class AIService {
     }
   }
 
-  private async logPrompt(prompt: string, response: string, latencyMs: number, status: 'SUCCESS' | 'ERROR', errorMessage?: string) {
+  private async logPrompt(prompt: string, response: string, latencyMs: number, status: 'SUCCESS' | 'ERROR', _errorMessage?: string) {
     // Ideally log to PromptLog (MongoDB)
     console.log(`[PromptLog] ${status} - Latency: ${latencyMs}ms`);
   }
 
-  private async logChat(messages: AIChatMessage[], response: string, latencyMs: number, status: 'SUCCESS' | 'ERROR', errorMessage?: string) {
+  private async logChat(messages: AIChatMessage[], response: string, latencyMs: number, status: 'SUCCESS' | 'ERROR', _errorMessage?: string) {
     // Ideally log to ChatLog (MongoDB)
     console.log(`[ChatLog] ${status} - Latency: ${latencyMs}ms`);
   }

@@ -117,7 +117,7 @@ export class AnalyticsController {
 
   public static async getProductAnalytics(req: Request, res: Response, next: NextFunction) {
     try {
-      const branchId = req.query.branchId as string;
+      const _branchId = req.query.branchId as string;
 
       const items = await prisma.orderItem.groupBy({
         by: ['productId'],

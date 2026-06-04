@@ -6,7 +6,6 @@ import AuthLayout from '../../../shared/layouts/AuthLayout';
 import Input from '../../../shared/components/ui/Input';
 import Button from '../../../shared/components/ui/Button';
 import Alert from '../../../shared/components/ui/Alert';
-import Select from '../../../shared/components/ui/Select';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { Mail, Phone, Lock, User as UserIcon, UserPlus } from 'lucide-react';
 
@@ -15,7 +14,7 @@ export const RegisterPage: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [role, setRole] = useState('CUSTOMER');
+  const [role] = useState('CUSTOMER');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -24,10 +23,6 @@ export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { authStatus, error } = useAppSelector((state) => state.auth);
-
-  const roleOptions = [
-    { label: 'Customer', value: 'CUSTOMER' },
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

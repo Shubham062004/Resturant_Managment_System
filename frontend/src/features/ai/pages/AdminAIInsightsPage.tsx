@@ -39,7 +39,7 @@ export default function AdminAIInsightsPage() {
               <p className="text-muted-foreground">Generating demand predictions...</p>
             ) : demand ? (
               <>
-                <p className="text-sm text-muted-foreground italic mb-4">"{demand.aiAnalysis}"</p>
+                <p className="text-sm text-muted-foreground italic mb-4">&ldquo;{demand.aiAnalysis}&rdquo;</p>
                 <div className="space-y-3">
                   {demand.forecasts?.map((f: any, i: number) => (
                     <div key={i} className="flex justify-between items-center p-3 bg-secondary/30 rounded-lg">
@@ -71,7 +71,7 @@ export default function AdminAIInsightsPage() {
               <p className="text-muted-foreground">Analyzing inventory levels...</p>
             ) : inventory ? (
               <>
-                <p className="text-sm text-muted-foreground italic mb-4">"{inventory.aiAnalysis}"</p>
+                <p className="text-sm text-muted-foreground italic mb-4">&ldquo;{inventory.aiAnalysis}&rdquo;</p>
                 <div className="space-y-3">
                   {inventory.risks?.map((r: any, i: number) => (
                     <div key={i} className="flex justify-between items-center p-3 bg-danger/10 border border-danger/20 rounded-lg">
