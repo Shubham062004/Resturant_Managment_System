@@ -15,7 +15,6 @@
     "lint": "npm run lint --workspaces --if-present",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install || true",
     "docker:build": "docker compose build",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down"
@@ -26,12 +25,13 @@
     "@playwright/test": "^1.60.0",
     "concurrently": "^8.2.2",
     "eslint": "^9.4.0",
-    "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
     "prettier": "^3.3.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.60.4",
-    "@rollup/rollup-linux-x64-musl": "^4.60.4"
+    "@rollup/rollup-linux-x64-musl": "^4.60.4",
+    "@rolldown/binding-linux-x64-gnu": "^1.0.3",
+    "@rolldown/binding-linux-x64-musl": "^1.0.3"
   }
 }
