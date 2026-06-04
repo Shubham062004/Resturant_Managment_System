@@ -88,7 +88,15 @@ app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/super-admin', superAdminRouter);
 app.use('/api/v1/notifications', notificationRouter);
 
-// 4. Fallback Catch-All Route
+// 4. Root Welcome Route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Backend is running all good!',
+  });
+});
+
+// 5. Fallback Catch-All Route
 app.all('*', (req, res, next) => {
   next(
     new AppError(
