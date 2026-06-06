@@ -11,6 +11,7 @@ export interface DecodedToken {
   id: string;
   email: string;
   role: Role;
+  assignedCategory?: string;
   iat: number;
   exp: number;
 }
@@ -35,6 +36,7 @@ export const authGuard = async (
       id: decoded.id,
       email: decoded.email,
       role: decoded.role,
+      assignedCategory: decoded.assignedCategory,
     };
 
     next();

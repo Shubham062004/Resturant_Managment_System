@@ -6,9 +6,8 @@ import {
   receiveOrderStatusUpdate
 } from '../store/kitchenSlice';
 import { io } from 'socket.io-client';
-import { Flame, Clock, RefreshCw, Layers } from 'lucide-react';
+import { Flame, Clock, Layers } from 'lucide-react';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card } from '../../../shared/components/ui/Card';
 import { motion } from 'framer-motion';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -22,7 +21,7 @@ const COLUMNS = [
 
 export default function KitchenMonitorPage() {
   const dispatch = useAppDispatch();
-  const { orders, status } = useAppSelector((state) => state.kitchen);
+  const { orders } = useAppSelector((state) => state.kitchen);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {

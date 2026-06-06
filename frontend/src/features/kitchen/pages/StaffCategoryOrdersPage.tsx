@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../app/store';
 import apiClient from '../../../services/apiClient';
-import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
+import { Card } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { Flame, Clock, ChefHat, Check, Play, CheckCheck, RefreshCw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ChefHat, Check, Play, CheckCheck, RefreshCw } from 'lucide-react';
 
 interface KitchenTask {
   id: string;

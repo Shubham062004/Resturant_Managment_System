@@ -78,7 +78,7 @@ export class AIService {
     }
   }
 
-  private async logChat(messages: AIChatMessage[], response: string, latencyMs: number, status: 'SUCCESS' | 'ERROR', errorMessage?: string) {
+  private async logChat(messages: AIChatMessage[], response: string, _latencyMs: number, status: 'SUCCESS' | 'ERROR', _errorMessage?: string) {
     try {
       const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
       const chatMessages = messages.map(msg => ({

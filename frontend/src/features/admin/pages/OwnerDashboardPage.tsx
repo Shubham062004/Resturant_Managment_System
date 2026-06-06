@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../app/store';
 import apiClient from '../../../services/apiClient';
-import { Card, CardHeader, CardContent, CardFooter } from '../../../shared/components/ui/Card';
+import { Card, CardHeader } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
-import { Select } from '../../../shared/components/ui/Select';
 import { useToast } from '../../../shared/components/ui/Toast';
 import {
   TrendingUp,
@@ -33,8 +31,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
   CartesianGrid
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -63,11 +59,7 @@ interface BranchPerformance {
   customerRating: number;
 }
 
-interface TopProduct {
-  name: string;
-  quantity: number;
-  revenue: number;
-}
+
 
 interface LowStockAlert {
   id: string;
@@ -114,7 +106,6 @@ export default function OwnerDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [branches, setBranches] = useState<BranchPerformance[]>([]);
-  const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
   const [lowStockAlerts, setLowStockAlerts] = useState<LowStockAlert[]>([]);
   
   // Inventory Approval States
@@ -138,7 +129,6 @@ export default function OwnerDashboardPage() {
       const data = ownerRes.data.data;
       setSummary(data.summary);
       setBranches(data.branchPerformance);
-      setTopProducts(data.topProducts);
       setLowStockAlerts(data.lowStockAlerts);
 
       // Filter for PENDING inventory requests
@@ -517,7 +507,7 @@ export default function OwnerDashboardPage() {
                     </span>
                   </div>
                   {req.notes && (
-                    <p className="text-xs text-slate-400 mt-2 truncate italic">"{req.notes}"</p>
+                    <p className="text-xs text-slate-400 mt-2 truncate italic">&quot;{req.notes}&quot;</p>
                   )}
                   <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
                     <span>{req.items.length} items requested</span>

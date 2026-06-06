@@ -147,17 +147,26 @@ const posSlice = createSlice({
       })
       .addCase(startShift.fulfilled, (state, action) => {
         state.activeDrawer = action.payload;
+        state.activeTerminal = action.payload?.terminal || { id: action.meta.arg.terminalId };
       })
       .addCase(endShift.fulfilled, (state) => {
         state.activeDrawer = null;
+        state.activeTerminal = null;
       })
       .addCase(checkoutPOS.fulfilled, (state, action) => {
         state.activeOrder = action.payload;
       })
       .addCase(processPayment.fulfilled, (state, action) => {
         if (action.payload.status === 'PAID') {
-          state.activeOrder = null; // Clear active order
-          // Cart clearing can be dispatched after
+          if (state.activeOrder) {
+            state.receipts.unshift(state.activeOrder);
+          }
+          state.activeOrder = null;
+          state.cart.items = [];
+          state.cart.discount = 0;
+          state.cart.subtotal = 0;
+          state.cart.tax = 0;
+          state.cart.total = 0;
         }
       });
   },

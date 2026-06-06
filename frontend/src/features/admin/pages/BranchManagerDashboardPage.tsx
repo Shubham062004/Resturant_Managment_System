@@ -7,7 +7,6 @@ import {
   processPayment,
   setOrderType,
   addToCart,
-  removeFromCart,
   clearCart,
   updateQuantity
 } from '../../pos/store/posSlice';
@@ -17,7 +16,7 @@ import {
   updateReservationStatus
 } from '../../reservations/store/reservationSlice';
 import apiClient from '../../../services/apiClient';
-import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
+import { Card, CardHeader } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import { Badge } from '../../../shared/components/ui/Badge';
@@ -35,13 +34,9 @@ import {
   PlusCircle,
   ClipboardList,
   Building,
-  RefreshCw,
-  Search,
-  CheckCircle,
-  XCircle,
-  FileText
+  Search
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface Branch {
   id: string;
@@ -65,7 +60,7 @@ interface ReplenishmentItem {
 export default function BranchManagerDashboardPage() {
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const { terminals, activeDrawer, cart, activeOrder } = useAppSelector((state) => state.pos);
+  const { activeDrawer, cart, activeOrder } = useAppSelector((state) => state.pos);
   const { categories, products } = useAppSelector((state) => state.menu);
   const { reservations } = useAppSelector((state) => state.reservations);
 

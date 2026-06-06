@@ -515,6 +515,7 @@ export class AuthController {
         id: user.id,
         email: user.email,
         role: user.role,
+        assignedCategory: user.assignedCategory,
       });
       const refreshToken = await AuthService.generateRefreshToken(user.id);
       const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');

@@ -1,16 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchNotifications, markNotificationRead } from '../store/notificationSlice';
+import { fetchNotifications, markNotificationRead, addRealtimeNotification } from '../store/notificationSlice';
 import { Bell, X } from 'lucide-react';
+import { io } from 'socket.io-client';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function NotificationCenter() {
   const dispatch = useAppDispatch();
   const { list, unreadCount } = useAppSelector((state) => state.notifications);
+  const { user } = useAppSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchNotifications());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!user) return undefined;
+    const token = localStorage.getItem('token');
+    const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
+
+    newSocket.on('notification-created', (notification: any) => {
+      dispatch(addRealtimeNotification(notification));
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [user, dispatch]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 

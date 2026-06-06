@@ -55,7 +55,6 @@ const ReservationsPage = React.lazy(
 const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
 const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
 const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
-const DashboardPage = React.lazy(() => import('../features/admin/pages/DashboardPage'));
 const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
 const AnalyticsDashboardPage = React.lazy(
   () => import('../features/analytics/pages/AnalyticsDashboardPage'),

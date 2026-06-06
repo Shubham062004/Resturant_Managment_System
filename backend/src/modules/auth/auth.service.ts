@@ -13,6 +13,7 @@ export interface TokenPayload {
   id: string;
   email: string;
   role: Role;
+  assignedCategory?: string | null;
 }
 
 export class AuthService {
@@ -160,6 +161,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
+      assignedCategory: user.assignedCategory,
     });
     const refreshToken = await this.generateRefreshToken(user.id);
     const tokenHash = this.hashToken(refreshToken);
@@ -209,6 +211,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
+      assignedCategory: user.assignedCategory,
     });
     const refreshToken = await this.generateRefreshToken(user.id);
     const tokenHash = this.hashToken(refreshToken);
@@ -284,6 +287,7 @@ export class AuthService {
       id: user.id,
       email: user.email,
       role: user.role,
+      assignedCategory: user.assignedCategory,
     });
     const newRefreshToken = await this.generateRefreshToken(user.id);
     const newHash = this.hashToken(newRefreshToken);

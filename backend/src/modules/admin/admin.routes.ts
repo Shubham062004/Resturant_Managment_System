@@ -46,6 +46,16 @@ router.get(
 );
 router.post('/staff', restrictTo('ADMIN', 'SUPER_ADMIN'), StaffController.createStaff);
 router.patch(
+  '/staff/bulk-update',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  StaffController.bulkUpdateStaff,
+);
+router.patch(
+  '/staff/:id',
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  StaffController.updateStaffProfile,
+);
+router.patch(
   '/staff/:id/role',
   restrictTo('ADMIN', 'SUPER_ADMIN'),
   StaffController.updateStaffRole,
