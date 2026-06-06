@@ -15,10 +15,9 @@ export async function seedOperations(prisma: PrismaClient, branches: any[], cust
     const branch = branches[i % branches.length];
     const customerId = customerIds[i % customerIds.length];
     
-    // Generate dates around today
-    const dateObj = new Date();
-    dateObj.setDate(dateObj.getDate() + (Math.floor(Math.random() * 14) - 7)); // -7 to +7 days
-    const dateStr = dateObj.toISOString().split('T')[0];
+    // Generate dates in May 2026
+    const day = (i % 31) + 1;
+    const dateStr = `2026-05-${day.toString().padStart(2, '0')}`;
 
     reservations.push({
       id: randomUUID(),

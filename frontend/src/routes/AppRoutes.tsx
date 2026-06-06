@@ -37,6 +37,18 @@ const InventoryDashboardPage = React.lazy(
   () => import('../features/inventory/pages/InventoryDashboardPage'),
 );
 const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashboardPage'));
+const OwnerDashboardPage = React.lazy(
+  () => import('../features/admin/pages/OwnerDashboardPage'),
+);
+const BranchManagerDashboardPage = React.lazy(
+  () => import('../features/admin/pages/BranchManagerDashboardPage'),
+);
+const KitchenMonitorPage = React.lazy(
+  () => import('../features/kitchen/pages/KitchenMonitorPage'),
+);
+const StaffCategoryOrdersPage = React.lazy(
+  () => import('../features/kitchen/pages/StaffCategoryOrdersPage'),
+);
 const ReservationsPage = React.lazy(
   () => import('../features/reservations/pages/ReservationsPage'),
 );
@@ -108,23 +120,16 @@ const KitchenAnalyticsPage = React.lazy(
   () => import('../features/kitchen/pages/KitchenAnalyticsPage'),
 );
 
-const DashboardView = () => (
-  <div className="space-y-6">
-    <h1 className="text-3xl font-bold font-display tracking-tight text-white animate-fade-in">
-      Dashboard Overview
-    </h1>
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      {['Total Sales', 'Active Tables', 'Pending Tickets', 'Staff On-Shift'].map(
-        (cardName, idx) => (
-          <div key={idx} className="glass-card p-6 rounded-lg border border-border/40">
-            <p className="text-sm text-muted-foreground font-sans">{cardName}</p>
-            <p className="text-4xl font-semibold font-display text-primary mt-2">--</p>
-          </div>
-        ),
-      )}
-    </div>
-  </div>
-);
+const AdminDashboardRouter = () => {
+  const { user } = useAppSelector((state) => state.auth);
+  if (!user) return <RouteLoader />;
+  
+  if (user.role === 'BRANCH_MANAGER') {
+    return <BranchManagerDashboardPage />;
+  }
+  
+  return <OwnerDashboardPage />;
+};
 
 const TablesView = () => (
   <div className="space-y-6">
@@ -303,7 +308,8 @@ const AppRouter = () => {
                 </ProtectedRoute>
               }
             >
-              <Route index element={<DashboardView />} />
+              <Route index element={<AdminDashboardRouter />} />
+              <Route path=":id/orders" element={<StaffCategoryOrdersPage />} />
               <Route path="tables" element={<TablesView />} />
               <Route path="design-system" element={<DesignSystemShowcase />} />
             </Route>
@@ -314,6 +320,14 @@ const AppRouter = () => {
               element={
                 <ProtectedRoute>
                   <KitchenDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/kitchen/monitor"
+              element={
+                <ProtectedRoute>
+                  <KitchenMonitorPage />
                 </ProtectedRoute>
               }
             />
@@ -406,7 +420,7 @@ const AppRouter = () => {
                 </ProtectedRoute>
               }
             >
-              <Route path="/admin" element={<DashboardPage />} />
+              <Route path="/admin" element={<AdminDashboardRouter />} />
               <Route path="customers" element={<div>Customers Page</div>} />
               <Route path="analytics" element={<AnalyticsDashboardPage />} />
               <Route path="ai-insights" element={<AdminAIInsightsPage />} />

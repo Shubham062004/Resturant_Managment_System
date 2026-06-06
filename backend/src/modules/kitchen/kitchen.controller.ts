@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { KitchenService } from './kitchen.service';
+import { AuthRequest } from '../../types/express';
 
-export const getActiveOrders = async (req: Request, res: Response, next: NextFunction) => {
+export const getActiveOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const orders = await KitchenService.getActiveOrders();
+    const assignedCategory = req.user?.assignedCategory;
+    const orders = await KitchenService.getActiveOrders(assignedCategory);
     res.status(200).json({
       status: 'success',
       data: { orders },
@@ -72,6 +74,19 @@ export const getAnalytics = async (req: Request, res: Response, next: NextFuncti
     res.status(200).json({
       status: 'success',
       data: { analytics },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getStaffOrders = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const orders = await KitchenService.getStaffOrders(id);
+    res.status(200).json({
+      status: 'success',
+      data: { orders },
     });
   } catch (err) {
     next(err);

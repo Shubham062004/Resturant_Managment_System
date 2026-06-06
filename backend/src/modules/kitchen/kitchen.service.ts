@@ -11,8 +11,8 @@ export class KitchenService {
   /**
    * Get all active kitchen orders
    */
-  public static async getActiveOrders() {
-    return prisma.kitchenOrder.findMany({
+  public static async getActiveOrders(assignedCategory?: string) {
+    const orders = await prisma.kitchenOrder.findMany({
       where: {
         status: {
           not: 'COMPLETED',
@@ -23,7 +23,11 @@ export class KitchenService {
           include: {
             items: {
               include: {
-                product: true,
+                product: {
+                  include: {
+                    category: true,
+                  },
+                },
               },
             },
           },
@@ -34,6 +38,89 @@ export class KitchenService {
       },
       orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
     });
+
+    if (assignedCategory) {
+      return orders.map(ko => {
+        if (!ko.order) return null;
+        const matchedItems = ko.order.items.filter(item => {
+          const catSlug = item.product.category.slug.toLowerCase();
+          const catName = item.product.category.name.toLowerCase();
+          const filterSlug = assignedCategory.toLowerCase();
+          return catSlug.includes(filterSlug) || catName.includes(filterSlug) || filterSlug.includes(catSlug);
+        });
+
+        if (matchedItems.length === 0) return null;
+
+        return {
+          ...ko,
+          order: {
+            ...ko.order,
+            items: matchedItems
+          }
+        };
+      }).filter((o): o is NonNullable<typeof o> => o !== null);
+    }
+
+    return orders;
+  }
+
+  /**
+   * Get kitchen orders for a specific staff member
+   */
+  public static async getStaffOrders(userId: string) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+    if (!user) throw new AppError('User not found', 404);
+
+    const assignedCategory = user.assignedCategory;
+
+    // Fetch all active or completed today orders
+    const orders = await prisma.kitchenOrder.findMany({
+      include: {
+        order: {
+          include: {
+            items: {
+              include: {
+                product: {
+                  include: {
+                    category: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        station: true,
+        assignedUser: true,
+        tasks: true,
+      },
+      orderBy: [{ priority: 'desc' }, { createdAt: 'desc' }],
+    });
+
+    if (assignedCategory) {
+      return orders.map(ko => {
+        if (!ko.order) return null;
+        const matchedItems = ko.order.items.filter(item => {
+          const catSlug = item.product.category.slug.toLowerCase();
+          const catName = item.product.category.name.toLowerCase();
+          const filterSlug = assignedCategory.toLowerCase();
+          return catSlug.includes(filterSlug) || catName.includes(filterSlug) || filterSlug.includes(catSlug);
+        });
+
+        if (matchedItems.length === 0) return null;
+
+        return {
+          ...ko,
+          order: {
+            ...ko.order,
+            items: matchedItems
+          }
+        };
+      }).filter((o): o is NonNullable<typeof o> => o !== null);
+    }
+
+    return orders;
   }
 
   /**

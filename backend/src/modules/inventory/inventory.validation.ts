@@ -82,3 +82,44 @@ export const inventoryTransferSchema = {
     notes: z.string().optional(),
   }),
 };
+
+export const updateSupplierSchema = {
+  body: createSupplierSchema.body.partial(),
+};
+
+export const createInventoryRequestSchema = {
+  body: z.object({
+    branchId: z.string().uuid(),
+    notes: z.string().optional(),
+    items: z
+      .array(
+        z.object({
+          ingredientId: z.string().uuid(),
+          requestedQuantity: z.number().positive(),
+        }),
+      )
+      .min(1),
+  }),
+};
+
+export const approveInventoryRequestSchema = {
+  body: z.object({
+    status: z.enum(['APPROVED', 'REJECTED']),
+    notes: z.string().optional(),
+    items: z
+      .array(
+        z.object({
+          id: z.string().uuid().optional(),
+          ingredientId: z.string().uuid().optional(),
+          approvedQuantity: z.number().nonnegative(),
+        }),
+      )
+      .optional(),
+  }),
+};
+
+export const updateInventoryRequestStatusSchema = {
+  body: z.object({
+    status: z.enum(['PACKED', 'DISPATCHED', 'DELIVERED']),
+  }),
+};

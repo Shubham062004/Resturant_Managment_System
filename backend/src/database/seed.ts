@@ -22,13 +22,24 @@ async function main() {
     
     await seedMenu(prisma, restaurants, users.customers);
     await seedOperations(prisma, branches, users.customers);
-    await seedTransactions(prisma, restaurants, branches, users.customers);
-    
-    // New Seeders
     await seedInventory(prisma, branches);
-    await seedDelivery(prisma, users.deliveryStaff);
-    await seedKitchen(prisma);
-    await seedPOS(prisma, branches, users.cashiers);
+    const { partners } = await seedDelivery(prisma, users.deliveryStaff);
+    const { stations } = await seedKitchen(prisma);
+    const { terminals, tables } = await seedPOS(prisma, branches, users.cashiers);
+
+    await seedTransactions(
+      prisma,
+      restaurants,
+      branches,
+      users.customers,
+      users.cashiers,
+      users.kitchenStaff,
+      users.deliveryStaff,
+      terminals,
+      tables,
+      stations,
+      partners
+    );
 
     // MongoDB Analytics Events
     await seedMongoDB(users.customers);

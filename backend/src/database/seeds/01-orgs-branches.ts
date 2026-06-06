@@ -43,8 +43,8 @@ export async function seedOrgsAndBranches(prisma: PrismaClient) {
     restaurants.push(res);
   }
 
-  // Create 6 Branches
-  const cities = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Pune', 'Kolkata'];
+  // Create 5 Branches
+  const cities = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Pune'];
   const branches = [];
   let i = 0;
   for (const city of cities) {

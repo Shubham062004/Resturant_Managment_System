@@ -13,10 +13,10 @@ export async function seedMongoDB(customerIds: string[]) {
   const cartEvents = [];
   const checkoutEvents = [];
 
-  // Generate 10000 realistic cart events across 12 months
+  // Generate 10000 realistic cart events across May 2026
   for (let i = 0; i < 10000; i++) {
-    const eventDate = new Date();
-    eventDate.setDate(eventDate.getDate() - Math.floor(Math.random() * 365));
+    const day = (i % 31) + 1;
+    const eventDate = new Date(2026, 4, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
     
     cartEvents.push({
       userId: customerIds[i % customerIds.length],
@@ -28,10 +28,10 @@ export async function seedMongoDB(customerIds: string[]) {
     });
   }
 
-  // Generate 2000 checkout events
+  // Generate 2000 checkout events across May 2026
   for (let i = 0; i < 2000; i++) {
-    const eventDate = new Date();
-    eventDate.setDate(eventDate.getDate() - Math.floor(Math.random() * 365));
+    const day = (i % 31) + 1;
+    const eventDate = new Date(2026, 4, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
     
     checkoutEvents.push({
       userId: customerIds[i % customerIds.length],
@@ -51,10 +51,12 @@ export async function seedMongoDB(customerIds: string[]) {
   const searchAnalytics = [];
   for (let i = 0; i < 500; i++) {
     const term = searchTerms[i % searchTerms.length];
+    const day = (i % 31) + 1;
+    const eventDate = new Date(2026, 4, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
     searchAnalytics.push({
       query: term,
       resultsCount: Math.floor(Math.random() * 20),
-      timestamp: new Date(),
+      timestamp: eventDate,
       userId: customerIds[i % customerIds.length],
     });
   }

@@ -1,10 +1,11 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { authGuard, restrictTo } from '../middleware/authGuard';
 import { AuthRequest } from '../types/express';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import AppError from '../utils/appError';
 
-jest.mock('jsonwebtoken');
+vi.mock('jsonwebtoken');
 
 describe('Auth Middleware Tests', () => {
   let mockRequest: Partial<AuthRequest>;
@@ -16,8 +17,8 @@ describe('Auth Middleware Tests', () => {
       headers: {},
     };
     mockResponse = {};
-    nextFunction = jest.fn();
-    jest.clearAllMocks();
+    nextFunction = vi.fn();
+    vi.clearAllMocks();
   });
 
   describe('authGuard', () => {
@@ -25,7 +26,7 @@ describe('Auth Middleware Tests', () => {
       await authGuard(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
 
       expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
-      const error = (nextFunction as jest.Mock).mock.calls[0][0];
+      const error = (nextFunction as any).mock.calls[0][0];
       expect(error.statusCode).toBe(401);
       expect(error.message).toContain('Access token is missing');
     });
@@ -37,7 +38,7 @@ describe('Auth Middleware Tests', () => {
         email: 'user@example.com',
         role: 'ADMIN',
       };
-      (jwt.verify as jest.Mock).mockReturnValue(mockDecoded);
+      (jwt.verify as any).mockReturnValue(mockDecoded);
 
       await authGuard(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
 
@@ -52,14 +53,14 @@ describe('Auth Middleware Tests', () => {
 
     it('should fail with 401 if token verification throws an error', async () => {
       mockRequest.headers!.authorization = 'Bearer invalid-jwt-token';
-      (jwt.verify as jest.Mock).mockImplementation(() => {
+      (jwt.verify as any).mockImplementation(() => {
         throw new Error('Invalid signature');
       });
 
       await authGuard(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
 
       expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
-      const error = (nextFunction as jest.Mock).mock.calls[0][0];
+      const error = (nextFunction as any).mock.calls[0][0];
       expect(error.statusCode).toBe(401);
     });
   });
@@ -89,7 +90,7 @@ describe('Auth Middleware Tests', () => {
       restrictMiddleware(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
 
       expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
-      const error = (nextFunction as jest.Mock).mock.calls[0][0];
+      const error = (nextFunction as any).mock.calls[0][0];
       expect(error.statusCode).toBe(403);
       expect(error.message).toContain('Forbidden');
     });

@@ -367,4 +367,171 @@ export class InventoryService {
       totalIngredients,
     };
   }
+
+  // ---------------------------------------------------------------------------
+  // INVENTORY REQUESTS (BRANCH TRANSFERS / STOCK REPLENISHMENT)
+  // ---------------------------------------------------------------------------
+  static async getInventoryRequests(branchId?: string, status?: any) {
+    const where: any = {};
+    if (branchId) where.branchId = branchId;
+    if (status) where.status = status;
+    return prisma.inventoryRequest.findMany({
+      where,
+      include: {
+        branch: true,
+        requestedBy: {
+          select: { id: true, firstName: true, lastName: true, email: true }
+        },
+        items: {
+          include: { ingredient: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  static async createInventoryRequest(data: {
+    branchId: string;
+    requestedById: string;
+    notes?: string;
+    items: Array<{ ingredientId: string; requestedQuantity: number }>;
+  }) {
+    const request = await prisma.inventoryRequest.create({
+      data: {
+        branchId: data.branchId,
+        requestedById: data.requestedById,
+        notes: data.notes,
+        status: 'PENDING',
+        items: {
+          create: data.items.map(item => ({
+            ingredientId: item.ingredientId,
+            requestedQuantity: item.requestedQuantity,
+          }))
+        }
+      },
+      include: {
+        items: { include: { ingredient: true } },
+        branch: true
+      }
+    });
+
+    const io = getIO();
+    io.to('staff_room').emit('inventory-request-created', request);
+    return request;
+  }
+
+  static async approveInventoryRequest(
+    id: string,
+    data: {
+      status: 'APPROVED' | 'REJECTED';
+      notes?: string;
+      items?: Array<{ id?: string; ingredientId?: string; approvedQuantity: number }>;
+    }
+  ) {
+    const request = await prisma.inventoryRequest.findUnique({
+      where: { id },
+      include: { items: true }
+    });
+
+    if (!request) throw new AppError('Inventory Request not found', 404);
+    if (request.status !== 'PENDING') throw new AppError('Inventory Request is already processed', 400);
+
+    // Update items approvedQuantity
+    if (data.status === 'APPROVED') {
+      if (data.items && data.items.length > 0) {
+        for (const itemUpdate of data.items) {
+          if (itemUpdate.id) {
+            await prisma.inventoryRequestItem.update({
+              where: { id: itemUpdate.id },
+              data: { approvedQuantity: itemUpdate.approvedQuantity }
+            });
+          } else if (itemUpdate.ingredientId) {
+            await prisma.inventoryRequestItem.create({
+              data: {
+                requestId: id,
+                ingredientId: itemUpdate.ingredientId,
+                requestedQuantity: 0,
+                approvedQuantity: itemUpdate.approvedQuantity
+              }
+            });
+          }
+        }
+      } else {
+        // If no explicit items quantity, default approvedQuantity to requestedQuantity
+        for (const item of request.items) {
+          await prisma.inventoryRequestItem.update({
+            where: { id: item.id },
+            data: { approvedQuantity: item.requestedQuantity }
+          });
+        }
+      }
+    }
+
+    const updatedRequest = await prisma.inventoryRequest.update({
+      where: { id },
+      data: {
+        status: data.status,
+        notes: data.notes ? data.notes : request.notes,
+        approvedAt: data.status === 'APPROVED' ? new Date() : null
+      },
+      include: {
+        items: { include: { ingredient: true } },
+        branch: true,
+        requestedBy: {
+          select: { id: true, firstName: true, lastName: true, email: true }
+        }
+      }
+    });
+
+    const io = getIO();
+    io.to('staff_room').emit('inventory-request-approved', updatedRequest);
+    return updatedRequest;
+  }
+
+  static async updateInventoryRequestStatus(id: string, status: 'PACKED' | 'DISPATCHED' | 'DELIVERED') {
+    const request = await prisma.inventoryRequest.findUnique({
+      where: { id },
+      include: { items: true }
+    });
+
+    if (!request) throw new AppError('Inventory Request not found', 404);
+
+    const updateData: any = { status };
+    if (status === 'DISPATCHED') {
+      updateData.dispatchedAt = new Date();
+    } else if (status === 'DELIVERED') {
+      updateData.deliveredAt = new Date();
+    }
+
+    const updatedRequest = await prisma.inventoryRequest.update({
+      where: { id },
+      data: updateData,
+      include: {
+        items: { include: { ingredient: true } },
+        branch: true,
+        requestedBy: {
+          select: { id: true, firstName: true, lastName: true, email: true }
+        }
+      }
+    });
+
+    // If delivered, we adjust local branch stock levels!
+    if (status === 'DELIVERED') {
+      for (const item of updatedRequest.items) {
+        const qty = item.approvedQuantity !== null ? item.approvedQuantity : item.requestedQuantity;
+        await this.adjustInventory({
+          ingredientId: item.ingredientId,
+          branchId: updatedRequest.branchId,
+          quantity: qty,
+          reason: `Stock replenishment from Request ${updatedRequest.id}`,
+          referenceId: updatedRequest.id,
+          type: 'TRANSFER'
+        });
+      }
+    }
+
+    const io = getIO();
+    io.to('staff_room').emit('inventory-request-status-updated', updatedRequest);
+    return updatedRequest;
+  }
 }

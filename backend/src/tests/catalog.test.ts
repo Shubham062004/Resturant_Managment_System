@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import request from 'supertest';
 import app from '../app';
 import { prisma } from '../config/db';
@@ -8,55 +9,60 @@ import jwt from 'jsonwebtoken';
 import env from '../config/env';
 
 // Mock DB configs and Prisma client queries
-jest.mock('../config/db', () => ({
+vi.mock('../config/db', () => ({
   prisma: {
     restaurant: {
-      count: jest.fn(),
-      findMany: jest.fn(),
-      findUnique: jest.fn(),
-      update: jest.fn(),
+      count: vi.fn(),
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      update: vi.fn(),
     },
     branch: {
-      findMany: jest.fn(),
+      findMany: vi.fn(),
     },
     category: {
-      findMany: jest.fn(),
-      findFirst: jest.fn(),
+      findMany: vi.fn(),
+      findFirst: vi.fn(),
     },
     product: {
-      count: jest.fn(),
-      findMany: jest.fn(),
-      findFirst: jest.fn(),
-      findUnique: jest.fn(),
-      update: jest.fn(),
-      aggregate: jest.fn(),
+      count: vi.fn(),
+      findMany: vi.fn(),
+      findFirst: vi.fn(),
+      findUnique: vi.fn(),
+      update: vi.fn(),
+      aggregate: vi.fn(),
     },
     review: {
-      findFirst: jest.fn(),
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
-      findMany: jest.fn(),
-      aggregate: jest.fn(),
+      findFirst: vi.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+      findMany: vi.fn(),
+      aggregate: vi.fn(),
     },
     favorite: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      delete: jest.fn(),
-      findMany: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      delete: vi.fn(),
+      findMany: vi.fn(),
+    },
+    restaurantGroup: {
+      count: vi.fn(),
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      update: vi.fn(),
     },
   },
-  connectDatabases: jest.fn(),
-  disconnectDatabases: jest.fn(),
+  connectDatabases: vi.fn(),
+  disconnectDatabases: vi.fn(),
 }));
 
-// Mock MongoDB Mongoose Models with proper ESModule interop
 // Mock MongoDB Mongoose Models
-jest.spyOn(ProductViewEvent, 'create').mockReturnValue(Promise.resolve({}) as any);
-jest.spyOn(SearchAnalytic, 'create').mockReturnValue(Promise.resolve({}) as any);
-jest.spyOn(RecommendationEvent, 'create').mockReturnValue(Promise.resolve({}) as any);
-jest.spyOn(RecommendationEvent, 'insertMany').mockReturnValue(Promise.resolve([]) as any);
+vi.spyOn(ProductViewEvent, 'create').mockReturnValue(Promise.resolve({}) as any);
+vi.spyOn(SearchAnalytic, 'create').mockReturnValue(Promise.resolve({}) as any);
+vi.spyOn(RecommendationEvent, 'create').mockReturnValue(Promise.resolve({}) as any);
+vi.spyOn(RecommendationEvent, 'insertMany').mockReturnValue(Promise.resolve([]) as any);
 
 // Valid UUIDs for test fixtures
 const PRODUCT_UUID = '550e8400-e29b-41d4-a716-446655440001';
@@ -79,13 +85,13 @@ describe('Catalog API Integration Tests', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('GET /api/v1/catalog/restaurants', () => {
     it('should retrieve a paginated list of active restaurants', async () => {
-      (prisma.restaurantGroup.count as jest.Mock).mockResolvedValue(1);
-      (prisma.restaurantGroup.findMany as jest.Mock).mockResolvedValue([
+      (prisma.restaurantGroup.count as any).mockResolvedValue(1);
+      (prisma.restaurantGroup.findMany as any).mockResolvedValue([
         {
           id: RESTAURANT_UUID,
           name: 'Oven Xpress - Firehouse',
@@ -108,7 +114,7 @@ describe('Catalog API Integration Tests', () => {
 
   describe('GET /api/v1/catalog/restaurants/slug/:slug', () => {
     it('should retrieve full details of restaurant by its slug name', async () => {
-      (prisma.restaurantGroup.findUnique as jest.Mock).mockResolvedValue({
+      (prisma.restaurantGroup.findUnique as any).mockResolvedValue({
         id: RESTAURANT_UUID,
         name: 'Oven Xpress - Firehouse',
         slug: 'oven-xpress-firehouse',
@@ -129,7 +135,7 @@ describe('Catalog API Integration Tests', () => {
     });
 
     it('should throw 404 error if restaurant slug is not active/found', async () => {
-      (prisma.restaurantGroup.findUnique as jest.Mock).mockResolvedValue(null);
+      (prisma.restaurantGroup.findUnique as any).mockResolvedValue(null);
 
       const response = await request(app).get('/api/v1/catalog/restaurants/slug/non-existent');
 
@@ -140,8 +146,8 @@ describe('Catalog API Integration Tests', () => {
 
   describe('GET /api/v1/catalog/products', () => {
     it('should retrieve matching products and log search parameters to MongoDB', async () => {
-      (prisma.product.count as jest.Mock).mockResolvedValue(1);
-      (prisma.product.findMany as jest.Mock).mockResolvedValue([
+      (prisma.product.count as any).mockResolvedValue(1);
+      (prisma.product.findMany as any).mockResolvedValue([
         {
           id: PRODUCT_UUID,
           name: 'Classic Margherita',
@@ -162,7 +168,7 @@ describe('Catalog API Integration Tests', () => {
 
   describe('GET /api/v1/catalog/products/slug/:slug', () => {
     it('should retrieve product and load recommendations, logging views', async () => {
-      (prisma.product.findFirst as jest.Mock).mockResolvedValue({
+      (prisma.product.findFirst as any).mockResolvedValue({
         id: PRODUCT_UUID,
         name: 'Classic Margherita',
         slug: 'classic-margherita',
@@ -171,7 +177,7 @@ describe('Catalog API Integration Tests', () => {
         reviews: [],
         variants: [],
       });
-      (prisma.product.findMany as jest.Mock).mockResolvedValue([
+      (prisma.product.findMany as any).mockResolvedValue([
         { id: REVIEW_UUID, name: 'Double Pepperoni' },
       ]);
 
@@ -195,26 +201,26 @@ describe('Catalog API Integration Tests', () => {
     });
 
     it('should allow reviews submissions if valid JWT session header is provided', async () => {
-      (prisma.product.findUnique as jest.Mock).mockResolvedValue({
+      (prisma.product.findUnique as any).mockResolvedValue({
         id: PRODUCT_UUID,
         restaurantId: RESTAURANT_UUID,
       });
-      (prisma.review.findFirst as jest.Mock).mockResolvedValue(null);
-      (prisma.review.create as jest.Mock).mockResolvedValue({
+      (prisma.review.findFirst as any).mockResolvedValue(null);
+      (prisma.review.create as any).mockResolvedValue({
         id: REVIEW_UUID,
         rating: 5,
         comment: 'Great sourdough crust!',
         user: { id: USER_UUID, firstName: 'Test', lastName: 'User', avatar: null },
       });
-      (prisma.review.aggregate as jest.Mock).mockResolvedValue({
+      (prisma.review.aggregate as any).mockResolvedValue({
         _avg: { rating: 5.0 },
         _count: { id: 1 },
       });
-      (prisma.product.aggregate as jest.Mock).mockResolvedValue({
+      (prisma.product.aggregate as any).mockResolvedValue({
         _avg: { rating: 5.0 },
       });
-      (prisma.product.update as jest.Mock).mockResolvedValue({});
-      (prisma.restaurantGroup.update as jest.Mock).mockResolvedValue({});
+      (prisma.product.update as any).mockResolvedValue({});
+      (prisma.restaurantGroup.update as any).mockResolvedValue({});
 
       const response = await request(app)
         .post('/api/v1/catalog/reviews')
@@ -232,9 +238,9 @@ describe('Catalog API Integration Tests', () => {
 
   describe('POST /api/v1/catalog/favorites', () => {
     it('should toggle favorites state from true to false when already favorited', async () => {
-      (prisma.product.findUnique as jest.Mock).mockResolvedValue({ id: PRODUCT_UUID });
-      (prisma.favorite.findUnique as jest.Mock).mockResolvedValue({ id: FAVORITE_UUID });
-      (prisma.favorite.delete as jest.Mock).mockResolvedValue({});
+      (prisma.product.findUnique as any).mockResolvedValue({ id: PRODUCT_UUID });
+      (prisma.favorite.findUnique as any).mockResolvedValue({ id: FAVORITE_UUID });
+      (prisma.favorite.delete as any).mockResolvedValue({});
 
       const response = await request(app)
         .post('/api/v1/catalog/favorites')

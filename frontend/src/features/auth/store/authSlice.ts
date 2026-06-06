@@ -11,6 +11,10 @@ export interface User {
   avatar?: string;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
+  salary?: number;
+  attendanceCount?: number;
+  performanceScore?: number;
+  assignedCategory?: string;
 }
 
 export interface AuthState {

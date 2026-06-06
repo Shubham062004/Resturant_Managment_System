@@ -6,6 +6,7 @@ import {
   updateOrderStatus,
   assignOrder,
   getAnalytics,
+  getStaffOrders,
 } from './kitchen.controller';
 import { validate } from '../../middleware/validate';
 import { authGuard, restrictTo } from '../../middleware/authGuard';
@@ -19,13 +20,15 @@ const router = Router();
 
 // All kitchen routes are protected
 router.use(authGuard);
-router.use(restrictTo('KITCHEN_STAFF', 'HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN'));
+router.use(restrictTo('KITCHEN_STAFF', 'HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'BRANCH_MANAGER'));
 
 router.route('/orders').get(getActiveOrders);
 
 router.route('/orders/:id/status').patch(validate(updateOrderStatusSchema), updateOrderStatus);
 
 router.route('/orders/:id/assign').patch(validate(assignOrderSchema), assignOrder);
+
+router.route('/staff/:id/orders').get(getStaffOrders);
 
 router
   .route('/stations')
@@ -36,6 +39,6 @@ router
     createStation,
   );
 
-router.route('/analytics').get(restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN'), getAnalytics);
+router.route('/analytics').get(restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER'), getAnalytics);
 
 export default router;

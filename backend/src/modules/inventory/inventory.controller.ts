@@ -153,3 +153,47 @@ export const getAnalytics = async (req: Request, res: Response, next: NextFuncti
     next(err);
   }
 };
+
+// INVENTORY REQUESTS
+export const getInventoryRequests = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const branchId = req.query.branchId as string;
+    const status = req.query.status as string;
+    const requests = await InventoryService.getInventoryRequests(branchId, status);
+    res.status(200).json({ status: 'success', data: requests });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const createInventoryRequest = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const requestedById = req.user!.id;
+    const request = await InventoryService.createInventoryRequest({
+      ...req.body,
+      requestedById,
+    });
+    res.status(201).json({ status: 'success', data: request });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const approveInventoryRequest = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const request = await InventoryService.approveInventoryRequest(req.params.id, req.body);
+    res.status(200).json({ status: 'success', data: request });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateInventoryRequestStatus = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { status } = req.body;
+    const request = await InventoryService.updateInventoryRequestStatus(req.params.id, status);
+    res.status(200).json({ status: 'success', data: request });
+  } catch (err) {
+    next(err);
+  }
+};

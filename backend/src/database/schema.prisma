@@ -55,6 +55,14 @@ model User {
   notificationPreference NotificationPreference?
   recommendations        Recommendation[]
   customerSegment        CustomerSegment?
+
+  // Operations Staff Fields
+  salary                 Decimal?                 @db.Decimal(10, 2)
+  attendanceCount        Int                      @default(0)
+  performanceScore       Float                    @default(5.0)
+  assignedCategory       String?
+
+  inventoryRequests      InventoryRequest[]
 }
 
 enum Role {
@@ -72,6 +80,7 @@ enum Role {
   FRANCHISE_OWNER
   ORGANIZATION_OWNER
   SUPER_ADMIN
+  INVENTORY_MANAGER
 }
 
 model Organization {
@@ -446,6 +455,7 @@ model Branch {
   reservations    Reservation[]
   waitlistEntries WaitlistEntry[]
   settings        RestaurantSettings?
+  inventoryRequests InventoryRequest[]
 
   @@index([restaurantId])
 }
@@ -843,6 +853,7 @@ model Ingredient {
   recipeMappings RecipeMapping[]
   alerts         InventoryAlert[]
   transfers      InventoryTransfer[]
+  inventoryRequestItems InventoryRequestItem[]
 }
 
 model Inventory {
@@ -1193,4 +1204,43 @@ model AIInsight {
   title       String
   description String
   generatedAt DateTime @default(now())
+}
+
+// ----------------------------------------------------
+// INVENTORY REQUESTS MODELS
+// ----------------------------------------------------
+
+model InventoryRequest {
+  id             String                 @id @default(uuid())
+  branchId       String
+  branch         Branch                 @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  status         InventoryRequestStatus @default(PENDING)
+  requestedById  String
+  requestedBy    User                   @relation(fields: [requestedById], references: [id], onDelete: Cascade)
+  notes          String?
+  approvedAt     DateTime?
+  dispatchedAt   DateTime?
+  deliveredAt    DateTime?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  items          InventoryRequestItem[]
+}
+
+model InventoryRequestItem {
+  id                 String           @id @default(uuid())
+  requestId          String
+  request            InventoryRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  ingredientId       String
+  ingredient         Ingredient       @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  requestedQuantity  Float
+  approvedQuantity   Float?
+}
+
+enum InventoryRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PACKED
+  DISPATCHED
+  DELIVERED
 }
