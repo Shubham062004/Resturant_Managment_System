@@ -60,10 +60,10 @@ export default function NotificationCenter() {
           </div>
 
           <div className="max-h-96 overflow-y-auto">
-            {list.length === 0 ? (
+            {(!list || list.length === 0) ? (
               <div className="p-6 text-center text-slate-500">No recent notifications</div>
             ) : (
-              list.map((notif: any) => (
+              list?.map((notif: any) => (
                 <div
                   key={notif.id}
                   className={`p-4 border-b border-slate-700/50 hover:bg-slate-700 cursor-pointer ${notif.status !== 'READ' ? 'bg-slate-700/30' : ''}`}

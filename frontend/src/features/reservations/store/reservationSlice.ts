@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import apiClient from '../../../services/apiClient';
 
 interface Reservation {
   id: string;
@@ -44,11 +42,8 @@ const initialState: ReservationState = {
 export const fetchBranchReservations = createAsyncThunk(
   'reservations/fetchBranch',
   async (branchId: string) => {
-    const response = await axios.get(
-      `${API_BASE_URL}/api/v1/reservations/branch?branchId=${branchId}`,
-      {
-        withCredentials: true,
-      },
+    const response = await apiClient.get(
+      `/reservations/branch?branchId=${branchId}`
     );
     return response.data.data;
   },
@@ -57,9 +52,7 @@ export const fetchBranchReservations = createAsyncThunk(
 export const fetchWaitlist = createAsyncThunk(
   'reservations/fetchWaitlist',
   async (branchId: string) => {
-    const response = await axios.get(`${API_BASE_URL}/api/v1/waitlist/branch/${branchId}`, {
-      withCredentials: true,
-    });
+    const response = await apiClient.get(`/waitlist/branch/${branchId}`);
     return response.data.data;
   },
 );
@@ -67,12 +60,9 @@ export const fetchWaitlist = createAsyncThunk(
 export const updateReservationStatus = createAsyncThunk(
   'reservations/updateStatus',
   async ({ id, status, tableId }: { id: string; status: string; tableId?: string }) => {
-    const response = await axios.patch(
-      `${API_BASE_URL}/api/v1/reservations/${id}`,
-      { status, tableId },
-      {
-        withCredentials: true,
-      },
+    const response = await apiClient.patch(
+      `/reservations/${id}`,
+      { status, tableId }
     );
     return response.data.data;
   },
@@ -81,12 +71,9 @@ export const updateReservationStatus = createAsyncThunk(
 export const updateWaitlistStatus = createAsyncThunk(
   'reservations/updateWaitlist',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await axios.patch(
-      `${API_BASE_URL}/api/v1/waitlist/${id}`,
-      { status },
-      {
-        withCredentials: true,
-      },
+    const response = await apiClient.patch(
+      `/waitlist/${id}`,
+      { status }
     );
     return response.data.data;
   },

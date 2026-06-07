@@ -1,12 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import apiClient from '../../../services/apiClient';
 
 export const fetchOrganizations = createAsyncThunk('organizations/fetchAll', async () => {
-  const response = await axios.get(`${API_BASE_URL}/api/v1/super-admin/organizations`, {
-    withCredentials: true,
-  });
+  const response = await apiClient.get('/super-admin/organizations');
   return response.data.data;
 });
 

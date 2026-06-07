@@ -86,7 +86,7 @@ export default function BranchManagerDashboardPage() {
     try {
       const [branchRes, ingredientRes] = await Promise.all([
         apiClient.get('/catalog/branches'),
-        apiClient.get('/api/v1/inventory/ingredients')
+        apiClient.get('/inventory/ingredients')
       ]);
 
       const fetchedBranches = branchRes.data.data.branches || [];
@@ -229,7 +229,7 @@ export default function BranchManagerDashboardPage() {
         }))
       };
 
-      await apiClient.post('/api/v1/inventory/requests', payload);
+      await apiClient.post('/inventory/requests', payload);
       toast.success('Inventory request successfully submitted to Organization Owner for approval.');
       setReplenishmentList([]);
       setReplenishmentNotes('');

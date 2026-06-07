@@ -1,19 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import apiClient from '../../../services/apiClient';
 
 export const fetchAllStaff = createAsyncThunk('staff/fetchAll', async () => {
-  const response = await axios.get(`${API_BASE_URL}/api/v1/admin/staff`, { withCredentials: true });
+  const response = await apiClient.get('/admin/staff');
   return response.data.data;
 });
 
 export const updateStaffProfile = createAsyncThunk(
   'staff/updateProfile',
   async ({ id, data }: { id: string; data: any }) => {
-    const response = await axios.patch(`${API_BASE_URL}/api/v1/admin/staff/${id}`, data, {
-      withCredentials: true,
-    });
+    const response = await apiClient.patch(`/admin/staff/${id}`, data);
     return response.data.data;
   },
 );
@@ -21,10 +17,9 @@ export const updateStaffProfile = createAsyncThunk(
 export const bulkUpdateStaff = createAsyncThunk(
   'staff/bulkUpdate',
   async ({ ids, data }: { ids: string[]; data: any }) => {
-    const response = await axios.patch(
-      `${API_BASE_URL}/api/v1/admin/staff/bulk-update`,
-      { ids, ...data },
-      { withCredentials: true },
+    const response = await apiClient.patch(
+      '/admin/staff/bulk-update',
+      { ids, ...data }
     );
     return { ids, updatedData: data, result: response.data };
   },

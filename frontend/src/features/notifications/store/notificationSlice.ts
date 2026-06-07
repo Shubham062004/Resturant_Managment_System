@@ -1,22 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import apiClient from '../../../services/apiClient';
 
 export const fetchNotifications = createAsyncThunk('notifications/fetchAll', async () => {
-  const response = await axios.get(`${API_BASE_URL}/api/v1/notifications`, {
-    withCredentials: true,
-  });
-  return response.data.data; // { notifications: [], unreadCount: number }
+  const response = await apiClient.get('/notifications');
+  return response.data.data;
 });
 
 export const markNotificationRead = createAsyncThunk(
   'notifications/markRead',
   async (id: string) => {
-    await axios.patch(
-      `${API_BASE_URL}/api/v1/notifications/${id}/read`,
-      {},
-      { withCredentials: true },
+    await apiClient.patch(
+      `/notifications/${id}/read`,
+      {}
     );
     return id;
   },

@@ -19,7 +19,7 @@ export default function ProductMetrics() {
         <CardHeader>
           <h3 className="text-lg font-bold text-white">Top Performing Products</h3>
         </CardHeader>
-        <CardContent className="h-80 w-full">
+        <CardContent className="h-80 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={topProducts}

@@ -28,7 +28,7 @@ export default function CustomerMetrics() {
         <CardHeader>
           <h3 className="text-lg font-bold text-white">Customer Retention</h3>
         </CardHeader>
-        <CardContent className="h-80 w-full flex justify-center items-center">
+        <CardContent className="h-80 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -67,7 +67,7 @@ export default function CustomerMetrics() {
         <CardHeader>
           <h3 className="text-lg font-bold text-white">Demographics</h3>
         </CardHeader>
-        <CardContent className="h-80 w-full flex justify-center items-center">
+        <CardContent className="h-80 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

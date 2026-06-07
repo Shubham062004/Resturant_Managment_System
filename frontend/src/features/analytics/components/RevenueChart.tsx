@@ -26,7 +26,7 @@ export default function RevenueChart() {
         <CardHeader>
           <h3 className="text-lg font-bold text-white">7-Day Revenue Trend</h3>
         </CardHeader>
-        <CardContent className="h-80 w-full">
+        <CardContent className="h-80 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={revenueTrends}>
               <defs>
@@ -76,7 +76,7 @@ export default function RevenueChart() {
         <CardHeader>
           <h3 className="text-lg font-bold text-white">7-Day Order Volume</h3>
         </CardHeader>
-        <CardContent className="h-64 w-full">
+        <CardContent className="h-64 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={revenueTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" vertical={false} />

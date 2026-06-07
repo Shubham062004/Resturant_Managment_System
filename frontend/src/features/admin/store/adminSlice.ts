@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import apiClient from '../../../services/apiClient';
 
 interface DashboardData {
   revenueToday: number;
@@ -24,11 +22,8 @@ const initialState: AdminState = {
 export const fetchDashboardOverview = createAsyncThunk(
   'admin/fetchDashboard',
   async (branchId: string) => {
-    const response = await axios.get(
-      `${API_BASE_URL}/api/v1/admin/dashboard?branchId=${branchId}`,
-      {
-        withCredentials: true,
-      },
+    const response = await apiClient.get(
+      `/admin/dashboard?branchId=${branchId}`
     );
     return response.data.data;
   },

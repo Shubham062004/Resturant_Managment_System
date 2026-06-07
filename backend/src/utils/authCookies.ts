@@ -5,7 +5,7 @@ const isProduction = env.NODE_ENV === 'production';
 export const refreshTokenCookieOptions = {
   httpOnly: true,
   secure: isProduction,
-  sameSite: 'lax' as const,
+  sameSite: isProduction ? ('none' as const) : ('lax' as const),
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   path: '/',
 };
@@ -14,7 +14,7 @@ export const refreshTokenCookieOptions = {
 export const accessTokenCookieOptions = {
   httpOnly: true,
   secure: isProduction,
-  sameSite: 'lax' as const,
+  sameSite: isProduction ? ('none' as const) : ('lax' as const),
   maxAge: 15 * 60 * 1000, // 15 minutes (matches JWT expiry)
   path: '/',
 };
@@ -22,6 +22,6 @@ export const accessTokenCookieOptions = {
 export const clearAuthCookieOptions = {
   httpOnly: true,
   secure: isProduction,
-  sameSite: 'lax' as const,
+  sameSite: isProduction ? ('none' as const) : ('lax' as const),
   path: '/',
 };

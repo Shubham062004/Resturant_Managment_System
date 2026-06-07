@@ -121,9 +121,9 @@ export default function OwnerDashboardPage() {
     try {
       setLoading(true);
       const [ownerRes, requestRes, ingredientRes] = await Promise.all([
-        apiClient.get('/api/v1/admin/analytics/owner-dashboard'),
-        apiClient.get('/api/v1/inventory/requests'),
-        apiClient.get('/api/v1/inventory/ingredients')
+        apiClient.get('/admin/analytics/owner-dashboard'),
+        apiClient.get('/inventory/requests'),
+        apiClient.get('/inventory/ingredients')
       ]);
 
       const data = ownerRes.data.data;
@@ -214,7 +214,7 @@ export default function OwnerDashboardPage() {
         }));
       }
 
-      await apiClient.patch(`/api/v1/inventory/requests/${activeRequest.id}/approve`, payload);
+      await apiClient.patch(`/inventory/requests/${activeRequest.id}/approve`, payload);
       toast.success(status === 'APPROVED' ? `Replenishment request approved for ${activeRequest.branch.name}` : `Replenishment request rejected for ${activeRequest.branch.name}`);
       
       setActiveRequest(null);
@@ -337,7 +337,7 @@ export default function OwnerDashboardPage() {
             <h3 className="text-lg font-bold font-display">Branch Revenue Performance</h3>
             <p className="text-xs text-slate-400 font-sans">Comparison of sales across active outlets for May 2026</p>
           </CardHeader>
-          <div className="h-80">
+          <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={branches}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
@@ -360,7 +360,7 @@ export default function OwnerDashboardPage() {
             <h3 className="text-lg font-bold font-display">Order Volume Share</h3>
             <p className="text-xs text-slate-400 font-sans">Branch order distribution breakdown</p>
           </CardHeader>
-          <div className="h-80 flex items-center justify-center">
+          <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie

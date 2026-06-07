@@ -204,7 +204,7 @@ export default function AnalyticsDashboardPage() {
           {/* Multi-Branch Performance Comparison Bar Chart */}
           <Card className="bg-slate-900 border-slate-800 p-6">
             <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">Multi-Branch Sales Performance ($)</h3>
-            <div className="h-80 w-full">
+            <div className="h-80 w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={branchComparisonData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
@@ -262,7 +262,7 @@ export default function AnalyticsDashboardPage() {
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
           <h3 className="text-lg font-bold text-white uppercase tracking-wider">Ingredient Consumption vs Waste Analysis</h3>
-          <div className="h-80 w-full">
+          <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={inventoryWasteData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
@@ -286,7 +286,7 @@ export default function AnalyticsDashboardPage() {
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
           <h3 className="text-lg font-bold text-white uppercase tracking-wider">Prep Duration logs by Station</h3>
-          <div className="h-80 w-full">
+          <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={kitchenEfficiencyData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
@@ -309,7 +309,7 @@ export default function AnalyticsDashboardPage() {
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
           <h3 className="text-lg font-bold text-white uppercase tracking-wider">Salary Payout base vs Performance Ratings</h3>
-          <div className="h-80 w-full">
+          <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={staffPayoutData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />

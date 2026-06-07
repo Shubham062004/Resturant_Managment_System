@@ -22,7 +22,7 @@ const startServer = async () => {
     await connectDatabases();
     await connectMongoDB();
 
-    app.use('/api/ai', aiRoutes);
+    app.use('/api/v1/ai', aiRoutes);
 
     // 2. Start Express Port Listener
     const server = app.listen(env.PORT, () => {

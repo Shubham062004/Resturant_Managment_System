@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import apiClient from '../../../services/apiClient';
 
 interface Table {
   id: string;
@@ -28,21 +26,16 @@ const initialState: TableState = {
 };
 
 export const fetchTables = createAsyncThunk('tables/fetchBranch', async (branchId: string) => {
-  const response = await axios.get(`${API_BASE_URL}/api/v1/tables/branch/${branchId}`, {
-    withCredentials: true,
-  });
+  const response = await apiClient.get(`/tables/branch/${branchId}`);
   return response.data.data;
 });
 
 export const updateTablePosition = createAsyncThunk(
   'tables/updatePosition',
   async ({ id, x, y }: { id: string; x: number; y: number }) => {
-    const response = await axios.patch(
-      `${API_BASE_URL}/api/v1/tables/${id}`,
-      { x, y },
-      {
-        withCredentials: true,
-      },
+    const response = await apiClient.patch(
+      `/tables/${id}`,
+      { x, y }
     );
     return response.data.data;
   },
@@ -51,12 +44,9 @@ export const updateTablePosition = createAsyncThunk(
 export const updateTableStatus = createAsyncThunk(
   'tables/updateStatus',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await axios.patch(
-      `${API_BASE_URL}/api/v1/tables/${id}`,
-      { status },
-      {
-        withCredentials: true,
-      },
+    const response = await apiClient.patch(
+      `/tables/${id}`,
+      { status }
     );
     return response.data.data;
   },

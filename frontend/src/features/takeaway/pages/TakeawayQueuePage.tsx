@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
-import axios from 'axios';
+import apiClient from '../../../services/apiClient';
 import { io } from 'socket.io-client';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -36,11 +36,8 @@ export default function TakeawayQueuePage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/api/v1/orders?branchId=${branchId}&orderType=PICKUP`,
-        {
-          withCredentials: true,
-        },
+      const response = await apiClient.get(
+        `/orders?branchId=${branchId}&orderType=PICKUP`
       );
       setOrders(response.data.data.orders || []);
     } catch (err) {
@@ -50,10 +47,9 @@ export default function TakeawayQueuePage() {
 
   const updateOrderStatus = async (id: string, status: string) => {
     try {
-      await axios.patch(
-        `${API_BASE_URL}/api/v1/orders/${id}/status`,
-        { status },
-        { withCredentials: true },
+      await apiClient.patch(
+        `/orders/${id}/status`,
+        { status }
       );
       fetchOrders();
     } catch (err) {
