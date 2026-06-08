@@ -10,31 +10,31 @@ const router = Router();
 // Protect routes
 router.use(authGuard);
 
-// Global Super Admin Endpoints (Unscoped, restricted to SUPER_ADMIN/PLATFORM_ADMIN)
+// Global Super Admin Endpoints (Unscoped, restricted to SUPER_ADMIN/ORGANIZATION_OWNER)
 router.get(
   '/dashboard',
-  restrictTo('SUPER_ADMIN'),
+  restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
   SuperAdminController.getGlobalDashboard,
 );
 router.get(
   '/health',
-  restrictTo('SUPER_ADMIN'),
+  restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
   SuperAdminController.getPlatformHealth,
 );
 
 router.get(
   '/organizations',
-  restrictTo('SUPER_ADMIN'),
+  restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
   OrganizationController.getOrganizations,
 );
 router.post(
   '/organizations',
-  restrictTo('SUPER_ADMIN'),
+  restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
   OrganizationController.createOrganization,
 );
 router.patch(
   '/organizations/:id',
-  restrictTo('SUPER_ADMIN'),
+  restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
   OrganizationController.updateOrganization,
 );
 

@@ -434,13 +434,16 @@ const AppRouter = () => {
             <Route
               path="/super-admin"
               element={
-                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}>
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN', 'ORGANIZATION_OWNER']}>
                   <SuperAdminLayout />
                 </ProtectedRoute>
               }
             >
               <Route index element={<GlobalDashboardPage />} />
               <Route path="organizations" element={<OrganizationManagementPage />} />
+              <Route path="franchises" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Franchise Management</h2><p className="text-slate-400">Manage all organization franchise outlets here.</p></div>} />
+              <Route path="health" element={<SystemHealthPage />} />
+              <Route path="settings" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Global System Settings</h2><p className="text-slate-400">Configure global application variables and constants.</p></div>} />
               <Route
                 path="*"
                 element={
