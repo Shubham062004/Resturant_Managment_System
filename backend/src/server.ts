@@ -14,15 +14,12 @@ import { connectMongoDB } from './config/mongo';
 import { connectDatabases, disconnectDatabases } from './config/db';
 import { initSocket } from './config/socket';
 import logger from './utils/logger';
-import aiRoutes from './modules/ai/ai.routes';
 
 const startServer = async () => {
   try {
     // 1. Establish database connection sessions
     await connectDatabases();
     await connectMongoDB();
-
-    app.use('/api/v1/ai', aiRoutes);
 
     // 2. Start Express Port Listener
     const server = app.listen(env.PORT, () => {

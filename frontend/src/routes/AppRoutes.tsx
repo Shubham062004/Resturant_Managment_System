@@ -56,6 +56,13 @@ const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/Floo
 const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
 const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
 const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
+const BranchManagementPage = React.lazy(() => import('../features/admin/pages/BranchManagementPage'));
+const IngredientManagementPage = React.lazy(() => import('../features/admin/pages/IngredientManagementPage'));
+const SupplierManagementPage = React.lazy(() => import('../features/admin/pages/SupplierManagementPage'));
+const MenuManagementPage = React.lazy(() => import('../features/admin/pages/MenuManagementPage'));
+const FinancePage = React.lazy(() => import('../features/admin/pages/FinancePage'));
+const AuditLogPage = React.lazy(() => import('../features/admin/pages/AuditLogPage'));
+const AdminOrdersPage = React.lazy(() => import('../features/admin/pages/AdminOrdersPage'));
 const AnalyticsDashboardPage = React.lazy(
   () => import('../features/analytics/pages/AnalyticsDashboardPage'),
 );
@@ -402,7 +409,6 @@ const AppRouter = () => {
               }
             />
 
-            {/* Admin Dashboard System */}
             <Route
               path="/admin"
               element={
@@ -413,6 +419,8 @@ const AppRouter = () => {
                     'BRANCH_MANAGER',
                     'OPERATIONS_MANAGER',
                     'FINANCE_MANAGER',
+                    'ORGANIZATION_OWNER',
+                    'FRANCHISE_OWNER',
                   ]}
                 >
                   <AdminLayout />
@@ -425,7 +433,14 @@ const AppRouter = () => {
               <Route path="ai-insights" element={<AdminAIInsightsPage />} />
               <Route path="system-health" element={<SystemHealthPage />} />
               <Route path="settings" element={<div>Settings Page</div>} />
-              <Route path="/admin/staff" element={<StaffManagementPage />} />
+              <Route path="staff" element={<StaffManagementPage />} />
+              <Route path="branches" element={<BranchManagementPage />} />
+              <Route path="ingredients" element={<IngredientManagementPage />} />
+              <Route path="suppliers" element={<SupplierManagementPage />} />
+              <Route path="menu" element={<MenuManagementPage />} />
+              <Route path="finance" element={<FinancePage />} />
+              <Route path="audit" element={<AuditLogPage />} />
+              <Route path="orders" element={<AdminOrdersPage />} />
               {/* Other admin routes placeholder */}
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
             </Route>
@@ -434,16 +449,13 @@ const AppRouter = () => {
             <Route
               path="/super-admin"
               element={
-                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN', 'ORGANIZATION_OWNER']}>
+                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}>
                   <SuperAdminLayout />
                 </ProtectedRoute>
               }
             >
               <Route index element={<GlobalDashboardPage />} />
               <Route path="organizations" element={<OrganizationManagementPage />} />
-              <Route path="franchises" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Franchise Management</h2><p className="text-slate-400">Manage all organization franchise outlets here.</p></div>} />
-              <Route path="health" element={<SystemHealthPage />} />
-              <Route path="settings" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Global System Settings</h2><p className="text-slate-400">Configure global application variables and constants.</p></div>} />
               <Route
                 path="*"
                 element={

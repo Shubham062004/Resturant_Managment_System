@@ -29,6 +29,7 @@ import adminRouter from './modules/admin/admin.routes';
 import superAdminRouter from './modules/super-admin/superadmin.routes';
 import notificationRouter from './modules/notifications/notification.routes';
 import healthRouter from './routes/health.routes';
+import aiRouter from './modules/ai/ai.routes';
 
 // Express application instance
 export const app = express();
@@ -90,6 +91,7 @@ app.use('/api/v1/qr-ordering', qrRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/super-admin', superAdminRouter);
 app.use('/api/v1/notifications', notificationRouter);
+app.use('/api/v1/ai', aiRouter);
 
 // 4. Root Welcome Route
 app.get('/', (req, res) => {

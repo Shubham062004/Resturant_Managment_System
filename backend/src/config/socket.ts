@@ -25,10 +25,26 @@ export const initSocket = (server: HttpServer) => {
     },
   });
 
+  const parseCookies = (cookieHeader: string | undefined): Record<string, string> => {
+    const list: Record<string, string> = {};
+    if (!cookieHeader) return list;
+    cookieHeader.split(';').forEach((cookie) => {
+      const parts = cookie.split('=');
+      const name = parts.shift()?.trim();
+      if (name) {
+        list[name] = decodeURIComponent(parts.join('='));
+      }
+    });
+    return list;
+  };
+
   io.use((socket, next) => {
     try {
+      const cookies = parseCookies(socket.handshake.headers?.cookie);
       const token =
-        socket.handshake.auth?.token || socket.handshake.headers?.authorization?.split(' ')[1];
+        socket.handshake.auth?.token ||
+        cookies['accessToken'] ||
+        socket.handshake.headers?.authorization?.split(' ')[1];
 
       if (!token) {
         return next(new Error('Authentication Error: Token missing'));

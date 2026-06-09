@@ -8,11 +8,11 @@ export const getDashboardRouteByRole = (role?: string | null): string => {
       return '/profile';
 
     case 'SUPER_ADMIN':
-    case 'ORGANIZATION_OWNER':
-    case 'FRANCHISE_OWNER':
     case 'PLATFORM_ADMIN':
       return '/super-admin';
 
+    case 'ORGANIZATION_OWNER':
+    case 'FRANCHISE_OWNER':
     case 'ADMIN':
     case 'SUPPORT_STAFF':
     case 'BRANCH_MANAGER':

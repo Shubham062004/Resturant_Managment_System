@@ -259,7 +259,7 @@ async function main() {
     phone: '+919999999050',
     firstName: 'System',
     lastName: 'Admin',
-    role: Role.ADMIN,
+    role: Role.SUPER_ADMIN,
     passwordHash: userPasswordHash,
     organizationId: org.id,
     isEmailVerified: true,

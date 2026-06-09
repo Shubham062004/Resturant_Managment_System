@@ -58,7 +58,7 @@ router
     controller.getIngredients
   )
   .post(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER'),
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.createIngredientSchema),
     controller.createIngredient
   );
@@ -66,7 +66,7 @@ router
 router
   .route('/ingredients/:id')
   .patch(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER'),
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.updateIngredientSchema),
     controller.updateIngredient
   );
@@ -81,7 +81,7 @@ router
     controller.getSuppliers
   )
   .post(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER'),
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.createSupplierSchema),
     controller.createSupplier
   );
@@ -89,7 +89,7 @@ router
 router
   .route('/suppliers/:id')
   .patch(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER'),
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.updateSupplierSchema),
     controller.updateSupplier
   );
@@ -104,7 +104,7 @@ router
     controller.getPurchaseOrders
   )
   .post(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER'),
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.createPurchaseOrderSchema),
     controller.createPurchaseOrder
   );
@@ -112,7 +112,7 @@ router
 router
   .route('/purchase-orders/:id')
   .patch(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER'),
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.updatePurchaseOrderStatusSchema),
     controller.updatePurchaseOrderStatus
   );
@@ -127,21 +127,21 @@ router.route('/').get(
 
 router.post(
   '/adjust',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'INVENTORY_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   validate(validation.adjustInventorySchema),
   controller.adjustInventory
 );
 
 router.post(
   '/transfers',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'INVENTORY_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   validate(validation.inventoryTransferSchema),
   controller.transferInventory
 );
 
 router.post(
   '/waste',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'HEAD_CHEF', 'KITCHEN_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'HEAD_CHEF', 'KITCHEN_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   validate(validation.logWasteSchema),
   controller.logWaste
 );

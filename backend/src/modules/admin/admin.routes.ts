@@ -12,17 +12,36 @@ const router = Router();
 // Protect all admin routes
 router.use(authGuard);
 router.use(
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'OPERATIONS_MANAGER', 'FINANCE_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'OPERATIONS_MANAGER', 'FINANCE_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
 );
 
 // Dashboard Overview
 router.get('/dashboard', AdminController.getDashboardOverview);
 
+// Branch management
+router.get('/branches', AdminController.getBranches);
+router.post('/branches', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.createBranch);
+router.patch('/branches/:id', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.updateBranch);
+router.delete('/branches/:id', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.deleteBranch);
+
+// Product management
+router.get('/products', AdminController.getProducts);
+router.post('/products', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.createProduct);
+router.patch('/products/:id', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.updateProduct);
+router.delete('/products/:id', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.deleteProduct);
+
+// Audit Logs
+router.get('/audit-logs', restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), AdminController.getAuditLogs);
+
+// Orders list for admin dashboard
+router.get('/orders', AdminController.getOrders);
+
+
 // Settings
 router.get('/settings/:branchId', SettingsController.getSettings);
 router.patch(
   '/settings/:branchId',
-  restrictTo('ADMIN', 'SUPER_ADMIN'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   SettingsController.updateSettings,
 );
 
@@ -41,35 +60,35 @@ router.get('/reports/daily', ReportsController.getDailyReport);
 // Staff
 router.get(
   '/staff',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   StaffController.getAllStaff,
 );
-router.post('/staff', restrictTo('ADMIN', 'SUPER_ADMIN'), StaffController.createStaff);
+router.post('/staff', restrictTo('ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'), StaffController.createStaff);
 router.patch(
   '/staff/bulk-update',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   StaffController.bulkUpdateStaff,
 );
 router.patch(
   '/staff/:id',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   StaffController.updateStaffProfile,
 );
 router.patch(
   '/staff/:id/role',
-  restrictTo('ADMIN', 'SUPER_ADMIN'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   StaffController.updateStaffRole,
 );
 
 // Customers
 router.get(
   '/customers',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   CustomersController.getAllCustomers,
 );
 router.get(
   '/customers/:id',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER'),
+  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
   CustomersController.getCustomerDetails,
 );
 
