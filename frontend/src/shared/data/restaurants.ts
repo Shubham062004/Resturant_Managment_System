@@ -15,7 +15,7 @@ export interface Restaurant {
 export const mockRestaurants: Restaurant[] = [
   {
     id: 'res_firehouse',
-    name: 'Oven Xpress - Firehouse',
+    name: 'ABC - Firehouse',
     rating: 4.8,
     reviewsCount: 320,
     categories: ['Pizza', 'Burgers'],

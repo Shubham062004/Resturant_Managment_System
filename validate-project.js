@@ -67,7 +67,7 @@ function getFilesRecursive(dir) {
 
 function runAudit() {
   console.log('==================================================');
-  console.log('🔎 OVEN XPRESS PROJECT STABILIZATION & AUDIT TOOL');
+  console.log('🔎 ABC PROJECT STABILIZATION & AUDIT TOOL');
   console.log('==================================================');
 
   // Step 1: Run Linting Checks

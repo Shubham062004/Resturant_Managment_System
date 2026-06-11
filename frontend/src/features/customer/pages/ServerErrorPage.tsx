@@ -12,7 +12,7 @@ export const ServerErrorPage: React.FC = () => {
     <>
       <SEO
         title="Server Error (500)"
-        description="The Oven Xpress main database or gateway is currently undergoing maintenance."
+        description="The ABC main database or gateway is currently undergoing maintenance."
       />
 
       <div className="text-center space-y-6 font-sans">

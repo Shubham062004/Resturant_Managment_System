@@ -74,7 +74,7 @@ export const Navbar: React.FC = () => {
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center shadow-md shadow-primary/10">
             <Flame className="w-5.5 h-5.5 text-white" />
           </div>
-          <span>Oven Xpress</span>
+          <span>ABC</span>
         </Link>
 
         {selectedBranch && (
@@ -83,7 +83,7 @@ export const Navbar: React.FC = () => {
             className="hidden lg:flex items-center gap-1.5 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-primary/20 transition-all duration-200"
           >
             <MapPin size={12} />
-            <span>Outpost: {selectedBranch.name.replace('Oven Xpress - ', '')}</span>
+            <span>Outpost: {selectedBranch.name.replace('ABC - ', '')}</span>
           </Link>
         )}
       </div>
@@ -159,7 +159,7 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-2.5 py-1 rounded-full"
           >
             <MapPin size={10} />
-            <span>{selectedBranch.name.replace('Oven Xpress - ', '').split(' ')[0]}</span>
+            <span>{selectedBranch.name.replace('ABC - ', '').split(' ')[0]}</span>
           </Link>
         )}
         <button

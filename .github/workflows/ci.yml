@@ -1,4 +1,4 @@
-name: Oven Xpress CI Pipeline
+name: ABC CI Pipeline
 
 on:
   push:

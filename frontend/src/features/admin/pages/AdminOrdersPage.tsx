@@ -206,7 +206,7 @@ export default function AdminOrdersPage() {
   };
 
   return (
-    <div className="space-y-8 p-6 text-white bg-slate-950 min-h-screen">
+    <div className="space-y-8 p-6 text-[#F8FAFC] bg-[#0F172A] min-h-screen font-sans">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -275,16 +275,16 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Main Grid Filters & Listing */}
-      <Card className="p-6 bg-slate-900/40 border-border/30 rounded-2xl">
+      <Card className="p-6 bg-[#111827] border-slate-800 rounded-2xl shadow-xl">
         <CardHeader className="border-none p-0 mb-6 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold font-display text-white">Live Operations Grid</h3>
-            <p className="text-xs text-slate-400">Benchmarking, status tracking, and order overrides</p>
+            <p className="text-xs text-slate-450">Benchmarking, status tracking, and order overrides</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Search Input */}
-            <div className="flex items-center space-x-2 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-border/20 text-xs w-64">
+            <div className="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs w-64">
               <Search size={14} className="text-slate-400" />
               <input
                 type="text"
@@ -296,7 +296,7 @@ export default function AdminOrdersPage() {
             </div>
 
             {/* Branch Filter */}
-            <div className="flex items-center space-x-2 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-border/20 text-xs">
+            <div className="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
               <span className="text-slate-400">Branch:</span>
               <select
                 value={branchFilter}
@@ -311,7 +311,7 @@ export default function AdminOrdersPage() {
             </div>
 
             {/* Status Filter */}
-            <div className="flex items-center space-x-2 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-border/20 text-xs">
+            <div className="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
               <span className="text-slate-400">Status:</span>
               <select
                 value={statusFilter}
@@ -331,7 +331,7 @@ export default function AdminOrdersPage() {
             </div>
 
             {/* Type Filter */}
-            <div className="flex items-center space-x-2 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-border/20 text-xs">
+            <div className="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
               <span className="text-slate-400">Type:</span>
               <select
                 value={typeFilter}
@@ -388,7 +388,7 @@ export default function AdminOrdersPage() {
                       <p className="text-[10px] text-slate-500 mt-0.5">{order.user.email}</p>
                     </td>
                     <td className="py-3 text-slate-300 font-medium">
-                      {order.branch?.name.replace('Oven Xpress - ', '') || 'Central'}
+                      {order.branch?.name.replace('ABC - ', '') || 'Central'}
                     </td>
                     <td className="py-3 text-center">
                       <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-300 font-semibold">
@@ -433,7 +433,7 @@ export default function AdminOrdersPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl text-[#F8FAFC]"
             >
               <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
                 <div>
@@ -639,7 +639,7 @@ export default function AdminOrdersPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl text-[#F8FAFC]"
             >
               <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-base font-bold font-display">Issue Refund: #{selectedOrder.orderNumber.toUpperCase()}</h2>

@@ -38,7 +38,7 @@ const request = (path, method = 'GET', data = null, token = null) => {
 };
 
 async function runE2E() {
-  console.log("=== OVEN XPRESS E2E API VALIDATION ===");
+  console.log("=== ABC E2E API VALIDATION ===");
   let errors = [];
 
   // Helper to run and track
@@ -56,7 +56,7 @@ async function runE2E() {
 
   // 1. Customer Flow
   const loginRes = await testFlow('Customer Login', '/api/v1/auth/login', 'POST', {
-    email: 'customer@ovenxpress.com',
+    email: 'customer@abc.com',
     password: 'Customer@123'
   });
   
@@ -72,7 +72,7 @@ async function runE2E() {
 
   // 2. Admin Flow
   const adminLogin = await testFlow('Admin Login', '/api/v1/auth/login', 'POST', {
-    email: 'admin@ovenxpress.com',
+    email: 'admin@abc.com',
     password: 'Admin@123'
   });
   let adminToken = adminLogin?.token;

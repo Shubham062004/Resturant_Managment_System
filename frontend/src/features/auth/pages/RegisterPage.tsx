@@ -115,7 +115,7 @@ export const RegisterPage: React.FC = () => {
           <Input
             type="email"
             label="Email Address"
-            placeholder="jane.cook@ovenxpress.com"
+            placeholder="jane.cook@abc.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             prefixIcon={<Mail size={16} />}

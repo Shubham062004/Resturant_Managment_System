@@ -38,7 +38,8 @@ import {
   Search,
   CheckCircle2,
   Award,
-  AlertCircle
+  AlertCircle,
+  Bell
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -239,7 +240,7 @@ export default function OwnerDashboardPage() {
   const { user } = useAppSelector(state => state.auth);
   
   // Greeting name
-  const greetingName = user?.name || 'Shubham';
+  const greetingName = user?.firstName || 'Shubham';
 
   // API Telemetry Data states
   const [loading, setLoading] = useState(true);
@@ -1398,7 +1399,7 @@ export default function OwnerDashboardPage() {
                           }`}
                         >
                           <div className="flex justify-between items-center text-xs font-semibold">
-                            <span>{req.branch.name.replace('Oven Xpress - ', '')}</span>
+                            <span>{req.branch.name.replace('ABC - ', '')}</span>
                             <span className="text-slate-500 text-[9px]">{new Date(req.createdAt).toLocaleDateString()}</span>
                           </div>
                           <p className="text-[10px] text-slate-400 mt-1">{req.items.length} items requested</p>

@@ -6,7 +6,7 @@ import { getIO } from '../../config/socket';
 export class TableService {
   public static async createTable(data: any) {
     const tableId = crypto.randomUUID();
-    const qrCode = `ovenxpress.com/qr/${tableId}`;
+    const qrCode = `abc.com/qr/${tableId}`;
 
     const table = await prisma.table.create({
       data: {

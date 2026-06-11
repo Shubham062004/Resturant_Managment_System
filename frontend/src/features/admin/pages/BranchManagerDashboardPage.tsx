@@ -277,7 +277,7 @@ export default function BranchManagerDashboardPage() {
             >
               {branches.map((b) => (
                 <option key={b.id} value={b.id} className="bg-slate-900 text-white">
-                  {b.name.replace('Oven Xpress - ', '')}
+                  {b.name.replace('ABC - ', '')}
                 </option>
               ))}
             </select>

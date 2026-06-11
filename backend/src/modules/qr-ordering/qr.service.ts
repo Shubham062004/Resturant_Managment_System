@@ -25,11 +25,11 @@ export class QROrderingService {
 
     // Get an anonymous user or a dummy user for guest orders if not authenticated
     // In our system, order requires userId. We can find or create a GUEST user.
-    let guestUser = await prisma.user.findFirst({ where: { email: 'guest@ovenxpress.local' } });
+    let guestUser = await prisma.user.findFirst({ where: { email: 'guest@abc.local' } });
     if (!guestUser) {
       guestUser = await prisma.user.create({
         data: {
-          email: 'guest@ovenxpress.local',
+          email: 'guest@abc.local',
           firstName: 'Guest',
           lastName: 'User',
           role: 'CUSTOMER',

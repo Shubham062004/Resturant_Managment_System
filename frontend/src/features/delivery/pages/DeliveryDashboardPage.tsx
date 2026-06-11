@@ -77,44 +77,45 @@ export default function DeliveryDashboardPage() {
 
   // Simulated Driver Location / GPS Movement Loop
   useEffect(() => {
-    if (!gpsActive || !selectedOrderId) return;
+    if (gpsActive && selectedOrderId) {
+      const interval = setInterval(() => {
+        setGpsPercent((prev) => {
+          const next = prev + 5;
+          
+          // Calculate incremental coordinates between main kitchen and customer dropoff
+          // Center restaurant coordinate: (12.9716, 77.5946)
+          // Mock dropoff location: (12.9816, 77.6046)
+          const startLat = 12.9716;
+          const startLng = 77.5946;
+          const endLat = 12.9816;
+          const endLng = 77.6046;
 
-    const interval = setInterval(() => {
-      setGpsPercent((prev) => {
-        const next = prev + 5;
-        
-        // Calculate incremental coordinates between main kitchen and customer dropoff
-        // Center restaurant coordinate: (12.9716, 77.5946)
-        // Mock dropoff location: (12.9816, 77.6046)
-        const startLat = 12.9716;
-        const startLng = 77.5946;
-        const endLat = 12.9816;
-        const endLng = 77.6046;
+          const currentLat = startLat + (endLat - startLat) * (next / 100);
+          const currentLng = startLng + (endLng - startLng) * (next / 100);
 
-        const currentLat = startLat + (endLat - startLat) * (next / 100);
-        const currentLng = startLng + (endLng - startLng) * (next / 100);
+          // Push location telemetry to backend MongoDB
+          dispatch(
+            updateLocation({
+              orderId: selectedOrderId,
+              latitude: currentLat,
+              longitude: currentLng,
+              heading: 45,
+              speed: 35,
+            })
+          );
 
-        // Push location telemetry to backend MongoDB
-        dispatch(
-          updateLocation({
-            orderId: selectedOrderId,
-            latitude: currentLat,
-            longitude: currentLng,
-            heading: 45,
-            speed: 35,
-          })
-        );
+          if (next >= 100) {
+            setGpsActive(false);
+            setAlertMsg({ type: 'success', text: 'You have arrived at the customer location!' });
+            return 100;
+          }
+          return next;
+        });
+      }, 4000);
 
-        if (next >= 100) {
-          setGpsActive(false);
-          setAlertMsg({ type: 'success', text: 'You have arrived at the customer location!' });
-          return 100;
-        }
-        return next;
-      });
-    }, 4000);
-
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
+    return undefined;
   }, [gpsActive, selectedOrderId, dispatch]);
 
   const handleAction = async (assignment: DeliveryAssignment) => {
@@ -186,6 +187,10 @@ export default function DeliveryDashboardPage() {
 
     ctx.lineTo(x, y);
     ctx.stroke();
+  };
+
+  const stopDrawing = () => {
+    setIsDrawing(false);
   };
 
   const clearCanvas = () => {
@@ -282,13 +287,20 @@ export default function DeliveryDashboardPage() {
       </div>
 
       {alertMsg && (
-        <Alert
-          variant={alertMsg.type === 'success' ? 'success' : 'error'}
-          onClose={() => setAlertMsg(null)}
-          className="mb-2"
-        >
-          {alertMsg.text}
-        </Alert>
+        <div className="relative">
+          <Alert
+            variant={alertMsg.type === 'success' ? 'success' : 'error'}
+            className="mb-2 pr-10"
+          >
+            {alertMsg.text}
+          </Alert>
+          <button
+            onClick={() => setAlertMsg(null)}
+            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 text-xs font-bold"
+          >
+            ✕
+          </button>
+        </div>
       )}
 
       {/* Driver Earnings & Performance Cards */}
@@ -362,13 +374,13 @@ export default function DeliveryDashboardPage() {
                             <h3 className="font-extrabold text-white text-base">
                               Order #{assignment.order?.orderNumber || '0000'}
                             </h3>
-                            <Badge variant="indigo" className="text-xs uppercase tracking-wider font-extrabold">
+                            <Badge variant="info" className="text-xs uppercase tracking-wider font-extrabold">
                               {assignment.status.replace(/_/g, ' ')}
                             </Badge>
                           </div>
                           <p className="text-xs text-slate-400 leading-relaxed">
                             <span className="font-semibold text-slate-300">Hub:</span>{' '}
-                            {assignment.order?.restaurant?.name || 'Oven Xpress Kitchen'}
+                            {assignment.order?.restaurant?.name || 'ABC Kitchen'}
                           </p>
                           <p className="text-xs text-slate-400 leading-relaxed">
                             <span className="font-semibold text-slate-300">Dropoff Address:</span>{' '}

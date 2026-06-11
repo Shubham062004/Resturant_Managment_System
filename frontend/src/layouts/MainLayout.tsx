@@ -48,7 +48,7 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-background flex text-foreground overflow-hidden">
       <Helmet>
-        <title>Oven Xpress - Restaurant Management System</title>
+        <title>ABC - Restaurant Management System</title>
         <meta name="description" content="Enterprise-grade Restaurant Management System featuring AI insights, live kitchen displays, and seamless delivery integration." />
         <html lang="en" />
       </Helmet>
@@ -69,7 +69,7 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
                 <Flame className="w-6 h-6 text-white" />
               </div>
               <span className="font-display font-extrabold text-xl tracking-tight text-white">
-                Oven Xpress
+                ABC
               </span>
             </div>
 

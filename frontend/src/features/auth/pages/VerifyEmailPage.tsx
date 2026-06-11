@@ -126,7 +126,7 @@ export const VerifyEmailPage: React.FC = () => {
               <Input
                 type="email"
                 label="Registered Email Address"
-                placeholder="staff@ovenxpress.com"
+                placeholder="staff@abc.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 prefixIcon={<Mail size={16} />}
@@ -166,7 +166,7 @@ export const VerifyEmailPage: React.FC = () => {
               <Input
                 type="email"
                 label="Registered Email Address"
-                placeholder="staff@ovenxpress.com"
+                placeholder="staff@abc.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 prefixIcon={<Mail size={16} />}

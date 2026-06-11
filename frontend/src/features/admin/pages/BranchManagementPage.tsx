@@ -223,8 +223,14 @@ export default function BranchManagementPage() {
     }
   };
 
+  const totalBranches = branches.length;
+  const activeBranches = branches.filter(b => b.isActive).length;
+  const uniqueCities = new Set(branches.map(b => b.city)).size;
+  const totalCoverage = branches.reduce((sum, b) => sum + (b.isActive ? b.deliveryRadius : 0), 0);
+  const averageRadius = branches.length > 0 ? (totalCoverage / branches.length).toFixed(1) : '0';
+
   return (
-    <div className="space-y-8 p-6 text-white bg-slate-950 min-h-screen">
+    <div className="space-y-8 p-6 text-[#F8FAFC] bg-[#0F172A] min-h-screen font-sans">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -238,17 +244,44 @@ export default function BranchManagementPage() {
         <div className="flex gap-3">
           <Button
             onClick={() => setShowTransferModal(true)}
-            className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-border/20"
+            className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700/60"
           >
             <ArrowRightLeft size={16} /> Transfer Inventory
           </Button>
           <Button
             onClick={openAddModal}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+            className="flex items-center gap-2 bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
           >
             <Plus size={16} /> Create Branch
           </Button>
         </div>
+      </div>
+
+      {/* KPI Overview Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Outlets</p>
+          <p className="text-3xl font-bold font-display mt-2 text-white">{totalBranches}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Registered in franchise group</span>
+        </Card>
+
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Outlets</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">{activeBranches}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Serving active orders</span>
+        </Card>
+
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Managed Cities</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">{uniqueCities}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Operational city groups</span>
+        </Card>
+
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Avg Radius Coverage</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">{averageRadius} Km</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Total dispatch reach</span>
+        </Card>
       </div>
 
       {/* Main Grid List */}
@@ -264,8 +297,8 @@ export default function BranchManagementPage() {
               key={b.id}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className={`glass-card p-6 rounded-2xl border bg-gradient-to-b from-slate-900/60 to-slate-950/40 relative overflow-hidden ${
-                b.isActive ? 'border-border/30' : 'border-rose-900/40 opacity-75'
+              className={`p-6 rounded-2xl border bg-[#111827] relative overflow-hidden transition-all duration-200 hover:border-slate-700/60 hover:shadow-xl ${
+                b.isActive ? 'border-slate-800' : 'border-rose-900/40 opacity-75'
               }`}
             >
               <div className="flex items-start justify-between">
@@ -290,7 +323,7 @@ export default function BranchManagementPage() {
                 </div>
               </div>
 
-              <div className="mt-6 space-y-3 border-t border-border/10 pt-4 text-xs text-slate-300">
+              <div className="mt-6 space-y-3 border-t border-slate-800/80 pt-4 text-xs text-slate-300">
                 <p className="flex items-center gap-2">
                   <Navigation size={14} className="text-slate-500" />
                   <span>Address: {b.address}</span>
@@ -306,7 +339,7 @@ export default function BranchManagementPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-6 flex justify-between gap-3 border-t border-border/10 pt-4">
+              <div className="mt-6 flex justify-between gap-3 border-t border-slate-800/80 pt-4">
                 <Button
                   onClick={() => {
                     setManagerBranchId(b.id);
@@ -314,16 +347,16 @@ export default function BranchManagementPage() {
                   }}
                   size="sm"
                   variant="outline"
-                  className="flex-1 bg-slate-900 border-border/30 text-slate-300 hover:bg-slate-800 text-xs py-1.5"
+                  className="flex-1 bg-slate-950 border-slate-800 text-slate-350 hover:bg-slate-800/60 text-xs py-1.5"
                 >
-                  <UserCheck size={14} className="mr-1.5" /> Assign Manager
+                  <UserCheck size={14} className="mr-1.5 text-[#06B6D4]" /> Assign Manager
                 </Button>
 
                 <div className="flex gap-2">
                   <Button
                     onClick={() => openEditModal(b)}
                     size="sm"
-                    className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-border/20 rounded-lg"
+                    className="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-lg"
                   >
                     <Edit2 size={14} />
                   </Button>
@@ -332,8 +365,8 @@ export default function BranchManagementPage() {
                     size="sm"
                     className={`p-2 rounded-lg border ${
                       b.isActive 
-                        ? 'bg-rose-950/20 hover:bg-rose-950 text-rose-400 border-rose-500/20' 
-                        : 'bg-emerald-950/20 hover:bg-emerald-950 text-emerald-400 border-emerald-500/20'
+                        ? 'bg-rose-950/20 hover:bg-rose-950 text-rose-450 border-rose-500/20' 
+                        : 'bg-emerald-950/20 hover:bg-emerald-950 text-emerald-450 border-emerald-500/20'
                     }`}
                   >
                     <Power size={14} />
@@ -341,7 +374,7 @@ export default function BranchManagementPage() {
                   <Button
                     onClick={() => handleDeleteBranch(b.id)}
                     size="sm"
-                    className="p-2 bg-slate-800 hover:bg-rose-950 text-slate-400 hover:text-rose-500 border border-border/10 rounded-lg"
+                    className="p-2 bg-slate-900 hover:bg-rose-950/30 text-slate-400 hover:text-rose-500 border border-slate-800 rounded-lg"
                   >
                     <Trash2 size={14} />
                   </Button>
@@ -360,9 +393,9 @@ export default function BranchManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">
                   {selectedBranch ? 'Modify Branch Parameters' : 'Register New Branch'}
                 </h2>
@@ -376,7 +409,7 @@ export default function BranchManagementPage() {
                     required
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    placeholder="e.g. Oven Xpress - Indiranagar"
+                    placeholder="e.g. ABC - Indiranagar"
                     className="bg-slate-950 border-border/30 text-white"
                   />
                 </div>
@@ -478,11 +511,11 @@ export default function BranchManagementPage() {
                     type="button"
                     onClick={() => setShowAddEditModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Save Branch
                   </Button>
                 </div>
@@ -500,9 +533,9 @@ export default function BranchManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">Assign Branch Manager</h2>
                 <button onClick={() => setShowManagerModal(false)} className="text-slate-400 hover:text-white">✕</button>
               </div>
@@ -525,11 +558,11 @@ export default function BranchManagementPage() {
                     type="button"
                     onClick={() => setShowManagerModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Assign Role
                   </Button>
                 </div>
@@ -547,9 +580,9 @@ export default function BranchManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">Inter-Branch Inventory Transfer</h2>
                 <button onClick={() => setShowTransferModal(false)} className="text-slate-400 hover:text-white">✕</button>
               </div>
@@ -632,11 +665,11 @@ export default function BranchManagementPage() {
                     type="button"
                     onClick={() => setShowTransferModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Execute Transfer
                   </Button>
                 </div>

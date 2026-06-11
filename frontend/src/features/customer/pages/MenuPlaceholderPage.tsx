@@ -7,7 +7,7 @@ export const MenuPlaceholderPage: React.FC = () => {
     <>
       <SEO
         title="Menu Catalog Catalog"
-        description="Browse Oven Xpress custom fire-baked pizza combinations and customized cheeseburger menus."
+        description="Browse ABC custom fire-baked pizza combinations and customized cheeseburger menus."
       />
 
       <div className="max-w-4xl mx-auto px-6 py-12 text-center">

@@ -94,8 +94,8 @@ describe('Catalog API Integration Tests', () => {
       (prisma.restaurantGroup.findMany as any).mockResolvedValue([
         {
           id: RESTAURANT_UUID,
-          name: 'Oven Xpress - Firehouse',
-          slug: 'oven-xpress-firehouse',
+          name: 'ABC - Firehouse',
+          slug: 'abc-firehouse',
           description: 'A mock pizza outlet',
           rating: 4.8,
           branches: [],
@@ -107,7 +107,7 @@ describe('Catalog API Integration Tests', () => {
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveLength(1);
-      expect(response.body.data[0].name).toBe('Oven Xpress - Firehouse');
+      expect(response.body.data[0].name).toBe('ABC - Firehouse');
       expect(prisma.restaurantGroup.findMany).toHaveBeenCalled();
     });
   });
@@ -116,20 +116,20 @@ describe('Catalog API Integration Tests', () => {
     it('should retrieve full details of restaurant by its slug name', async () => {
       (prisma.restaurantGroup.findUnique as any).mockResolvedValue({
         id: RESTAURANT_UUID,
-        name: 'Oven Xpress - Firehouse',
-        slug: 'oven-xpress-firehouse',
+        name: 'ABC - Firehouse',
+        slug: 'abc-firehouse',
         branches: [{ id: FAVORITE_UUID, name: 'Head Branch', isActive: true }],
         categories: [{ id: CATEGORY_UUID, name: 'Pizza', isActive: true }],
         products: [],
       });
 
       const response = await request(app).get(
-        '/api/v1/catalog/restaurants/slug/oven-xpress-firehouse',
+        '/api/v1/catalog/restaurants/slug/abc-firehouse',
       );
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
-      expect(response.body.data.name).toBe('Oven Xpress - Firehouse');
+      expect(response.body.data.name).toBe('ABC - Firehouse');
       expect(response.body.data.branches).toHaveLength(1);
       expect(prisma.restaurantGroup.findUnique).toHaveBeenCalled();
     });

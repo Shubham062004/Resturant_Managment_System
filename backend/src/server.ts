@@ -24,7 +24,7 @@ const startServer = async () => {
     // 2. Start Express Port Listener
     const server = app.listen(env.PORT, () => {
       logger.info(
-        `🚀 Oven Xpress RMS Service listening on http://localhost:${env.PORT} in [${env.NODE_ENV}] mode`,
+        `🚀 ABC RMS Service listening on http://localhost:${env.PORT} in [${env.NODE_ENV}] mode`,
       );
     });
 

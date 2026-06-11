@@ -14,22 +14,22 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
   
   // Explicit/Standard logins for testing (total 16 logins)
   const explicitUsers = [
-    { email: 'customer@ovenxpress.com', role: Role.CUSTOMER, firstName: 'Standard', lastName: 'Customer', phone: '9000000001' },
-    { email: 'vipcustomer@ovenxpress.com', role: Role.CUSTOMER, firstName: 'VIP', lastName: 'Customer', phone: '9000000002' },
-    { email: 'cashier@ovenxpress.com', role: Role.CASHIER, firstName: 'Main', lastName: 'Cashier', phone: '9000000010', salary: 22000 },
-    { email: 'kitchen@ovenxpress.com', role: Role.KITCHEN_STAFF, firstName: 'Line', lastName: 'Cook', phone: '9000000011', salary: 25000, assignedCategory: 'burger' },
-    { email: 'chef@ovenxpress.com', role: Role.HEAD_CHEF, firstName: 'Head', lastName: 'Chef', phone: '9000000012', salary: 35000 },
-    { email: 'kitchenmanager@ovenxpress.com', role: Role.KITCHEN_MANAGER, firstName: 'Kitchen', lastName: 'Manager', phone: '9000000013', salary: 30000 },
-    { email: 'driver@ovenxpress.com', role: Role.DELIVERY_PARTNER, firstName: 'Delivery', lastName: 'Partner', phone: '9000000014', salary: 20000 },
-    { email: 'deliverymanager@ovenxpress.com', role: Role.DELIVERY_MANAGER, firstName: 'Delivery', lastName: 'Manager', phone: '9000000015', salary: 28000 },
-    { email: 'branchmanager@ovenxpress.com', role: Role.BRANCH_MANAGER, firstName: 'Branch', lastName: 'Manager', phone: '9000000016', salary: 45000 },
-    { email: 'operations@ovenxpress.com', role: Role.OPERATIONS_MANAGER, firstName: 'Operations', lastName: 'Manager', phone: '9000000017', salary: 40000 },
-    { email: 'finance@ovenxpress.com', role: Role.FINANCE_MANAGER, firstName: 'Finance', lastName: 'Manager', phone: '9000000018', salary: 38000 },
-    { email: 'admin@ovenxpress.com', role: Role.ADMIN, firstName: 'System', lastName: 'Admin', phone: '9000000019', salary: 50000 },
-    { email: 'franchise@ovenxpress.com', role: Role.FRANCHISE_OWNER, firstName: 'Franchise', lastName: 'Owner', phone: '9000000020', salary: 60000 },
-    { email: 'owner@ovenxpress.com', role: Role.ORGANIZATION_OWNER, firstName: 'Organization', lastName: 'Owner', phone: '9000000021' },
-    { email: 'superadmin@ovenxpress.com', role: Role.SUPER_ADMIN, firstName: 'Super', lastName: 'Admin', phone: '9000000022' },
-    { email: 'inventory@ovenxpress.com', role: Role.INVENTORY_MANAGER, firstName: 'Inventory', lastName: 'Manager', phone: '9000000023', salary: 35000 }
+    { email: 'customer@abc.com', role: Role.CUSTOMER, firstName: 'Standard', lastName: 'Customer', phone: '9000000001' },
+    { email: 'vipcustomer@abc.com', role: Role.CUSTOMER, firstName: 'VIP', lastName: 'Customer', phone: '9000000002' },
+    { email: 'cashier@abc.com', role: Role.CASHIER, firstName: 'Main', lastName: 'Cashier', phone: '9000000010', salary: 22000 },
+    { email: 'kitchen@abc.com', role: Role.KITCHEN_STAFF, firstName: 'Line', lastName: 'Cook', phone: '9000000011', salary: 25000, assignedCategory: 'burger' },
+    { email: 'chef@abc.com', role: Role.HEAD_CHEF, firstName: 'Head', lastName: 'Chef', phone: '9000000012', salary: 35000 },
+    { email: 'kitchenmanager@abc.com', role: Role.KITCHEN_MANAGER, firstName: 'Kitchen', lastName: 'Manager', phone: '9000000013', salary: 30000 },
+    { email: 'driver@abc.com', role: Role.DELIVERY_PARTNER, firstName: 'Delivery', lastName: 'Partner', phone: '9000000014', salary: 20000 },
+    { email: 'deliverymanager@abc.com', role: Role.DELIVERY_MANAGER, firstName: 'Delivery', lastName: 'Manager', phone: '9000000015', salary: 28000 },
+    { email: 'branchmanager@abc.com', role: Role.BRANCH_MANAGER, firstName: 'Branch', lastName: 'Manager', phone: '9000000016', salary: 45000 },
+    { email: 'operations@abc.com', role: Role.OPERATIONS_MANAGER, firstName: 'Operations', lastName: 'Manager', phone: '9000000017', salary: 40000 },
+    { email: 'finance@abc.com', role: Role.FINANCE_MANAGER, firstName: 'Finance', lastName: 'Manager', phone: '9000000018', salary: 38000 },
+    { email: 'admin@abc.com', role: Role.ADMIN, firstName: 'System', lastName: 'Admin', phone: '9000000019', salary: 50000 },
+    { email: 'franchise@abc.com', role: Role.FRANCHISE_OWNER, firstName: 'Franchise', lastName: 'Owner', phone: '9000000020', salary: 60000 },
+    { email: 'owner@abc.com', role: Role.ORGANIZATION_OWNER, firstName: 'Organization', lastName: 'Owner', phone: '9000000021' },
+    { email: 'superadmin@abc.com', role: Role.SUPER_ADMIN, firstName: 'Super', lastName: 'Admin', phone: '9000000022' },
+    { email: 'inventory@abc.com', role: Role.INVENTORY_MANAGER, firstName: 'Inventory', lastName: 'Manager', phone: '9000000023', salary: 35000 }
   ];
 
   for (const u of explicitUsers) {
@@ -58,7 +58,7 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
   const invMgrId = randomUUID();
   usersToCreate.push({
     id: invMgrId,
-    email: 'inventory2@ovenxpress.com',
+    email: 'inventory2@abc.com',
     firstName: 'Inventory',
     lastName: 'Manager 2',
     phone: '9000000024',
@@ -75,13 +75,13 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
 
   // Generate branch-specific staff
   branches.forEach((branch, index) => {
-    // 2 Branch Managers per branch (index 0 already has the explicit branchmanager@ovenxpress.com, we add 1 or 2 as needed)
+    // 2 Branch Managers per branch (index 0 already has the explicit branchmanager@abc.com, we add 1 or 2 as needed)
     const mgrCount = index === 0 ? 1 : 2;
     for (let m = 0; m < mgrCount; m++) {
       const id = randomUUID();
       usersToCreate.push({
         id,
-        email: `branch${index + 1}.mgr${m + 1}@ovenxpress.com`,
+        email: `branch${index + 1}.mgr${m + 1}@abc.com`,
         firstName: `Branch${index + 1}`,
         lastName: `Manager ${m + 1}`,
         phone: `9100000${index}${m}`,
@@ -103,7 +103,7 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
       const cat = categories[k % categories.length];
       usersToCreate.push({
         id,
-        email: `branch${index + 1}.cook${k + 1}@ovenxpress.com`,
+        email: `branch${index + 1}.cook${k + 1}@abc.com`,
         firstName: `Branch${index + 1} Cook`,
         lastName: `${k + 1}`,
         phone: `9200000${index}${k}`,
@@ -125,7 +125,7 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
       const id = randomUUID();
       usersToCreate.push({
         id,
-        email: `branch${index + 1}.rider${d + 1}@ovenxpress.com`,
+        email: `branch${index + 1}.rider${d + 1}@abc.com`,
         firstName: `Branch${index + 1} Rider`,
         lastName: `${d + 1}`,
         phone: `9300000${index}${d}`,
@@ -146,7 +146,7 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
       const id = randomUUID();
       usersToCreate.push({
         id,
-        email: `branch${index + 1}.cashier@ovenxpress.com`,
+        email: `branch${index + 1}.cashier@abc.com`,
         firstName: `Branch${index + 1} Cashier`,
         lastName: `1`,
         phone: `9400000${index}1`,
@@ -165,8 +165,8 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
 
   // Seed customers for orders
   const customers: string[] = [];
-  customers.push(usersToCreate.find(u => u.email === 'customer@ovenxpress.com').id);
-  customers.push(usersToCreate.find(u => u.email === 'vipcustomer@ovenxpress.com').id);
+  customers.push(usersToCreate.find(u => u.email === 'customer@abc.com').id);
+  customers.push(usersToCreate.find(u => u.email === 'vipcustomer@abc.com').id);
 
   for (let i = 1; i <= 40; i++) {
     const custId = randomUUID();

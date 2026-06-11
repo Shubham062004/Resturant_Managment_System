@@ -199,7 +199,7 @@ export default function IngredientManagementPage() {
   const totalCost = ingredients.reduce((sum, i) => sum + i.costPrice, 0) * 150;
 
   return (
-    <div className="space-y-8 p-6 text-white bg-slate-950 min-h-screen">
+    <div className="space-y-8 p-6 text-[#F8FAFC] bg-[#0F172A] min-h-screen font-sans">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -213,19 +213,19 @@ export default function IngredientManagementPage() {
         <div className="flex flex-wrap gap-3">
           <Button
             onClick={() => setShowWasteModal(true)}
-            className="flex items-center gap-2 bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 border border-rose-500/20"
+            className="flex items-center gap-2 bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 border border-rose-500/30"
           >
             <Trash size={16} /> Log Waste
           </Button>
           <Button
             onClick={() => setShowTransferModal(true)}
-            className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-border/20"
+            className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-800"
           >
             <ArrowRightLeft size={16} /> Transfer Stock
           </Button>
           <Button
             onClick={openAddModal}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+            className="flex items-center gap-2 bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
           >
             <Plus size={16} /> Create Ingredient
           </Button>
@@ -234,39 +234,39 @@ export default function IngredientManagementPage() {
 
       {/* KPI Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="p-6 bg-slate-900/40 border-border/30">
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Ingredients</p>
           <p className="text-3xl font-bold font-display mt-2 text-white">{ingredients.length}</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Active SKU catalog</span>
         </Card>
 
-        <Card className="p-6 bg-slate-900/40 border-yellow-500/20">
+        <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
           <div className="flex justify-between items-center">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Low Stock SKUs</p>
-            <AlertTriangle size={16} className="text-yellow-500" />
+            <AlertTriangle size={16} className="text-[#F59E0B]" />
           </div>
-          <p className="text-3xl font-bold font-display mt-2 text-yellow-500">{lowStockCount}</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">{lowStockCount}</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Requires branch restock</span>
         </Card>
 
-        <Card className="p-6 bg-slate-900/40 border-rose-500/20">
+        <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Waste This Month</p>
-          <p className="text-3xl font-bold font-display mt-2 text-rose-400">₹3,450</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#DC2626]">₹3,450</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Spoilage & expired log</span>
         </Card>
 
-        <Card className="p-6 bg-slate-900/40 border-emerald-500/20">
+        <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
           <div className="flex justify-between items-center">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Ingredient Cost</p>
-            <TrendingUp size={16} className="text-emerald-500" />
+            <TrendingUp size={16} className="text-[#16A34A]" />
           </div>
-          <p className="text-3xl font-bold font-display mt-2 text-emerald-400">₹{totalCost.toLocaleString('en-IN')}</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">₹{totalCost.toLocaleString('en-IN')}</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Est. cost this month</span>
         </Card>
       </div>
 
       {/* Grid Table Card */}
-      <Card className="border-border/40 bg-slate-900/40 backdrop-blur-md rounded-2xl p-6">
+      <Card className="border-slate-800 bg-[#111827] rounded-2xl p-6 shadow-lg">
         <CardHeader className="border-none p-0 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold font-display text-white">Ingredient Directory</h3>
@@ -275,7 +275,7 @@ export default function IngredientManagementPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Search Input */}
-            <div className="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-border/20 text-xs w-64">
+            <div className="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs w-64">
               <Search size={14} className="text-slate-500" />
               <input
                 type="text"
@@ -287,12 +287,12 @@ export default function IngredientManagementPage() {
             </div>
 
             {/* Category Filter */}
-            <div className="flex items-center space-x-2 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-border/20 text-xs">
+            <div className="flex items-center space-x-2 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
               <Filter size={14} className="text-slate-500" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-transparent text-white font-semibold focus:outline-none cursor-pointer"
+                className="bg-transparent text-white font-semibold focus:outline-none cursor-pointer text-xs"
               >
                 <option value="ALL" className="bg-slate-900">All Categories</option>
                 {categories.map(c => (
@@ -306,7 +306,7 @@ export default function IngredientManagementPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm font-sans text-left">
             <thead>
-              <tr className="border-b border-border/40 text-slate-400 font-semibold text-xs pb-3">
+              <tr className="border-b border-slate-800/80 text-slate-400 font-semibold text-xs pb-3">
                 <th className="pb-3 pr-2">Ingredient SKU</th>
                 <th className="pb-3 pr-2">Name</th>
                 <th className="pb-3 pr-2">Category</th>
@@ -316,7 +316,7 @@ export default function IngredientManagementPage() {
                 <th className="pb-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/10">
+            <tbody className="divide-y divide-slate-800/40">
               {filteredIngredients.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-6 text-center text-slate-500 text-xs">
@@ -325,11 +325,11 @@ export default function IngredientManagementPage() {
                 </tr>
               ) : (
                 filteredIngredients.map((i) => (
-                  <tr key={i.id} className="hover:bg-slate-900/20 transition-colors">
+                  <tr key={i.id} className="hover:bg-slate-800/10 transition-colors">
                     <td className="py-3 font-mono text-slate-400 text-xs">{i.sku}</td>
                     <td className="py-3 font-semibold text-slate-200">{i.name}</td>
                     <td className="py-3 text-slate-400 text-xs">
-                      <span className="px-2 py-0.5 bg-slate-900 border border-border/10 rounded-full">
+                      <span className="px-2 py-0.5 bg-slate-950 border border-slate-800/60 rounded-full">
                         {i.category}
                       </span>
                     </td>
@@ -341,7 +341,7 @@ export default function IngredientManagementPage() {
                         <Button
                           onClick={() => openEditModal(i)}
                           size="sm"
-                          className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-border/20 rounded-lg"
+                          className="p-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-lg"
                         >
                           <Edit2 size={12} />
                         </Button>
@@ -363,9 +363,9 @@ export default function IngredientManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">
                   {selectedIngredient ? 'Modify Ingredient Master' : 'Create Ingredient Master'}
                 </h2>
@@ -457,11 +457,11 @@ export default function IngredientManagementPage() {
                     type="button"
                     onClick={() => setShowAddEditModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Save Ingredient
                   </Button>
                 </div>
@@ -479,9 +479,9 @@ export default function IngredientManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">Log Spoilage / Waste Record</h2>
                 <button onClick={() => setShowWasteModal(false)} className="text-slate-400 hover:text-white">✕</button>
               </div>
@@ -551,11 +551,11 @@ export default function IngredientManagementPage() {
                     type="button"
                     onClick={() => setShowWasteModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Submit Report
                   </Button>
                 </div>
@@ -573,9 +573,9 @@ export default function IngredientManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">Inter-Branch Inventory Transfer</h2>
                 <button onClick={() => setShowTransferModal(false)} className="text-slate-400 hover:text-white">✕</button>
               </div>
@@ -648,11 +648,11 @@ export default function IngredientManagementPage() {
                     type="button"
                     onClick={() => setShowTransferModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Execute Transfer
                   </Button>
                 </div>

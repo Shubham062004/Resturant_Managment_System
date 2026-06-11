@@ -17,6 +17,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
 
 interface Supplier {
   id: string;
@@ -128,8 +129,15 @@ export default function SupplierManagementPage() {
     s.contactName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalSuppliers = suppliers.length;
+  const totalPOAmount = purchaseOrders.reduce((acc, po) => acc + po.totalAmount, 0);
+  const pendingPOs = purchaseOrders.filter(po => po.status === 'PENDING' || po.status === 'PLACED').length;
+  const avgRating = suppliers.length > 0
+    ? (suppliers.reduce((acc, s) => acc + (s.rating || 4.5), 0) / suppliers.length).toFixed(1)
+    : '4.6';
+
   return (
-    <div className="space-y-8 p-6 text-white bg-slate-950 min-h-screen">
+    <div className="space-y-8 p-6 text-[#F8FAFC] bg-[#0F172A] min-h-screen font-sans">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -142,10 +150,40 @@ export default function SupplierManagementPage() {
         </div>
         <Button
           onClick={openAddModal}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+          className="flex items-center gap-2 bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
         >
           <Plus size={16} /> Add Supplier
         </Button>
+      </div>
+
+      {/* Coming Soon Banner */}
+      <ComingSoonBanner featureName="Supplier Management" />
+
+      {/* KPI Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Partners</p>
+          <p className="text-3xl font-bold font-display mt-2 text-white">{totalSuppliers}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Distributors registered</span>
+        </Card>
+
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Procurement Expenses</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">₹{totalPOAmount.toLocaleString('en-IN')}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Cumulative purchase orders</span>
+        </Card>
+
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Awaiting Dispatches</p>
+          <p className="text-3xl font-bold font-[#F59E0B] mt-2 text-[#F59E0B]">{pendingPOs}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Pending purchase orders</span>
+        </Card>
+
+        <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Avg Partner Rating</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">★ {avgRating}</p>
+          <span className="text-[10px] text-slate-500 mt-1 block">Supplier fulfillment average</span>
+        </Card>
       </div>
 
       {/* Grid of Suppliers and Purchase History */}
@@ -153,13 +191,13 @@ export default function SupplierManagementPage() {
         
         {/* Suppliers List (left) */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="p-6 bg-slate-900/40 border-border/30">
+          <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
             <CardHeader className="border-none p-0 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <h3 className="text-lg font-bold font-display text-white">Active Distributors</h3>
                 <p className="text-xs text-slate-400">Directory of ingredient and materials partners</p>
               </div>
-              <div className="bg-slate-950 px-3 py-1.5 rounded-xl border border-border/20 text-xs w-64">
+              <div className="bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs w-64">
                 <input
                   type="text"
                   placeholder="Search supplier name..."
@@ -185,7 +223,7 @@ export default function SupplierManagementPage() {
                       key={s.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 bg-slate-950/60 border border-border/20 rounded-xl relative hover:border-indigo-500/40 transition-colors flex flex-col justify-between"
+                      className="p-4 bg-slate-950 border border-slate-800/80 rounded-xl relative hover:border-[#2563EB]/40 transition-colors flex flex-col justify-between"
                     >
                       <div>
                         <div className="flex justify-between items-start">
@@ -209,12 +247,12 @@ export default function SupplierManagementPage() {
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-border/10 flex justify-end">
+                      <div className="mt-4 pt-3 border-t border-slate-800/60 flex justify-end">
                         <Button
                           onClick={() => openEditModal(s)}
                           size="sm"
                           variant="outline"
-                          className="text-xs bg-slate-900 border-border/30 text-slate-300 hover:bg-slate-800 py-1"
+                          className="text-xs bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800 py-1"
                         >
                           <Edit2 size={12} className="mr-1" /> Edit Profile
                         </Button>
@@ -229,7 +267,7 @@ export default function SupplierManagementPage() {
 
         {/* Purchase History / Pending POs (right) */}
         <div className="lg:col-span-1 space-y-6">
-          <Card className="p-6 bg-slate-900/40 border-border/30">
+          <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
             <CardHeader className="border-none p-0 mb-4">
               <h3 className="text-base font-bold font-display text-white">Purchase Orders History</h3>
               <p className="text-xs text-slate-400">Recent wholesale ingredient purchase transactions</p>
@@ -246,7 +284,7 @@ export default function SupplierManagementPage() {
                 purchaseOrders.map((po) => (
                   <div
                     key={po.id}
-                    className="p-3 bg-slate-950/40 border border-border/10 rounded-xl space-y-2"
+                    className="p-3 bg-slate-950 border border-slate-800/60 rounded-xl space-y-2"
                   >
                     <div className="flex justify-between items-center text-xs">
                       <span className="font-bold text-slate-300">{po.supplier.name}</span>
@@ -284,9 +322,9 @@ export default function SupplierManagementPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 border border-border/40 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
+              className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
-              <div className="px-6 py-4 border-b border-border/20 flex justify-between items-center bg-slate-950/40">
+              <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">
                   {selectedSupplier ? 'Modify Supplier Profile' : 'Add Wholesale Supplier'}
                 </h2>
@@ -301,7 +339,7 @@ export default function SupplierManagementPage() {
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
                     placeholder="e.g. ABC Dairy Farms"
-                    className="bg-slate-950 border-border/30 text-white"
+                    className="bg-slate-950 border-slate-800 text-white"
                   />
                 </div>
 
@@ -312,7 +350,7 @@ export default function SupplierManagementPage() {
                     value={formContactName}
                     onChange={(e) => setFormContactName(e.target.value)}
                     placeholder="e.g. John Doe"
-                    className="bg-slate-950 border-border/30 text-white"
+                    className="bg-slate-950 border-slate-800 text-white"
                   />
                 </div>
 
@@ -325,7 +363,7 @@ export default function SupplierManagementPage() {
                       value={formEmail}
                       onChange={(e) => setFormEmail(e.target.value)}
                       placeholder="john@abcdairy.com"
-                      className="bg-slate-950 border-border/30 text-white"
+                      className="bg-slate-950 border-slate-800 text-white"
                     />
                   </div>
                   <div className="space-y-1">
@@ -335,7 +373,7 @@ export default function SupplierManagementPage() {
                       value={formPhone}
                       onChange={(e) => setFormPhone(e.target.value)}
                       placeholder="e.g. +91 99999 88888"
-                      className="bg-slate-950 border-border/30 text-white"
+                      className="bg-slate-950 border-slate-800 text-white"
                     />
                   </div>
                 </div>
@@ -347,7 +385,7 @@ export default function SupplierManagementPage() {
                     value={formAddress}
                     onChange={(e) => setFormAddress(e.target.value)}
                     placeholder="e.g. Plot 42, Industrial Area, Sector 5"
-                    className="bg-slate-950 border-border/30 text-white"
+                    className="bg-slate-950 border-slate-800 text-white"
                   />
                 </div>
 
@@ -356,11 +394,11 @@ export default function SupplierManagementPage() {
                     type="button"
                     onClick={() => setShowAddEditModal(false)}
                     variant="outline"
-                    className="bg-slate-900 border-border/30 text-slate-300"
+                    className="bg-slate-900 border-slate-800 text-slate-350 hover:bg-slate-800"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
                     Save Profile
                   </Button>
                 </div>

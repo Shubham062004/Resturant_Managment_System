@@ -19,7 +19,7 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
     return <Navigate to="/login" replace />;
   }
 
-  if (!user || !allowedRoles.includes(user.role)) {
+  if (!user || !allowedRoles.includes(user.role as any)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="glass-panel max-w-md w-full p-8 rounded-xl text-center space-y-6 border border-danger/30 shadow-2xl">

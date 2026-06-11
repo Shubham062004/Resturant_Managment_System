@@ -210,20 +210,27 @@ export default function POSDashboardPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="indigo" className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <Badge variant="info" className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
             REGISTER ACTIVE: #{activeDrawer.terminalId?.slice(0, 6) || 'Main Register'}
           </Badge>
         </div>
       </div>
 
       {alertMsg && (
-        <Alert
-          variant={alertMsg.type === 'success' ? 'success' : 'error'}
-          onClose={() => setAlertMsg(null)}
-          className="mb-1"
-        >
-          {alertMsg.text}
-        </Alert>
+        <div className="relative mb-1">
+          <Alert
+            variant={alertMsg.type === 'success' ? 'success' : 'error'}
+            className="pr-10"
+          >
+            {alertMsg.text}
+          </Alert>
+          <button
+            onClick={() => setAlertMsg(null)}
+            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 text-xs font-bold"
+          >
+            ✕
+          </button>
+        </div>
       )}
 
       {viewTab === 'register' ? (

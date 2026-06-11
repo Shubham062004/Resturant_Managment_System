@@ -32,6 +32,7 @@ export default function AdminLayout() {
   const dispatch = useDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const role = user?.role;
+  const userName = user ? `${user.firstName} ${user.lastName}`.trim() : 'Shubham';
 
   // Sidebar States
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -56,7 +57,7 @@ export default function AdminLayout() {
     apiClient.get('/admin/branches')
       .then(res => {
         const branchList = res.data.data || [];
-        setBranches(branchList.map((b: any) => ({ id: b.id, name: b.name.replace('Oven Xpress - ', '') })));
+        setBranches(branchList.map((b: any) => ({ id: b.id, name: b.name.replace('ABC - ', '') })));
       })
       .catch(err => console.error('Error loading branches in sidebar selector:', err));
   }, []);
@@ -190,7 +191,7 @@ export default function AdminLayout() {
               <div className="p-1.5 bg-[#2563EB] text-white rounded-lg">
                 <Shield size={16} />
               </div>
-              <span className="font-display font-bold text-sm tracking-tight text-white uppercase">Oven Xpress</span>
+              <span className="font-display font-bold text-sm tracking-tight text-white uppercase">ABC</span>
             </Link>
           )}
           {isCollapsed && (
@@ -322,11 +323,11 @@ export default function AdminLayout() {
           <div className="flex items-center justify-between gap-3 overflow-hidden">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-[#06B6D4] shrink-0 border border-[#06B6D4]/20 shadow-sm uppercase">
-                {user?.name ? user.name.slice(0, 2) : 'SH'}
+                {userName.slice(0, 2)}
               </div>
               {!isCollapsed && (
                 <div className="min-w-0">
-                  <h4 className="text-xs font-bold text-slate-200 truncate leading-snug">{user?.name || 'Shubham'}</h4>
+                  <h4 className="text-xs font-bold text-slate-200 truncate leading-snug">{userName}</h4>
                   <span className="text-[10px] text-slate-500 font-medium block truncate uppercase">{role?.replace(/_/g, ' ') || 'Owner'}</span>
                 </div>
               )}
@@ -422,7 +423,7 @@ export default function AdminLayout() {
                   <div className="p-1.5 bg-[#2563EB] text-white rounded-lg">
                     <Shield size={16} />
                   </div>
-                  <span className="font-display font-bold text-sm tracking-tight text-white uppercase">Oven Xpress</span>
+                  <span className="font-display font-bold text-sm tracking-tight text-white uppercase">ABC</span>
                 </Link>
                 <button 
                   onClick={() => setMobileMenuOpen(false)}
@@ -473,10 +474,10 @@ export default function AdminLayout() {
               <div className="p-4 border-t border-slate-800 bg-slate-900/40 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-slate-850 flex items-center justify-center font-bold text-xs text-[#06B6D4] uppercase">
-                    {user?.name ? user.name.slice(0,2) : 'SH'}
+                    {userName.slice(0, 2)}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-200 leading-snug">{user?.name || 'Shubham'}</h4>
+                    <h4 className="text-xs font-bold text-slate-200 leading-snug">{userName}</h4>
                     <span className="text-[10px] text-slate-550 uppercase">Owner</span>
                   </div>
                 </div>

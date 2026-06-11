@@ -18,8 +18,8 @@ export const OffersPage: React.FC = () => {
     <>
       <SEO
         title="Promotions, Coupons & Offers"
-        description="Browse active Oven Xpress discount codes, welcome coupons, free delivery weekend promotions, and special culinary deals."
-        keywords="Oven Xpress coupons, promo codes, food discount list, free delivery codes"
+        description="Browse active ABC discount codes, welcome coupons, free delivery weekend promotions, and special culinary deals."
+        keywords="ABC coupons, promo codes, food discount list, free delivery codes"
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-12 font-sans">

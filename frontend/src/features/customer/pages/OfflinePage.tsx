@@ -29,7 +29,7 @@ export const OfflinePage: React.FC = () => {
     <>
       <SEO
         title="Offline Mode"
-        description="Check your network connection to access Oven Xpress outposts and smart menus."
+        description="Check your network connection to access ABC outposts and smart menus."
       />
 
       <div className="text-center space-y-6 font-sans">
@@ -44,7 +44,7 @@ export const OfflinePage: React.FC = () => {
           <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
             {isOnline
               ? 'Your browser detected an active network signal. You can now reload to return to operations.'
-              : 'Your device is disconnected from the Oven Xpress core network. Check your cellular or Wi-Fi configurations.'}
+              : 'Your device is disconnected from the ABC core network. Check your cellular or Wi-Fi configurations.'}
           </p>
         </div>
 

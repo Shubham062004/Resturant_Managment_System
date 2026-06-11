@@ -40,7 +40,7 @@ export const ForgotPasswordPage: React.FC = () => {
   return (
     <AuthLayout
       brandTitle="Credential Recovery"
-      brandDescription="Initiate the secure reset sequence to update your Oven Xpress system passwords and node access credentials."
+      brandDescription="Initiate the secure reset sequence to update your ABC system passwords and node access credentials."
     >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
@@ -79,7 +79,7 @@ export const ForgotPasswordPage: React.FC = () => {
             <Input
               type="email"
               label="Registered Email Address"
-              placeholder="staff@ovenxpress.com"
+              placeholder="staff@abc.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               prefixIcon={<Mail size={16} />}

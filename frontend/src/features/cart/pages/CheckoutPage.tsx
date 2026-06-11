@@ -82,7 +82,7 @@ export const CheckoutPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="Checkout" description="Complete your Oven Xpress order." />
+      <SEO title="Checkout" description="Complete your ABC order." />
       <div className="max-w-5xl mx-auto px-6 py-12 space-y-8">
         <h1 className="text-2xl font-display font-bold text-white">Checkout</h1>
 

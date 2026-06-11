@@ -60,7 +60,7 @@ export default function OrderListPage() {
             <CardContent>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">
-                  {order.items.length} item(s) from {order.restaurant?.name || 'Oven Xpress'}
+                  {order.items.length} item(s) from {order.restaurant?.name || 'ABC'}
                 </span>
                 <span className="font-bold text-white">
                   ${Number(order.totalAmount).toFixed(2)}

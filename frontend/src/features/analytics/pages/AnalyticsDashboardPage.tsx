@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Briefcase
 } from 'lucide-react';
+import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
 
 import {
   BarChart,
@@ -361,6 +362,9 @@ export default function AnalyticsDashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* Coming Soon Banner */}
+      <ComingSoonBanner featureName="Business Intelligence Center" className="mb-2" />
 
       {status === 'loading' && !executive ? (
         <div className="flex justify-center items-center py-20 text-slate-500 animate-pulse text-lg">

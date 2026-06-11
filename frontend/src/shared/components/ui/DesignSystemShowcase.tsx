@@ -51,7 +51,7 @@ export const DesignSystemShowcase: React.FC = () => {
   const [animKey, setAnimKey] = useState(0);
 
   const selectOptions: SelectOption[] = [
-    { label: 'Oven Roasted Chicken', value: 'chicken' },
+    { label: 'Roasted Chicken', value: 'chicken' },
     { label: 'Spicy Pepperoni Pizza', value: 'pizza' },
     { label: 'Truffle Mushroom Risotto', value: 'risotto' },
     { label: 'Garlic Butter Shrimp', value: 'shrimp' },
@@ -704,7 +704,7 @@ export const DesignSystemShowcase: React.FC = () => {
             PR-002 UI System Release
           </Badge>
           <h1 className="text-4xl md:text-5xl font-extrabold font-display tracking-tight leading-none">
-            Oven Xpress Design System
+            ABC Design System
           </h1>
           <p className="text-white/80 font-sans text-sm md:text-base leading-relaxed">
             Centralized design token engine, responsive layout frameworks, micro-animations, and

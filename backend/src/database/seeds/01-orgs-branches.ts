@@ -15,17 +15,17 @@ export async function seedOrgsAndBranches(prisma: PrismaClient) {
   await prisma.organization.create({
     data: {
       id: orgId,
-      name: 'Oven Xpress Group',
-      slug: 'oven-xpress-group',
+      name: 'ABC Group',
+      slug: 'abc-group',
       status: 'ACTIVE',
     },
   });
 
   // Create Restaurants
   const restaurantsData = [
-    { name: 'Oven Xpress Downtown', slug: 'ox-downtown', rating: 4.8 },
-    { name: 'Oven Xpress City Center', slug: 'ox-city-center', rating: 4.6 },
-    { name: 'Oven Xpress Riverside', slug: 'ox-riverside', rating: 4.9 },
+    { name: 'ABC Downtown', slug: 'abc-downtown', rating: 4.8 },
+    { name: 'ABC City Center', slug: 'abc-city-center', rating: 4.6 },
+    { name: 'ABC Riverside', slug: 'abc-riverside', rating: 4.9 },
   ];
 
   const restaurants = [];
@@ -54,7 +54,7 @@ export async function seedOrgsAndBranches(prisma: PrismaClient) {
         id: randomUUID(),
         restaurantId: restaurant.id,
         organizationId: orgId,
-        name: `Oven Xpress - ${city}`,
+        name: `ABC - ${city}`,
         address: `123 Main St, ${city} Center`,
         city: city,
         state: city === 'Delhi' ? 'DL' : 'MH',

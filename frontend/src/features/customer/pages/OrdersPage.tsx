@@ -13,7 +13,7 @@ export const OrdersPage: React.FC = () => {
   // Simulated active order state
   const activeOrder = {
     id: 'OX-9801',
-    branch: 'Oven Xpress - Midtown Manhattan',
+    branch: 'ABC - Midtown Manhattan',
     date: 'Today, 07:15 PM',
     amount: 34.5,
     items: [
@@ -33,8 +33,8 @@ export const OrdersPage: React.FC = () => {
     <>
       <SEO
         title="Order Tracker & History"
-        description="Monitor active kitchen preparation steps, track delivery transit, and view order receipts from Oven Xpress."
-        keywords="Order history Oven Xpress, pizza order tracker, kitchen ticket tracking"
+        description="Monitor active kitchen preparation steps, track delivery transit, and view order receipts from ABC."
+        keywords="Order history ABC, pizza order tracker, kitchen ticket tracking"
       />
 
       <div className="space-y-6 font-sans">

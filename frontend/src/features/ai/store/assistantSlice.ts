@@ -7,7 +7,7 @@ interface AssistantState {
 }
 
 const initialState: AssistantState = {
-  messages: [{ role: 'assistant', content: 'Hello! I am your Oven Xpress AI Assistant. How can I help you today?' }],
+  messages: [{ role: 'assistant', content: 'Hello! I am your ABC AI Assistant. How can I help you today?' }],
   status: 'idle',
 };
 

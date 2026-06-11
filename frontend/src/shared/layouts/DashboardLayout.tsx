@@ -62,7 +62,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         {logo || (
           <div className="flex items-center gap-2.5 font-display font-extrabold text-xl tracking-tight">
             <span className="text-primary text-2xl font-black">🔥</span>
-            <span>Oven Xpress</span>
+            <span>ABC</span>
           </div>
         )}
         <button

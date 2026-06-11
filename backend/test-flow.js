@@ -42,7 +42,7 @@ async function runTests() {
   console.log("Testing Customer Login...");
   try {
     const loginRes = await request('/api/v1/auth/login', 'POST', {
-      email: 'customer@ovenxpress.com',
+      email: 'customer@abc.com',
       password: 'Customer@123'
     });
     

@@ -13,6 +13,7 @@
     "seed:postgres": "ts-node-dev --transpile-only src/database/seed.postgres.ts",
     "seed:mongodb": "ts-node-dev --transpile-only src/database/seed.mongodb.ts",
     "seed": "ts-node-dev --transpile-only src/database/seed.ts",
+    "seed:inventory": "ts-node-dev --transpile-only src/database/seed.inventory.ts",
     "reset-demo": "prisma migrate reset --force --schema src/database/schema.prisma",
     "create-demo-data": "npm run reset-demo && npm run seed",
     "create-demo-environment": "npm run create-demo-data",

@@ -14,14 +14,14 @@ export interface SEOProps {
 export const SEO: React.FC<SEOProps> = ({
   title,
   description,
-  keywords = 'restaurant, food order, pos, kitchen grid, oven xpress',
+  keywords = 'restaurant, food order, pos, kitchen grid, abc',
   ogType = 'website',
   ogImage = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=60',
   canonicalUrl,
   structuredData,
 }) => {
   const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : '');
-  const siteTitle = `${title} | Oven Xpress`;
+  const siteTitle = `${title} | ABC`;
 
   return (
     <Helmet>
@@ -37,7 +37,7 @@ export const SEO: React.FC<SEOProps> = ({
       <meta property="og:type" content={ogType} />
       <meta property="og:image" content={ogImage} />
       {currentUrl && <meta property="og:url" content={currentUrl} />}
-      <meta property="og:site_name" content="Oven Xpress Restaurant Group" />
+      <meta property="og:site_name" content="ABC Restaurant Group" />
 
       {/* Twitter Cards */}
       <meta name="twitter:card" content="summary_large_image" />

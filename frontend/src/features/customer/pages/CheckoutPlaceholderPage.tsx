@@ -7,7 +7,7 @@ export const CheckoutPlaceholderPage: React.FC = () => {
     <>
       <SEO
         title="Secure Checkout Gateway"
-        description="Proceed to pay for your customized Oven Xpress order using safe banking credit, debit, or cash gateways."
+        description="Proceed to pay for your customized ABC order using safe banking credit, debit, or cash gateways."
       />
 
       <div className="max-w-4xl mx-auto px-6 py-12 text-center">

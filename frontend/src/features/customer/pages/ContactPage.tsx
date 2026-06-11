@@ -33,8 +33,8 @@ export const ContactPage: React.FC = () => {
     <>
       <SEO
         title="Contact Customer Operations"
-        description="Get in touch with Oven Xpress headquarters, log support claims, or clear outpost ordering inquiries."
-        keywords="Contact Oven Xpress, customer service hotline, restaurant feedback, partner support"
+        description="Get in touch with ABC headquarters, log support claims, or clear outpost ordering inquiries."
+        keywords="Contact ABC, customer service hotline, restaurant feedback, partner support"
       />
 
       <div className="max-w-5xl mx-auto px-6 py-12 md:py-16 space-y-12">
@@ -61,7 +61,7 @@ export const ContactPage: React.FC = () => {
                 <Phone className="text-primary flex-shrink-0" size={18} />
                 <div className="space-y-1 font-sans text-xs">
                   <h3 className="font-bold text-white">Operational Support</h3>
-                  <p className="text-muted-foreground">+1 (800) 555-OVEN</p>
+                  <p className="text-muted-foreground">+1 (800) 555-ABC</p>
                   <p className="text-[10px] text-muted-foreground/60">
                     Mon-Sun: 8:00 AM - 11:00 PM EST
                   </p>
@@ -72,9 +72,9 @@ export const ContactPage: React.FC = () => {
                 <Mail className="text-primary flex-shrink-0" size={18} />
                 <div className="space-y-1 font-sans text-xs">
                   <h3 className="font-bold text-white">Digital Dispatch Desk</h3>
-                  <p className="text-muted-foreground">support@ovenxpress.com</p>
+                  <p className="text-muted-foreground">support@abc.com</p>
                   <p className="text-[10px] text-muted-foreground/60">
-                    Corporate/API requests: ops@ovenxpress.com
+                    Corporate/API requests: ops@abc.com
                   </p>
                 </div>
               </div>

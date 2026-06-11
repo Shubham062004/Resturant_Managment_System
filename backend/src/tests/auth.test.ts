@@ -66,7 +66,7 @@ describe('Auth API Integration Tests', () => {
         id: 'user-uuid',
         firstName: 'Jane',
         lastName: 'Cook',
-        email: 'jane.cook@ovenxpress.com',
+        email: 'jane.cook@abc.com',
         role: 'KITCHEN_STAFF',
       });
       (prisma.emailVerificationToken.create as any).mockResolvedValue({
@@ -74,7 +74,7 @@ describe('Auth API Integration Tests', () => {
       });
 
       const response = await request(app).post('/api/v1/auth/register').send({
-        email: 'jane.cook@ovenxpress.com',
+        email: 'jane.cook@abc.com',
         firstName: 'Jane',
         lastName: 'Cook',
         password: 'securePassword123',
@@ -83,7 +83,7 @@ describe('Auth API Integration Tests', () => {
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
-      expect(response.body.data.user.email).toBe('jane.cook@ovenxpress.com');
+      expect(response.body.data.user.email).toBe('jane.cook@abc.com');
       expect(prisma.user.create).toHaveBeenCalled();
       expect(prisma.emailVerificationToken.create).toHaveBeenCalled();
     });
@@ -109,7 +109,7 @@ describe('Auth API Integration Tests', () => {
         id: 'user-uuid',
         firstName: 'Jane',
         lastName: 'Cook',
-        email: 'jane.cook@ovenxpress.com',
+        email: 'jane.cook@abc.com',
         passwordHash: hashedPassword,
         role: 'CUSTOMER',
         isActive: true,
@@ -119,7 +119,7 @@ describe('Auth API Integration Tests', () => {
       });
 
       const response = await request(app).post('/api/v1/auth/login').send({
-        email: 'jane.cook@ovenxpress.com',
+        email: 'jane.cook@abc.com',
         password: 'securePassword123',
       });
 
@@ -138,7 +138,7 @@ describe('Auth API Integration Tests', () => {
       (prisma.user.findFirst as any).mockResolvedValue(null);
 
       const response = await request(app).post('/api/v1/auth/login').send({
-        email: 'wrong@ovenxpress.com',
+        email: 'wrong@abc.com',
         password: 'wrongPassword',
       });
 
@@ -160,7 +160,7 @@ describe('Auth API Integration Tests', () => {
         revoked: false,
         user: {
           id: 'user-uuid',
-          email: 'jane.cook@ovenxpress.com',
+          email: 'jane.cook@abc.com',
           role: 'KITCHEN_STAFF',
         },
       });

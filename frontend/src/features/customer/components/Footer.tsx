@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     e.preventDefault();
     if (!email) return;
 
-    toast.success('Successfully subscribed to Oven Xpress newsletters!');
+    toast.success('Successfully subscribed to ABC newsletters!');
     setEmail('');
   };
 
@@ -27,7 +27,7 @@ export const Footer: React.FC = () => {
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <span>Oven Xpress</span>
+            <span>ABC</span>
           </Link>
           <p className="text-sm leading-relaxed text-muted-foreground/80">
             Enterprise restaurant systems serving premium fire-baked pizza catalogs, gourmet
@@ -85,7 +85,7 @@ export const Footer: React.FC = () => {
 
         {/* Company information column */}
         <div className="space-y-4">
-          <h3 className="text-white font-display font-bold text-sm tracking-wide">Oven Xpress</h3>
+          <h3 className="text-white font-display font-bold text-sm tracking-wide">ABC</h3>
           <ul className="space-y-2 text-sm">
             <li>
               <Link to="/about" className="hover:text-primary transition-colors">
@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 border-t border-border/40 mt-12 pt-8 flex flex-col sm:flex-row justify-between text-xs text-muted-foreground/60 font-sans gap-4">
-        <span>© {new Date().getFullYear()} Oven Xpress Group Inc. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} ABC Group Inc. All rights reserved.</span>
         <div className="flex gap-6">
           <a href="#" className="hover:underline">
             Privacy Policy

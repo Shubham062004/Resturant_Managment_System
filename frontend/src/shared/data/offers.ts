@@ -14,7 +14,7 @@ export const mockOffers: Offer[] = [
   {
     id: 'off_welcome50',
     title: '50% Welcome Discount',
-    description: 'Get 50% off on your first order with Oven Xpress!',
+    description: 'Get 50% off on your first order with ABC!',
     code: 'WELCOME50',
     discountPercentage: 50,
     minOrderValue: 20.0,

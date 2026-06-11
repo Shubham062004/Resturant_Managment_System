@@ -63,7 +63,7 @@ export const SearchPage: React.FC = () => {
       <SEO
         title="Global Culinary Search"
         description="Search active kitchen outposts, filter gourmet fire-baked pizzas, modifier configurations, and quick counter recipes."
-        keywords="Search Oven Xpress, food finder, pizza customization, local restaurant menus"
+        keywords="Search ABC, food finder, pizza customization, local restaurant menus"
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-8 font-sans">
@@ -189,7 +189,7 @@ export const SearchPage: React.FC = () => {
               <EmptyState
                 type="search"
                 title="Start typing to search"
-                description="Search products across all Oven Xpress restaurant menus."
+                description="Search products across all ABC restaurant menus."
               />
             ) : isSearchLoading ? (
               <div className="flex justify-center py-16">

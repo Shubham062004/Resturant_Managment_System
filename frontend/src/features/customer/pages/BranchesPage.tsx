@@ -113,8 +113,8 @@ export const BranchesPage: React.FC = () => {
     <>
       <SEO
         title="Find Outposts & Kitchen Branches"
-        description="Search active Oven Xpress restaurant branches, check store hours, compute closest location metrics, and set your current dining outpost."
-        keywords="Oven Xpress branches, pizza locations near me, outpost tracking map, smart kitchen locations"
+        description="Search active ABC restaurant branches, check store hours, compute closest location metrics, and set your current dining outpost."
+        keywords="ABC branches, pizza locations near me, outpost tracking map, smart kitchen locations"
       />
 
       <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-10">

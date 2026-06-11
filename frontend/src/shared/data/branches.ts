@@ -13,7 +13,7 @@ export interface Branch {
 export const mockBranches: Branch[] = [
   {
     id: 'br_midtown',
-    name: 'Oven Xpress - Midtown Manhattan',
+    name: 'ABC - Midtown Manhattan',
     address: '456 5th Ave, New York, NY 10018',
     city: 'New York',
     distance: 1.2,
@@ -24,7 +24,7 @@ export const mockBranches: Branch[] = [
   },
   {
     id: 'br_brooklyn',
-    name: 'Oven Xpress - Brooklyn Heights',
+    name: 'ABC - Brooklyn Heights',
     address: '78 Montague St, Brooklyn, NY 11201',
     city: 'New York',
     distance: 4.8,
@@ -35,7 +35,7 @@ export const mockBranches: Branch[] = [
   },
   {
     id: 'br_queens',
-    name: 'Oven Xpress - Astoria Queens',
+    name: 'ABC - Astoria Queens',
     address: '31-15 30th Ave, Astoria, NY 11102',
     city: 'New York',
     distance: 6.5,
@@ -46,7 +46,7 @@ export const mockBranches: Branch[] = [
   },
   {
     id: 'br_jersey',
-    name: 'Oven Xpress - Jersey City',
+    name: 'ABC - Jersey City',
     address: '210 Hudson St, Jersey City, NJ 07311',
     city: 'Jersey City',
     distance: 5.4,

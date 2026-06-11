@@ -14,7 +14,7 @@ export const mockTestimonials: Testimonial[] = [
     role: 'Loyal Customer',
     rating: 5,
     comment:
-      'Oven Xpress has revolutionized our dinner schedules. The pizza is delivered burning hot, and the location detection was spot on!',
+      'ABC has revolutionized our dinner schedules. The pizza is delivered burning hot, and the location detection was spot on!',
     avatar:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=60',
   },

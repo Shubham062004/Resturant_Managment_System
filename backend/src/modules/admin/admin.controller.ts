@@ -271,7 +271,7 @@ export class AdminController {
             id: '1',
             actionType: 'UPDATE_SETTINGS',
             userId: 'owner@abcrestaurant.com',
-            targetId: 'Oven Xpress - Indiranagar',
+            targetId: 'ABC - Indiranagar',
             changes: { taxRate: 18, deliveryRadius: 5 },
             createdAt: new Date(),
           },

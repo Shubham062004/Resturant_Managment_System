@@ -9,7 +9,7 @@ export interface AuthLayoutProps {
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({
   children,
-  brandTitle = 'Oven Xpress',
+  brandTitle = 'ABC',
   brandDescription = 'Production-grade terminal management systems for enterprise restaurant chains, kitchens, and point-of-sale systems.',
 }) => {
   return (
@@ -22,7 +22,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
         {/* Top brand signature */}
         <div className="flex items-center gap-2.5 font-display font-extrabold text-2xl tracking-tight z-10">
           <span className="text-3xl">🔥</span>
-          <span>Oven Xpress</span>
+          <span>ABC</span>
         </div>
 
         {/* Center quote/intro info */}
@@ -35,7 +35,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
 
         {/* Bottom copyright details */}
         <div className="text-white/60 font-sans text-xs z-10">
-          © {new Date().getFullYear()} Oven Xpress Inc. All rights reserved.
+          © {new Date().getFullYear()} ABC Inc. All rights reserved.
         </div>
       </div>
 

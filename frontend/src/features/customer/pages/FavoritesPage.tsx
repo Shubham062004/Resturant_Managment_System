@@ -17,7 +17,7 @@ export const FavoritesPage: React.FC = () => {
       <SEO
         title="My Favorites"
         description="Check your saved fire-baked pizzas, custom burgers, and preferred restaurant outposts."
-        keywords="Oven Xpress favorites, saved dishes, wishlist"
+        keywords="ABC favorites, saved dishes, wishlist"
       />
 
       <div className="space-y-6">

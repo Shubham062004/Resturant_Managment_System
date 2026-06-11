@@ -6,7 +6,7 @@ export async function seedKitchen(prisma: PrismaClient) {
 
   const stations = [
     { id: randomUUID(), name: 'Grill Station', description: 'Burgers and Steaks' },
-    { id: randomUUID(), name: 'Pizza Oven', description: 'Pizzas and Flatbreads' },
+    { id: randomUUID(), name: 'Pizza', description: 'Pizzas and Flatbreads' },
     { id: randomUUID(), name: 'Salad Bar', description: 'Cold prep and Salads' },
     { id: randomUUID(), name: 'Fryer', description: 'Fries and Appetizers' },
     { id: randomUUID(), name: 'Dessert Prep', description: 'Sweets and Shakes' }

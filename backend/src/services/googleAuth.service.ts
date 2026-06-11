@@ -28,7 +28,7 @@ export class GoogleAuthService {
         );
 
         // If the token itself is an email address, use it; otherwise mock default
-        let mockEmail = 'google.test.user@ovenxpress.com';
+        let mockEmail = 'google.test.user@abc.com';
         if (token.includes('@')) {
           mockEmail = token;
         }

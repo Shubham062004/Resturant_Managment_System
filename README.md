@@ -1,13 +1,13 @@
-# 🔥 Oven Xpress - Restaurant Management System
+# 🔥 ABC - Restaurant Management System
 
-Oven Xpress is an enterprise-grade, cloud-native Restaurant Management System (RMS) designed to unify FOH (Front-of-House) and BOH (Back-of-House) workflows.
+ABC is an enterprise-grade, cloud-native Restaurant Management System (RMS) designed to unify FOH (Front-of-House) and BOH (Back-of-House) workflows.
 
 This repository houses the complete production-ready project foundation, fully scaffolded with a modular feature-based architecture, dual-database capability, containerized orchestration, strict linting parameters, and robust CI/CD validation.
 
 ---
 
 ## 🏗️ Project Overview & Features
-Oven Xpress implements a monorepo workspace layout.
+ABC implements a monorepo workspace layout.
 
 ### Core Features (Verified Implemented):
 - **Authentication**: JWT-based auth, Role-Based Access Control (RBAC).

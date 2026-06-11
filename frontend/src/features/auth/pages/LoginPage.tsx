@@ -31,7 +31,7 @@ export const LoginPage: React.FC = () => {
 
   const handleGoogleLogin = () => {
     // In local development, redirect with a mock token to trigger auto-verify
-    const redirectUrl = `/auth/callback/google#id_token=mock-google-user@ovenxpress.com`;
+    const redirectUrl = `/auth/callback/google#id_token=mock-google-user@abc.com`;
     navigate(redirectUrl);
   };
 
@@ -90,7 +90,7 @@ export const LoginPage: React.FC = () => {
   return (
     <AuthLayout
       brandTitle="Terminal Verification"
-      brandDescription="Authenticate using your enterprise credentials to access the Oven Xpress floor plans and point-of-sale grids."
+      brandDescription="Authenticate using your enterprise credentials to access the ABC floor plans and point-of-sale grids."
     >
       <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
@@ -140,7 +140,7 @@ export const LoginPage: React.FC = () => {
             <Input
               type="email"
               label="Email Address"
-              placeholder="staff@ovenxpress.com"
+              placeholder="staff@abc.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               prefixIcon={<Mail size={16} />}

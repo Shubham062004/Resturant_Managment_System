@@ -37,7 +37,7 @@ export default function InventoryDashboardPage() {
   useEffect(() => {
     dispatch(fetchInventory());
     dispatch(fetchAnalytics());
-    dispatch(fetchInventoryRequests());
+    dispatch(fetchInventoryRequests(undefined));
   }, [dispatch]);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function InventoryDashboardPage() {
 
     try {
       // Find branch ID: if user belongs to branch, use that, else default to first inventory item's branch
-      const branchId = user?.branchId || inventory[0]?.branchId;
+      const branchId = (user as any)?.branchId || inventory[0]?.branchId;
       if (!branchId) {
         setAlertMsg({ type: 'error', text: 'No branch reference found for user context.' });
         return;
@@ -95,7 +95,7 @@ export default function InventoryDashboardPage() {
       setShowCreateRequestModal(false);
       setRequestNotes('');
       setRequestItems([]);
-      dispatch(fetchInventoryRequests());
+      dispatch(fetchInventoryRequests(undefined));
     } catch (err: any) {
       setAlertMsg({ type: 'error', text: err.message || 'Failed to dispatch replenishment request.' });
     }
@@ -110,7 +110,7 @@ export default function InventoryDashboardPage() {
         })
       ).unwrap();
       setAlertMsg({ type: 'success', text: `Request successfully ${approveStatus.toLowerCase()}.` });
-      dispatch(fetchInventoryRequests());
+      dispatch(fetchInventoryRequests(undefined));
     } catch (err: any) {
       setAlertMsg({ type: 'error', text: err.message || 'Failed to update request authorization.' });
     }
@@ -126,7 +126,7 @@ export default function InventoryDashboardPage() {
         })
       ).unwrap();
       setAlertMsg({ type: 'success', text: `Shipment marked as ${nextStatus.toLowerCase()}.` });
-      dispatch(fetchInventoryRequests());
+      dispatch(fetchInventoryRequests(undefined));
       dispatch(fetchInventory()); // Reload stock levels in case of DELIVERY
     } catch (err: any) {
       setAlertMsg({ type: 'error', text: err.message || 'Failed to change shipment workflow status.' });
@@ -176,13 +176,20 @@ export default function InventoryDashboardPage() {
       </div>
 
       {alertMsg && (
-        <Alert
-          variant={alertMsg.type === 'success' ? 'success' : 'error'}
-          onClose={() => setAlertMsg(null)}
-          className="mb-4"
-        >
-          {alertMsg.text}
-        </Alert>
+        <div className="relative mb-4">
+          <Alert
+            variant={alertMsg.type === 'success' ? 'success' : 'error'}
+            className="pr-10"
+          >
+            {alertMsg.text}
+          </Alert>
+          <button
+            onClick={() => setAlertMsg(null)}
+            className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 text-xs font-bold"
+          >
+            ✕
+          </button>
+        </div>
       )}
 
       {/* Analytics Summary Bar */}
@@ -371,7 +378,7 @@ export default function InventoryDashboardPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-3">
                         <span className="font-semibold text-white text-base">Request ID: #{req.id.slice(0, 8)}</span>
-                        <Badge variant="indigo" className="text-xs">
+                        <Badge variant="info" className="text-xs">
                           Branch: {req.branch?.name || 'Main'}
                         </Badge>
                       </div>

@@ -279,7 +279,7 @@ export class AnalyticsController {
 
           return {
             branchId: branch.id,
-            name: branch.name.replace('Oven Xpress - ', ''),
+            name: branch.name.replace('ABC - ', ''),
             city: branch.city,
             revenue: bRevenue,
             orders: bOrders.length,
@@ -321,7 +321,7 @@ export class AnalyticsController {
       const lowStockAlerts = lowStockAlertsData.map(item => ({
         id: item.id,
         ingredientName: item.ingredient?.name || 'Ingredient',
-        branchName: item.branch?.name.replace('Oven Xpress - ', '') || 'Branch',
+        branchName: item.branch?.name.replace('ABC - ', '') || 'Branch',
         quantity: item.quantity,
         unit: item.ingredient?.unit || 'Units'
       }));

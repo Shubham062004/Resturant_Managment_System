@@ -3,28 +3,28 @@ version: '3.8'
 services:
   db-postgres:
     image: postgres:16-alpine
-    container_name: oven-xpress-postgres
+    container_name: abc-postgres
     restart: always
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin_password_9922
-      POSTGRES_DB: oven_xpress
+      POSTGRES_DB: abc
     ports:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U admin -d oven_xpress']
+      test: ['CMD-SHELL', 'pg_isready -U admin -d abc']
       interval: 10s
       timeout: 5s
       retries: 5
 
   db-mongodb:
     image: mongo:7.0
-    container_name: oven-xpress-mongodb
+    container_name: abc-mongodb
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: oven_xpress
+      MONGO_INITDB_DATABASE: abc
     ports:
       - '27017:27017'
     volumes:
@@ -40,13 +40,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: oven-xpress-backend
+    container_name: abc-backend
     restart: always
     environment:
       NODE_ENV: production
       PORT: 5000
-      DATABASE_URL: postgresql://admin:admin_password_9922@db-postgres:5432/oven_xpress?schema=public
-      MONGODB_URI: mongodb://db-mongodb:27017/oven_xpress
+      DATABASE_URL: postgresql://admin:admin_password_9922@db-postgres:5432/abc?schema=public
+      MONGODB_URI: mongodb://db-mongodb:27017/abc
       JWT_SECRET: c6747b0e14a1a364be167d3d2db70fa1c4f03932785d99723cb8d234a9ef3878
       JWT_EXPIRES_IN: 1d
     ports:
@@ -61,7 +61,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: oven-xpress-frontend
+    container_name: abc-frontend
     restart: always
     ports:
       - '80:80'

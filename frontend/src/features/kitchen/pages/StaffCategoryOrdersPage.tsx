@@ -123,7 +123,7 @@ export default function StaffCategoryOrdersPage() {
                 <div key={order.id} className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3">
                   <div className="flex justify-between">
                     <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant={order.priority === 'URGENT' || order.priority === 'HIGH' ? 'danger' : 'neutral'} className="text-[9px]">
+                    <Badge variant={order.priority === 'URGENT' || order.priority === 'HIGH' ? 'error' : 'neutral'} className="text-[9px]">
                       {order.priority}
                     </Badge>
                   </div>

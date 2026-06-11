@@ -8,8 +8,8 @@ export const AboutPage: React.FC = () => {
     <>
       <SEO
         title="Our Story & Vision"
-        description="Learn how Oven Xpress combines premium brick oven baking styles with modern digital smart kitchen automation."
-        keywords="About Oven Xpress, brick oven pizza history, culinary automation, smart kitchen management"
+        description="Learn how ABC combines premium brick oven baking styles with modern digital smart kitchen automation."
+        keywords="About ABC, brick oven pizza history, culinary automation, smart kitchen management"
       />
 
       <div className="max-w-4xl mx-auto px-6 py-12 md:py-16 space-y-16">
@@ -49,7 +49,7 @@ export const AboutPage: React.FC = () => {
               The Hearth & The Code
             </h2>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-              Oven Xpress began with a single vision: how to serve authentic Neapolitan-style stone
+              ABC began with a single vision: how to serve authentic Neapolitan-style stone
               crust pizzas and handcrafted gourmet burger blends without the traditional restaurant
               delays.
             </p>

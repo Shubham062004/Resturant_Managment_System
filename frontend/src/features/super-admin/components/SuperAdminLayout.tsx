@@ -18,7 +18,7 @@ export default function SuperAdminLayout() {
       {/* Sidebar */}
       <aside className="w-64 bg-black flex flex-col border-r border-slate-800">
         <div className="h-16 flex items-center px-6 border-b border-slate-800">
-          <span className="text-white font-bold text-lg">Oven Xpress Global</span>
+          <span className="text-white font-bold text-lg">ABC Global</span>
         </div>
         <nav className="flex-1 overflow-y-auto py-4">
           <ul className="space-y-1 px-3">

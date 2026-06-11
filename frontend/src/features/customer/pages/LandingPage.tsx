@@ -48,7 +48,7 @@ export const LandingPage: React.FC = () => {
     e.preventDefault();
     if (!newsletterEmail.trim()) return;
 
-    toast.success('Thank you for subscribing to Oven Xpress updates!');
+    toast.success('Thank you for subscribing to ABC updates!');
     setNewsletterEmail('');
   };
 
@@ -56,8 +56,8 @@ export const LandingPage: React.FC = () => {
     <>
       <SEO
         title="Fire-Baked Pizza & Crafted Gourmet Burgers"
-        description="Experience the peak of restaurant automation and culinary delight. Order from Oven Xpress outposts, track live counter progress, and savor fire-baked pizzas."
-        keywords="Oven Xpress, pizza delivery, gourmet burgers, local food outposts, smart kitchen order tracker"
+        description="Experience the peak of restaurant automation and culinary delight. Order from ABC outposts, track live counter progress, and savor fire-baked pizzas."
+        keywords="ABC, pizza delivery, gourmet burgers, local food outposts, smart kitchen order tracker"
       />
 
       <div className="flex flex-col w-full overflow-hidden">
@@ -93,7 +93,7 @@ export const LandingPage: React.FC = () => {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans"
               >
-                Order from local Oven Xpress outposts with lightning fast delivery, real-time smart
+                Order from local ABC outposts with lightning fast delivery, real-time smart
                 kitchen tracking, and customizable meal modifications.
               </motion.p>
 
@@ -314,7 +314,7 @@ export const LandingPage: React.FC = () => {
         <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
           <div className="text-center space-y-3 mb-12">
             <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-              Why Oven Xpress?
+              Why ABC?
             </h2>
             <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
               Combining ancient culinary baking secrets with cutting-edge kitchen logistics.
@@ -376,7 +376,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="font-display font-bold text-base text-white">Pick Nearest Outpost</h3>
               <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Check our branches map. Select the closest Oven Xpress outpost to unlock its
+                Check our branches map. Select the closest ABC outpost to unlock its
                 customized food catalog.
               </p>
             </div>
@@ -452,7 +452,7 @@ export const LandingPage: React.FC = () => {
           <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/35 border border-border/60 p-8 md:p-12 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
             <div className="space-y-6 max-w-xl text-center md:text-left z-10">
               <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-                Order Faster on the Oven Xpress App
+                Order Faster on the ABC App
               </h2>
               <p className="text-sm text-muted-foreground font-sans leading-relaxed">
                 Download our companion mobile application for iOS and Android. Save favorite
@@ -481,7 +481,7 @@ export const LandingPage: React.FC = () => {
                   <Flame size={12} className="text-primary" />
                 </div>
                 <span className="text-[10px] font-bold text-white uppercase tracking-wider block mt-2">
-                  Oven Xpress Mobile
+                  ABC Mobile
                 </span>
                 <span className="text-[8px] text-muted-foreground block font-sans">
                   Active Location: Midtown
