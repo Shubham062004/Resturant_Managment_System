@@ -44,8 +44,13 @@ const ManagerKitchenPage = React.lazy(() => import('../features/manager/pages/Ma
 const ManagerInventoryPage = React.lazy(() => import('../features/manager/pages/ManagerInventoryPage'));
 const ManagerCustomersPage = React.lazy(() => import('../features/manager/pages/ManagerCustomersPage'));
 const ManagerAnalyticsPage = React.lazy(() => import('../features/manager/pages/ManagerAnalyticsPage'));
-const KitchenMonitorPage = React.lazy(() => import('../features/kitchen/pages/KitchenMonitorPage'));
-const StaffCategoryOrdersPage = React.lazy(() => import('../features/kitchen/pages/StaffCategoryOrdersPage'));
+// Staff Portal
+const StaffLayout = React.lazy(() => import('../features/staff/components/StaffLayout'));
+const StaffDashboardPage = React.lazy(() => import('../features/staff/pages/StaffDashboardPage'));
+const StaffProfilePage = React.lazy(() => import('../features/staff/pages/StaffProfilePage'));
+const StaffWorkQueuePage = React.lazy(() => import('../features/staff/pages/StaffWorkQueuePage'));
+const StaffAttendancePage = React.lazy(() => import('../features/staff/pages/StaffAttendancePage'));
+const StaffPerformancePage = React.lazy(() => import('../features/staff/pages/StaffPerformancePage'));
 const ReservationsPage = React.lazy(() => import('../features/reservations/pages/ReservationsPage'));
 const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
 const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
@@ -94,10 +99,7 @@ const NotFoundPage = React.lazy(() => import('../features/customer/pages/NotFoun
 const ServerErrorPage = React.lazy(() => import('../features/customer/pages/ServerErrorPage'));
 const OfflinePage = React.lazy(() => import('../features/customer/pages/OfflinePage'));
 
-// Kitchen Views (Lazy)
-const KitchenDashboardPage = React.lazy(() => import('../features/kitchen/pages/KitchenDashboardPage'));
-const KitchenAnalyticsPage = React.lazy(() => import('../features/kitchen/pages/KitchenAnalyticsPage'));
-
+// Removed Kitchen Views
 // Loader component for Suspense Fallbacks
 const RouteLoader = () => (
   <div className="min-h-[50vh] flex items-center justify-center bg-transparent">
@@ -210,11 +212,18 @@ const AppRouter = () => {
               <Route path="analytics" element={<ManagerAnalyticsPage />} />
             </Route>
 
-            {/* Kitchen Dashboard System */}
-            <Route path="/kitchen" element={<ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}><KitchenDashboardPage /></ProtectedRoute>} />
-            <Route path="/kitchen/monitor" element={<ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}><KitchenMonitorPage /></ProtectedRoute>} />
-            <Route path="/kitchen/analytics" element={<ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}><KitchenAnalyticsPage /></ProtectedRoute>} />
-
+            {/* Staff Portal System */}
+            <Route path="/staff" element={
+              <ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}>
+                <StaffLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<StaffDashboardPage />} />
+              <Route path="profile" element={<StaffProfilePage />} />
+              <Route path="work" element={<StaffWorkQueuePage />} />
+              <Route path="attendance" element={<StaffAttendancePage />} />
+              <Route path="performance" element={<StaffPerformancePage />} />
+            </Route>
             {/* Inventory Dashboard System */}
             <Route path="/inventory" element={<ProtectedRoute allowedRoles={['INVENTORY_MANAGER', 'OPERATIONS_MANAGER']}><InventoryDashboardPage /></ProtectedRoute>} />
 
