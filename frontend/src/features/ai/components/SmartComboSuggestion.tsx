@@ -37,7 +37,7 @@ export default function SmartComboSuggestion({ cartItemIds }: SmartComboProps) {
           <div key={item.id} className="flex justify-between items-center p-3 bg-surface rounded-lg">
             <div>
               <p className="font-semibold text-white text-sm">{item.name}</p>
-              <p className="text-xs text-muted-foreground">${item.basePrice}</p>
+              <p className="text-xs text-muted-foreground">₹{item.basePrice}</p>
             </div>
             <Button variant="outline" size="sm" className="h-8">
               <Plus size={14} className="mr-1" /> Add

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { Flame, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, SearchX } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,34 +10,27 @@ export const NotFoundPage: React.FC = () => {
   return (
     <>
       <SEO
-        title="Page Not Found (404)"
-        description="The requested page could not be located in our restaurant management database."
+        title="Page Not Found | ABC Restaurant"
+        description="The page you are looking for does not exist."
       />
 
-      <div className="text-center space-y-6 font-sans">
-        <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mx-auto animate-bounce">
-          <Flame size={32} />
-        </div>
-
-        <div className="space-y-2">
-          <h1 className="text-4xl font-display font-extrabold text-white">404 - Node Offline</h1>
-          <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
-            The coordinates you input do not match any active menu, branch, or user route in Oven
-            Xpress.
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-center px-4">
+        <div className="space-y-4 max-w-md">
+          <h1 className="text-6xl font-display font-black text-foreground">404</h1>
+          <h2 className="text-2xl font-bold text-foreground">Page Not Found</h2>
+          <p className="text-muted-foreground text-base leading-relaxed pb-6">
+            We're sorry, but the page you are looking for doesn't exist, has been removed, or is temporarily unavailable.
           </p>
         </div>
 
-        <div className="pt-2">
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => navigate('/')}
-            className="flex items-center gap-1.5 mx-auto text-xs"
-          >
-            <ArrowLeft size={14} />
-            <span>Return to HQ</span>
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={() => navigate('/')}
+          leftIcon={<ArrowLeft size={18} />}
+        >
+          Return Home
+        </Button>
       </div>
     </>
   );

@@ -27,31 +27,26 @@ const OffersPage = React.lazy(() => import('../features/customer/pages/OffersPag
 const FavoritesPage = React.lazy(() => import('../features/customer/pages/FavoritesPage'));
 const OrderListPage = React.lazy(() => import('../features/orders/pages/OrderListPage'));
 const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/OrderTrackingPage'));
-const DeliveryDashboardPage = React.lazy(
-  () => import('../features/delivery/pages/DeliveryDashboardPage'),
-);
-const EarningsDashboardPage = React.lazy(
-  () => import('../features/delivery/pages/EarningsDashboardPage'),
-);
-const InventoryDashboardPage = React.lazy(
-  () => import('../features/inventory/pages/InventoryDashboardPage'),
-);
+const DeliveryDashboardPage = React.lazy(() => import('../features/delivery/pages/DeliveryDashboardPage'));
+const EarningsDashboardPage = React.lazy(() => import('../features/delivery/pages/EarningsDashboardPage'));
+const InventoryDashboardPage = React.lazy(() => import('../features/inventory/pages/InventoryDashboardPage'));
 const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashboardPage'));
-const OwnerDashboardPage = React.lazy(
-  () => import('../features/admin/pages/OwnerDashboardPage'),
-);
-const BranchManagerDashboardPage = React.lazy(
-  () => import('../features/admin/pages/BranchManagerDashboardPage'),
-);
-const KitchenMonitorPage = React.lazy(
-  () => import('../features/kitchen/pages/KitchenMonitorPage'),
-);
-const StaffCategoryOrdersPage = React.lazy(
-  () => import('../features/kitchen/pages/StaffCategoryOrdersPage'),
-);
-const ReservationsPage = React.lazy(
-  () => import('../features/reservations/pages/ReservationsPage'),
-);
+const OwnerDashboardPage = React.lazy(() => import('../features/admin/pages/OwnerDashboardPage'));
+// Branch Manager Module (Rebuilt)
+const BranchManagerLayout = React.lazy(() => import('../features/manager/components/BranchManagerLayout'));
+const ManagerDashboardPage = React.lazy(() => import('../features/manager/pages/ManagerDashboardPage'));
+const ManagerOrdersPage = React.lazy(() => import('../features/manager/pages/ManagerOrdersPage'));
+const ManagerPOSPage = React.lazy(() => import('../features/manager/pages/ManagerPOSPage'));
+const ManagerTablesPage = React.lazy(() => import('../features/manager/pages/ManagerTablesPage'));
+const ManagerReservationsPage = React.lazy(() => import('../features/manager/pages/ManagerReservationsPage'));
+const ManagerStaffPage = React.lazy(() => import('../features/manager/pages/ManagerStaffPage'));
+const ManagerKitchenPage = React.lazy(() => import('../features/manager/pages/ManagerKitchenPage'));
+const ManagerInventoryPage = React.lazy(() => import('../features/manager/pages/ManagerInventoryPage'));
+const ManagerCustomersPage = React.lazy(() => import('../features/manager/pages/ManagerCustomersPage'));
+const ManagerAnalyticsPage = React.lazy(() => import('../features/manager/pages/ManagerAnalyticsPage'));
+const KitchenMonitorPage = React.lazy(() => import('../features/kitchen/pages/KitchenMonitorPage'));
+const StaffCategoryOrdersPage = React.lazy(() => import('../features/kitchen/pages/StaffCategoryOrdersPage'));
+const ReservationsPage = React.lazy(() => import('../features/reservations/pages/ReservationsPage'));
 const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
 const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
 const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
@@ -63,35 +58,21 @@ const MenuManagementPage = React.lazy(() => import('../features/admin/pages/Menu
 const FinancePage = React.lazy(() => import('../features/admin/pages/FinancePage'));
 const AuditLogPage = React.lazy(() => import('../features/admin/pages/AuditLogPage'));
 const AdminOrdersPage = React.lazy(() => import('../features/admin/pages/AdminOrdersPage'));
-const AnalyticsDashboardPage = React.lazy(
-  () => import('../features/analytics/pages/AnalyticsDashboardPage'),
-);
+const AnalyticsDashboardPage = React.lazy(() => import('../features/analytics/pages/AnalyticsDashboardPage'));
 const AdminAIInsightsPage = React.lazy(() => import('../features/ai/pages/AdminAIInsightsPage'));
 const SystemHealthPage = React.lazy(() => import('../features/qa/pages/SystemHealthPage'));
 
 // Super Admin Pages
-const SuperAdminLayout = React.lazy(
-  () => import('../features/super-admin/components/SuperAdminLayout'),
-);
-const GlobalDashboardPage = React.lazy(
-  () => import('../features/super-admin/pages/GlobalDashboardPage'),
-);
-const OrganizationManagementPage = React.lazy(
-  () => import('../features/super-admin/pages/OrganizationManagementPage'),
-);
+const SuperAdminLayout = React.lazy(() => import('../features/super-admin/components/SuperAdminLayout'));
+const GlobalDashboardPage = React.lazy(() => import('../features/super-admin/pages/GlobalDashboardPage'));
+const OrganizationManagementPage = React.lazy(() => import('../features/super-admin/pages/OrganizationManagementPage'));
 
 // Menu Catalog Pages
 const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
-const RestaurantDetailPage = React.lazy(
-  () => import('../features/customer/pages/RestaurantDetailPage'),
-);
+const RestaurantDetailPage = React.lazy(() => import('../features/customer/pages/RestaurantDetailPage'));
 const ProductDetailPage = React.lazy(() => import('../features/customer/pages/ProductDetailPage'));
-const CategoryDetailPage = React.lazy(
-  () => import('../features/customer/pages/CategoryDetailPage'),
-);
-const AdminPlaceholderPage = React.lazy(
-  () => import('../features/customer/pages/AdminPlaceholderPage'),
-);
+const CategoryDetailPage = React.lazy(() => import('../features/customer/pages/CategoryDetailPage'));
+const AdminPlaceholderPage = React.lazy(() => import('../features/customer/pages/AdminPlaceholderPage'));
 
 // Cart & Checkout
 const CartPage = React.lazy(() => import('../features/cart/pages/CartPage'));
@@ -113,42 +94,9 @@ const NotFoundPage = React.lazy(() => import('../features/customer/pages/NotFoun
 const ServerErrorPage = React.lazy(() => import('../features/customer/pages/ServerErrorPage'));
 const OfflinePage = React.lazy(() => import('../features/customer/pages/OfflinePage'));
 
-// Staff dashboard views (inline templates from previous foundation)
-const DesignSystemShowcase = React.lazy(
-  () => import('../shared/components/ui/DesignSystemShowcase'),
-);
-
 // Kitchen Views (Lazy)
-const KitchenDashboardPage = React.lazy(
-  () => import('../features/kitchen/pages/KitchenDashboardPage'),
-);
-const KitchenAnalyticsPage = React.lazy(
-  () => import('../features/kitchen/pages/KitchenAnalyticsPage'),
-);
-
-const AdminDashboardRouter = () => {
-  const { user } = useAppSelector((state) => state.auth);
-  if (!user) return <RouteLoader />;
-  
-  if (user.role === 'BRANCH_MANAGER') {
-    return <BranchManagerDashboardPage />;
-  }
-  
-  return <OwnerDashboardPage />;
-};
-
-const TablesView = () => (
-  <div className="space-y-6">
-    <h1 className="text-3xl font-bold font-display tracking-tight text-white animate-fade-in">
-      Floor Plan Grid
-    </h1>
-    <div className="glass-panel p-8 rounded-lg min-h-[400px] flex items-center justify-center border border-border/40">
-      <p className="text-muted-foreground font-sans">
-        Active interactive layout blueprint will render here.
-      </p>
-    </div>
-  </div>
-);
+const KitchenDashboardPage = React.lazy(() => import('../features/kitchen/pages/KitchenDashboardPage'));
+const KitchenAnalyticsPage = React.lazy(() => import('../features/kitchen/pages/KitchenAnalyticsPage'));
 
 // Loader component for Suspense Fallbacks
 const RouteLoader = () => (
@@ -179,62 +127,13 @@ const AppRouter = () => {
         <Suspense fallback={<RouteLoader />}>
           <Routes>
             {/* Public Authentication Pipelines */}
-            <Route
-              path="/login"
-              element={
-                <PublicRoute>
-                  <LoginPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/verify-login-otp"
-              element={
-                <PublicRoute>
-                  <VerifyOtpPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <PublicRoute>
-                  <RegisterPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/forgot-password"
-              element={
-                <PublicRoute>
-                  <ForgotPasswordPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/reset-password"
-              element={
-                <PublicRoute>
-                  <ResetPasswordPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/verify-email"
-              element={
-                <PublicRoute>
-                  <VerifyEmailPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/auth/callback/google"
-              element={
-                <PublicRoute>
-                  <GoogleCallbackPage />
-                </PublicRoute>
-              }
-            />
+            <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+            <Route path="/verify-login-otp" element={<PublicRoute><VerifyOtpPage /></PublicRoute>} />
+            <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+            <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+            <Route path="/reset-password" element={<PublicRoute><ResetPasswordPage /></PublicRoute>} />
+            <Route path="/verify-email" element={<PublicRoute><VerifyEmailPage /></PublicRoute>} />
+            <Route path="/auth/callback/google" element={<PublicRoute><GoogleCallbackPage /></PublicRoute>} />
 
             {/* Customer Facing Application Shell (Public & User Account pages) */}
             <Route element={<CustomerLayout />}>
@@ -253,37 +152,13 @@ const AppRouter = () => {
               <Route path="/products/:slug" element={<ProductDetailPage />} />
               <Route path="/categories/:slug" element={<CategoryDetailPage />} />
 
-              {/* Guarded Admin Console Shells */}
-              <Route
-                path="/admin/restaurants"
-                element={
-                  <ProtectedRoute>
-                    <AdminPlaceholderPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/products"
-                element={
-                  <ProtectedRoute>
-                    <AdminPlaceholderPage />
-                  </ProtectedRoute>
-                }
-              />
-
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/checkout/address" element={<Navigate to="/checkout" replace />} />
               <Route path="/checkout/payment" element={<Navigate to="/checkout" replace />} />
 
-              {/* Protected Customer Account Pages (nested inside ProfileLayout sidebar) */}
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <ProfileLayout />
-                  </ProtectedRoute>
-                }
-              >
+              {/* Protected Customer Account Pages */}
+              <Route element={<ProtectedRoute allowedRoles={['CUSTOMER']}><ProfileLayout /></ProtectedRoute>}>
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
                 <Route path="/orders" element={<OrderListPage />} />
@@ -291,143 +166,16 @@ const AppRouter = () => {
               </Route>
 
               {/* Order Tracking - Full page view */}
-              <Route
-                path="/orders/:id"
-                element={
-                  <ProtectedRoute>
-                    <OrderTrackingPage />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/orders/:id" element={<ProtectedRoute allowedRoles={['CUSTOMER']}><OrderTrackingPage /></ProtectedRoute>} />
             </Route>
 
-            <Route path="/admin" element={<Navigate to="/admin/restaurants" replace />} />
-            <Route path="/design-system" element={<Navigate to="/staff/design-system" replace />} />
-            <Route path="/500" element={<Navigate to="/server-error" replace />} />
-
-            {/* Core Authorized Staff Dashboard Shell */}
-            <Route
-              path="/staff"
-              element={
-                <ProtectedRoute>
-                  <MainLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<AdminDashboardRouter />} />
-              <Route path=":id/orders" element={<StaffCategoryOrdersPage />} />
-              <Route path="tables" element={<TablesView />} />
-              <Route path="design-system" element={<DesignSystemShowcase />} />
-            </Route>
-
-            {/* Kitchen Dashboard System */}
-            <Route
-              path="/kitchen"
-              element={
-                <ProtectedRoute>
-                  <KitchenDashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/kitchen/monitor"
-              element={
-                <ProtectedRoute>
-                  <KitchenMonitorPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/kitchen/analytics"
-              element={
-                <ProtectedRoute>
-                  <KitchenAnalyticsPage />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Inventory Dashboard System */}
-            <Route
-              path="/admin/inventory"
-              element={
-                <ProtectedRoute>
-                  <InventoryDashboardPage />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Delivery Dashboard System */}
-            <Route
-              path="/delivery"
-              element={
-                <ProtectedRoute>
-                  <DeliveryDashboardPage />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* POS Dashboard System */}
-            <Route
-              path="/pos"
-              element={
-                <ProtectedRoute>
-                  <POSDashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/delivery/earnings"
-              element={
-                <ProtectedRoute>
-                  <EarningsDashboardPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/reservations"
-              element={
-                <ProtectedRoute>
-                  <ReservationsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/floor-plan"
-              element={
-                <ProtectedRoute>
-                  <FloorPlanPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/takeaway"
-              element={
-                <ProtectedRoute>
-                  <TakeawayQueuePage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute
-                  allowedRoles={[
-                    'ADMIN',
-                    'SUPER_ADMIN',
-                    'BRANCH_MANAGER',
-                    'OPERATIONS_MANAGER',
-                    'FINANCE_MANAGER',
-                    'ORGANIZATION_OWNER',
-                    'FRANCHISE_OWNER',
-                  ]}
-                >
-                  <AdminLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route path="/admin" element={<AdminDashboardRouter />} />
+            {/* Admin / Owner Routes */}
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={['ADMIN', 'SUPER_ADMIN', 'PLATFORM_ADMIN', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER']}>
+                <AdminLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<OwnerDashboardPage />} />
               <Route path="customers" element={<div>Customers Page</div>} />
               <Route path="analytics" element={<AnalyticsDashboardPage />} />
               <Route path="ai-insights" element={<AdminAIInsightsPage />} />
@@ -441,27 +189,47 @@ const AppRouter = () => {
               <Route path="finance" element={<FinancePage />} />
               <Route path="audit" element={<AuditLogPage />} />
               <Route path="orders" element={<AdminOrdersPage />} />
-              {/* Other admin routes placeholder */}
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
             </Route>
 
+            {/* Branch Manager Operations Console */}
+            <Route path="/manager" element={
+              <ProtectedRoute allowedRoles={['BRANCH_MANAGER']}>
+                <BranchManagerLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<ManagerDashboardPage />} />
+              <Route path="orders" element={<ManagerOrdersPage />} />
+              <Route path="pos" element={<ManagerPOSPage />} />
+              <Route path="tables" element={<ManagerTablesPage />} />
+              <Route path="reservations" element={<ManagerReservationsPage />} />
+              <Route path="staff" element={<ManagerStaffPage />} />
+              <Route path="kitchen" element={<ManagerKitchenPage />} />
+              <Route path="inventory" element={<ManagerInventoryPage />} />
+              <Route path="customers" element={<ManagerCustomersPage />} />
+              <Route path="analytics" element={<ManagerAnalyticsPage />} />
+            </Route>
+
+            {/* Kitchen Dashboard System */}
+            <Route path="/kitchen" element={<ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}><KitchenDashboardPage /></ProtectedRoute>} />
+            <Route path="/kitchen/monitor" element={<ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}><KitchenMonitorPage /></ProtectedRoute>} />
+            <Route path="/kitchen/analytics" element={<ProtectedRoute allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}><KitchenAnalyticsPage /></ProtectedRoute>} />
+
+            {/* Inventory Dashboard System */}
+            <Route path="/inventory" element={<ProtectedRoute allowedRoles={['INVENTORY_MANAGER', 'OPERATIONS_MANAGER']}><InventoryDashboardPage /></ProtectedRoute>} />
+
+            {/* Delivery Dashboard System */}
+            <Route path="/delivery" element={<ProtectedRoute allowedRoles={['DELIVERY_PARTNER', 'DELIVERY_MANAGER']}><DeliveryDashboardPage /></ProtectedRoute>} />
+            <Route path="/delivery/earnings" element={<ProtectedRoute allowedRoles={['DELIVERY_PARTNER', 'DELIVERY_MANAGER']}><EarningsDashboardPage /></ProtectedRoute>} />
+
+            {/* POS Dashboard System */}
+            <Route path="/pos" element={<ProtectedRoute allowedRoles={['CASHIER', 'POS_OPERATOR']}><POSDashboardPage /></ProtectedRoute>} />
+
             {/* Super Admin Dashboard System */}
-            <Route
-              path="/super-admin"
-              element={
-                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}>
-                  <SuperAdminLayout />
-                </ProtectedRoute>
-              }
-            >
+            <Route path="/super-admin" element={<ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}><SuperAdminLayout /></ProtectedRoute>}>
               <Route index element={<GlobalDashboardPage />} />
               <Route path="organizations" element={<OrganizationManagementPage />} />
-              <Route
-                path="*"
-                element={
-                  <div className="p-6 text-slate-100">Page not found in Super Admin Panel</div>
-                }
-              />
+              <Route path="*" element={<div className="p-6 text-slate-100">Page not found in Super Admin Panel</div>} />
             </Route>
 
             {/* Error Pages Shell */}

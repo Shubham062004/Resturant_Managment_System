@@ -35,7 +35,7 @@ export default function PersonalizedRecommendations() {
               </div>
             </div>
             <h3 className="font-bold text-white mb-1 truncate">{rec.product.name}</h3>
-            <p className="text-primary font-bold text-sm">${rec.product.basePrice}</p>
+            <p className="text-primary font-bold text-sm">₹{rec.product.basePrice}</p>
             <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{rec.reason}</p>
           </Card>
         ))}

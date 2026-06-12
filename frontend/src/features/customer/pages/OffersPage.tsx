@@ -93,10 +93,10 @@ export const OffersPage: React.FC = () => {
                       {offer.discountType === 'PERCENTAGE'
                         ? `${offer.discountValue}% off`
                         : offer.discountType === 'FIXED_AMOUNT'
-                          ? `$${parseFloat(offer.discountValue).toFixed(2)} off`
+                          ? `₹${parseFloat(offer.discountValue).toFixed(2)} off`
                           : 'Free delivery'}
                       {parseFloat(offer.minimumAmount) > 0 &&
-                        ` · Min order $${parseFloat(offer.minimumAmount).toFixed(2)}`}
+                        ` · Min order ₹${parseFloat(offer.minimumAmount).toFixed(2)}`}
                     </p>
                   </CardContent>
                 </Card>

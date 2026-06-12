@@ -67,7 +67,7 @@ export const CheckoutPage: React.FC = () => {
         orderAmount: subtotal,
       });
       setDiscountAmount(result.discountAmount);
-      toast.success(`Coupon applied: -$${result.discountAmount.toFixed(2)}`);
+      toast.success(`Coupon applied: -₹${result.discountAmount.toFixed(2)}`);
       setStep('payment');
     } catch {
       toast.error('Invalid or expired coupon');
@@ -210,7 +210,7 @@ export const CheckoutPage: React.FC = () => {
             <h3 className="font-semibold text-white">Order Summary</h3>
             <p className="text-sm flex justify-between">
               <span className="text-muted-foreground">Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>₹{subtotal.toFixed(2)}</span>
             </p>
             <p className="text-sm flex justify-between text-success">
               <span>Discount</span>
@@ -218,7 +218,7 @@ export const CheckoutPage: React.FC = () => {
             </p>
             <p className="text-lg flex justify-between font-bold text-primary border-t border-border/40 pt-3">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>₹{total.toFixed(2)}</span>
             </p>
             {discountAmount > 0 && (
               <p className="text-xs text-success flex items-center gap-1">

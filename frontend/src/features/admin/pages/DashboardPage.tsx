@@ -34,7 +34,7 @@ export default function DashboardPage() {
   const kpis = [
     {
       title: "Today's Revenue",
-      value: `$${dashboard.revenueToday.toFixed(2)}`,
+      value: `₹${dashboard.revenueToday.toFixed(2)}`,
       icon: <DollarSign size={24} className="text-emerald-500" />,
     },
     {

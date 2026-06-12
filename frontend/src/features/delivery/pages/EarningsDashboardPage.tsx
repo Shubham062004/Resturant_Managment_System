@@ -25,7 +25,7 @@ export default function EarningsDashboardPage() {
               <Wallet className="w-5 h-5" /> Total Earnings
             </p>
             <h2 className="text-5xl font-bold text-white">
-              ${Number(earnings.totalEarnings || 0).toFixed(2)}
+              ₹{Number(earnings.totalEarnings || 0).toFixed(2)}
             </h2>
           </div>
           <TrendingUp className="absolute -right-6 -bottom-6 w-32 h-32 text-primary/10" />
@@ -54,9 +54,9 @@ export default function EarningsDashboardPage() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-success font-bold">+${Number(e.earnings).toFixed(2)}</p>
+                <p className="text-success font-bold">+₹{Number(e.earnings).toFixed(2)}</p>
                 {Number(e.bonus) > 0 && (
-                  <p className="text-xs text-primary">Bonus: ${Number(e.bonus).toFixed(2)}</p>
+                  <p className="text-xs text-primary">Bonus: ₹{Number(e.bonus).toFixed(2)}</p>
                 )}
               </div>
             </Card>

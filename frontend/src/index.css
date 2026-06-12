@@ -5,47 +5,63 @@
 @layer base {
   :root {
     /* Main HSL Tokens for Light Mode */
-    --background: 32 100% 97.5%; /* #FFF8F0 - Light warm cream */
-    --foreground: 24 20% 9.5%; /* Text primary */
+    --background: 32 100% 97.5%;
+    /* #FFF8F0 - Light warm cream */
+    --foreground: 24 20% 9.5%;
+    /* Text primary */
 
-    --card: 0 0% 100%; /* White surface */
+    --card: 0 0% 100%;
+    /* White surface */
     --card-foreground: 24 20% 9.5%;
 
-    --primary: 0 68% 41.6%; /* #B22222 - Firebrick */
-    --primary-hover: 0 68% 32.4%; /* #8B1A1A */
+    --primary: 0 68% 41.6%;
+    /* #B22222 - Firebrick */
+    --primary-hover: 0 68% 32.4%;
+    /* #8B1A1A */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 32 18% 90%; /* Soft secondary warm grey */
+    --secondary: 32 18% 90%;
+    /* Soft secondary warm grey */
     --secondary-foreground: 24 20% 12%;
 
-    --accent: 24 100% 63.1%; /* #FF8C42 */
+    --accent: 24 100% 63.1%;
+    /* #FF8C42 */
     --accent-foreground: 0 0% 100%;
 
-    --success: 142 72% 45.1%; /* #22C55E */
+    --success: 142 72% 45.1%;
+    /* #22C55E */
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%; /* #F59E0B */
+    --warning: 38 92% 50%;
+    /* #F59E0B */
     --warning-foreground: 0 0% 100%;
 
-    --danger: 348 83% 58%; /* #EF4444 */
+    --danger: 348 83% 58%;
+    /* #EF4444 */
     --danger-foreground: 0 0% 100%;
 
-    --info: 217 91% 59.8%; /* #3B82F6 */
+    --info: 217 91% 59.8%;
+    /* #3B82F6 */
     --info-foreground: 0 0% 100%;
 
     --muted: 32 10% 88%;
     --muted-foreground: 24 10% 40%;
 
-    --border: 32 12% 86%; /* Light warm border */
-    --radius: 0.5rem; /* 8px default radius */
+    --border: 32 12% 86%;
+    /* Light warm border */
+    --radius: 0.5rem;
+    /* 8px default radius */
   }
 
   .dark {
     /* Main HSL Tokens for Dark Mode */
-    --background: 0 0% 7.1%; /* #121212 - Pure Dark background */
-    --foreground: 32 20% 96.1%; /* Off-white text */
+    --background: 0 0% 7.1%;
+    /* #121212 - Pure Dark background */
+    --foreground: 32 20% 96.1%;
+    /* Off-white text */
 
-    --card: 0 0% 11.8%; /* #1E1E1E - Dark Surface */
+    --card: 0 0% 11.8%;
+    /* #1E1E1E - Dark Surface */
     --card-foreground: 32 20% 96.1%;
 
     --primary: 0 68% 41.6%;
@@ -73,7 +89,8 @@
     --muted: 0 0% 16%;
     --muted-foreground: 32 10% 60%;
 
-    --border: 0 0% 18%; /* #2D2D2D - Dark Mode Border */
+    --border: 0 0% 18%;
+    /* #2D2D2D - Dark Mode Border */
     --radius: 0.5rem;
   }
 }
@@ -82,6 +99,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground font-sans transition-colors duration-300 antialiased;
   }

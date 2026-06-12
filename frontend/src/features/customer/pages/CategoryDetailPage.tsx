@@ -171,7 +171,7 @@ export const CategoryDetailPage: React.FC = () => {
 
                       <div className="flex items-center gap-3">
                         <span className="text-white font-bold text-base">
-                          ${parseFloat(product.basePrice).toFixed(2)}
+                          <span className="font-semibold text-primary">₹{parseFloat(product.basePrice).toFixed(2)}</span>
                         </span>
                         <Link
                           to={`/product/${product.slug}`}

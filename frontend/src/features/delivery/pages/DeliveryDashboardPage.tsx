@@ -308,7 +308,7 @@ export default function DeliveryDashboardPage() {
         <Card className="bg-slate-900 border-slate-800 p-6 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Shift Earnings</span>
-            <p className="text-3xl font-extrabold text-white mt-1.5">${(earnings?.totalEarnings || 0).toFixed(2)}</p>
+            <p className="text-3xl font-extrabold text-white mt-1.5">₹{(earnings?.totalEarnings || 0).toFixed(2)}</p>
           </div>
           <div className="bg-emerald-500/10 p-3 rounded-full border border-emerald-500/20 text-emerald-400">
             <DollarSign className="w-6 h-6" />
@@ -328,7 +328,7 @@ export default function DeliveryDashboardPage() {
         <Card className="bg-slate-900 border-slate-800 p-6 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Ratings Bonus Meter</span>
-            <p className="text-3xl font-extrabold text-white mt-1.5">+$15.00 Base</p>
+            <p className="text-3xl font-extrabold text-white mt-1.5">+₹15.00 Base</p>
           </div>
           <div className="bg-amber-500/10 p-3 rounded-full border border-amber-500/20 text-amber-400">
             <Award className="w-6 h-6" />

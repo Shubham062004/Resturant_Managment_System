@@ -198,13 +198,13 @@ export default function OrderTrackingPage() {
                 {item.quantity} x {item.product.name}
               </span>
               <span className="text-muted-foreground">
-                ${(Number(item.price) * item.quantity).toFixed(2)}
+                ₹{(Number(item.price) * item.quantity).toFixed(2)}
               </span>
             </div>
           ))}
           <div className="border-t border-border/50 pt-4 flex justify-between font-bold text-white">
             <span>Total</span>
-            <span>${Number(currentOrder.totalAmount).toFixed(2)}</span>
+            <span>₹{Number(currentOrder.totalAmount).toFixed(2)}</span>
           </div>
         </CardContent>
       </Card>

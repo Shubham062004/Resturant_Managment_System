@@ -19,7 +19,7 @@ export default function GlobalDashboardPage() {
   const metrics = [
     {
       label: 'Total Revenue',
-      value: `$${dashboard.globalRevenue.toLocaleString()}`,
+      value: `₹${dashboard.globalRevenue.toLocaleString()}`,
       icon: <DollarSign size={24} className="text-emerald-400" />,
     },
     {

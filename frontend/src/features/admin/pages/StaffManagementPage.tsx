@@ -129,7 +129,7 @@ export default function StaffManagementPage() {
     }
   };
 
-  // Helper bonus calculator: $150 bonus per performance point above 3.5
+  // Helper bonus calculator: ₹150 bonus per performance point above 3.5
   const calculateBonus = (perf: number) => {
     if (perf <= 3.5) return 0;
     return Math.round((perf - 3.5) * 150);
@@ -176,7 +176,7 @@ export default function StaffManagementPage() {
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Salary Overheads</p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">${totalPayroll.toLocaleString()} /mo</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">₹{totalPayroll.toLocaleString()} /mo</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Est. gross monthly payroll</span>
         </Card>
 
@@ -301,7 +301,7 @@ export default function StaffManagementPage() {
                           </div>
                         </td>
                         <td className="p-4 text-slate-300 font-mono">
-                          ${staff.salary ? parseFloat(staff.salary).toLocaleString() : '0'} /mo
+                          ₹{staff.salary ? parseFloat(staff.salary).toLocaleString() : '0'} /mo
                         </td>
                         <td className="p-4 text-center">
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -460,7 +460,7 @@ export default function StaffManagementPage() {
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Monthly Base Salary ($)</label>
+                    <label className="block text-xs font-semibold text-slate-400 uppercase mb-1">Monthly Base Salary (₹)</label>
                     <Input
                       id="edit-staff-salary"
                       type="number"
@@ -491,15 +491,15 @@ export default function StaffManagementPage() {
                     <div className="text-slate-400 font-bold border-b border-slate-850 pb-1 uppercase tracking-wider">Estimated Payout Slip</div>
                     <div className="flex justify-between">
                       <span>Base Contract Salary:</span>
-                      <span>${baseSalary.toLocaleString()}</span>
+                      <span>₹{baseSalary.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-amber-500">
                       <span>Performance Bonus:</span>
-                      <span>+${ratingBonus.toLocaleString()}</span>
+                      <span>+₹{ratingBonus.toLocaleString()}</span>
                     </div>
                     <div className="border-t border-slate-850 pt-2 flex justify-between font-bold text-sm text-[#16A34A]">
                       <span>Gross Estimated Payout:</span>
-                      <span>${totalPayout.toLocaleString()}</span>
+                      <span>₹{totalPayout.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import apiClient from '../services/apiClient';
+import NotFoundPage from '../features/customer/pages/NotFoundPage';
 
 interface BackendMonitorProps {
   children: React.ReactNode;
@@ -29,24 +31,22 @@ const BackendMonitor: React.FC<BackendMonitorProps> = ({ children }) => {
 
   if (isBackendOnline === null) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#111827', color: 'white', fontFamily: 'sans-serif' }}>
-        <h2>Connecting to Backend...</h2>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground transition-colors duration-300">
+        <div className="relative flex flex-col items-center">
+          {/* Subtle Glow Effect */}
+          <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+        </div>
       </div>
     );
   }
 
   if (!isBackendOnline) {
+    console.error("404 Bad Request - Backend connection failed.");
+    // Render the NotFoundPage directly wrapped in a BrowserRouter to provide the routing context
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#111827', color: '#f87171', fontFamily: 'sans-serif' }}>
-        <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Backend Offline</h1>
-        <p style={{ color: '#9ca3af' }}>Cannot reach the server at {import.meta.env.VITE_API_URL.replace('/api/v1', '')}. Please ensure the backend is running.</p>
-        <button 
-          onClick={() => window.location.reload()} 
-          style={{ marginTop: '2rem', padding: '0.75rem 1.5rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '0.375rem', cursor: 'pointer' }}
-        >
-          Retry Connection
-        </button>
-      </div>
+      <BrowserRouter>
+        <NotFoundPage />
+      </BrowserRouter>
     );
   }
 

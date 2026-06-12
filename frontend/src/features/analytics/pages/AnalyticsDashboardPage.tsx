@@ -204,18 +204,18 @@ export default function AnalyticsDashboardPage() {
 
           {/* Multi-Branch Performance Comparison Bar Chart */}
           <Card className="bg-slate-900 border-slate-800 p-6">
-            <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">Multi-Branch Sales Performance ($)</h3>
+            <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">Multi-Branch Sales Performance (₹)</h3>
             <div className="h-80 w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={branchComparisonData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                   <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} tickFormatter={(val) => `$${val / 1000}k`} />
+                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} tickFormatter={(val) => `₹${val / 1000}k`} />
                   <Tooltip
                     contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }}
                   />
                   <Legend />
-                  <Bar dataKey="sales" name="Gross Revenue ($)" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="sales" name="Gross Revenue (₹)" fill="#6366f1" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="orders" name="Order count" fill="#38bdf8" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -245,9 +245,9 @@ export default function AnalyticsDashboardPage() {
                 {branchComparisonData.map((branch, i) => (
                   <tr key={i} className="hover:bg-slate-900/40">
                     <td className="px-6 py-4 font-bold text-white">{branch.name}</td>
-                    <td className="px-6 py-4 font-mono text-white">${branch.sales.toLocaleString()}</td>
+                    <td className="px-6 py-4 font-mono text-white">₹{branch.sales.toLocaleString()}</td>
                     <td className="px-6 py-4 font-mono">{branch.orders}</td>
-                    <td className="px-6 py-4 font-mono">${(branch.sales / branch.orders).toFixed(2)}</td>
+                    <td className="px-6 py-4 font-mono">₹{(branch.sales / branch.orders).toFixed(2)}</td>
                     <td className="px-6 py-4 font-mono text-amber-500 font-bold">★ {branch.rating}</td>
                   </tr>
                 ))}
@@ -320,7 +320,7 @@ export default function AnalyticsDashboardPage() {
                   contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }}
                 />
                 <Legend />
-                <Bar dataKey="avgSalary" name="Avg Contract Salary ($)" fill="#ec4899" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="avgSalary" name="Avg Contract Salary (₹)" fill="#ec4899" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -42,8 +42,8 @@ export const RegisterPage: React.FC = () => {
       setValidationError('Invalid email address format.');
       return;
     }
-    if (phone && !/^\+?[1-9]\d{1,14}$/.test(phone)) {
-      setValidationError('Invalid phone number format. Use E.164 format (e.g. +1234567890).');
+    if (phone && !/^\d{10}$/.test(phone)) {
+      setValidationError('Phone number must be exactly 10 digits.');
       return;
     }
     if (password.length < 6) {
@@ -66,28 +66,53 @@ export const RegisterPage: React.FC = () => {
 
     const result = await dispatch(registerUser(payload));
     if (registerUser.fulfilled.match(result)) {
-      toast.success('Registration successful! Check your logs/email for a verification link.');
+      toast.success('Registration successful! Check your email for verification.');
       navigate('/login');
     }
   };
 
+  const handleGoogleLogin = () => {
+    const redirectUrl = `/auth/callback/google#id_token=mock-google-user@abc.com`;
+    navigate(redirectUrl);
+  };
+
+  const GoogleIcon = (
+    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+      <path
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+        fill="#4285F4"
+      />
+      <path
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+        fill="#34A853"
+      />
+      <path
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
+
   return (
-    <AuthLayout
-      brandTitle="Terminal Onboarding"
-      brandDescription="Register your employee profile node to configure authorizations for the Point of Sale terminals and Kitchen Display systems."
-    >
-      <div className="glass-panel p-8 rounded-xl border border-border/80 shadow-2xl space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">
-            Register Account
+    <AuthLayout>
+      <div className="bg-card p-8 md:p-10 rounded-2xl shadow-xl border border-border/40 w-full animate-fade-in">
+        <div className="text-center space-y-2 mb-8">
+          <h2 className="text-3xl font-display font-bold tracking-tight text-foreground">
+            Create an Account
           </h2>
-          <p className="text-muted-foreground font-sans text-sm">Setup your system access node</p>
+          <p className="text-muted-foreground font-sans text-sm">Sign up to get started</p>
         </div>
 
         {(validationError || error) && (
-          <Alert variant="error" title="Registration Failed">
-            {validationError || error}
-          </Alert>
+          <div className="mb-6">
+            <Alert variant="error" title="Oops!">
+              {validationError || error}
+            </Alert>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -104,7 +129,7 @@ export const RegisterPage: React.FC = () => {
             <Input
               type="text"
               label="Last Name"
-              placeholder="Cook"
+              placeholder="Doe"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               prefixIcon={<UserIcon size={16} />}
@@ -115,7 +140,7 @@ export const RegisterPage: React.FC = () => {
           <Input
             type="email"
             label="Email Address"
-            placeholder="jane.cook@abc.com"
+            placeholder="jane@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             prefixIcon={<Mail size={16} />}
@@ -125,50 +150,73 @@ export const RegisterPage: React.FC = () => {
           <Input
             type="text"
             label="Phone Number (Optional)"
-            placeholder="+1234567890"
+            placeholder="1234567890"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            maxLength={10}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, '');
+              setPhone(val);
+            }}
             prefixIcon={<Phone size={16} />}
           />
 
-          <Input
-            type="password"
-            label="Security Password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            prefixIcon={<Lock size={16} />}
-            required
-          />
-
-          <Input
-            type="password"
-            label="Confirm Password"
-            placeholder="••••••••"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            prefixIcon={<Lock size={16} />}
-            required
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              type="password"
+              label="Password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              prefixIcon={<Lock size={16} />}
+              required
+            />
+            <Input
+              type="password"
+              label="Confirm Password"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              prefixIcon={<Lock size={16} />}
+              required
+            />
+          </div>
 
           <Button
             type="submit"
             variant="primary"
-            className="w-full py-3"
+            className="w-full py-2.5 mt-2"
             isLoading={authStatus === 'loading'}
             leftIcon={<UserPlus size={18} />}
           >
-            Create Profile Node
+            Create Account
           </Button>
         </form>
 
-        <div className="text-center font-sans text-sm text-muted-foreground">
-          Already registered?{' '}
+        <div className="relative flex py-5 items-center">
+          <div className="flex-grow border-t border-border"></div>
+          <span className="flex-shrink mx-4 text-muted-foreground text-xs uppercase font-semibold tracking-wider">
+            Or
+          </span>
+          <div className="flex-grow border-t border-border"></div>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full py-2.5"
+          onClick={handleGoogleLogin}
+          leftIcon={GoogleIcon}
+        >
+          Sign up with Google
+        </Button>
+
+        <div className="text-center font-sans text-sm text-muted-foreground pt-6">
+          Already have an account?{' '}
           <Link
             to="/login"
-            className="text-primary hover:text-accent font-semibold transition-colors duration-150"
+            className="text-primary hover:text-primary-hover font-semibold transition-colors duration-150"
           >
-            Unlock terminal
+            Log in
           </Link>
         </div>
       </div>

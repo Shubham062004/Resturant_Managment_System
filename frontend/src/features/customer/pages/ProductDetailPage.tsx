@@ -364,7 +364,7 @@ export const ProductDetailPage: React.FC = () => {
                     >
                       <span className="text-xs font-semibold">{v.name}</span>
                       <span className="text-sm font-bold text-white">
-                        ${parseFloat(v.price).toFixed(2)}
+                        ₹{parseFloat(v.price).toFixed(2)}
                       </span>
                     </button>
                   ))}
@@ -378,9 +378,7 @@ export const ProductDetailPage: React.FC = () => {
                 <p className="text-xs text-neutral-500 uppercase tracking-widest font-sans">
                   Total Price
                 </p>
-                <p className="text-3xl font-extrabold text-primary">
-                  ${parseFloat(displayPrice).toFixed(2)}
-                </p>
+                <span className="text-2xl font-display font-bold text-primary">₹{parseFloat(displayPrice).toFixed(2)}</span>
               </div>
 
               <button

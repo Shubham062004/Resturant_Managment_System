@@ -173,7 +173,7 @@ export const CartPage: React.FC = () => {
             <div className="glass-card p-6 rounded-xl border border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Subtotal</p>
-                <p className="text-3xl font-bold text-primary">${subtotal.toFixed(2)}</p>
+                <p className="text-3xl font-bold text-primary">₹{subtotal.toFixed(2)}</p>
               </div>
               <Button variant="primary" size="lg" onClick={() => navigate('/checkout')}>
                 Proceed to Checkout

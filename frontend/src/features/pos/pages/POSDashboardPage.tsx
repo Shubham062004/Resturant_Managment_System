@@ -139,7 +139,7 @@ export default function POSDashboardPage() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-400 mb-1 uppercase tracking-wider">
-              Opening Cash Balance ($)
+              Opening Cash Balance (₹)
             </label>
             <Input
               id="opening-cash-amount"
@@ -283,7 +283,7 @@ export default function POSDashboardPage() {
                     <h3 className="text-white text-xs font-semibold leading-tight line-clamp-2 min-h-[32px]">
                       {product.name}
                     </h3>
-                    <p className="text-indigo-400 font-mono text-sm font-bold">${parseFloat(product.basePrice).toFixed(2)}</p>
+                    <p className="text-indigo-400 font-mono text-sm font-bold">₹{parseFloat(product.basePrice).toFixed(2)}</p>
                   </div>
                 </Card>
               ))}
@@ -358,15 +358,15 @@ export default function POSDashboardPage() {
               <div className="space-y-1.5 text-xs text-slate-400 font-mono">
                 <div className="flex justify-between">
                   <span>Gross Subtotal</span>
-                  <span>${cart.subtotal.toFixed(2)}</span>
+                  <span>₹{cart.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>SGST + CGST (5%)</span>
-                  <span>${cart.tax.toFixed(2)}</span>
+                  <span>₹{cart.tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-white font-bold text-base pt-2 border-t border-slate-850">
                   <span>Net Payout</span>
-                  <span className="text-indigo-400">${cart.total.toFixed(2)}</span>
+                  <span className="text-indigo-400">₹{cart.total.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -525,7 +525,7 @@ export default function POSDashboardPage() {
                     <div>
                       {item.name || item.product?.name} x {item.quantity}
                     </div>
-                    <div className="font-semibold">${((item.price || item.product?.basePrice || 0) * item.quantity).toFixed(2)}</div>
+                    <div className="font-semibold text-right w-16">₹{((item.price || item.product?.basePrice || 0) * item.quantity).toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -534,11 +534,11 @@ export default function POSDashboardPage() {
               <div className="border-t border-dashed border-black/35 pt-2 text-[10px] space-y-1">
                 <div className="flex justify-between font-bold text-[11px]">
                   <span>NET TAX (5%):</span>
-                  <span>${(parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0) * 0.05).toFixed(2)}</span>
+                  <span>₹{(parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0) * 0.05).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-extrabold text-sm border-t border-black/40 pt-1">
                   <span>TOTAL PAID:</span>
-                  <span>${parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0).toFixed(2)}</span>
+                  <span>₹{parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0).toFixed(2)}</span>
                 </div>
               </div>
 

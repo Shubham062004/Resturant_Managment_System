@@ -71,7 +71,7 @@ export const FavoritesPage: React.FC = () => {
                 <div className="p-4">
                   <h3 className="font-semibold text-white">{product.name}</h3>
                   <p className="text-primary font-bold mt-1">
-                    ${parseFloat(product.basePrice).toFixed(2)}
+                    ₹{parseFloat(product.basePrice).toFixed(2)}
                   </p>
                 </div>
               </Link>
