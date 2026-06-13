@@ -24,27 +24,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run Backend Unit Tests (Vitest)
-        run: npm run test
-        working-directory: ./backend
-
-      - name: Run Frontend Unit Tests (Vitest)
-        run: npm run test
-        working-directory: ./frontend
-
-      - name: Run Playwright E2E Tests
-        run: npx playwright test
-        continue-on-error: true
-
-      - name: Security Scan
-        run: npm audit --audit-level=high
-
-      - name: Build Projects Formatting (Prettier)
-        run: npm run format:check
-
-      - name: Lint Workspace Packages (ESLint)
-        run: npm run lint
-
       - name: Validate Prisma Schema
         run: |
           cd backend
@@ -55,6 +34,12 @@ jobs:
           cd backend
           npx prisma generate --schema src/database/schema.prisma
 
+      - name: Build Projects Formatting (Prettier)
+        run: npm run format:check
+
+      - name: Lint Workspace Packages (ESLint)
+        run: npm run lint
+
       - name: Compile Backend TypeScript
         run: |
           cd backend
@@ -64,3 +49,18 @@ jobs:
         run: |
           cd frontend
           npm run build
+
+      - name: Run Backend Unit Tests (Vitest)
+        run: npm run test
+        working-directory: ./backend
+
+      - name: Run Frontend Unit Tests (Vitest)
+        run: npm run test
+        working-directory: ./frontend
+
+      - name: Security Scan
+        run: npm audit --audit-level=high
+
+      - name: Run Playwright E2E Tests
+        run: npx playwright test
+        continue-on-error: true

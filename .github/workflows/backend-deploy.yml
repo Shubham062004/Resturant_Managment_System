@@ -9,14 +9,60 @@ on:
       - '.github/workflows/backend-deploy.yml'
 
 jobs:
-  deploy:
+  validate_and_deploy:
+    name: Build, Test & Trigger Render Deploy
     runs-on: ubuntu-latest
+
     steps:
-      - name: Trigger Render Deploy Hook
-        # Using a deploy hook URL provided by Render dashboard
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Validate Prisma Schema
+        working-directory: ./backend
+        run: npx prisma validate --schema src/database/schema.prisma
+
+      - name: Generate Prisma Client
+        working-directory: ./backend
+        run: npx prisma generate --schema src/database/schema.prisma
+
+      - name: Compile Backend TypeScript
+        working-directory: ./backend
+        run: npm run build
+
+      - name: Run Backend Unit Tests
+        working-directory: ./backend
+        run: npm run test
+
+      - name: Validate Render Deploy Hook
         run: |
           if [ -z "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
-            echo "Missing Render Deploy Hook"
+            echo "::error::RENDER_DEPLOY_HOOK_URL is missing. Please configure it in GitHub Secrets."
             exit 1
           fi
-          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+          if [[ ! "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" =~ ^https://api\.render\.com/deploy/srv- ]]; then
+            echo "::error::RENDER_DEPLOY_HOOK_URL does not look like a valid Render deploy hook."
+            exit 1
+          fi
+
+      - name: Trigger Render Deploy Hook
+        run: |
+          response=$(curl -s -w "%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          if [ "$http_code" -eq 200 ] || [ "$http_code" -eq 201 ]; then
+            echo "::notice::Render deployment triggered successfully! $body"
+          else
+            echo "::error::Failed to trigger Render deployment. HTTP Code: $http_code. Response: $body"
+            exit 1
+          fi

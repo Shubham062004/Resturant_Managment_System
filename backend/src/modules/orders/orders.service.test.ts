@@ -3,6 +3,15 @@ import { prismaMock } from '../../tests/prisma.mock';
 import { OrdersService } from './orders.service';
 import { Prisma } from '@prisma/client';
 
+// Mock the socket server to prevent "Socket.io not initialized" warnings
+vi.mock('../../config/socket', () => ({
+  getIO: vi.fn(() => ({
+    to: vi.fn(() => ({
+      emit: vi.fn(),
+    })),
+  })),
+}));
+
 describe('OrdersService', () => {
   it('should create an order successfully', async () => {
     const mockOrder = {
@@ -13,15 +22,6 @@ describe('OrdersService', () => {
       orderType: 'DELIVERY',
       totalAmount: new Prisma.Decimal(20.50),
     };
-    
-    // Mock the socket server to prevent "Socket.io not initialized" warnings
-    vi.mock('../../config/socket', () => ({
-      getIO: vi.fn(() => ({
-        to: vi.fn(() => ({
-          emit: vi.fn(),
-        })),
-      })),
-    }));
 
     // Mock direct Prisma database calls
     prismaMock.cart.findUnique.mockResolvedValue({
