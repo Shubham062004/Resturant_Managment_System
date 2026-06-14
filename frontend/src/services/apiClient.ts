@@ -42,8 +42,7 @@ apiClient.interceptors.response.use(
       const isAuthRoute =
         url.includes('/auth/login') ||
         url.includes('/auth/register') ||
-        url.includes('/auth/refresh') ||
-        url.includes('/auth/me');
+        url.includes('/auth/refresh');
 
       if (isAuthRoute) {
         return Promise.reject(error);

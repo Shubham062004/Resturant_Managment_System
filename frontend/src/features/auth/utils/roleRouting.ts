@@ -21,7 +21,7 @@ export const getDashboardRouteByRole = (role?: string | null): string => {
     case 'HEAD_CHEF':
     case 'CHEF':
     case 'KITCHEN_MANAGER':
-      return '/kitchen';
+      return '/staff';
 
     case 'INVENTORY_MANAGER':
     case 'OPERATIONS_MANAGER':

@@ -117,7 +117,9 @@ const AppRouter = () => {
 
     dispatch(refreshSession())
       .unwrap()
-      .then(() => dispatch(fetchProfile()))
+      .then(() => dispatch(fetchProfile()).catch(() => {
+        /* Profile fetch failed but session is still valid — user stays authenticated */
+      }))
       .catch(() => {
         /* no active session — public routes remain available */
       });

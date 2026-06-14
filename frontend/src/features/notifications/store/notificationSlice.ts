@@ -33,8 +33,8 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchNotifications.fulfilled, (state, action) => {
-        state.list = action.payload.notifications;
-        state.unreadCount = action.payload.unreadCount;
+        state.list = action.payload?.notifications ?? [];
+        state.unreadCount = action.payload?.unreadCount ?? 0;
         state.status = 'succeeded';
       })
       .addCase(markNotificationRead.fulfilled, (state, action) => {

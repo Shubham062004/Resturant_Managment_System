@@ -234,10 +234,14 @@ const authSlice = createSlice({
         localStorage.setItem('hasSession', 'true');
       })
       .addCase(refreshSession.rejected, (state) => {
-        state.user = null;
-        state.isAuthenticated = false;
+        // Only clear auth if there was a prior session attempt
+        // Don't nuke state for users who simply have no session
         state.authStatus = 'idle';
-        localStorage.removeItem('hasSession');
+        if (localStorage.getItem('hasSession')) {
+          state.user = null;
+          state.isAuthenticated = false;
+          localStorage.removeItem('hasSession');
+        }
       })
       .addCase(fetchProfile.pending, (state) => {
         state.error = null;
@@ -248,9 +252,11 @@ const authSlice = createSlice({
         state.authStatus = 'succeeded';
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        // CRITICAL: Do NOT set isAuthenticated=false here.
+        // A profile fetch failure is NOT a logout event.
+        // The user's session cookies are still valid.
+        // Only record the error — the session remains active.
         state.error = action.payload as string;
-        state.isAuthenticated = false;
-        state.authStatus = 'failed';
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.user = action.payload;
