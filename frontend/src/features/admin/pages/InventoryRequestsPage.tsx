@@ -4,7 +4,7 @@ import { Button } from '../../../shared/components/ui/Button';
 import { Box, Check, X, Eye, Package, Truck, CheckCircle2 } from 'lucide-react';
 import apiClient from '../../../services/apiClient';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { format } from 'date-fns';
+
 
 interface InventoryRequestItem {
   id: string;
@@ -135,7 +135,7 @@ export default function InventoryRequestsPage() {
                 paginatedRequests.map((req) => (
                   <tr key={req.id} className="hover:bg-slate-800/20 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-slate-300">
-                      {format(new Date(req.createdAt), 'MMM dd, yyyy')}
+                      {new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).format(new Date(req.createdAt))}
                     </td>
                     <td className="px-6 py-4 font-semibold text-slate-200">
                       {req.branch.name}
@@ -242,7 +242,7 @@ export default function InventoryRequestsPage() {
                 </div>
                 <div>
                   <p className="text-slate-500">Date</p>
-                  <p className="font-semibold text-lg">{format(new Date(selectedRequest.createdAt), 'PPpp')}</p>
+                  <p className="font-semibold text-lg">{new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(selectedRequest.createdAt))}</p>
                 </div>
                 <div>
                   <p className="text-slate-500">Status</p>
