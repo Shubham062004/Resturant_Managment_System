@@ -103,6 +103,20 @@ const AnalyticsDashboardPage = React.lazy(
 const AdminAIInsightsPage = React.lazy(() => import('../features/ai/pages/AdminAIInsightsPage'));
 const SystemHealthPage = React.lazy(() => import('../features/qa/pages/SystemHealthPage'));
 
+// History Module Pages
+const OrderHistoryPage = React.lazy(() => import('../features/history/pages/OrderHistoryPage'));
+const StaffHistoryPage = React.lazy(() => import('../features/history/pages/StaffHistoryPage'));
+const InventoryHistoryPage = React.lazy(() => import('../features/history/pages/InventoryHistoryPage'));
+const IngredientHistoryPage = React.lazy(() => import('../features/history/pages/IngredientHistoryPage'));
+const SupplierHistoryPage = React.lazy(() => import('../features/history/pages/SupplierHistoryPage'));
+const BranchHistoryPage = React.lazy(() => import('../features/history/pages/BranchHistoryPage'));
+const CustomerActivityHistoryPage = React.lazy(() => import('../features/history/pages/CustomerActivityHistoryPage'));
+const FinanceHistoryPage = React.lazy(() => import('../features/history/pages/FinanceHistoryPage'));
+const AttendanceHistoryPage = React.lazy(() => import('../features/history/pages/AttendanceHistoryPage'));
+const SalaryBonusHistoryPage = React.lazy(() => import('../features/history/pages/SalaryBonusHistoryPage'));
+const AuditLogsPage = React.lazy(() => import('../features/history/pages/AuditLogsPage'));
+const SystemActivityLogsPage = React.lazy(() => import('../features/history/pages/SystemActivityLogsPage'));
+
 // Super Admin Pages
 const SuperAdminLayout = React.lazy(
   () => import('../features/super-admin/components/SuperAdminLayout'),
@@ -317,6 +331,24 @@ const AppRouter = () => {
               <Route path="finance" element={<FinancePage />} />
               <Route path="audit" element={<AuditLogPage />} />
               <Route path="orders" element={<AdminOrdersPage />} />
+              
+              {/* History Module */}
+              <Route path="history">
+                <Route path="orders" element={<OrderHistoryPage />} />
+                <Route path="staff" element={<StaffHistoryPage />} />
+                <Route path="inventory" element={<InventoryHistoryPage />} />
+                <Route path="ingredients" element={<IngredientHistoryPage />} />
+                <Route path="suppliers" element={<SupplierHistoryPage />} />
+                <Route path="branches" element={<BranchHistoryPage />} />
+                <Route path="customers" element={<CustomerActivityHistoryPage />} />
+                <Route path="finance" element={<FinanceHistoryPage />} />
+                <Route path="attendance" element={<AttendanceHistoryPage />} />
+                <Route path="salary" element={<SalaryBonusHistoryPage />} />
+                <Route path="audit" element={<AuditLogsPage />} />
+                <Route path="system" element={<SystemActivityLogsPage />} />
+                <Route index element={<OrderHistoryPage />} />
+              </Route>
+
               <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
             </Route>
 
