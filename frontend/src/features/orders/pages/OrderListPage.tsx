@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchMyOrders } from '../store/orderSlice';
 import { Link } from 'react-router-dom';
-import { Card, CardHeader, CardContent, CardFooter } from '../../../shared/components/ui/Card';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardHeader, CardContent, CardFooter } from '../../../shared/components/ui/Card';
+import { fetchMyOrders } from '../store/orderSlice';
 
 export default function OrderListPage() {
   const dispatch = useAppDispatch();

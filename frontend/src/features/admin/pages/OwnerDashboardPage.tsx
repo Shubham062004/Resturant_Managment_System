@@ -1,11 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../../app/store';
-import apiClient from '../../../services/apiClient';
-import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
-import { useToast } from '../../../shared/components/ui/Toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp,
   DollarSign,
@@ -41,6 +34,8 @@ import {
   AlertCircle,
   Bell,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ResponsiveContainer,
   BarChart,
@@ -58,7 +53,13 @@ import {
   AreaChart,
   Area,
 } from 'recharts';
-import { motion, AnimatePresence } from 'framer-motion';
+
+import { useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
 
 interface SummaryData {
   revenueToday: number;

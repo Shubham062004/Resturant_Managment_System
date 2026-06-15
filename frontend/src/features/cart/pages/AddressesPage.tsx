@@ -1,5 +1,8 @@
+import { MapPin, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
@@ -10,8 +13,6 @@ import {
   useUpdateAddress,
   useDeleteAddress,
 } from '../store/cartQueries';
-import { useAppSelector } from '../../../app/store';
-import { MapPin, Trash2 } from 'lucide-react';
 
 const emptyForm = {
   fullName: '',

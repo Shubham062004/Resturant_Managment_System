@@ -1,17 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import {
-  startShift,
-  checkoutPOS,
-  processPayment,
-  setOrderType,
-  addToCart,
-  clearCart,
-} from '../store/posSlice';
-import { fetchCategories, fetchProducts } from '../../menu/store/menuSlice';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
 import {
   ShoppingCart,
   Plus,
@@ -25,8 +11,23 @@ import {
   History,
   QrCode,
 } from 'lucide-react';
-import { Badge } from '../../../shared/components/ui/Badge';
+import React, { useEffect, useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { Alert } from '../../../shared/components/ui/Alert';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import { fetchCategories, fetchProducts } from '../../menu/store/menuSlice';
+import {
+  startShift,
+  checkoutPOS,
+  processPayment,
+  setOrderType,
+  addToCart,
+  clearCart,
+} from '../store/posSlice';
 
 export default function POSDashboardPage() {
   const dispatch = useAppDispatch();

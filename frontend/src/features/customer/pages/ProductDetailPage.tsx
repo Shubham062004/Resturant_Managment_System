@@ -1,17 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../../app/store';
-import {
-  useProductBySlug,
-  useToggleFavorite,
-  useTrackRecommendationClick,
-  useCreateReview,
-  useUpdateReview,
-  useDeleteReview,
-} from '../store/catalogQueries';
-import { useAddToCart } from '../../cart/store/cartQueries';
-import { useToast } from '../../../shared/components/ui/Toast';
-import FoodCard from '../components/FoodCard';
 import {
   Star,
   Heart,
@@ -25,6 +11,21 @@ import {
   AlertCircle,
   Leaf,
 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { useAddToCart } from '../../cart/store/cartQueries';
+import FoodCard from '../components/FoodCard';
+import {
+  useProductBySlug,
+  useToggleFavorite,
+  useTrackRecommendationClick,
+  useCreateReview,
+  useUpdateReview,
+  useDeleteReview,
+} from '../store/catalogQueries';
 
 export const ProductDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

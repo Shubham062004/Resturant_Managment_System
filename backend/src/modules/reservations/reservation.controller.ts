@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { ReservationService } from './reservation.service';
+
 import { AuthRequest } from '../../types/express';
+
+import { ReservationService } from './reservation.service';
 
 export class ReservationController {
   public static async createReservation(req: AuthRequest, res: Response, next: NextFunction) {

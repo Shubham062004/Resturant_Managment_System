@@ -1,8 +1,12 @@
 import { Server as HttpServer } from 'http';
-import { Server, Socket } from 'socket.io';
+
 import jwt from 'jsonwebtoken';
-import env from './env';
+import { Server, Socket } from 'socket.io';
+
 import logger from '../utils/logger';
+
+import env from './env';
+
 
 export interface SocketUser {
   id: string;

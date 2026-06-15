@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { logout } from '../../auth/store/authSlice';
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -19,7 +15,12 @@ import {
   Bell,
   Store,
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { Badge } from '../../../shared/components/ui/Badge';
+import { logout } from '../../auth/store/authSlice';
 
 const NAV_LINKS = [
   { path: '/manager', label: 'Dashboard', icon: LayoutDashboard, exact: true },

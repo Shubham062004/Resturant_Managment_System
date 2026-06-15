@@ -1,13 +1,17 @@
+import fs from 'fs';
+import path from 'path';
+
 import { Router } from 'express';
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { UsersController } from './users.controller';
+
 import { authGuard } from '../../middleware/authGuard';
-import { validate } from '../../middleware/validate';
-import { updateProfileSchema } from './users.validation';
 import { sanitizeInput } from '../../middleware/sanitize';
+import { validate } from '../../middleware/validate';
 import AppError from '../../utils/appError';
+
+import { UsersController } from './users.controller';
+import { updateProfileSchema } from './users.validation';
+
 
 const router = Router();
 

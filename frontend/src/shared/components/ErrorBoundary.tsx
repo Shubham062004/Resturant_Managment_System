@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import ErrorLayout from '../../layouts/ErrorLayout';
+
 import ServerErrorPage from '../../features/customer/pages/ServerErrorPage';
+import ErrorLayout from '../../layouts/ErrorLayout';
 
 interface Props {
   children?: ReactNode;

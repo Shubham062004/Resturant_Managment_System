@@ -1,6 +1,7 @@
-import Stripe from 'stripe';
-import { prisma } from '../../config/db';
 import { PaymentStatus } from '@prisma/client';
+import Stripe from 'stripe';
+
+import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {

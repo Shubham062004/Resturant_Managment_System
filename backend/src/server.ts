@@ -9,9 +9,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 import app from './app';
+import { connectDatabases, disconnectDatabases } from './config/db';
 import env from './config/env';
 import { connectMongoDB } from './config/mongo';
-import { connectDatabases, disconnectDatabases } from './config/db';
 import { initSocket } from './config/socket';
 import logger from './utils/logger';
 

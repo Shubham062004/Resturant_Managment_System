@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Search, ChevronRight, Heart, Play } from 'lucide-react';
+import React, { useState } from 'react';
 
 // Shared components imports
-import Button from './Button';
-import Input from './Input';
-import Textarea from './Textarea';
-import Select, { SelectOption } from './Select';
-import Checkbox from './Checkbox';
-import { RadioGroup, RadioGroupItem } from './RadioGroup';
-import Switch from './Switch';
-import Badge from './Badge';
-import Avatar from './Avatar';
-import Modal from './Modal';
-import Drawer from './Drawer';
-import Tooltip from './Tooltip';
-import Breadcrumb from './Breadcrumb';
-import Tabs from './Tabs';
-import Pagination from './Pagination';
-import Alert from './Alert';
-import { useToast } from './Toast';
-import EmptyState from './EmptyState';
-import { ProductSkeleton, TableSkeleton, CardSkeleton, ProfileSkeleton } from './Skeleton';
-
-// Theme imports
+import { fadeUp, springTransition } from '../../theme/animations';
 import { typographyClasses } from '../../theme/typography';
 
+import Alert from './Alert';
+import Avatar from './Avatar';
+import Badge from './Badge';
+import Breadcrumb from './Breadcrumb';
+import Button from './Button';
+import Checkbox from './Checkbox';
+import Drawer from './Drawer';
+import EmptyState from './EmptyState';
+import Input from './Input';
+import Modal from './Modal';
+import Pagination from './Pagination';
+import { RadioGroup, RadioGroupItem } from './RadioGroup';
+import Select, { SelectOption } from './Select';
+import { ProductSkeleton, TableSkeleton, CardSkeleton, ProfileSkeleton } from './Skeleton';
+import Switch from './Switch';
+import Tabs from './Tabs';
+import Textarea from './Textarea';
+import { useToast } from './Toast';
+import Tooltip from './Tooltip';
+
+// Theme imports
+
 // Animations
-import { fadeUp, springTransition } from '../../theme/animations';
 
 export const DesignSystemShowcase: React.FC = () => {
   const toast = useToast();

@@ -2,6 +2,8 @@ import React from 'react';
 
 export interface AuthLayoutProps {
   children: React.ReactNode;
+  brandTitle?: string;
+  brandDescription?: string;
 }
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {

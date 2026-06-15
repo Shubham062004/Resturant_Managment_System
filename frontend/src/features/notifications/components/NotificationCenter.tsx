@@ -1,12 +1,13 @@
+import { Bell, X } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import {
   fetchNotifications,
   markNotificationRead,
   addRealtimeNotification,
 } from '../store/notificationSlice';
-import { Bell, X } from 'lucide-react';
-import { io } from 'socket.io-client';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

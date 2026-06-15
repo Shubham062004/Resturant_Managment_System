@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { logout } from '../../auth/store/authSlice';
 import {
   LayoutDashboard,
   UserCircle,
@@ -14,6 +10,11 @@ import {
   Bell,
   ChefHat,
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { logout } from '../../auth/store/authSlice';
 
 const NAV_LINKS = [
   { path: '/staff', label: 'Dashboard', icon: LayoutDashboard, exact: true },

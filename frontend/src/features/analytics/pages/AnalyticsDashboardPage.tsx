@@ -1,18 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import {
-  fetchExecutiveSummary,
-  fetchSalesTrends,
-  fetchCustomerAnalytics,
-  fetchProductAnalytics,
-  fetchDeliveryAnalytics,
-} from '../store/analyticsSlice';
-import { Card } from '../../../shared/components/ui/Card';
-import Tabs from '../../../shared/components/ui/Tabs';
-import { Button } from '../../../shared/components/ui/Button';
 import { Calendar, Download, TrendingUp, Briefcase } from 'lucide-react';
-import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
-
+import React, { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -23,6 +10,20 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
+import Tabs from '../../../shared/components/ui/Tabs';
+import {
+  fetchExecutiveSummary,
+  fetchSalesTrends,
+  fetchCustomerAnalytics,
+  fetchProductAnalytics,
+  fetchDeliveryAnalytics,
+} from '../store/analyticsSlice';
+
 
 export default function AnalyticsDashboardPage() {
   const dispatch = useAppDispatch();

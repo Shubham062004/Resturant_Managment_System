@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { TableService } from './table.service';
 
 export class TableController {

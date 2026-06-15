@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchTables, updateTablePosition, tableUpdated } from '../../floor-plan/store/tableSlice';
-import apiClient from '../../../services/apiClient';
-import { io } from 'socket.io-client';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { useToast } from '../../../shared/components/ui/Toast';
-import { Badge } from '../../../shared/components/ui/Badge';
 import { motion } from 'framer-motion';
 import { LayoutGrid, Users, Clock, Coffee, AlertTriangle, Filter } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { fetchTables, updateTablePosition, tableUpdated } from '../../floor-plan/store/tableSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -244,7 +245,7 @@ export default function ManagerTablesPage() {
                       table.status === 'AVAILABLE'
                         ? 'success'
                         : table.status === 'OCCUPIED'
-                          ? 'danger'
+                          ? 'error'
                           : table.status === 'RESERVED'
                             ? 'warning'
                             : 'neutral'

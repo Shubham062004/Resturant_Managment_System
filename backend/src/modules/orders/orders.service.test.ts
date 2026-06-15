@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
-import { prismaMock } from '../../tests/prisma.mock';
-import { OrdersService } from './orders.service';
 import { Prisma } from '@prisma/client';
+import { describe, it, expect, vi } from 'vitest';
+
+import { prismaMock } from '../../tests/prisma.mock';
+
+import { OrdersService } from './orders.service';
 
 // Mock the socket server to prevent "Socket.io not initialized" warnings
 vi.mock('../../config/socket', () => ({

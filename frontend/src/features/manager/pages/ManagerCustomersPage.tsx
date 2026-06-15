@@ -1,8 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import apiClient from '../../../services/apiClient';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Button } from '../../../shared/components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
@@ -13,6 +8,12 @@ import {
   History,
   MessageSquare,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 
 export default function ManagerCustomersPage() {
   const [branches, setBranches] = useState<any[]>([]);

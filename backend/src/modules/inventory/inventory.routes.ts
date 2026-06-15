@@ -1,6 +1,8 @@
 import { Router } from 'express';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
+
 import * as controller from './inventory.controller';
 import * as validation from './inventory.validation';
 

@@ -1,18 +1,19 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import { Package, Send, AlertTriangle, History, CheckCircle, Truck } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
 import {
   fetchInventory,
   fetchInventoryRequests,
   createInventoryRequest,
 } from '../../inventory/store/inventorySlice';
-import apiClient from '../../../services/apiClient';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
-import { useToast } from '../../../shared/components/ui/Toast';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Send, AlertTriangle, History, CheckCircle, Truck } from 'lucide-react';
 
 export default function ManagerInventoryPage() {
   const toast = useToast();

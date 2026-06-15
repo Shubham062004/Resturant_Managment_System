@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { RecommendationService } from './recommendation.service';
+
+import { aiService } from './ai.service';
 import { ForecastingService } from './forecasting.service';
 import { MarketingService } from './marketing.service';
-import { aiService } from './ai.service';
+import { RecommendationService } from './recommendation.service';
 
 export class AIController {
   // --- Recommendations ---

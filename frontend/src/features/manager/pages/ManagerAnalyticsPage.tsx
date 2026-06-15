@@ -1,5 +1,6 @@
-import React from 'react';
 import { Wrench } from 'lucide-react';
+import React from 'react';
+
 import { Card } from '../../../shared/components/ui/Card';
 
 export default function ManagerAnalyticsPage() {

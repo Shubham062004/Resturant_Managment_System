@@ -1,7 +1,8 @@
-import React from 'react';
-import { useAppSelector } from '../../../app/store';
 import { ShieldCheck, Database, KeyRound, AlertTriangle } from 'lucide-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
 
 export const AdminPlaceholderPage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);

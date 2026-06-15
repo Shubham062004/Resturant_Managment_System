@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { WaitlistService } from './waitlist.service';
+
 import { AuthRequest } from '../../types/express';
+
+import { WaitlistService } from './waitlist.service';
 
 export class WaitlistController {
   public static async joinWaitlist(req: AuthRequest, res: Response, next: NextFunction) {

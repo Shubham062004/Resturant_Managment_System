@@ -13,17 +13,28 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,
+      'import': require('eslint-plugin-import'),
     },
     rules: {
       ...typescriptEslint.configs.recommended.rules,
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
-        'error',
+        'warn',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
         },
       ],
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
+      ],
+      'import/no-duplicates': 'error',
     },
   },
 ];

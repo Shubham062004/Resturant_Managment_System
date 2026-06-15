@@ -1,8 +1,9 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
+
 import { authGuard } from '../../middleware/authGuard';
+
 import { PaymentsController } from './payments.controller';
 
-import express from 'express';
 
 const router = Router();
 

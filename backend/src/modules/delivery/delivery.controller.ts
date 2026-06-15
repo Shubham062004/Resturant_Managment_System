@@ -1,6 +1,8 @@
 import { Response, NextFunction } from 'express';
-import { DeliveryService } from './delivery.service';
+
 import { AuthRequest } from '../../types/express';
+
+import { DeliveryService } from './delivery.service';
 
 export const getAssignedOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

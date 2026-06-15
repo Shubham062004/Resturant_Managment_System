@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
 import {
   Server,
   Database,
@@ -14,8 +11,12 @@ import {
   Wifi,
   HardDrive,
 } from 'lucide-react';
-import { useToast } from '../../../shared/components/ui/Toast';
+import React, { useEffect, useState } from 'react';
+
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
+import { useToast } from '../../../shared/components/ui/Toast';
 
 export default function SystemMonitoringPage() {
   const toast = useToast();

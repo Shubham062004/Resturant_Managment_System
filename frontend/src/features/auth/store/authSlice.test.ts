@@ -1,5 +1,6 @@
-import authReducer, { clearError } from './authSlice';
 import { describe, it, expect } from 'vitest';
+
+import authReducer, { clearError } from './authSlice';
 
 describe('authSlice reducer', () => {
   const initialState = {

@@ -1,10 +1,14 @@
+import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Tag, Info, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
 import EmptyState from '../../../shared/components/ui/EmptyState';
+import { Input } from '../../../shared/components/ui/Input';
 import { useToast } from '../../../shared/components/ui/Toast';
+import SmartComboSuggestion from '../../ai/components/SmartComboSuggestion';
 import {
   useCart,
   useUpdateCartItem,
@@ -12,9 +16,6 @@ import {
   useClearCart,
   useValidateCoupon,
 } from '../store/cartQueries';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Tag, Info, X } from 'lucide-react';
-import { useAppSelector } from '../../../app/store';
-import SmartComboSuggestion from '../../ai/components/SmartComboSuggestion';
 
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();

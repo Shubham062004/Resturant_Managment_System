@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { mockDeep, DeepMockProxy } from 'vitest-mock-extended';
 import { vi } from 'vitest';
+import { mockDeep, DeepMockProxy } from 'vitest-mock-extended';
+
 import { prisma } from '../config/db';
 
 vi.mock('../config/db', () => ({

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import CustomerLayout from './CustomerLayout';
 
 export const GuestLayout: React.FC = () => {

@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 import {
   fetchBranchReservations,
   fetchWaitlist,
@@ -9,10 +14,6 @@ import {
   reservationUpdated,
   waitlistUpdated,
 } from '../store/reservationSlice';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { io } from 'socket.io-client';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

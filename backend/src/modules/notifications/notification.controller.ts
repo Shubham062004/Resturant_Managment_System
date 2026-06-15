@@ -1,6 +1,8 @@
 import { Response, NextFunction } from 'express';
+
 import { prisma } from '../../config/db';
 import { AuthRequest } from '../../types/express';
+
 import { NotificationService } from './notification.service';
 
 export class NotificationController {

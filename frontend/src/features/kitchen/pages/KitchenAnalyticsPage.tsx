@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent } from '../../../shared/components/ui/Card';
 import { BarChart3, ChefHat, Clock, TrendingUp } from 'lucide-react';
-import apiClient from '../../../services/apiClient';
+import React, { useEffect, useState } from 'react';
+
 import MainLayout from '../../../layouts/MainLayout';
+import apiClient from '../../../services/apiClient';
+import { Card, CardContent } from '../../../shared/components/ui/Card';
 
 export default function KitchenAnalyticsPage() {
   const [data, setData] = useState<any>(null);

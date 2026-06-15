@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import {
   PrismaClient,
   Role,
@@ -21,8 +23,8 @@ import {
   RefundStatus,
 } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { randomUUID } from 'crypto';
 import mongoose from 'mongoose';
+
 import env from '../config/env';
 import CartEvent from '../models/CartEvent';
 import CheckoutEvent from '../models/CheckoutEvent';

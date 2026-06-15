@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { POSService } from './pos.service';
+
 import { POSActivityLog } from '../../database/mongo/POSActivityLog';
+
+import { POSService } from './pos.service';
 
 export class POSController {
   public static async createTerminal(req: Request, res: Response, next: NextFunction) {

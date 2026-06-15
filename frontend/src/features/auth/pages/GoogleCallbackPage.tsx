@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useAppDispatch } from '../../../app/store';
+import { useToast } from '../../../shared/components/ui/Toast';
 import { googleAuthLogin } from '../store/authSlice';
 import { getDashboardRouteByRole } from '../utils/roleRouting';
-import { useToast } from '../../../shared/components/ui/Toast';
 
 export const GoogleCallbackPage: React.FC = () => {
   const navigate = useNavigate();

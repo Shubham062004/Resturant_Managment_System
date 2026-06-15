@@ -1,8 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../app/store';
-import apiClient from '../../../services/apiClient';
-import { Card, CardContent } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
 import { motion } from 'framer-motion';
 import {
   Banknote,
@@ -17,15 +12,21 @@ import {
   TrendingUp,
   Store,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent } from '../../../shared/components/ui/Card';
 
 export default function ManagerDashboardPage() {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user: _user } = useAppSelector((state) => state.auth);
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   // Mocked KPI Data (To be replaced with real analytics endpoint)
-  const [kpiData, setKpiData] = useState({
+  const [kpiData, _setKpiData] = useState({
     revenue: 45200,
     ordersToday: 86,
     pendingOrders: 12,
@@ -111,7 +112,7 @@ export default function ManagerDashboardPage() {
             </div>
             {trend && (
               <Badge
-                variant={trendUp ? 'success' : 'danger'}
+                variant={trendUp ? 'success' : 'error'}
                 className="text-[10px] font-bold px-1.5 py-0"
               >
                 {trendUp ? '↑' : '↓'} {trend}

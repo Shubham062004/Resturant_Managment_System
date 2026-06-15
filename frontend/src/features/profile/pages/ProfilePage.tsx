@@ -1,12 +1,3 @@
-import React, { useState, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { updateProfile, logoutAllDevices } from '../../auth/store/authSlice';
-import { useToast } from '../../../shared/components/ui/Toast';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Avatar from '../../../shared/components/ui/Avatar';
-import Badge from '../../../shared/components/ui/Badge';
-import Alert from '../../../shared/components/ui/Alert';
 import {
   User as UserIcon,
   Phone,
@@ -16,6 +7,16 @@ import {
   Camera,
   LogOut,
 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import Alert from '../../../shared/components/ui/Alert';
+import Avatar from '../../../shared/components/ui/Avatar';
+import Badge from '../../../shared/components/ui/Badge';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { updateProfile, logoutAllDevices } from '../../auth/store/authSlice';
 
 export const ProfilePage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);

@@ -1,7 +1,8 @@
 import { Response, NextFunction } from 'express';
+
+import { prisma } from '../config/db';
 import { AuthRequest } from '../types/express';
 import AppError from '../utils/appError';
-import { prisma } from '../config/db';
 
 export const tenantGuard = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import SEO from '../../../shared/components/SEO';
 import EmptyState from '../../../shared/components/ui/EmptyState';
 

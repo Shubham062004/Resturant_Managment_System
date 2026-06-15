@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import CartEvent from '../../models/CartEvent';
+import AppError from '../../utils/appError';
 import logger from '../../utils/logger';
 
 export class CartService {

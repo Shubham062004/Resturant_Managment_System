@@ -1,13 +1,14 @@
+import { ShieldCheck } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
 import { verifyOtp, clearError } from '../store/authSlice';
 import { getDashboardRouteByRole } from '../utils/roleRouting';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Alert from '../../../shared/components/ui/Alert';
-import { ShieldCheck } from 'lucide-react';
 
 export const VerifyOtpPage: React.FC = () => {
   const [otp, setOtp] = useState('');

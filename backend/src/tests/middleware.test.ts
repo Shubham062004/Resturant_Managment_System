@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { authGuard, restrictTo } from '../middleware/authGuard';
-import { AuthRequest } from '../types/express';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+import { authGuard, restrictTo } from '../middleware/authGuard';
+import { AuthRequest } from '../types/express';
 import AppError from '../utils/appError';
 
 vi.mock('jsonwebtoken');

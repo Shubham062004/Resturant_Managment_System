@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Menu, X, Sun, Moon, Monitor } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../theme/theme-provider';
+import { Menu, X, Sun, Moon, Monitor } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { useToast } from '../components/ui/Toast';
 import { slideRight, fadeIn } from '../theme/animations';
+import { useTheme } from '../theme/theme-provider';
 
 export interface SidebarLink {
   label: string;

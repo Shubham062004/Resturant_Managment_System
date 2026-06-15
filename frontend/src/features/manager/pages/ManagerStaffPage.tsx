@@ -1,10 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchAllStaff } from '../../admin/store/staffSlice';
-import apiClient from '../../../services/apiClient';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Button } from '../../../shared/components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
@@ -16,6 +9,14 @@ import {
   XCircle,
   MoreVertical,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { fetchAllStaff } from '../../admin/store/staffSlice';
 
 export default function ManagerStaffPage() {
   const dispatch = useAppDispatch();

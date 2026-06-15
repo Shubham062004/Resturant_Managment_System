@@ -1,5 +1,6 @@
-import { aiService } from './ai.service';
 import { prisma } from '../../config/db';
+
+import { aiService } from './ai.service';
 
 export class RecommendationService {
   /**

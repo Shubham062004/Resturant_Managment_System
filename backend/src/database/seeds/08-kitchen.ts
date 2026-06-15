@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
+
+import { PrismaClient } from '@prisma/client';
 
 export async function seedKitchen(prisma: PrismaClient) {
   console.log('🌱 Seeding Kitchen (Stations)...');

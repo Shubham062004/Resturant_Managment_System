@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { InventoryService } from './inventory.service';
+
 import { AuthRequest } from '../../types/express';
+
+import { InventoryService } from './inventory.service';
 
 // INGREDIENTS
 export const getIngredients = async (req: Request, res: Response, next: NextFunction) => {

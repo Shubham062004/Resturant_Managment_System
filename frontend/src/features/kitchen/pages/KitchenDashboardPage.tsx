@@ -1,15 +1,16 @@
+import { Flame, Activity } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import OrderTicket from '../components/OrderTicket';
 import {
   fetchActiveOrders,
   updateOrderStatus,
   receiveNewOrder,
   receiveOrderStatusUpdate,
 } from '../store/kitchenSlice';
-import OrderTicket from '../components/OrderTicket';
-import { io } from 'socket.io-client';
-import { Flame, Activity } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

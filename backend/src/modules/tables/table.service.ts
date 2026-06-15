@@ -1,7 +1,8 @@
 import crypto from 'crypto';
+
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 
 export class TableService {
   public static async createTable(data: any) {

@@ -1,17 +1,18 @@
+import { Search as SearchIcon, Clock, Trash2, X, TrendingUp } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+
 import { useAppSelector, useAppDispatch } from '../../../app/store';
-import { addRecentSearch, clearRecentSearches } from '../store/customerSlice';
 import useDebounce from '../../../hooks/useDebounce';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
 import EmptyState from '../../../shared/components/ui/EmptyState';
-import { Search as SearchIcon, Clock, Trash2, X, TrendingUp } from 'lucide-react';
-import { useProducts } from '../store/catalogQueries';
+import { Input } from '../../../shared/components/ui/Input';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import PersonalizedRecommendations from '../../ai/components/PersonalizedRecommendations';
 import FoodCard from '../components/FoodCard';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import { useProducts } from '../store/catalogQueries';
+import { addRecentSearch, clearRecentSearches } from '../store/customerSlice';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();

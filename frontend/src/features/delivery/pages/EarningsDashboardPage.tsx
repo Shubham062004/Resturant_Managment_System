@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchEarnings } from '../store/deliverySlice';
-import { Card } from '../../../shared/components/ui/Card';
 import { Wallet, TrendingUp, History } from 'lucide-react';
+import React, { useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Card } from '../../../shared/components/ui/Card';
+import { fetchEarnings } from '../store/deliverySlice';
 
 export default function EarningsDashboardPage() {
   const dispatch = useAppDispatch();

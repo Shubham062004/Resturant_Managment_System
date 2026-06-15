@@ -1,5 +1,6 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Globe, Building2, Store, Activity, Settings } from 'lucide-react';
+import { Outlet, Link, useLocation } from 'react-router-dom';
+
 import NotificationCenter from '../../notifications/components/NotificationCenter';
 
 export default function SuperAdminLayout() {

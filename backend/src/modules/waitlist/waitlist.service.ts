@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 
 export class WaitlistService {
   public static async joinWaitlist(customerId: string, data: any) {

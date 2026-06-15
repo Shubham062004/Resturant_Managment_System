@@ -1,5 +1,6 @@
-import React from 'react';
 import { ClipboardList, Utensils, Users, Search } from 'lucide-react';
+import React from 'react';
+
 import { Button } from './Button';
 
 export type EmptyStateType = 'orders' | 'products' | 'customers' | 'search';

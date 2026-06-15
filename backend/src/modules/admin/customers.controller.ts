@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { prisma } from '../../config/db';
 
 export class CustomersController {

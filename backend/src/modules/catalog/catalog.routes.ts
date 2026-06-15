@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
+
 import env from '../../config/env';
-import { CatalogController } from './catalog.controller';
 import { authGuard, DecodedToken } from '../../middleware/authGuard';
-import { validate } from '../../middleware/validate';
 import { sanitizeInput } from '../../middleware/sanitize';
+import { validate } from '../../middleware/validate';
 import { extractAccessToken } from '../../utils/extractAccessToken';
+
+import { CatalogController } from './catalog.controller';
 import {
   restaurantQuerySchema,
   productQuerySchema,

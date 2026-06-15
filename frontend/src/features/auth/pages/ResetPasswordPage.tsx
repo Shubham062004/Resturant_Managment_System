@@ -1,12 +1,13 @@
+import { Lock, ArrowLeft, KeyRound } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Alert from '../../../shared/components/ui/Alert';
-import { useToast } from '../../../shared/components/ui/Toast';
+
 import apiClient from '../../../services/apiClient';
-import { Lock, ArrowLeft, KeyRound } from 'lucide-react';
+import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
 
 export const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState('');

@@ -1,7 +1,9 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import SEO from '../../../shared/components/SEO';
 import { Flame, Target, ShieldCheck, Clock } from 'lucide-react';
+import React from 'react';
+
+import SEO from '../../../shared/components/SEO';
+
 
 export const AboutPage: React.FC = () => {
   return (

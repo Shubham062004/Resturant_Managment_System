@@ -1,8 +1,9 @@
+import { Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useCategoryBySlug, useToggleFavorite } from '../store/catalogQueries';
+
 import { useAppSelector } from '../../../app/store';
-import { Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
+import { useCategoryBySlug, useToggleFavorite } from '../store/catalogQueries';
 
 export const CategoryDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

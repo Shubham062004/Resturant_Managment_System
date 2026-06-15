@@ -1,9 +1,11 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import bcrypt from 'bcryptjs';
 import request from 'supertest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
 import app from '../app';
 import { prisma } from '../config/db';
 import { AuditService } from '../services/audit.service';
-import bcrypt from 'bcryptjs';
+
 
 vi.mock('../config/db', () => ({
   prisma: {

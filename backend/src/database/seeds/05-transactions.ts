@@ -1,5 +1,6 @@
-import { PrismaClient, Prisma, KitchenPriority } from '@prisma/client';
 import { randomUUID } from 'crypto';
+
+import { PrismaClient, Prisma, KitchenPriority } from '@prisma/client';
 
 export async function seedTransactions(
   prisma: PrismaClient,

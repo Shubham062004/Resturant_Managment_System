@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { SettingsService } from './settings.service';
+
 import { AuditLog } from '../../database/mongo/AuditLog';
 import { AuthRequest } from '../../types/express';
+
+import { SettingsService } from './settings.service';
 
 export class SettingsController {
   public static async getSettings(req: Request, res: Response, next: NextFunction) {

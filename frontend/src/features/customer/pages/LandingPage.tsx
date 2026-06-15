@@ -1,16 +1,4 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { addRecentSearch } from '../store/customerSlice';
-import SEO from '../../../shared/components/SEO';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
-import Card, { CardContent } from '../../../shared/components/ui/Card';
-import { useToast } from '../../../shared/components/ui/Toast';
-import FoodCard from '../components/FoodCard';
-import CategoryPill from '../components/CategoryPill';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import {
   Search,
   ArrowRight,
@@ -31,12 +19,25 @@ import {
   Copy,
   Tag,
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import SEO from '../../../shared/components/SEO';
+import { Button } from '../../../shared/components/ui/Button';
+import Card, { CardContent } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import { useToast } from '../../../shared/components/ui/Toast';
 import mockCategories from '../../../shared/data/categories';
 import mockRestaurants from '../../../shared/data/restaurants';
 import mockTestimonials from '../../../shared/data/testimonials';
 import { fadeUp, scaleIn } from '../../../shared/theme/animations';
-import { useFeaturedProducts, useRestaurants } from '../store/catalogQueries';
 import { useActiveCoupons } from '../../cart/store/cartQueries';
+import CategoryPill from '../components/CategoryPill';
+import FoodCard from '../components/FoodCard';
+import { useFeaturedProducts, useRestaurants } from '../store/catalogQueries';
+import { addRecentSearch } from '../store/customerSlice';
 
 export const LandingPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');

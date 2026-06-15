@@ -1,13 +1,15 @@
-import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+
+import { Role } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 import { prisma } from '../../config/db';
 import env from '../../config/env';
-import AppError from '../../utils/appError';
-import { Role } from '@prisma/client';
-import { EmailService } from '../../services/email.service';
 import { AuditService } from '../../services/audit.service';
+import { EmailService } from '../../services/email.service';
 import { OtpService } from '../../services/otp.service';
+import AppError from '../../utils/appError';
 
 export interface TokenPayload {
   id: string;

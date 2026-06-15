@@ -1,12 +1,15 @@
 import { Router } from 'express';
-import { getAddresses, createAddress, updateAddress, deleteAddress } from './addresses.controller';
+
+import { authGuard } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
+
+import { getAddresses, createAddress, updateAddress, deleteAddress } from './addresses.controller';
 import {
   createAddressBodySchema,
   updateAddressBodySchema,
   addressIdParamSchema,
 } from './addresses.validation';
-import { authGuard } from '../../middleware/authGuard';
+
 
 const router = Router();
 

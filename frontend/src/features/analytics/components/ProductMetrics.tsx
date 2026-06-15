@@ -1,8 +1,9 @@
 import React from 'react';
-import { useAppSelector } from '../../../app/store';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+import { useAppSelector } from '../../../app/store';
 import Badge from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 
 export default function ProductMetrics() {
   const { product } = useAppSelector((state) => state.analytics);

@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { useAppSelector } from '../../../app/store';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 import Avatar from '../../../shared/components/ui/Avatar';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 
 export default function DeliveryMetrics() {
   const { delivery } = useAppSelector((state) => state.analytics);

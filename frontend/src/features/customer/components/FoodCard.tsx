@@ -1,8 +1,10 @@
+import { motion } from 'framer-motion';
+import { Star, Clock, Heart, Plus, Minus, Flame, Leaf } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Clock, Heart, Plus, Minus, Flame, Leaf } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import { useAppSelector } from '../../../app/store';
+import { useToast } from '../../../shared/components/ui/Toast';
 import {
   useAddToCart,
   useUpdateCartItem,
@@ -10,7 +12,6 @@ import {
   useCart,
 } from '../../cart/store/cartQueries';
 import { useToggleFavorite } from '../store/catalogQueries';
-import { useToast } from '../../../shared/components/ui/Toast';
 import type { Product } from '../store/catalogQueries';
 
 interface FoodCardProps {
@@ -22,8 +23,8 @@ interface FoodCardProps {
 const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, className = '' }) => {
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { favoriteIds } = useAppSelector((state) => state.favorites);
-  const isFavorite = favoriteIds.includes(product.id);
+  const { favoritedIds } = useAppSelector((state) => state.favorite);
+  const isFavorite = !!favoritedIds[product.id];
 
   const { data: cart } = useCart(isAuthenticated);
   const addToCart = useAddToCart();

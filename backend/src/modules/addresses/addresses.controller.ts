@@ -1,5 +1,7 @@
 import { Response } from 'express';
+
 import { AuthRequest } from '../../types/express';
+
 import { AddressService } from './addresses.service';
 
 export const getAddresses = async (req: AuthRequest, res: Response) => {

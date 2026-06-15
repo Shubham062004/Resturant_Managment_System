@@ -1,7 +1,8 @@
 import React from 'react';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+
 import { useAppSelector } from '../../../app/store';
 import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export default function CustomerMetrics() {
   const { customer } = useAppSelector((state) => state.analytics);
@@ -40,7 +41,7 @@ export default function CustomerMetrics() {
                 paddingAngle={5}
                 dataKey="value"
               >
-                {retentionData.map((entry, index) => (
+                {retentionData.map((entry: any, index: any) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
@@ -78,7 +79,7 @@ export default function CustomerMetrics() {
                 paddingAngle={2}
                 dataKey="value"
               >
-                {demoData.map((entry, index) => (
+                {demoData.map((entry: any, index: any) => (
                   <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                 ))}
               </Pie>

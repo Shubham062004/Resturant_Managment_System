@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { KitchenService } from './kitchen.service';
+
 import { AuthRequest } from '../../types/express';
+
+import { KitchenService } from './kitchen.service';
 
 export const getActiveOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

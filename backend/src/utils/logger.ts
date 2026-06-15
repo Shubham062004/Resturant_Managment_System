@@ -1,6 +1,6 @@
-import pino from 'pino';
 import { Logtail } from '@logtail/node';
 import LogtailTransport from '@logtail/pino';
+import pino from 'pino';
 
 const isProduction = process.env.NODE_ENV === 'production';
 

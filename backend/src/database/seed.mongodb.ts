@@ -1,6 +1,6 @@
-import { connectDatabases, disconnectDatabases } from '../config/db';
+import { connectDatabases, disconnectDatabases , prisma } from '../config/db';
+
 import { seedMongoDB } from './seeds/10-mongodb';
-import { prisma } from '../config/db';
 
 async function main() {
   console.log('🚀 Initiating Complete MongoDB Analytics Seeding...');

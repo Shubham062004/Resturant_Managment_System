@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
 

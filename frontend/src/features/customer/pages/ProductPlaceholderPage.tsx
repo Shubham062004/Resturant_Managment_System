@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
 import SEO from '../../../shared/components/SEO';
 import EmptyState from '../../../shared/components/ui/EmptyState';
 

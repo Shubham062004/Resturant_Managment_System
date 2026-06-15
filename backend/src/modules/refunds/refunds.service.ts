@@ -1,6 +1,7 @@
+import { RefundStatus } from '@prisma/client';
+
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
-import { RefundStatus } from '@prisma/client';
 
 export class RefundsService {
   /**

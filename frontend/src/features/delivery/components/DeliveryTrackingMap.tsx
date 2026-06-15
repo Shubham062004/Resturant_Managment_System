@@ -1,6 +1,7 @@
-import React from 'react';
-import { Card } from '../../../shared/components/ui/Card';
 import { MapPin, Navigation } from 'lucide-react';
+import React from 'react';
+
+import { Card } from '../../../shared/components/ui/Card';
 
 interface DeliveryTrackingMapProps {
   driverLocation?: { latitude: number; longitude: number };

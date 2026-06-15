@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Button } from '../../../shared/components/ui/Button';
 import {
   Clock,
   Calendar,
@@ -13,6 +9,11 @@ import {
   CheckCircle,
   FileX,
 } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 import { useToast } from '../../../shared/components/ui/Toast';
 
 export default function StaffAttendancePage() {

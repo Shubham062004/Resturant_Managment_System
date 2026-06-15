@@ -1,5 +1,10 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import { Star, Search, Filter, RotateCcw, Compass, Clock, MapPin } from 'lucide-react';
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import { useRestaurants } from '../store/catalogQueries';
 import {
   setSearch,
@@ -9,10 +14,7 @@ import {
   setSorting,
   resetFilters,
 } from '../store/restaurantSlice';
-import { Link } from 'react-router-dom';
-import { Star, Search, Filter, RotateCcw, Compass, Clock, MapPin } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+
 
 export const RestaurantsPage: React.FC = () => {
   const dispatch = useAppDispatch();

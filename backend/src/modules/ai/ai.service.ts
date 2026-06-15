@@ -1,8 +1,9 @@
+import { ChatLog } from '../../database/mongo/ChatLog';
+import { PromptLog } from '../../database/mongo/PromptLog';
+
 import { AIProvider, AICompletionOptions, AIChatMessage } from './providers/AIProvider';
 import { GeminiProvider } from './providers/GeminiProvider';
 import { OpenAIProvider } from './providers/OpenAIProvider';
-import { PromptLog } from '../../database/mongo/PromptLog';
-import { ChatLog } from '../../database/mongo/ChatLog';
 
 export class AIService {
   private activeProvider: AIProvider;

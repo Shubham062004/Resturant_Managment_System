@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { toggleAssistant } from '../store/aiSlice';
-import { sendMessage, addUserMessage } from '../store/assistantSlice';
-import { MessageSquare, X, Send, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MessageSquare, X, Send, Bot } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import Button from '../../../shared/components/ui/Button';
 import Input from '../../../shared/components/ui/Input';
+import { toggleAssistant } from '../store/aiSlice';
+import { sendMessage, addUserMessage } from '../store/assistantSlice';
+
 
 export default function AIRestaurantAssistant() {
   const dispatch = useAppDispatch();

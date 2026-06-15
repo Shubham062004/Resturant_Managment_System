@@ -1,5 +1,7 @@
 import { Response } from 'express';
+
 import { AuthRequest } from '../../types/express';
+
 import { CartService } from './cart.service';
 
 export const getCart = async (req: AuthRequest, res: Response) => {

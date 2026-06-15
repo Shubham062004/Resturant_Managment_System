@@ -1,6 +1,6 @@
+import { User, ClipboardList, Heart } from 'lucide-react';
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { User, ClipboardList, Heart } from 'lucide-react';
 
 export const ProfileLayout: React.FC = () => {
   const location = useLocation();

@@ -1,11 +1,12 @@
+import { Role } from '@prisma/client';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+
 import env from '../config/env';
-import AppError from '../utils/appError';
 import { AuthRequest } from '../types/express';
+import AppError from '../utils/appError';
 import { extractAccessToken } from '../utils/extractAccessToken';
 
-import { Role } from '@prisma/client';
 
 export interface DecodedToken {
   id: string;

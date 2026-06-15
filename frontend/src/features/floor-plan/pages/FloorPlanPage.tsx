@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { fetchTables, updateTablePosition, tableUpdated } from '../store/tableSlice';
-import { io } from 'socket.io-client';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

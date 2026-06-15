@@ -1,6 +1,7 @@
+import { randomUUID } from 'crypto';
+
 import { PrismaClient, Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { randomUUID } from 'crypto';
 
 export async function seedUsers(prisma: PrismaClient, orgId: string, branches: any[]) {
   console.log('🌱 Seeding Users (Admin, Staff, Customers)...');

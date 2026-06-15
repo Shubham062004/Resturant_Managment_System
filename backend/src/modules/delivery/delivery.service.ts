@@ -1,7 +1,7 @@
 import { prisma } from '../../config/db';
+import { getIO } from '../../config/socket';
 import { DeliveryEvent } from '../../database/mongo/DeliveryEvent';
 import { DriverLocation } from '../../database/mongo/DriverLocation';
-import { getIO } from '../../config/socket';
 import AppError from '../../utils/appError';
 
 export class DeliveryService {

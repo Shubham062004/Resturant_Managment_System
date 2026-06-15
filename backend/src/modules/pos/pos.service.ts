@@ -1,10 +1,11 @@
-import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
-import { getIO } from '../../config/socket';
 import { OrderStatus } from '@prisma/client';
-import { InventoryService } from '../inventory/inventory.service';
+
+import { prisma } from '../../config/db';
+import { getIO } from '../../config/socket';
 import { POSActivityLog } from '../../database/mongo/POSActivityLog';
 import { POSAnalyticsEvent } from '../../database/mongo/POSAnalyticsEvent';
+import AppError from '../../utils/appError';
+import { InventoryService } from '../inventory/inventory.service';
 
 export class POSService {
   public static async createTerminal(data: { branchId: string; terminalName: string }) {

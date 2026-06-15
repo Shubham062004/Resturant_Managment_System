@@ -1,10 +1,11 @@
 import React, { useEffect, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import ThemeProvider from '../shared/theme/theme-provider';
-import { ToastProvider } from '../shared/components/ui/Toast';
+
 import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../app/store';
-import { refreshSession, fetchProfile } from '../features/auth/store/authSlice';
 
 // Lazy-load layouts for route code splitting
 const CustomerLayout = React.lazy(() => import('../layouts/CustomerLayout'));
@@ -15,7 +16,9 @@ const MainLayout = React.lazy(() => import('../layouts/MainLayout'));
 // Import Route Guards
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
 import PublicRoute from '../features/auth/components/PublicRoute';
+import { refreshSession, fetchProfile } from '../features/auth/store/authSlice';
 import ErrorBoundary from '../shared/components/ErrorBoundary';
+import { ToastProvider } from '../shared/components/ui/Toast';
 
 // Lazy Load Pages for Bundle Optimization
 const LandingPage = React.lazy(() => import('../features/customer/pages/LandingPage'));

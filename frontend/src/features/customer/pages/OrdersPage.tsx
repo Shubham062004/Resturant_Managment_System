@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SEO from '../../../shared/components/SEO';
-import EmptyState from '../../../shared/components/ui/EmptyState';
 import {
   ClipboardList,
   Flame,
@@ -11,6 +7,11 @@ import {
   History,
   CheckCircle2,
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import SEO from '../../../shared/components/SEO';
+import EmptyState from '../../../shared/components/ui/EmptyState';
 
 export const OrdersPage: React.FC = () => {
   const navigate = useNavigate();

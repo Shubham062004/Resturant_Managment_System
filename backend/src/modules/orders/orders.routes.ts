@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { OrdersController } from './orders.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
+
+import { OrdersController } from './orders.controller';
 import { createOrderSchema, updateOrderStatusSchema } from './orders.validation';
 
 const router = Router();

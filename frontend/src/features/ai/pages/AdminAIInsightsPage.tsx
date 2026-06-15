@@ -1,10 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchPredictions } from '../store/forecastSlice';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { useToast } from '../../../shared/components/ui/Toast';
-import apiClient from '../../../services/apiClient';
 import {
   BrainCircuit,
   TrendingUp,
@@ -18,8 +11,16 @@ import {
   BarChart4,
   Warehouse,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
 import Badge from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { fetchPredictions } from '../store/forecastSlice';
 
 interface Branch {
   id: string;

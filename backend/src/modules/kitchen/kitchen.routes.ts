@@ -1,4 +1,8 @@
 import { Router } from 'express';
+
+import { authGuard, restrictTo } from '../../middleware/authGuard';
+import { validate } from '../../middleware/validate';
+
 import {
   getActiveOrders,
   getStations,
@@ -8,8 +12,6 @@ import {
   getAnalytics,
   getStaffOrders,
 } from './kitchen.controller';
-import { validate } from '../../middleware/validate';
-import { authGuard, restrictTo } from '../../middleware/authGuard';
 import {
   createStationSchema,
   updateOrderStatusSchema,

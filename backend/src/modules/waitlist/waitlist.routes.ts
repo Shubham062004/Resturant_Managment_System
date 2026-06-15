@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { WaitlistController } from './waitlist.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import validate from '../../middleware/validate';
+
+import { WaitlistController } from './waitlist.controller';
 import { joinWaitlistSchema, updateWaitlistStatusSchema } from './waitlist.validation';
 
 const router = Router();

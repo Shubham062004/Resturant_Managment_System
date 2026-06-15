@@ -1,26 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import {
-  startShift,
-  endShift,
-  checkoutPOS,
-  processPayment,
-  setOrderType,
-  addToCart,
-  clearCart,
-  updateQuantity,
-} from '../../pos/store/posSlice';
-import { fetchCategories, fetchProducts } from '../../menu/store/menuSlice';
-import {
-  fetchBranchReservations,
-  updateReservationStatus,
-} from '../../reservations/store/reservationSlice';
-import apiClient from '../../../services/apiClient';
-import { Card, CardHeader } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { useToast } from '../../../shared/components/ui/Toast';
+import { motion } from 'framer-motion';
 import {
   Store,
   ShoppingCart,
@@ -36,7 +14,30 @@ import {
   Building,
   Search,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardHeader } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { fetchCategories, fetchProducts } from '../../menu/store/menuSlice';
+import {
+  startShift,
+  endShift,
+  checkoutPOS,
+  processPayment,
+  setOrderType,
+  addToCart,
+  clearCart,
+  updateQuantity,
+} from '../../pos/store/posSlice';
+import {
+  fetchBranchReservations,
+  updateReservationStatus,
+} from '../../reservations/store/reservationSlice';
 
 interface Branch {
   id: string;

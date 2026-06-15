@@ -1,5 +1,6 @@
-import React from 'react';
 import { MapPin, Clock, Star, Navigation, Phone } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '../../../shared/components/ui/Button';
 import type { Branch } from '../../../shared/data/branches';
 

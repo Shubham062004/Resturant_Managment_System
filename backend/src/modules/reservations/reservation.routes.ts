@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { ReservationController } from './reservation.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import validate from '../../middleware/validate';
+
+import { ReservationController } from './reservation.controller';
 import { createReservationSchema, updateReservationStatusSchema } from './reservation.validation';
 
 const router = Router();

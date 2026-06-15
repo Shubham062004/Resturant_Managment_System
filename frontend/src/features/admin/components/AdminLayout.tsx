@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../app/store';
-import { logout } from '../../auth/store/authSlice';
-import NotificationCenter from '../../notifications/components/NotificationCenter';
-import apiClient from '../../../services/apiClient';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home,
   Users,
@@ -33,7 +27,14 @@ import {
   CheckCircle,
   HelpCircle,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { logout } from '../../auth/store/authSlice';
+import NotificationCenter from '../../notifications/components/NotificationCenter';
 
 interface SidebarLink {
   name: string;
@@ -109,22 +110,11 @@ export default function AdminLayout() {
           icon: <LayoutGrid size={18} />,
           links: [
             { name: 'Branch Management', path: '/admin/branches', icon: <MapPin size={18} /> },
-            {
-              name: 'Ingredient Management',
-              path: '/admin/ingredients',
-              icon: <ClipboardList size={18} />,
-            },
-            { name: 'Inventory Requests', path: '/admin/inventory', icon: <Box size={18} /> },
-            { name: 'Supplier Management', path: '/admin/suppliers', icon: <Truck size={18} /> },
-            { name: 'Menu Catalogs', path: '/admin/menu', icon: <BookOpen size={18} /> },
-            { name: 'Kitchen Queues', path: '/admin/kitchen', icon: <Activity size={18} /> },
-            { name: 'Delivery Fleet', path: '/admin/delivery', icon: <Truck size={18} /> },
-            { name: 'Orders Lifecycle', path: '/admin/orders', icon: <ClipboardList size={18} /> },
-            {
-              name: 'Table Reservations',
-              path: '/admin/reservations',
-              icon: <Calendar size={18} />,
-            },
+            { name: 'Menu Management', path: '/admin/menu', icon: <BookOpen size={18} /> },
+            { name: 'Orders', path: '/admin/orders', icon: <ClipboardList size={18} /> },
+            { name: 'Kitchen Operations', path: '/admin/kitchen', icon: <Activity size={18} /> },
+            { name: 'Inventory', path: '/admin/inventory', icon: <Box size={18} /> },
+            { name: 'Suppliers', path: '/admin/suppliers', icon: <Truck size={18} /> },
           ],
         },
         {
@@ -140,7 +130,61 @@ export default function AdminLayout() {
           icon: <BarChart2 size={18} />,
           links: [
             { name: 'Sales & BI Reports', path: '/admin/analytics', icon: <BarChart2 size={18} /> },
-            { name: 'AI Insights Forecast', path: '/admin/ai-insights', icon: <Brain size={18} /> },
+            { name: 'AI Forecasting', path: '/admin/ai-insights', icon: <Brain size={18} /> },
+          ],
+        },
+        {
+          name: 'History',
+          icon: <Calendar size={18} />,
+          links: [
+            {
+              name: 'Order History',
+              path: '/admin/history/orders',
+              icon: <ClipboardList size={18} />,
+            },
+            { name: 'Staff History', path: '/admin/history/staff', icon: <Briefcase size={18} /> },
+            {
+              name: 'Inventory History',
+              path: '/admin/history/inventory',
+              icon: <Box size={18} />,
+            },
+            {
+              name: 'Ingredient History',
+              path: '/admin/history/ingredients',
+              icon: <ClipboardList size={18} />,
+            },
+            {
+              name: 'Supplier History',
+              path: '/admin/history/suppliers',
+              icon: <Truck size={18} />,
+            },
+            { name: 'Branch History', path: '/admin/history/branches', icon: <MapPin size={18} /> },
+            {
+              name: 'Customer Activity History',
+              path: '/admin/history/customers',
+              icon: <Users size={18} />,
+            },
+            {
+              name: 'Finance History',
+              path: '/admin/history/finance',
+              icon: <DollarSign size={18} />,
+            },
+            {
+              name: 'Attendance History',
+              path: '/admin/history/attendance',
+              icon: <Briefcase size={18} />,
+            },
+            {
+              name: 'Salary & Bonus History',
+              path: '/admin/history/salary',
+              icon: <DollarSign size={18} />,
+            },
+            { name: 'Audit Logs', path: '/admin/history/audit', icon: <Shield size={18} /> },
+            {
+              name: 'System Activity Logs',
+              path: '/admin/history/system',
+              icon: <Activity size={18} />,
+            },
           ],
         },
         {
@@ -148,6 +192,12 @@ export default function AdminLayout() {
           icon: <DollarSign size={18} />,
           links: [
             { name: 'Finance Control', path: '/admin/finance', icon: <DollarSign size={18} /> },
+            { name: 'P&L', path: '/admin/finance/pl', icon: <BarChart2 size={18} /> },
+            {
+              name: 'Tax Management',
+              path: '/admin/finance/taxes',
+              icon: <DollarSign size={18} />,
+            },
           ],
         },
         {

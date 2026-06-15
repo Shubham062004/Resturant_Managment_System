@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchAllStaff, updateStaffProfile, bulkUpdateStaff } from '../store/staffSlice';
-import { Card } from '../../../shared/components/ui/Card';
+import { Alert } from '../../../shared/components/ui/Alert';
+import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 import { Checkbox } from '../../../shared/components/ui/Checkbox';
 import { Input } from '../../../shared/components/ui/Input';
 import { Select } from '../../../shared/components/ui/Select';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Alert } from '../../../shared/components/ui/Alert';
+import { fetchAllStaff, updateStaffProfile, bulkUpdateStaff } from '../store/staffSlice';
 
 const STAFF_ROLES = [
   { value: 'CASHIER', label: 'Cashier' },

@@ -1,5 +1,5 @@
-import React from 'react';
 import { FlaskConical, Construction, Sparkles } from 'lucide-react';
+import React from 'react';
 
 interface ComingSoonBannerProps {
   /** Override the feature label shown in the badge */

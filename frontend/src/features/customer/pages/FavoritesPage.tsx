@@ -1,12 +1,13 @@
+import { Heart } from 'lucide-react';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
 import EmptyState from '../../../shared/components/ui/EmptyState';
-import { Heart } from 'lucide-react';
-import { useFavorites } from '../store/catalogQueries';
-import { useAppSelector } from '../../../app/store';
-import FoodCard from '../components/FoodCard';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import FoodCard from '../components/FoodCard';
+import { useFavorites } from '../store/catalogQueries';
 
 export const FavoritesPage: React.FC = () => {
   const navigate = useNavigate();

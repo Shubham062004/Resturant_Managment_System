@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { prisma } from '../config/db';
 import mongoose from 'mongoose';
+
+import { prisma } from '../config/db';
 
 const router = Router();
 

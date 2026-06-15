@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { Branch } from '../../../shared/data/branches';
 
 export interface CustomerState {

@@ -1,7 +1,8 @@
+import { ShieldAlert, RefreshCw } from 'lucide-react';
 import React from 'react';
+
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { ShieldAlert, RefreshCw } from 'lucide-react';
 
 export const ServerErrorPage: React.FC = () => {
   const handleReload = () => {

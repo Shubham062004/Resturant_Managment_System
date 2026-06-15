@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { POSController } from './pos.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import validate from '../../middleware/validate';
+
+import { POSController } from './pos.controller';
 import {
   createTerminalSchema,
   startShiftSchema,

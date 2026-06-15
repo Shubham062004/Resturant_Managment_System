@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import mongoose from 'mongoose';
-import env from './env';
+
 import logger from '../utils/logger';
+
+import env from './env';
 
 const prismaClientSingleton = () => {
   return new PrismaClient({

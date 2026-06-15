@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { QROrderingService } from './qr.service';
 
 export class QROrderingController {

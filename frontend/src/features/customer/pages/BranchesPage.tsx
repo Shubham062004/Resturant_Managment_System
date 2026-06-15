@@ -1,15 +1,16 @@
+import { MapPin, Search, Compass, Navigation, Clock, Phone } from 'lucide-react';
 import React, { useState, useEffect, useMemo } from 'react';
+
 import { useAppSelector, useAppDispatch } from '../../../app/store';
-import { selectBranch } from '../store/customerSlice';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
-import { useToast } from '../../../shared/components/ui/Toast';
-import BranchCard from '../components/BranchCard';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
-import { MapPin, Search, Compass, Navigation, Clock, Phone } from 'lucide-react';
+import { useToast } from '../../../shared/components/ui/Toast';
 import { Branch } from '../../../shared/data/branches';
+import BranchCard from '../components/BranchCard';
 import { useBranches } from '../store/catalogQueries';
+import { selectBranch } from '../store/customerSlice';
 
 export const BranchesPage: React.FC = () => {
   const dispatch = useAppDispatch();

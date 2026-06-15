@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { TableController } from './table.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import validate from '../../middleware/validate';
+
+import { TableController } from './table.controller';
 import { createTableSchema, updateTableSchema } from './table.validation';
 
 const router = Router();

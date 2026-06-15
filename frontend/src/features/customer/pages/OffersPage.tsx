@@ -1,9 +1,10 @@
-import React from 'react';
-import SEO from '../../../shared/components/SEO';
-import { useToast } from '../../../shared/components/ui/Toast';
 import { Tag, Calendar, Copy, Percent, Sparkles } from 'lucide-react';
-import { useActiveCoupons } from '../../cart/store/cartQueries';
+import React from 'react';
+
+import SEO from '../../../shared/components/SEO';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { useActiveCoupons } from '../../cart/store/cartQueries';
 
 export const OffersPage: React.FC = () => {
   const toast = useToast();

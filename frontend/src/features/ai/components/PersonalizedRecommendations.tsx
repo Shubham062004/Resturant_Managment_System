@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchRecommendations } from '../store/recommendationSlice';
 import { Sparkles } from 'lucide-react';
+import React, { useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { Card } from '../../../shared/components/ui/Card';
+import { fetchRecommendations } from '../store/recommendationSlice';
 
 export default function PersonalizedRecommendations() {
   const dispatch = useAppDispatch();

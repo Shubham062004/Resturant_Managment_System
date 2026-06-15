@@ -1,6 +1,4 @@
 import React from 'react';
-import { useAppSelector } from '../../../app/store';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 import {
   LineChart,
   Line,
@@ -12,6 +10,9 @@ import {
   Area,
   AreaChart,
 } from 'recharts';
+
+import { useAppSelector } from '../../../app/store';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 
 export default function RevenueChart() {
   const { revenueTrends } = useAppSelector((state) => state.analytics);

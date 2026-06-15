@@ -1,13 +1,16 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Flame, Search, MapPin, Tag, Home, LogOut, User, ShoppingBag } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { useAppSelector, useAppDispatch } from '../../../app/store';
+import Avatar from '../../../shared/components/ui/Avatar';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { slideLeft } from '../../../shared/theme/animations';
 import { logout } from '../../auth/store/authSlice';
 import { useCart } from '../../cart/store/cartQueries';
-import { useToast } from '../../../shared/components/ui/Toast';
-import Avatar from '../../../shared/components/ui/Avatar';
-import { Menu, X, Flame, Search, MapPin, Tag, Home, LogOut, User, ShoppingBag } from 'lucide-react';
-import { slideLeft } from '../../../shared/theme/animations';
+
+
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

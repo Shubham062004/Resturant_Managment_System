@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
 import { TrendingUp, Star, Award, Clock, Target, Trophy, Gift, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card } from '../../../shared/components/ui/Card';
 
 export default function StaffPerformancePage() {
   const [showBonus, setShowBonus] = useState(false);

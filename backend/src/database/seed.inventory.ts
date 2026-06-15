@@ -17,8 +17,9 @@
  * =============================================================================
  */
 
-import { PrismaClient, StockMovementType, PurchaseOrderStatus } from '@prisma/client';
 import { randomUUID } from 'crypto';
+
+import { PrismaClient, StockMovementType, PurchaseOrderStatus } from '@prisma/client';
 
 const prisma = new PrismaClient();
 

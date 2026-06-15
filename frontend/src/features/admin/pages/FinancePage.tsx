@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import apiClient from '../../../services/apiClient';
-import { Card, CardHeader } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { useToast } from '../../../shared/components/ui/Toast';
+import { motion } from 'framer-motion';
 import {
   DollarSign,
   TrendingDown,
@@ -20,7 +16,12 @@ import {
   CreditCard,
   Truck,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+
+import apiClient from '../../../services/apiClient';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardHeader } from '../../../shared/components/ui/Card';
+import { useToast } from '../../../shared/components/ui/Toast';
 
 interface SummaryData {
   revenueThisMonth: number;

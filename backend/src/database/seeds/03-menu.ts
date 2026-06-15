@@ -1,5 +1,6 @@
-import { PrismaClient, Prisma } from '@prisma/client';
 import { randomUUID } from 'crypto';
+
+import { PrismaClient, Prisma } from '@prisma/client';
 
 export async function seedMenu(prisma: PrismaClient, restaurants: any[], customerIds: string[]) {
   console.log('🌱 Seeding Menu (Categories, Products, Variants, Reviews)...');

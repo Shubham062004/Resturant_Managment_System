@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import { addNotificationJob } from '../../workers/notification.queue';
 import { getIO } from '../../config/socket';
+import { addNotificationJob } from '../../workers/notification.queue';
 
 interface SendNotificationArgs {
   userId: string;

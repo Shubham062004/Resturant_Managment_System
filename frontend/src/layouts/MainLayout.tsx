@@ -1,11 +1,4 @@
-import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
-import { useAppDispatch, useAppSelector } from '../app/store';
-import { logout } from '../features/auth/store/authSlice';
-import Avatar from '../shared/components/ui/Avatar';
-import AIRestaurantAssistant from '../features/ai/components/AIRestaurantAssistant';
 import {
   LayoutDashboard,
   TableProperties,
@@ -17,6 +10,14 @@ import {
   User as UserIcon,
   BarChart3,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../app/store';
+import AIRestaurantAssistant from '../features/ai/components/AIRestaurantAssistant';
+import { logout } from '../features/auth/store/authSlice';
+import Avatar from '../shared/components/ui/Avatar';
 
 export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

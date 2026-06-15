@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { AuthController } from './auth.controller';
+
 import { authGuard } from '../../middleware/authGuard';
-import { validate } from '../../middleware/validate';
 import { authRateLimiter, otpRateLimiter } from '../../middleware/rateLimiter';
 import { sanitizeInput } from '../../middleware/sanitize';
+import { validate } from '../../middleware/validate';
+
+import { AuthController } from './auth.controller';
 import {
   registerSchema,
   loginSchema,

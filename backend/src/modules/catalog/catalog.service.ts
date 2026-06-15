@@ -1,8 +1,8 @@
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import ProductViewEvent from '../../models/ProductViewEvent';
-import SearchAnalytic from '../../models/SearchAnalytic';
 import RecommendationEvent from '../../models/RecommendationEvent';
+import SearchAnalytic from '../../models/SearchAnalytic';
+import AppError from '../../utils/appError';
 import logger from '../../utils/logger';
 
 export class CatalogService {

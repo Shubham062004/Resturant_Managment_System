@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { prisma } from '../../config/db';
 import { AuditLog } from '../../database/mongo/AuditLog';
 
@@ -99,12 +100,10 @@ export class AdminController {
 
       const restaurant = await prisma.restaurantGroup.findFirst();
       if (!restaurant) {
-        return res
-          .status(400)
-          .json({
-            status: 'fail',
-            message: 'No restaurant group found. Please seed the database first.',
-          });
+        return res.status(400).json({
+          status: 'fail',
+          message: 'No restaurant group found. Please seed the database first.',
+        });
       }
 
       const branch = await prisma.branch.create({

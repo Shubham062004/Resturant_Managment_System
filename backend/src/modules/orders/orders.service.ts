@@ -1,7 +1,8 @@
-import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
-import { getIO } from '../../config/socket';
 import { OrderStatus, OrderType } from '@prisma/client';
+
+import { prisma } from '../../config/db';
+import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 import logger from '../../utils/logger';
 
 export class OrdersService {

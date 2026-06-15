@@ -1,17 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import {
-  fetchInventory,
-  fetchAnalytics,
-  fetchInventoryRequests,
-  createInventoryRequest,
-  approveInventoryRequest,
-  updateInventoryRequestStatus,
-  socketInventoryUpdate,
-  socketInventoryRequestUpdated,
-} from '../store/inventorySlice';
-import { io } from 'socket.io-client';
-import { Card } from '../../../shared/components/ui/Card';
 import {
   Package,
   AlertTriangle,
@@ -22,10 +8,25 @@ import {
   CheckCircle,
   Clock,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Alert } from '../../../shared/components/ui/Alert';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
-import { Alert } from '../../../shared/components/ui/Alert';
+import {
+  fetchInventory,
+  fetchAnalytics,
+  fetchInventoryRequests,
+  createInventoryRequest,
+  approveInventoryRequest,
+  updateInventoryRequestStatus,
+  socketInventoryUpdate,
+  socketInventoryRequestUpdated,
+} from '../store/inventorySlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

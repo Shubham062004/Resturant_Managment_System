@@ -1,6 +1,13 @@
+import { CheckCircle2, Clock, MapPin, Package, ShoppingBag, Truck, XCircle } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
+import { DeliveryTrackingMap } from '../../delivery/components/DeliveryTrackingMap';
 import { fetchOrderById, cancelOrder } from '../store/orderSlice';
 import {
   setConnected,
@@ -8,12 +15,6 @@ import {
   updateDriverLocation,
   addLog,
 } from '../store/trackingSlice';
-import { io } from 'socket.io-client';
-import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { CheckCircle2, Clock, MapPin, Package, ShoppingBag, Truck, XCircle } from 'lucide-react';
-import { DeliveryTrackingMap } from '../../delivery/components/DeliveryTrackingMap';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 const SOCKET_URL = API_BASE_URL;

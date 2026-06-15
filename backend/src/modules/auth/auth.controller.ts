@@ -1,21 +1,24 @@
+import crypto from 'crypto';
+
+import { OtpType, Role } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../../types/express';
-import { AuthService } from './auth.service';
-import { OtpService } from '../../services/otp.service';
+
+import { prisma } from '../../config/db';
+import { AuditService } from '../../services/audit.service';
 import { EmailService } from '../../services/email.service';
 import { GoogleAuthService } from '../../services/googleAuth.service';
-import { AuditService } from '../../services/audit.service';
-import { prisma } from '../../config/db';
+import { OtpService } from '../../services/otp.service';
+import { AuthRequest } from '../../types/express';
 import AppError from '../../utils/appError';
-import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
-import { OtpType, Role } from '@prisma/client';
-import logger from '../../utils/logger';
 import {
   accessTokenCookieOptions,
   refreshTokenCookieOptions,
   clearAuthCookieOptions,
 } from '../../utils/authCookies';
+import logger from '../../utils/logger';
+
+import { AuthService } from './auth.service';
 
 export class AuthController {
   public static async register(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {

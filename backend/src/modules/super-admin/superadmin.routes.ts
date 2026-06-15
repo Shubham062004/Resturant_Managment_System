@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import { OrganizationController } from './organization.controller';
-import { FranchiseController } from './franchise.controller';
-import { SuperAdminController } from './superadmin.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { tenantGuard } from '../../middleware/tenant';
+
+import { FranchiseController } from './franchise.controller';
+import { OrganizationController } from './organization.controller';
+import { SuperAdminController } from './superadmin.controller';
+
 
 const router = Router();
 

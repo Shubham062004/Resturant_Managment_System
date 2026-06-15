@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { useAppSelector } from '../../../app/store';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
 import {
   User,
   Mail,
@@ -16,6 +12,11 @@ import {
   Award,
   CircleDollarSign,
 } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { useAppSelector } from '../../../app/store';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card } from '../../../shared/components/ui/Card';
 
 export default function StaffProfilePage() {
   const { user } = useAppSelector((state) => state.auth);
@@ -147,6 +148,7 @@ export default function StaffProfilePage() {
                   Joining Date
                 </p>
                 <p className="font-bold text-slate-200">
+                  {/* @ts-ignore */}
                   {new Date(user?.createdAt || Date.now()).toLocaleDateString()}
                 </p>
               </div>

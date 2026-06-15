@@ -1,7 +1,9 @@
 import crypto from 'crypto';
+
+import { OtpType } from '@prisma/client';
+
 import { prisma } from '../config/db';
 import logger from '../utils/logger';
-import { OtpType } from '@prisma/client';
 
 export class OtpService {
   /**

@@ -1,12 +1,3 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import SEO from '../../../shared/components/SEO';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
-import EmptyState from '../../../shared/components/ui/EmptyState';
-import { useToast } from '../../../shared/components/ui/Toast';
-import { useCart, useAddresses, useValidateCoupon, type Address } from '../store/cartQueries';
-import { useAppSelector } from '../../../app/store';
 import {
   Tag,
   MapPin,
@@ -16,6 +7,16 @@ import {
   ShoppingBag,
   ShieldCheck,
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
+import SEO from '../../../shared/components/SEO';
+import { Button } from '../../../shared/components/ui/Button';
+import EmptyState from '../../../shared/components/ui/EmptyState';
+import { Input } from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { useCart, useAddresses, useValidateCoupon, type Address } from '../store/cartQueries';
 
 type CheckoutStep = 'address' | 'coupon' | 'payment';
 

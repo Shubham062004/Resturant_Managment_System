@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { AdminController } from './admin.controller';
-import { SettingsController } from './settings.controller';
-import { AnalyticsController } from './analytics.controller';
-import { ReportsController } from './reports.controller';
-import { StaffController } from './staff.controller';
-import { CustomersController } from './customers.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
+
+import { AdminController } from './admin.controller';
+import { AnalyticsController } from './analytics.controller';
+import { CustomersController } from './customers.controller';
+import { ReportsController } from './reports.controller';
+import { SettingsController } from './settings.controller';
+import { StaffController } from './staff.controller';
 
 const router = Router();
 

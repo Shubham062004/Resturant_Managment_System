@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { Clock, AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface OrderTicketProps {
   order: any;

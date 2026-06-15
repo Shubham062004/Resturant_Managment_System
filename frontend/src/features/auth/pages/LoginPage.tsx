@@ -1,13 +1,14 @@
+import { Lock, LogIn, User } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
 import { login, clearError } from '../store/authSlice';
 import { getDashboardRouteByRole } from '../utils/roleRouting';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Alert from '../../../shared/components/ui/Alert';
-import { Lock, LogIn, User } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const [identifier, setIdentifier] = useState('');

@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../../types/express';
+
 import { prisma } from '../../config/db';
+import { AuthRequest } from '../../types/express';
 import AppError from '../../utils/appError';
 
 export class UsersController {

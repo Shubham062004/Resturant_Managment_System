@@ -1,11 +1,12 @@
+import { Mail, CheckCircle2, AlertOctagon, ArrowLeft, RefreshCw } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Alert from '../../../shared/components/ui/Alert';
+
 import apiClient from '../../../services/apiClient';
-import { Mail, CheckCircle2, AlertOctagon, ArrowLeft, RefreshCw } from 'lucide-react';
+import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
 
 export const VerifyEmailPage: React.FC = () => {
   const [searchParams] = useSearchParams();

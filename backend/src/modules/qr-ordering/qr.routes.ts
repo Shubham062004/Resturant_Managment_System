@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { QROrderingController } from './qr.controller';
-import validate from '../../middleware/validate';
 import { z } from 'zod';
+
+import validate from '../../middleware/validate';
+
+import { QROrderingController } from './qr.controller';
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 
 export class ReservationService {
   public static async createReservation(customerId: string, data: any) {

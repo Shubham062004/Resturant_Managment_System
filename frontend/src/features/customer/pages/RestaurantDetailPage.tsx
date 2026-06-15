@@ -1,10 +1,11 @@
+import { Star, Clock, MapPin, Phone, Info, ChevronRight, CheckCircle2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useRestaurantBySlug } from '../store/catalogQueries';
-import { Star, Clock, MapPin, Phone, Info, ChevronRight, CheckCircle2 } from 'lucide-react';
-import FoodCard from '../components/FoodCard';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+
 import { useAppSelector } from '../../../app/store';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import FoodCard from '../components/FoodCard';
+import { useRestaurantBySlug } from '../store/catalogQueries';
 
 export const RestaurantDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();

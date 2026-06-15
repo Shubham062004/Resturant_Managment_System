@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchCombos } from '../store/recommendationSlice';
 import { Sparkles, Plus } from 'lucide-react';
-import { Card } from '../../../shared/components/ui/Card';
-import Button from '../../../shared/components/ui/Button';
+import React, { useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import Badge from '../../../shared/components/ui/Badge';
+import Button from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { fetchCombos } from '../store/recommendationSlice';
 
 interface SmartComboProps {
   cartItemIds: string[];

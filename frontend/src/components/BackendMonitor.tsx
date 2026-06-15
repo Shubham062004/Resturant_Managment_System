@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import apiClient from '../services/apiClient';
+
 import NotFoundPage from '../features/customer/pages/NotFoundPage';
+import apiClient from '../services/apiClient';
 
 interface BackendMonitorProps {
   children: React.ReactNode;

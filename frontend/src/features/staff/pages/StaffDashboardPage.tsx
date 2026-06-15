@@ -1,9 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { useNavigate } from 'react-router-dom';
-import { Card } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Button } from '../../../shared/components/ui/Button';
 import {
   ClipboardList,
   CheckCircle,
@@ -16,7 +10,14 @@ import {
   ArrowRight,
   UserCircle,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 
 export default function StaffDashboardPage() {
   const { user } = useAppSelector((state) => state.auth);
@@ -51,6 +52,7 @@ export default function StaffDashboardPage() {
           todayTasks: 15,
           completedTasks: 10,
           pendingTasks: activeOrders.length,
+          // @ts-ignore
           performanceScore: user?.rating || 4.8,
         }));
       } catch (err) {

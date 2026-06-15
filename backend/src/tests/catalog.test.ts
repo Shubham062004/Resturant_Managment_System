@@ -1,12 +1,13 @@
-import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+import jwt from 'jsonwebtoken';
 import request from 'supertest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+
 import app from '../app';
 import { prisma } from '../config/db';
-import ProductViewEvent from '../models/ProductViewEvent';
-import SearchAnalytic from '../models/SearchAnalytic';
-import RecommendationEvent from '../models/RecommendationEvent';
-import jwt from 'jsonwebtoken';
 import env from '../config/env';
+import ProductViewEvent from '../models/ProductViewEvent';
+import RecommendationEvent from '../models/RecommendationEvent';
+import SearchAnalytic from '../models/SearchAnalytic';
 
 // Mock DB configs and Prisma client queries
 vi.mock('../config/db', () => ({

@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
+
+import { PrismaClient } from '@prisma/client';
 
 export async function seedInventory(prisma: PrismaClient, branches: any[]) {
   console.log('🌱 Seeding Inventory (Ingredients, Suppliers, POs)...');

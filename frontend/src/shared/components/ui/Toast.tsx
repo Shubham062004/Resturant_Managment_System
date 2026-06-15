@@ -1,7 +1,8 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, CheckCircle2, AlertTriangle, AlertOctagon, Info } from 'lucide-react';
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { X, CheckCircle2, AlertTriangle, AlertOctagon, Info } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { fadeUp } from '../../theme/animations';
 
 export type ToastType = 'success' | 'warning' | 'error' | 'info';

@@ -1,8 +1,8 @@
 import { prisma } from '../../config/db';
-import { InventoryEvent } from '../../database/mongo/InventoryEvent';
-import { ConsumptionLog } from '../../database/mongo/ConsumptionLog';
-import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
+import { ConsumptionLog } from '../../database/mongo/ConsumptionLog';
+import { InventoryEvent } from '../../database/mongo/InventoryEvent';
+import AppError from '../../utils/appError';
 
 export class InventoryService {
   // ---------------------------------------------------------------------------

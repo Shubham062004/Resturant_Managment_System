@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Check, X, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown, Check, X, Search } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+
 import { scaleIn } from '../../theme/animations';
 
 export interface SelectOption {

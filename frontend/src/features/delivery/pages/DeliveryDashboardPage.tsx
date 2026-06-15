@@ -1,5 +1,22 @@
+import {
+  Package,
+  Navigation,
+  CheckCircle2,
+  DollarSign,
+  Camera,
+  Activity,
+  Award,
+} from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Alert } from '../../../shared/components/ui/Alert';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { Textarea } from '../../../shared/components/ui/Textarea';
+import { DeliveryTrackingMap } from '../components/DeliveryTrackingMap';
 import {
   fetchAssignedOrders,
   acceptOrder,
@@ -10,22 +27,6 @@ import {
   socketAssignmentUpdate,
   DeliveryAssignment,
 } from '../store/deliverySlice';
-import { io } from 'socket.io-client';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { Textarea } from '../../../shared/components/ui/Textarea';
-import { Alert } from '../../../shared/components/ui/Alert';
-import {
-  Package,
-  Navigation,
-  CheckCircle2,
-  DollarSign,
-  Camera,
-  Activity,
-  Award,
-} from 'lucide-react';
-import { DeliveryTrackingMap } from '../components/DeliveryTrackingMap';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

@@ -1,7 +1,8 @@
-import { NotificationLog } from '../database/mongo/NotificationLog';
-import { prisma } from '../config/db';
 import fs from 'fs';
 import path from 'path';
+
+import { prisma } from '../config/db';
+import { NotificationLog } from '../database/mongo/NotificationLog';
 
 export const processEmailJob = async (jobData: any) => {
   const { notificationId, to, subject, body, userId, eventType } = jobData;

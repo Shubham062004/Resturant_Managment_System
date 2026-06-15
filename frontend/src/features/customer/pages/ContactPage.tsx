@@ -1,10 +1,11 @@
+import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react';
 import React, { useState } from 'react';
+
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import { Textarea } from '../../../shared/components/ui/Textarea';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react';
 
 export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');

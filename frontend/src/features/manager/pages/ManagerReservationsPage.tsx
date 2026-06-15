@@ -1,14 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import {
-  fetchBranchReservations,
-  updateReservationStatus,
-} from '../../reservations/store/reservationSlice';
-import apiClient from '../../../services/apiClient';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { useToast } from '../../../shared/components/ui/Toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   CalendarCheck,
@@ -20,6 +9,18 @@ import {
   XCircle,
   Filter,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import apiClient from '../../../services/apiClient';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { useToast } from '../../../shared/components/ui/Toast';
+import {
+  fetchBranchReservations,
+  updateReservationStatus,
+} from '../../reservations/store/reservationSlice';
 
 export default function ManagerReservationsPage() {
   const toast = useToast();

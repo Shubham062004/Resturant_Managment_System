@@ -1,8 +1,9 @@
+import { ArrowLeft, SearchX } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { ArrowLeft, SearchX } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   const navigate = useNavigate();

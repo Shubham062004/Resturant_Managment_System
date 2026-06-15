@@ -1,7 +1,8 @@
+import { WifiOff, RefreshCw } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { WifiOff, RefreshCw } from 'lucide-react';
 
 export const OfflinePage: React.FC = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);

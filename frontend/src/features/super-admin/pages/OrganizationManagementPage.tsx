@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchOrganizations } from '../store/organizationSlice';
-import { Card } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import { fetchOrganizations } from '../store/organizationSlice';
 
 export default function OrganizationManagementPage() {
   const dispatch = useAppDispatch();

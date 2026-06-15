@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import logger from '../utils/logger';
 
 interface OperationalError extends Error {
@@ -46,11 +47,15 @@ export const errorHandler = (
 
   // Handle Prisma Database errors (e.g. unique constraint violates)
   if (err.code && err.code.startsWith('P20')) {
+    logger.error(
+      `[Prisma Error] Code: ${err.code}, Meta: ${JSON.stringify(err.meta)}, Message: ${err.message}`,
+    );
     return res.status(409).json({
       success: false,
       error: {
         code: 'CONFLICT_ERROR',
-        message: 'Database relational conflict constraint violated',
+        message:
+          'Unable to complete action due to missing account relationship. Please contact administrator.',
         details: [err.meta],
       },
     });
