@@ -31,6 +31,7 @@ import waitlistRouter from './modules/waitlist/waitlist.routes';
 import qrRouter from './modules/qr-ordering/qr.routes';
 import notificationRouter from './modules/notifications/notification.routes';
 import healthRouter from './routes/health.routes';
+import historyRouter from './api/history/history.routes';
 import AppError from './utils/appError';
 import logger from './utils/logger';
 
@@ -95,6 +96,7 @@ app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/super-admin', superAdminRouter);
 app.use('/api/v1/notifications', notificationRouter);
 app.use('/api/v1/ai', aiRouter);
+app.use('/api/v1/history', historyRouter);
 
 // 4. Root Welcome Route
 app.get('/', (req, res) => {

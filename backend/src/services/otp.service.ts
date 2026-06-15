@@ -93,9 +93,15 @@ export class OtpService {
   ): Promise<boolean> {
     const codeHash = this.hashOtp(otp);
 
+    const conditions: any[] = [];
+    if (identifier.email) conditions.push({ email: identifier.email });
+    if (identifier.phone) conditions.push({ phone: identifier.phone });
+
+    if (conditions.length === 0) return false;
+
     const otpRecord = await prisma.otp.findFirst({
       where: {
-        OR: [{ email: identifier.email || undefined }, { phone: identifier.phone || undefined }],
+        OR: conditions,
         codeHash,
       },
       orderBy: { createdAt: 'desc' },

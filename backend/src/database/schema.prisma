@@ -74,6 +74,8 @@ model User {
   loginHistories         LoginHistory[]
 
   inventoryRequests      InventoryRequest[]
+  auditLogs              AuditLog[]
+  payrollRecords         PayrollRecord[]
 }
 
 enum Role {
@@ -1386,4 +1388,39 @@ model IngredientConsumptionLog {
   @@index([orderItemId])
   @@index([ingredientId])
   @@index([branchId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  role      String?
+  action    String   // e.g. LOGIN, LOGOUT, CREATE, UPDATE, DELETE, APPROVE, REJECT
+  entity    String?  // e.g. User, Order, InventoryRequest
+  entityId  String?
+  details   String?  // JSON string for storing what changed
+  ipAddress String?
+  timestamp DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([entity])
+  @@index([timestamp])
+}
+
+model PayrollRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  baseSalary  Decimal  @db.Decimal(10, 2)
+  bonusPaid   Decimal  @default(0.0) @db.Decimal(10, 2)
+  incentives  Decimal  @default(0.0) @db.Decimal(10, 2)
+  deductions  Decimal  @default(0.0) @db.Decimal(10, 2)
+  netPaid     Decimal  @db.Decimal(10, 2)
+  payrollDate DateTime @db.Date
+  status      String   @default("PAID") // PAID, PENDING
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([payrollDate])
 }
