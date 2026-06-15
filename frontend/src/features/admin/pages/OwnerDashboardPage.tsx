@@ -678,182 +678,290 @@ export default function OwnerDashboardPage() {
       {/* TABS CONTAINER */}
       <div className="space-y-8">
         
-        {/* TAB 1: CEO OVERVIEW */}
+        {/* TAB 1: CEO OVERVIEW (PREMIUM SAAS DESIGN) */}
         {activeTab === 'overview' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8 pb-12">
             
-            {/* 20 KPI Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-5 gap-4">
-              {ceoKpis.map((kpi, idx) => (
-                <div
-                  key={idx}
-                  className="bg-[#111827] border border-slate-800/80 p-4.5 rounded-2xl flex flex-col justify-between hover:border-slate-700 hover:shadow-md transition-all duration-300"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{kpi.title}</span>
-                    <span className={`text-[10px] font-bold ${kpi.isGrow ? 'text-[#16A34A]' : 'text-[#DC2626]'}`}>
+            {/* SECTION 1: EXECUTIVE KPI STRIP */}
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              {[
+                { title: "Today's Revenue", value: `₹${todayRevenue.toLocaleString('en-IN')}`, trend: '▲ 12.4%', isGrow: true, color: 'text-emerald-400', points: [12, 18, 15, 24, 21, 28, 30] },
+                { title: "Today's Orders", value: totalOrders, trend: '▲ 9.6%', isGrow: true, color: 'text-emerald-400', points: [30, 35, 33, 40, 38, 42, 45] },
+                { title: "Net Profit", value: `₹${netProfit.toLocaleString('en-IN')}`, trend: '▲ 12.7%', isGrow: true, color: 'text-emerald-400', points: [80, 88, 85, 92, 94, 98, 105] },
+                { title: "Active Branches", value: branches.length || 0, trend: 'Stable', isGrow: true, color: 'text-indigo-400', points: [5, 5, 5, 5, 5, 5, 5] },
+                { title: "Active Staff", value: summary?.staffOnline || 0, trend: '▲ 4.2%', isGrow: true, color: 'text-sky-400', points: [12, 14, 13, 15, 14, 15, 16] }
+              ].map((kpi, idx) => (
+                <div key={idx} className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 p-5 rounded-2xl flex flex-col justify-between hover:border-slate-700 hover:shadow-lg hover:shadow-slate-900/50 transition-all duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-slate-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{kpi.title}</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${kpi.isGrow ? 'bg-emerald-950/50 text-emerald-400' : 'bg-rose-950/50 text-rose-400'}`}>
                       {kpi.trend}
                     </span>
                   </div>
-                  <h3 className={`text-xl font-extrabold font-display mt-3.5 ${kpi.color}`}>{kpi.value}</h3>
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-850">
-                    <span className="text-[9px] text-slate-400 font-sans">{kpi.desc}</span>
-                    <Sparkline points={kpi.points} color={kpi.isGrow ? '#16A34A' : '#DC2626'} />
+                  <div className="flex items-end justify-between">
+                    <h3 className="text-3xl font-extrabold font-display text-white">{kpi.value}</h3>
+                    <Sparkline points={kpi.points} color={kpi.isGrow ? '#34d399' : '#fb7185'} />
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Business Health Score & Alerts layout */}
+            {/* SECTION 2 & 3: FINANCIAL HEALTH & BRANCH PERFORMANCE */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
               
-              {/* Concentric Gauge (radial chart) */}
-              <Card className="xl:col-span-1 border-slate-800/80 bg-[#111827] p-6 flex flex-col items-center justify-between">
-                <div className="w-full">
-                  <CardHeader className="border-none p-0 mb-4 text-center">
-                    <h3 className="text-base font-bold font-display">Business Health Score</h3>
-                    <p className="text-[11px] text-slate-500">Radial gauge calculations</p>
-                  </CardHeader>
-                  <ConcentricRadialGauge />
-                </div>
-
-                <div className="w-full space-y-2 mt-4">
-                  <div className="flex justify-between text-[11px] font-semibold border-b border-slate-850 pb-2">
-                    <span className="text-slate-400 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#2563EB]" /> Revenue growth</span>
-                    <span>95/100</span>
-                  </div>
-                  <div className="flex justify-between text-[11px] font-semibold border-b border-slate-850 pb-2">
-                    <span className="text-slate-400 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#16A34A]" /> Profit margins</span>
-                    <span>90/100</span>
-                  </div>
-                  <div className="flex justify-between text-[11px] font-semibold border-b border-slate-850 pb-2">
-                    <span className="text-slate-400 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#F59E0B]" /> CSAT rating</span>
-                    <span>96/100</span>
-                  </div>
-                  <div className="flex justify-between text-[11px] font-semibold">
-                    <span className="text-slate-400 flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-[#06B6D4]" /> Inventory health</span>
-                    <span>88/100</span>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Executive Alert Center */}
-              <Card className="xl:col-span-1 border-slate-800/80 bg-[#111827] p-6">
-                <CardHeader className="border-none p-0 mb-4 flex items-center justify-between">
+              {/* Financial Health Chart */}
+              <Card className="xl:col-span-2 border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 relative overflow-hidden">
+                <CardHeader className="border-none p-0 mb-6 flex flex-row justify-between items-start">
                   <div>
-                    <h3 className="text-base font-bold font-display">Executive Alert Center</h3>
-                    <p className="text-[11px] text-slate-500 mt-0.5">Important operational events requiring actions</p>
+                    <h3 className="text-lg font-bold font-display text-white">Financial Health</h3>
+                    <p className="text-xs text-slate-400 mt-1">Revenue vs Expenses trend over time</p>
                   </div>
-                  <AlertTriangle className="text-amber-500 w-5 h-5 animate-pulse" />
+                  <div className="flex bg-slate-950/50 border border-slate-800 rounded-lg p-1">
+                    {['Today', 'Week', 'Month', 'Year'].map(t => (
+                      <button key={t} className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${t === 'Month' ? 'bg-[#2563EB] text-white shadow-md' : 'text-slate-400 hover:text-white'}`}>
+                        {t}
+                      </button>
+                    ))}
+                  </div>
                 </CardHeader>
-                <div className="space-y-3">
-                  {alertLogs.map((alert, idx) => (
-                    <div 
-                      key={idx} 
-                      onClick={() => handleAlertClick(alert.title)}
-                      className="p-3 bg-slate-950/60 border border-slate-850 rounded-xl flex items-start gap-3 cursor-pointer hover:border-slate-800 transition-colors"
-                    >
-                      <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                        alert.level === 'Critical' ? 'bg-[#DC2626] animate-ping' : alert.level === 'High' ? 'bg-[#F59E0B]' : 'bg-[#2563EB]'
-                      }`} />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-center text-[11px] font-semibold text-slate-300">
-                          <span>{alert.title}</span>
-                          <span className="text-slate-500 text-[10px]">{alert.time}</span>
-                        </div>
-                        <p className="text-[10px] text-slate-400 mt-1 font-sans leading-normal">{alert.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-4 gap-4 mb-6">
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">Revenue</p>
+                    <p className="text-xl font-bold text-white">₹{monthlyRevenue.toLocaleString('en-IN')}</p>
+                    <p className="text-[10px] text-emerald-400 mt-0.5">▲ 11.8% vs last month</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">Expenses</p>
+                    <p className="text-xl font-bold text-white">₹{operatingExpenses.toLocaleString('en-IN')}</p>
+                    <p className="text-[10px] text-rose-400 mt-0.5">▲ 4.5% vs last month</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">Gross Profit</p>
+                    <p className="text-xl font-bold text-white">₹{grossProfit.toLocaleString('en-IN')}</p>
+                    <p className="text-[10px] text-emerald-400 mt-0.5">▲ 10.2% vs last month</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">Net Profit</p>
+                    <p className="text-xl font-bold text-white">₹{netProfit.toLocaleString('en-IN')}</p>
+                    <p className="text-[10px] text-emerald-400 mt-0.5">▲ 12.7% vs last month</p>
+                  </div>
                 </div>
-              </Card>
-
-              {/* Performance Charts area */}
-              <Card className="xl:col-span-1 border-slate-800/80 bg-[#111827] p-6">
-                <CardHeader className="border-none p-0 mb-4">
-                  <h3 className="text-base font-bold font-display">Revenue Benchmark Area</h3>
-                  <p className="text-[11px] text-slate-500">Sales vs net margins</p>
-                </CardHeader>
-                <div className="h-64 w-full relative">
-                  <ResponsiveContainer width="100%" height={240}>
+                <div className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={financeTrend}>
                       <defs>
-                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#2563EB" stopOpacity={0.2}/>
+                        <linearGradient id="colorRev2" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#2563EB" stopOpacity={0.3}/>
                           <stop offset="95%" stopColor="#2563EB" stopOpacity={0}/>
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
-                      <XAxis dataKey="name" stroke="#64748B" fontSize={10} />
-                      <YAxis stroke="#64748B" fontSize={10} />
-                      <Tooltip contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }} />
-                      <Area name="Revenue" type="monotone" dataKey="revenue" stroke="#2563EB" fillOpacity={1} fill="url(#colorRev)" />
-                      <Line name="Net Profit" type="monotone" dataKey="profit" stroke="#16A34A" strokeWidth={2} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                      <XAxis dataKey="name" stroke="#64748B" fontSize={10} axisLine={false} tickLine={false} />
+                      <YAxis stroke="#64748B" fontSize={10} axisLine={false} tickLine={false} tickFormatter={(val) => `₹${val/1000}k`} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)' }} />
+                      <Area name="Revenue" type="monotone" dataKey="revenue" stroke="#2563EB" strokeWidth={3} fillOpacity={1} fill="url(#colorRev2)" />
+                      <Line name="Expenses" type="monotone" dataKey="expenses" stroke="#DC2626" strokeWidth={2} dot={false} />
+                      <Line name="Profit" type="monotone" dataKey="profit" stroke="#16A34A" strokeWidth={2} dot={false} />
                     </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+
+              {/* Branch Performance Leaderboard */}
+              <Card className="xl:col-span-1 border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 flex flex-col">
+                <CardHeader className="border-none p-0 mb-6 flex justify-between items-center">
+                  <h3 className="text-lg font-bold font-display text-white">Branch Leaderboard</h3>
+                  <Button variant="ghost" size="xs" className="text-[#2563EB] hover:text-[#3B82F6] hover:bg-[#2563EB]/10 p-0 h-auto font-semibold">View All <ChevronRight size={14} className="ml-1" /></Button>
+                </CardHeader>
+                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-4">
+                  {bestBranches.map((branch, idx) => (
+                    <div key={idx} className="bg-slate-950/50 border border-slate-800/60 p-4 rounded-xl flex flex-col gap-3 relative overflow-hidden group hover:border-slate-700 transition-colors">
+                      {idx === 0 && <div className="absolute top-0 right-0 bg-amber-500 text-amber-950 text-[9px] font-extrabold px-2 py-0.5 rounded-bl-lg uppercase tracking-wider">Top Performer</div>}
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${idx === 0 ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-800 text-slate-300'}`}>
+                            #{idx + 1}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white">{branch.name}</h4>
+                            <p className="text-[10px] text-slate-400">{branch.city}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-bold text-emerald-400">₹{branch.revenue.toLocaleString('en-IN')}</p>
+                          <p className="text-[10px] text-slate-400">{branch.orders} orders</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/50">
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 font-semibold">Rating</span>
+                          <span className="text-white flex items-center gap-1"><Star size={10} className="text-amber-400 fill-amber-400" /> {branch.customerRating.toFixed(1)}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-500 font-semibold">Profit</span>
+                          <span className="text-emerald-400 font-semibold">{(branch.revenue * 0.28).toLocaleString('en-IN')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {/* Worst Performer Mock */}
+                  <div className="bg-rose-950/20 border border-rose-900/30 p-4 rounded-xl flex flex-col gap-3 relative overflow-hidden group hover:border-rose-800/50 transition-colors mt-6">
+                    <div className="absolute top-0 right-0 bg-rose-500/20 text-rose-400 text-[9px] font-extrabold px-2 py-0.5 rounded-bl-lg uppercase tracking-wider">Needs Attention</div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-rose-950/50 text-rose-400 flex items-center justify-center font-bold text-xs">
+                          !
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-white">Marathahalli</h4>
+                          <p className="text-[10px] text-slate-400">Bangalore</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold text-rose-400">₹42,500</p>
+                        <p className="text-[10px] text-slate-400">120 orders</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* SECTIONS 4, 5, 6: CATEGORIZED HEALTH GRIDS */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              {/* Operations Health */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold font-display text-slate-300 uppercase tracking-widest pl-1 border-l-2 border-[#06B6D4]">Operations Health</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: 'Food Cost %', val: '28.4%', trend: 'Good', color: 'text-emerald-400' },
+                    { label: 'Waste %', val: '1.8%', trend: 'Needs Check', color: 'text-amber-400' },
+                    { label: 'Inventory Value', val: `₹12.4L`, trend: 'Optimal', color: 'text-indigo-400' },
+                    { label: 'Low Stock Items', val: summary?.lowStockCount || 0, trend: 'Critical', color: 'text-rose-400' }
+                  ].map((item, i) => (
+                    <div key={i} className="bg-slate-900/30 border border-slate-800/60 p-4 rounded-xl hover:bg-slate-800/40 transition-colors">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-2">{item.label}</p>
+                      <p className={`text-xl font-bold ${item.color}`}>{item.val}</p>
+                      <p className="text-[9px] text-slate-400 mt-1">{item.trend}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Workforce */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold font-display text-slate-300 uppercase tracking-widest pl-1 border-l-2 border-[#8B5CF6]">Workforce</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: 'Staff On Duty', val: summary?.staffOnline || 0, trend: 'Optimal Coverage', color: 'text-white' },
+                    { label: 'Attendance %', val: '94.2%', trend: 'Above Average', color: 'text-emerald-400' },
+                    { label: 'Payroll Cost', val: `₹4.5L`, trend: 'Within Budget', color: 'text-white' },
+                    { label: 'Bonus Pool', val: `₹43K`, trend: 'Generated', color: 'text-amber-400' }
+                  ].map((item, i) => (
+                    <div key={i} className="bg-slate-900/30 border border-slate-800/60 p-4 rounded-xl hover:bg-slate-800/40 transition-colors">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-2">{item.label}</p>
+                      <p className={`text-xl font-bold ${item.color}`}>{item.val}</p>
+                      <p className="text-[9px] text-slate-400 mt-1">{item.trend}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Customer Insights */}
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold font-display text-slate-300 uppercase tracking-widest pl-1 border-l-2 border-[#EC4899]">Customer Insights</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { label: 'New Customers', val: '450', trend: '▲ 12%', color: 'text-white' },
+                    { label: 'Returning', val: '1,200', trend: '▲ 5%', color: 'text-white' },
+                    { label: 'Satisfaction', val: '4.8/5', trend: 'Excellent', color: 'text-amber-400' },
+                    { label: 'Avg Order Val', val: `₹${aov}`, trend: '▲ ₹45', color: 'text-emerald-400' }
+                  ].map((item, i) => (
+                    <div key={i} className="bg-slate-900/30 border border-slate-800/60 p-4 rounded-xl hover:bg-slate-800/40 transition-colors">
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-2">{item.label}</p>
+                      <p className={`text-xl font-bold ${item.color}`}>{item.val}</p>
+                      <p className="text-[9px] text-slate-400 mt-1">{item.trend}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION 7 & 8: AI INSIGHTS & CHARTS */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              
+              {/* AI Insights Card */}
+              <Card className="xl:col-span-1 relative overflow-hidden bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] border-indigo-900/50 p-6">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl" />
+                
+                <CardHeader className="border-none p-0 mb-6 flex flex-row items-center gap-3 relative z-10">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-400/30">
+                    <Brain size={20} className="text-indigo-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold font-display text-white">AI Predictions</h3>
+                    <p className="text-xs text-indigo-200/60">Powered by System ML</p>
+                  </div>
+                </CardHeader>
+                
+                <div className="space-y-4 relative z-10">
+                  <div className="bg-black/20 border border-indigo-500/20 p-4 rounded-xl backdrop-blur-sm">
+                    <p className="text-[10px] text-indigo-300 font-bold uppercase tracking-wider mb-1">Revenue Forecast (Next 7 Days)</p>
+                    <p className="text-2xl font-bold text-white">₹38.5L</p>
+                    <div className="flex items-center gap-1.5 mt-2 text-[10px] text-indigo-200">
+                      <TrendingUp size={12} className="text-emerald-400" /> Expected +15% surge due to weekend holidays
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-black/20 border border-indigo-500/20 p-3 rounded-xl backdrop-blur-sm">
+                      <p className="text-[9px] text-indigo-300 font-bold uppercase tracking-wider mb-1">Peak Hour</p>
+                      <p className="text-base font-bold text-white">19:00 - 21:00</p>
+                    </div>
+                    <div className="bg-black/20 border border-indigo-500/20 p-3 rounded-xl backdrop-blur-sm">
+                      <p className="text-[9px] text-indigo-300 font-bold uppercase tracking-wider mb-1">Best Selling</p>
+                      <p className="text-base font-bold text-white">Biryani</p>
+                    </div>
+                  </div>
+                  <div className="bg-black/20 border border-indigo-500/20 p-3 rounded-xl backdrop-blur-sm flex items-center justify-between">
+                    <div>
+                      <p className="text-[9px] text-indigo-300 font-bold uppercase tracking-wider mb-0.5">Inventory Risk</p>
+                      <p className="text-sm font-bold text-white">Poultry shortage predicted</p>
+                    </div>
+                    <AlertTriangle size={16} className="text-amber-400" />
+                  </div>
+                </div>
+              </Card>
+
+              {/* Order Trend Chart */}
+              <Card className="xl:col-span-2 border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6">
+                <CardHeader className="border-none p-0 mb-6 flex justify-between items-center">
+                  <h3 className="text-lg font-bold font-display text-white">Orders Trend Today</h3>
+                  <Button variant="ghost" size="xs" className="text-slate-400 hover:text-white p-0 h-auto"><Activity size={14} className="mr-1" /> Live</Button>
+                </CardHeader>
+                <div className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={salesByHour} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                      <XAxis dataKey="hour" stroke="#64748B" fontSize={10} axisLine={false} tickLine={false} />
+                      <YAxis stroke="#64748B" fontSize={10} axisLine={false} tickLine={false} />
+                      <Tooltip 
+                        cursor={{ fill: '#1e293b', opacity: 0.4 }}
+                        contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)' }} 
+                      />
+                      <Bar dataKey="orders" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                        {salesByHour.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.orders > 50 ? '#3B82F6' : '#1E3A8A'} />
+                        ))}
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
               </Card>
             </div>
 
-            {/* Quick Actions & Recent Activity layout */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-              
-              {/* Quick Actions Panel */}
-              <Card className="xl:col-span-1 border-slate-800/80 bg-[#111827] p-6 space-y-4">
-                <div>
-                  <h3 className="text-base font-bold font-display">Quick Actions Panel</h3>
-                  <p className="text-[11px] text-slate-500">Access common tasks instantly</p>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2 pt-2">
-                  <Button size="sm" variant="outline" className="flex flex-col items-center justify-center p-4 h-20 bg-slate-950/40 hover:bg-slate-900/60 border-slate-850 hover:border-slate-750 text-xs gap-1.5" onClick={() => setActiveTab('inventory')}>
-                    <Box size={16} /> Approve Inventory
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col items-center justify-center p-4 h-20 bg-slate-950/40 hover:bg-slate-900/60 border-slate-850 hover:border-slate-750 text-xs gap-1.5" onClick={() => setActiveTab('staff')}>
-                    <Users size={16} /> Add Staff
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col items-center justify-center p-4 h-20 bg-slate-950/40 hover:bg-slate-900/60 border-slate-850 hover:border-slate-750 text-xs gap-1.5" onClick={() => setActiveTab('branches')}>
-                    <Building size={16} /> Add Branch
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col items-center justify-center p-4 h-20 bg-slate-950/40 hover:bg-slate-900/60 border-slate-850 hover:border-slate-750 text-xs gap-1.5" onClick={() => navigate('/admin/menu')}>
-                    <Plus size={16} /> Create Product
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col items-center justify-center p-4 h-20 bg-slate-950/40 hover:bg-slate-900/60 border-slate-850 hover:border-slate-750 text-xs gap-1.5" onClick={() => setActiveTab('finance')}>
-                    <FileText size={16} /> View Reports
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex flex-col items-center justify-center p-4 h-20 bg-slate-950/40 hover:bg-slate-900/60 border-slate-850 hover:border-slate-750 text-xs gap-1.5" onClick={() => toast.info('System notification dispatcher loaded.')}>
-                    <Bell size={16} /> Send Alert
-                  </Button>
-                </div>
-              </Card>
-
-              {/* Recent Activity Feed */}
-              <Card className="xl:col-span-2 border-slate-800/80 bg-[#111827] p-6 space-y-4">
-                <div>
-                  <h3 className="text-base font-bold font-display">Recent Activity Feed</h3>
-                  <p className="text-[11px] text-slate-500">Live operational timeline logging events</p>
-                </div>
-
-                <div className="space-y-4 relative pl-4 border-l border-slate-800">
-                  {[
-                    { title: 'Indiranagar requested inventory restock', time: '12 mins ago', icon: <Box size={12} className="text-[#2563EB]" /> },
-                    { title: 'Kitchen completed 25 cooking orders', time: '20 mins ago', icon: <CheckCircle2 size={12} className="text-[#16A34A]" /> },
-                    { title: 'Riders completed 18 dispatches dispatches', time: '32 mins ago', icon: <Truck size={12} className="text-[#06B6D4]" /> },
-                    { title: 'New ingredients supplier added: Amul Dairy Foods', time: '1 hour ago', icon: <Plus size={12} className="text-purple-400" /> }
-                  ].map((act, idx) => (
-                    <div key={idx} className="relative flex items-center justify-between text-xs font-sans">
-                      <div className="flex items-center gap-3">
-                        <span className="absolute -left-[22px] w-3.5 h-3.5 bg-slate-950 border border-slate-850 rounded-full flex items-center justify-center">
-                          {act.icon}
-                        </span>
-                        <span className="font-semibold text-slate-200">{act.title}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-500 shrink-0">{act.time}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </div>
           </motion.div>
         )}
 
