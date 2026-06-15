@@ -5,9 +5,9 @@ import { useAppSelector } from '../../../app/store';
 import { logout } from '../../auth/store/authSlice';
 import NotificationCenter from '../../notifications/components/NotificationCenter';
 import apiClient from '../../../services/apiClient';
-import { 
-  Home, Users, Settings, BarChart2, Briefcase, Box, 
-  MapPin, ClipboardList, Truck, BookOpen, Activity, 
+import {
+  Home, Users, Settings, BarChart2, Briefcase, Box,
+  MapPin, ClipboardList, Truck, BookOpen, Activity,
   Calendar, Bell, Brain, DollarSign, Shield, Menu,
   ChevronLeft, ChevronRight, Search, LogOut, LayoutGrid,
   ChevronDown, ChevronUp, CheckCircle, HelpCircle
@@ -40,7 +40,7 @@ export default function AdminLayout() {
   const [searchQuery, setSearchQuery] = useState('');
   const [branches, setBranches] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedBranch, setSelectedBranch] = useState('ALL');
-  
+
   // Accordion active groups
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     Operations: true,
@@ -163,7 +163,7 @@ export default function AdminLayout() {
   const getFilteredGroups = () => {
     if (!searchQuery) return sidebarGroups;
     return sidebarGroups.map(group => {
-      const filteredLinks = group.links.filter(link => 
+      const filteredLinks = group.links.filter(link =>
         link.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       return {
@@ -177,12 +177,11 @@ export default function AdminLayout() {
 
   return (
     <div className="flex h-screen bg-[#0F172A] text-[#F8FAFC] overflow-hidden font-sans">
-      
+
       {/* Sidebar for Desktop */}
-      <aside 
-        className={`hidden md:flex flex-col bg-[#111827] border-r border-slate-800/80 transition-all duration-300 z-20 shrink-0 ${
-          isCollapsed ? 'w-20' : 'w-64'
-        }`}
+      <aside
+        className={`hidden md:flex flex-col bg-[#111827] border-r border-slate-800/80 transition-all duration-300 z-20 shrink-0 ${isCollapsed ? 'w-20' : 'w-64'
+          }`}
       >
         {/* Sidebar Header / Brand Logo */}
         <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800/60 shrink-0">
@@ -199,7 +198,7 @@ export default function AdminLayout() {
               <Shield size={16} />
             </div>
           )}
-          <button 
+          <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="text-slate-400 hover:text-white p-1 hover:bg-slate-800 rounded-lg transition-colors hidden md:block"
           >
@@ -241,16 +240,15 @@ export default function AdminLayout() {
 
         {/* Grouped Accordions navigation links */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-3.5 scrollbar-thin scrollbar-thumb-slate-800">
-          
+
           {/* Dashboard Home Quick Link */}
           <div className="mb-2">
             <Link
               to="/admin"
-              className={`flex items-center px-3 py-2 rounded-xl transition-all text-xs font-semibold ${
-                location.pathname === '/admin'
+              className={`flex items-center px-3 py-2 rounded-xl transition-all text-xs font-semibold ${location.pathname === '/admin'
                   ? 'bg-[#2563EB] text-white shadow-md shadow-[#2563EB]/15'
                   : 'hover:bg-slate-800/60 text-slate-400 hover:text-white'
-              }`}
+                }`}
             >
               <Home size={18} className="mr-3" />
               {!isCollapsed && <span>Dashboard Home</span>}
@@ -285,7 +283,7 @@ export default function AdminLayout() {
                 {/* Sub-links */}
                 <AnimatePresence initial={false}>
                   {(isGroupOpen || isCollapsed || searchQuery) && (
-                    <motion.ul 
+                    <motion.ul
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -298,11 +296,10 @@ export default function AdminLayout() {
                             <Link
                               to={link.path}
                               title={isCollapsed ? link.name : ''}
-                              className={`flex items-center px-3 py-2 rounded-xl transition-all text-xs font-semibold ${
-                                active 
-                                  ? 'bg-[#2563EB]/10 text-white border-l-2 border-[#2563EB]' 
+                              className={`flex items-center px-3 py-2 rounded-xl transition-all text-xs font-semibold ${active
+                                  ? 'bg-[#2563EB]/10 text-white border-l-2 border-[#2563EB]'
                                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
-                              }`}
+                                }`}
                             >
                               <span className={`${isCollapsed ? 'mx-auto' : 'mr-3'}`}>{link.icon}</span>
                               {!isCollapsed && <span>{link.name}</span>}
@@ -333,7 +330,7 @@ export default function AdminLayout() {
               )}
             </div>
             {!isCollapsed && (
-              <button 
+              <button
                 onClick={handleLogout}
                 className="text-slate-450 hover:text-red-400 p-1.5 hover:bg-slate-850 rounded-lg transition-colors"
                 title="Log Out"
@@ -347,18 +344,18 @@ export default function AdminLayout() {
 
       {/* Main Content Pane */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
-        
+
         {/* Sticky Executive Header */}
         <header className="h-16 bg-[#111827] border-b border-slate-800/80 flex items-center px-4 md:px-6 justify-between shadow-sm shrink-0 z-10">
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={() => setMobileMenuOpen(true)}
               className="md:hidden text-slate-300 hover:text-white p-1.5 hover:bg-slate-800 rounded-lg transition-colors"
             >
               <Menu size={20} />
             </button>
             <h2 className="text-sm font-bold font-display uppercase tracking-wider text-slate-300 hidden sm:block">
-              ABC Group Control Center
+              ABC Group Management
             </h2>
           </div>
 
@@ -390,7 +387,7 @@ export default function AdminLayout() {
             <Activity size={18} />
             <span className="text-[9px] font-bold">Kitchen</span>
           </Link>
-          <button 
+          <button
             onClick={() => setMobileMenuOpen(true)}
             className="flex flex-col items-center gap-0.5 text-slate-400 hover:text-[#2563EB] transition-colors"
           >
@@ -404,14 +401,14 @@ export default function AdminLayout() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
               className="fixed inset-0 bg-black z-30 md:hidden"
             />
-            <motion.div 
+            <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
@@ -425,7 +422,7 @@ export default function AdminLayout() {
                   </div>
                   <span className="font-display font-bold text-sm tracking-tight text-white uppercase">ABC</span>
                 </Link>
-                <button 
+                <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-slate-400 hover:text-white p-1 hover:bg-slate-800 rounded-lg transition-colors"
                 >

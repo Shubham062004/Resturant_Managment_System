@@ -24,6 +24,10 @@ export class InventoryService {
     return prisma.ingredient.update({ where: { id }, data });
   }
 
+  static async deleteIngredient(id: string) {
+    return prisma.ingredient.delete({ where: { id } });
+  }
+
   // ---------------------------------------------------------------------------
   // SUPPLIERS
   // ---------------------------------------------------------------------------

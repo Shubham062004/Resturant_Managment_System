@@ -60,6 +60,7 @@ const BranchManagementPage = React.lazy(() => import('../features/admin/pages/Br
 const IngredientManagementPage = React.lazy(() => import('../features/admin/pages/IngredientManagementPage'));
 const SupplierManagementPage = React.lazy(() => import('../features/admin/pages/SupplierManagementPage'));
 const MenuManagementPage = React.lazy(() => import('../features/admin/pages/MenuManagementPage'));
+const InventoryRequestsPage = React.lazy(() => import('../features/admin/pages/InventoryRequestsPage'));
 const FinancePage = React.lazy(() => import('../features/admin/pages/FinancePage'));
 const AuditLogPage = React.lazy(() => import('../features/admin/pages/AuditLogPage'));
 const AdminOrdersPage = React.lazy(() => import('../features/admin/pages/AdminOrdersPage'));
@@ -188,6 +189,7 @@ const AppRouter = () => {
               <Route path="staff" element={<StaffManagementPage />} />
               <Route path="branches" element={<BranchManagementPage />} />
               <Route path="ingredients" element={<IngredientManagementPage />} />
+              <Route path="inventory" element={<InventoryRequestsPage />} />
               <Route path="suppliers" element={<SupplierManagementPage />} />
               <Route path="menu" element={<MenuManagementPage />} />
               <Route path="finance" element={<FinancePage />} />

@@ -4,10 +4,10 @@ import { selectBranch } from '../store/customerSlice';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
-import Card, { CardContent } from '../../../shared/components/ui/Card';
-import Badge from '../../../shared/components/ui/Badge';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { MapPin, Phone, Clock, Search, Compass, ChevronRight, Navigation } from 'lucide-react';
+import BranchCard from '../components/BranchCard';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import { MapPin, Search, Compass, Navigation, Clock, Phone } from 'lucide-react';
 import { Branch } from '../../../shared/data/branches';
 import { useBranches } from '../store/catalogQueries';
 
@@ -35,10 +35,9 @@ export const BranchesPage: React.FC = () => {
   const [cityFilter, setCityFilter] = useState('All');
   const [isDetecting, setIsDetecting] = useState(false);
   const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(null);
+  const [branchesWithDistance, setBranchesWithDistance] = useState<Branch[]>([]);
 
   const cities = ['All', ...Array.from(new Set(mappedBranches.map((b) => b.city)))];
-
-  const [branchesWithDistance, setBranchesWithDistance] = useState<Branch[]>([]);
 
   useEffect(() => {
     setBranchesWithDistance(mappedBranches);
@@ -62,14 +61,13 @@ export const BranchesPage: React.FC = () => {
     }
   }, [filteredBranches, selectedBranch, activeBranchDetail]);
 
-  // Calculate distance in miles using basic Pythagorean approximation for Manhattan/Jersey City scale
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const p = 0.017453292519943295; // Math.PI / 180
+    const p = 0.017453292519943295;
     const c = Math.cos;
     const a =
       0.5 - c((lat2 - lat1) * p) / 2 + (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
-    const km = 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
-    return km * 0.621371; // Return miles
+    const km = 12742 * Math.asin(Math.sqrt(a));
+    return km * 0.621371;
   };
 
   const handleDetectLocation = () => {
@@ -82,236 +80,202 @@ export const BranchesPage: React.FC = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-
         const updated = mappedBranches
-          .map((b) => {
-            const dist = calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng);
-            return {
-              ...b,
-              distance: parseFloat(dist.toFixed(1)),
-            };
-          })
+          .map((b) => ({
+            ...b,
+            distance: parseFloat(calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng).toFixed(1)),
+          }))
           .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
         setBranchesWithDistance(updated);
         setIsDetecting(false);
-        toast.success('Successfully detected location. Outposts sorted by distance.');
+        toast.success('Location detected! Showing nearest branches first.');
+
+        // Auto-select nearest branch
+        if (updated.length > 0 && !selectedBranch) {
+          dispatch(selectBranch(updated[0]));
+          setActiveBranchDetail(updated[0]);
+        }
       },
-      (_error) => {
+      () => {
         setIsDetecting(false);
-        toast.error('Failed to retrieve location. Check browser permissions.');
+        toast.error('Failed to get location. Please check browser permissions.');
       },
     );
   };
 
   const handleSelectBranch = (branch: Branch) => {
     dispatch(selectBranch(branch));
-    toast.success(`Active outpost set to: ${branch.name}`);
+    toast.success(`Delivering from: ${branch.name}`);
   };
+
+  const nearestBranch = branchesWithDistance.find((b) => b.distance !== undefined);
 
   return (
     <>
       <SEO
-        title="Find Outposts & Kitchen Branches"
-        description="Search active ABC restaurant branches, check store hours, compute closest location metrics, and set your current dining outpost."
-        keywords="ABC branches, pizza locations near me, outpost tracking map, smart kitchen locations"
+        title="Find Your Nearest Branch — ABC Restaurant"
+        description="Select your nearest ABC restaurant branch for the fastest delivery. Auto-detect your location or browse all available branches."
+        keywords="ABC branches, restaurant near me, food delivery location, nearest restaurant"
       />
 
-      <div className="max-w-6xl mx-auto px-6 py-12 md:py-16 space-y-10">
-        {/* Header Title */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-border/40 pb-8">
-          <div className="space-y-3">
-            <h1 className="text-3xl md:text-4xl font-display font-extrabold tracking-tight text-white">
-              Select Dispatch Outpost
-            </h1>
-            <p className="text-muted-foreground text-sm font-sans max-w-lg">
-              Set your target location to access local fire-baked pizza and gourmet burger menus.
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            isLoading={isDetecting}
-            onClick={handleDetectLocation}
-            className="border-border/60 text-white flex items-center gap-1.5 hover:bg-secondary/40 font-semibold text-xs"
-          >
-            <Compass size={14} className="animate-spin-slow" />
-            <span>Detect Closest Branch</span>
-          </Button>
-        </div>
-
-        {/* Filters bar */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <div className="relative w-full sm:flex-grow">
-            <Input
-              type="text"
-              placeholder="Search branch name, street address..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              prefixIcon={<Search size={16} />}
-              className="bg-card border-border/80 text-xs py-2.5 text-white"
-            />
-          </div>
-          <div className="flex gap-2 w-full sm:w-auto">
-            {cities.map((city) => (
-              <button
-                key={city}
-                onClick={() => setCityFilter(city)}
-                className={`px-4 py-2 text-xs font-semibold rounded-lg font-display transition-colors border select-none ${
-                  cityFilter === city
-                    ? 'bg-primary text-white border-primary shadow-sm shadow-primary/10'
-                    : 'bg-card border-border/60 text-muted-foreground hover:text-white hover:bg-secondary/40'
-                }`}
-              >
-                {city}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Master-Detail Split Pane */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Branches list */}
-          <div className="lg:col-span-7 space-y-4">
-            {isLoading ? (
-              <div className="flex justify-center py-16">
-                <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary border-t-transparent" />
-              </div>
-            ) : filteredBranches.length === 0 ? (
-              <div className="text-center py-16 bg-card/45 border border-border/40 rounded-xl space-y-4">
-                <MapPin className="mx-auto text-muted-foreground/60" size={36} />
-                <p className="text-muted-foreground text-sm font-sans">
-                  No outposts found matching your filter criteria.
-                </p>
-              </div>
-            ) : (
-              filteredBranches.map((branch) => {
-                const isActiveSelection = selectedBranch?.id === branch.id;
-                const isFocused = activeBranchDetail?.id === branch.id;
-
-                return (
-                  <Card
-                    key={branch.id}
-                    className={`bg-card/45 border transition-all duration-200 cursor-pointer ${
-                      isFocused
-                        ? 'border-primary/50 bg-card/85 shadow-md'
-                        : 'border-border/60 hover:border-border'
-                    }`}
-                    onClick={() => setActiveBranchDetail(branch)}
-                  >
-                    <CardContent className="p-5 flex items-start justify-between gap-4 select-none">
-                      <div className="space-y-2.5">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="font-display font-bold text-sm md:text-base text-white tracking-tight leading-tight">
-                            {branch.name}
-                          </h3>
-                          {isActiveSelection && (
-                            <Badge
-                              variant="success"
-                              className="text-[9px] uppercase px-2 py-0.5 font-bold tracking-wider"
-                            >
-                              Active Outpost
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-sans">
-                          {branch.address}
-                        </p>
-
-                        <div className="flex flex-wrap items-center gap-4 text-[10px] text-muted-foreground font-sans">
-                          <span className="flex items-center gap-1">
-                            <Clock size={12} />
-                            {branch.openingHours}
-                          </span>
-                          {branch.distance !== undefined && (
-                            <span className="flex items-center gap-1 text-primary">
-                              <Navigation size={10} />
-                              {branch.distance} miles away
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col items-end justify-between h-full gap-6">
-                        <Button
-                          variant={isActiveSelection ? 'success' : 'outline'}
-                          size="xs"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSelectBranch(branch);
-                          }}
-                          className="font-bold text-[10px] uppercase shadow-sm tracking-wider"
-                        >
-                          {isActiveSelection ? 'Active' : 'Select'}
-                        </Button>
-                        <ChevronRight size={16} className="text-muted-foreground/50" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })
-            )}
+      <div className="min-h-screen bg-[#08070F] pt-24 pb-16">
+        <div className="max-w-6xl mx-auto px-6 space-y-8">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 pb-6 border-b border-white/5">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                Find Your Nearest Branch
+              </h1>
+              <p className="text-neutral-400 text-sm">
+                Select a branch to browse its menu and get fast delivery
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              size="sm"
+              isLoading={isDetecting}
+              onClick={handleDetectLocation}
+              className="flex items-center gap-2 shadow-lg shadow-primary/20 font-semibold"
+            >
+              <Compass size={16} className={isDetecting ? 'animate-spin' : ''} />
+              <span>Detect My Location</span>
+            </Button>
           </div>
 
-          {/* Branch detail view / placeholder */}
-          <div className="lg:col-span-5 sticky top-24">
-            {activeBranchDetail ? (
-              <div className="glass-panel p-6 rounded-2xl border border-border/80 bg-card/90 shadow-xl space-y-6">
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary font-display">
-                    Branch Details
-                  </span>
-                  <h2 className="font-display font-extrabold text-lg text-white leading-tight">
-                    {activeBranchDetail.name}
-                  </h2>
-                  <p className="text-xs text-muted-foreground leading-relaxed font-sans">
-                    {activeBranchDetail.address}
+          {/* Nearest branch highlight */}
+          {nearestBranch && nearestBranch.distance !== undefined && (
+            <div className="rounded-2xl bg-gradient-to-r from-primary/10 to-emerald-500/5 border border-primary/20 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                  <Navigation size={18} className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold">{nearestBranch.name}</p>
+                  <p className="text-neutral-400 text-xs">
+                    {nearestBranch.distance} mi away · ~{Math.max(15, Math.round(nearestBranch.distance * 8))} min delivery
                   </p>
                 </div>
+              </div>
+              <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-500/20">
+                Nearest to you
+              </span>
+            </div>
+          )}
 
-                <div className="border-t border-border/40 pt-4 space-y-3.5 text-xs font-sans">
-                  <div className="flex items-center gap-2 text-foreground/80">
-                    <Clock size={14} className="text-primary flex-shrink-0" />
-                    <span>Open Daily: {activeBranchDetail.openingHours}</span>
+          {/* Search & City filter */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div className="relative w-full sm:flex-grow">
+              <Input
+                type="text"
+                placeholder="Search by branch name or address..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                prefixIcon={<Search size={16} />}
+                className="bg-white/[0.04] border-white/10 text-sm text-white"
+              />
+            </div>
+            <div className="flex gap-2 overflow-x-auto w-full sm:w-auto scrollbar-hide">
+              {cities.map((city) => (
+                <button
+                  key={city}
+                  onClick={() => setCityFilter(city)}
+                  className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all border whitespace-nowrap select-none ${
+                    cityFilter === city
+                      ? 'bg-primary text-white border-primary shadow-lg shadow-primary/10'
+                      : 'bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white hover:bg-white/[0.06]'
+                  }`}
+                >
+                  {city}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Branch list + detail split */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Branch list */}
+            <div className="lg:col-span-7 space-y-4">
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <SkeletonCard key={i} variant="branch" />
+                  ))}
+                </div>
+              ) : filteredBranches.length === 0 ? (
+                <div className="text-center py-20 rounded-2xl border border-white/5 bg-white/[0.02]">
+                  <MapPin className="mx-auto text-neutral-600 mb-3" size={40} />
+                  <p className="text-white font-semibold mb-1">No branches found</p>
+                  <p className="text-neutral-500 text-sm">Try a different search or city filter</p>
+                </div>
+              ) : (
+                filteredBranches.map((branch) => (
+                  <BranchCard
+                    key={branch.id}
+                    branch={branch}
+                    isSelected={selectedBranch?.id === branch.id}
+                    isFocused={activeBranchDetail?.id === branch.id}
+                    onSelect={handleSelectBranch}
+                    onFocus={setActiveBranchDetail}
+                  />
+                ))
+              )}
+            </div>
+
+            {/* Detail panel */}
+            <div className="lg:col-span-5 sticky top-24">
+              {activeBranchDetail ? (
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl space-y-5">
+                  <div>
+                    <span className="text-primary text-[10px] font-bold uppercase tracking-widest">Branch Details</span>
+                    <h2 className="text-xl font-bold text-white mt-1">{activeBranchDetail.name}</h2>
+                    <p className="text-sm text-neutral-400 mt-1">{activeBranchDetail.address}</p>
                   </div>
 
-                  <div className="flex items-center gap-2 text-foreground/80">
-                    <Phone size={14} className="text-primary flex-shrink-0" />
-                    <span>Hotline: {activeBranchDetail.phone}</span>
+                  <div className="border-t border-white/5 pt-4 space-y-3 text-sm">
+                    <div className="flex items-center gap-2 text-neutral-300">
+                      <Clock size={16} className="text-primary flex-shrink-0" />
+                      <span>{activeBranchDetail.openingHours}</span>
+                    </div>
+                    {activeBranchDetail.phone && (
+                      <div className="flex items-center gap-2 text-neutral-300">
+                        <Phone size={16} className="text-primary flex-shrink-0" />
+                        <span>{activeBranchDetail.phone}</span>
+                      </div>
+                    )}
+                    {activeBranchDetail.distance !== undefined && (
+                      <div className="flex items-center gap-2 text-primary font-medium">
+                        <Navigation size={16} className="flex-shrink-0" />
+                        <span>{activeBranchDetail.distance} mi away · ~{Math.max(15, Math.round(activeBranchDetail.distance * 8))} min delivery</span>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* Map/Integration Mock */}
-                <div className="aspect-video rounded-xl bg-secondary/85 border border-border/80 flex flex-col items-center justify-center p-4 text-center text-muted-foreground space-y-2 relative overflow-hidden select-none">
-                  {/* Decorative background grid map simulation */}
-                  <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
-                  <MapPin size={28} className="text-primary z-10 animate-bounce" />
-                  <span className="text-xs font-bold text-white z-10">Smart Map Interface</span>
-                  <span className="text-[10px] text-muted-foreground/80 max-w-xs z-10 font-sans">
-                    GPS Coordinates: {activeBranchDetail.coords.lat},{' '}
-                    {activeBranchDetail.coords.lng}
-                  </span>
-                </div>
+                  {/* Map placeholder */}
+                  <div className="aspect-video rounded-xl bg-neutral-900 border border-white/5 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
+                    <MapPin size={28} className="text-primary z-10 animate-bounce" />
+                    <p className="text-xs text-white font-semibold mt-2 z-10">{activeBranchDetail.name}</p>
+                    <p className="text-[10px] text-neutral-500 z-10 mt-1">
+                      {activeBranchDetail.coords.lat.toFixed(4)}, {activeBranchDetail.coords.lng.toFixed(4)}
+                    </p>
+                  </div>
 
-                <div className="pt-2">
                   <Button
                     variant="primary"
-                    size="sm"
-                    className="w-full text-xs font-bold shadow-md"
+                    className="w-full font-semibold shadow-lg shadow-primary/20"
                     onClick={() => handleSelectBranch(activeBranchDetail)}
                   >
-                    Set as Selected Delivery Outpost
+                    {selectedBranch?.id === activeBranchDetail.id ? '✓ Currently Selected' : 'Select This Branch'}
                   </Button>
                 </div>
-              </div>
-            ) : (
-              <div className="glass-panel p-6 rounded-2xl border border-border/80 bg-card/90 shadow-xl text-center text-muted-foreground py-16">
-                <MapPin className="mx-auto mb-2 text-muted-foreground/50" size={32} />
-                <p className="text-xs font-sans">
-                  Select a dispatch outpost from the list to view operations detail.
-                </p>
-              </div>
-            )}
+              ) : (
+                <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-8 text-center">
+                  <MapPin className="mx-auto text-neutral-600 mb-3" size={36} />
+                  <p className="text-neutral-400 text-sm">Select a branch to view details</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

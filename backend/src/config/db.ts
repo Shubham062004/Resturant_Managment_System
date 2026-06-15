@@ -3,10 +3,19 @@ import mongoose from 'mongoose';
 import env from './env';
 import logger from '../utils/logger';
 
-// Instantiate single Prisma Client instance
-export const prisma = new PrismaClient({
-  log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-});
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
+};
+
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
+
+export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+
+if (env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
 
 export const connectDatabases = async (): Promise<void> => {
   try {

@@ -840,8 +840,9 @@ model Ingredient {
   sku          String   @unique
   category     String
   unit         String // KG, Gram, Liter, ML, Piece, Pack
-  minimumStock Float
+  minimumStock Float    @default(0.0)
   reorderPoint Float
+  costPrice    Float    @default(0.0)
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

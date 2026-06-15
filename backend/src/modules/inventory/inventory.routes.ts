@@ -69,6 +69,10 @@ router
     restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
     validate(validation.updateIngredientSchema),
     controller.updateIngredient
+  )
+  .delete(
+    restrictTo('ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
+    controller.deleteIngredient
   );
 
 // ----------------------------------------------------

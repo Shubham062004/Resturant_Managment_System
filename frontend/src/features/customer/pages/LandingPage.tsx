@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAppDispatch } from '../../../app/store';
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { addRecentSearch } from '../store/customerSlice';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import Card, { CardContent } from '../../../shared/components/ui/Card';
 import { useToast } from '../../../shared/components/ui/Toast';
+import FoodCard from '../components/FoodCard';
+import CategoryPill from '../components/CategoryPill';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import {
   Search,
   ArrowRight,
@@ -21,11 +24,19 @@ import {
   Play,
   Mail,
   Flame,
+  ShieldCheck,
+  Truck,
+  Zap,
+  ChefHat,
+  Copy,
+  Tag,
 } from 'lucide-react';
 import mockCategories from '../../../shared/data/categories';
 import mockRestaurants from '../../../shared/data/restaurants';
 import mockTestimonials from '../../../shared/data/testimonials';
 import { fadeUp, scaleIn } from '../../../shared/theme/animations';
+import { useFeaturedProducts, useRestaurants } from '../store/catalogQueries';
+import { useActiveCoupons } from '../../cart/store/cartQueries';
 
 export const LandingPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,13 +44,19 @@ export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const { selectedBranch } = useAppSelector((state) => state.customer);
+
+  // API data
+  const { data: featuredRes, isLoading: featuredLoading } = useFeaturedProducts();
+  const featuredProducts = featuredRes?.data ?? [];
+  const { data: restaurantsRes, isLoading: restaurantsLoading } = useRestaurants({ page: 1, limit: 6 });
+  const restaurants = restaurantsRes?.data ?? [];
+  const { data: coupons = [] } = useActiveCoupons();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const query = searchQuery.trim();
     if (!query) return;
-
-    // Save search query to Redux customer slice
     dispatch(addRecentSearch(query));
     navigate(`/search?q=${encodeURIComponent(query)}`);
   };
@@ -47,478 +64,494 @@ export const LandingPage: React.FC = () => {
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail.trim()) return;
-
     toast.success('Thank you for subscribing to ABC updates!');
     setNewsletterEmail('');
   };
 
+  const handleCopyCoupon = (code: string) => {
+    navigator.clipboard.writeText(code);
+    toast.success(`Coupon "${code}" copied!`);
+  };
+
+  const heroImages = [
+    'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop&q=80',
+  ];
+
+  const stats = [
+    { icon: Flame, label: 'Fresh Dishes', value: '500+' },
+    { icon: MapPin, label: 'Branches', value: '20+' },
+    { icon: Star, label: 'Avg Rating', value: '4.8★' },
+    { icon: Truck, label: 'Delivery', value: '30 min' },
+  ];
+
   return (
     <>
       <SEO
-        title="Fire-Baked Pizza & Crafted Gourmet Burgers"
-        description="Experience the peak of restaurant automation and culinary delight. Order from ABC outposts, track live counter progress, and savor fire-baked pizzas."
-        keywords="ABC, pizza delivery, gourmet burgers, local food outposts, smart kitchen order tracker"
+        title="ABC Restaurant — Order Food Online | Pizza, Burgers & More"
+        description="Order delicious food from ABC Restaurant. Fire-baked pizzas, gourmet burgers, and authentic cuisines. Fast delivery in 30 minutes."
+        keywords="ABC restaurant, food delivery, pizza order online, burger delivery, restaurant near me"
       />
 
       <div className="flex flex-col w-full overflow-hidden">
-        {/* HERO SECTION */}
-        <section className="relative min-h-[85vh] flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background py-20 px-6 border-b border-border/40">
-          <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
-          <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Branding & Value Proposition */}
-            <div className="lg:col-span-7 space-y-8 text-center lg:text-left z-10">
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 bg-primary/15 border border-primary/20 text-primary text-xs font-bold px-4 py-1.5 rounded-full select-none"
-              >
-                <Sparkles size={14} className="animate-pulse" />
-                <span>Next-Gen Dining Experience</span>
-              </motion.div>
+        {/* ═══════════════════════ HERO SECTION ═══════════════════════ */}
+        <section className="relative min-h-[88vh] flex items-center bg-[#08070F] py-16 px-6 overflow-hidden">
+          {/* Background gradient effects */}
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            {/* Left: Content */}
+            <div className="lg:col-span-6 space-y-7 text-center lg:text-left">
+              {/* Delivery badge */}
+              {selectedBranch ? (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold px-4 py-2 rounded-full">
+                  <MapPin size={14} />
+                  <span>Delivering from: {selectedBranch.name}</span>
+                </motion.div>
+              ) : (
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-4 py-2 rounded-full">
+                  <Zap size={14} className="animate-pulse" />
+                  <span>Order & get delivered in 30 minutes</span>
+                </motion.div>
+              )}
 
               <motion.h1
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.15 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-white leading-[1.1]"
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-4xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-white leading-[1.1]"
               >
-                Craving Fire-baked <span className="text-primary bg-clip-text">Pizza</span> or
-                Gourmet <span className="text-primary bg-clip-text">Burgers</span>?
+                Delicious Food,{' '}
+                <span className="bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">
+                  Delivered Fast
+                </span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans"
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-neutral-400 text-base sm:text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed"
               >
-                Order from local ABC outposts with lightning fast delivery, real-time smart
-                kitchen tracking, and customizable meal modifications.
+                From fire-baked pizzas to gourmet burgers — browse our menu, customize your order, and track it live to your doorstep.
               </motion.p>
 
-              {/* Global Search Entry Point */}
+              {/* Search bar */}
               <motion.form
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.45 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
                 onSubmit={handleSearchSubmit}
-                className="max-w-md mx-auto lg:mx-0"
+                className="max-w-lg mx-auto lg:mx-0"
               >
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <div className="relative w-full">
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
                     <Input
                       type="text"
-                      placeholder="Search dishes, burgers, cuisines..."
+                      placeholder="Search for pizza, burgers, biryani..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       prefixIcon={<Search size={18} />}
-                      className="bg-card/90 border-border/80 text-white placeholder-muted-foreground shadow-lg h-12 focus:ring-1 focus:ring-primary focus:border-primary"
+                      className="bg-white/[0.06] border-white/10 text-white placeholder-neutral-500 h-13 focus:border-primary/50 shadow-xl"
                     />
                   </div>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    className="w-full sm:w-auto h-12 px-6 shadow-md hover:shadow-primary/20 flex items-center justify-center gap-2 whitespace-nowrap"
-                  >
-                    <span>Search</span>
-                    <ArrowRight size={16} />
+                  <Button type="submit" variant="primary" className="h-13 px-6 shadow-lg shadow-primary/20 font-semibold">
+                    Search
                   </Button>
                 </div>
               </motion.form>
 
-              {/* CTAs & Stat highlights */}
+              {/* CTA buttons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2"
+                transition={{ delay: 0.4 }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-3"
               >
-                <Link to="/branches">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-border/60 hover:bg-secondary/40 font-semibold text-white"
-                  >
-                    Select Outpost
+                <Link to="/restaurants">
+                  <Button variant="primary" size="lg" className="shadow-lg shadow-primary/20 font-semibold flex items-center gap-2">
+                    <span>Order Now</span>
+                    <ArrowRight size={16} />
                   </Button>
                 </Link>
-                <Link to="/offers">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-primary hover:bg-primary/5 flex items-center gap-1"
-                  >
-                    View Promotion Coupons
+                <Link to="/branches">
+                  <Button variant="outline" size="lg" className="border-white/10 text-white hover:bg-white/5 font-semibold flex items-center gap-2">
+                    <MapPin size={16} />
+                    <span>Find Branch</span>
                   </Button>
                 </Link>
               </motion.div>
             </div>
 
-            {/* Hero Image Mockup (Aesthetic visual element) */}
-            <div className="lg:col-span-5 flex justify-center z-10">
+            {/* Right: Hero image grid */}
+            <div className="lg:col-span-6 flex justify-center lg:justify-end">
               <motion.div
                 variants={scaleIn}
                 initial="initial"
                 animate="animate"
-                className="relative w-full max-w-[420px] aspect-square rounded-3xl overflow-hidden shadow-2xl border border-border/60"
+                className="relative w-full max-w-[520px]"
               >
-                <img
-                  src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=80"
-                  alt="Delicious Fire-Baked Pepperoni Pizza"
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 select-none">
-                  <div className="bg-primary/95 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full self-start mb-2 flex items-center gap-1 shadow">
-                    <Flame size={12} className="animate-bounce" />
-                    <span>Freshly Baked</span>
+                {/* Main image */}
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 aspect-[4/3]">
+                  <img
+                    src={heroImages[0]}
+                    alt="Delicious food from ABC Restaurant"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="bg-black/50 backdrop-blur-lg rounded-xl p-3 border border-white/10 flex items-center justify-between">
+                      <div>
+                        <p className="text-white font-semibold text-sm">Today's Special</p>
+                        <p className="text-neutral-400 text-xs">Fire-Baked Pepperoni Pizza</p>
+                      </div>
+                      <span className="text-primary font-bold text-lg">₹299</span>
+                    </div>
                   </div>
-                  <h3 className="font-display font-extrabold text-xl text-white">
-                    Gourmet Pepperoni Double Crust
-                  </h3>
-                  <p className="text-xs text-foreground/80 font-sans mt-1">
-                    Baked in our smart stone ovens at 800°F
-                  </p>
                 </div>
+
+                {/* Floating cards */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="absolute -left-6 top-8 bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl p-3 shadow-2xl hidden lg:flex items-center gap-2"
+                >
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <ShieldCheck size={16} className="text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-white text-xs font-semibold">Fresh Ingredients</p>
+                    <p className="text-neutral-500 text-[10px]">100% Quality Checked</p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="absolute -right-4 bottom-20 bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl p-3 shadow-2xl hidden lg:flex items-center gap-2"
+                >
+                  <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center">
+                    <Star size={16} className="text-amber-400 fill-amber-400" />
+                  </div>
+                  <div>
+                    <p className="text-white text-xs font-semibold">4.8 Rating</p>
+                    <p className="text-neutral-500 text-[10px]">10,000+ Happy Customers</p>
+                  </div>
+                </motion.div>
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* POPULAR CATEGORIES CAROUSEL/GRID */}
-        <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
-          <div className="text-center space-y-3 mb-12">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-              Popular Categories
-            </h2>
-            <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
-              Skip search and jump straight into our chef-curated selections.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-            {mockCategories.map((category, index) => (
+        {/* ═══════════════════════ STATS BAR ═══════════════════════ */}
+        <section className="bg-white/[0.02] border-y border-white/5 py-6 px-6">
+          <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-8 md:gap-16">
+            {stats.map((stat, i) => (
               <motion.div
-                key={category.id}
-                variants={fadeUp}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: '-50px' }}
-                custom={index}
-                className="group"
+                key={stat.label}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-center gap-3 select-none"
               >
-                <Link to={`/search?category=${category.slug}`} className="block">
-                  <Card
-                    variant="interactive"
-                    className="h-full bg-card/60 hover:bg-card border-border/60 hover:border-primary/30 flex flex-col items-center p-5 text-center"
-                  >
-                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-border/60 group-hover:border-primary/50 transition-colors mb-4 shadow">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    </div>
-                    <h3 className="font-display font-bold text-sm text-white group-hover:text-primary transition-colors">
-                      {category.name}
-                    </h3>
-                  </Card>
-                </Link>
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <stat.icon size={18} className="text-primary" />
+                </div>
+                <div>
+                  <p className="text-white font-bold text-lg">{stat.value}</p>
+                  <p className="text-neutral-500 text-xs">{stat.label}</p>
+                </div>
               </motion.div>
             ))}
           </div>
         </section>
 
-        {/* FEATURED OUTPOSTS / RESTAURANTS */}
-        <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-12">
-            <div className="space-y-3 text-left">
-              <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-                Featured Restaurants & Outposts
-              </h2>
-              <p className="text-muted-foreground text-sm font-sans max-w-md">
-                Pre-selected and audited kitchen nodes maintaining peak delivery speed and
-                high-level sanitization ratings.
-              </p>
+        {/* ═══════════════════════ POPULAR CATEGORIES ═══════════════════════ */}
+        <section className="py-16 px-6 max-w-7xl mx-auto w-full">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">What are you craving?</h2>
+            <p className="text-neutral-500 text-sm">Explore our most popular food categories</p>
+          </div>
+
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide justify-center flex-wrap">
+            {mockCategories.map((cat) => (
+              <CategoryPill key={cat.id} name={cat.name} slug={cat.slug} image={cat.image} />
+            ))}
+          </div>
+        </section>
+
+        {/* ═══════════════════════ TRENDING DISHES ═══════════════════════ */}
+        <section className="py-16 px-6 max-w-7xl mx-auto w-full">
+          <div className="flex justify-between items-end mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp size={18} className="text-primary" />
+                <span className="text-primary text-xs font-bold uppercase tracking-wider">Trending</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">Popular Right Now</h2>
+              <p className="text-neutral-500 text-sm mt-1">Our most ordered dishes this week</p>
             </div>
-            <Link to="/branches">
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs border-border/60 text-white font-semibold flex items-center gap-1"
-              >
-                <span>View All Outposts</span>
-                <ArrowRight size={14} />
+            <Link to="/restaurants">
+              <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1">
+                View All <ArrowRight size={14} />
               </Button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mockRestaurants.slice(0, 3).map((res) => (
-              <Card
-                key={res.id}
-                variant="default"
-                className="flex flex-col bg-card/50 border-border/80 shadow-md"
-              >
-                <div className="relative h-48 w-full overflow-hidden">
-                  <img
-                    src={res.image}
-                    alt={res.name}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  {res.featured && (
-                    <span className="absolute top-3.5 left-3.5 bg-primary text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
-                      <Award size={10} />
-                      <span>Top Rated</span>
-                    </span>
-                  )}
-                  <span className="absolute bottom-3.5 right-3.5 bg-background/90 backdrop-blur text-foreground text-[10px] font-bold px-2 py-1 rounded-md">
-                    {res.deliveryTime}
-                  </span>
+          {featuredLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              {[1, 2, 3, 4].map((i) => (
+                <SkeletonCard key={i} variant="food" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              {featuredProducts.slice(0, 8).map((product) => (
+                <FoodCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* ═══════════════════════ FEATURED RESTAURANTS ═══════════════════════ */}
+        <section className="py-16 px-6 max-w-7xl mx-auto w-full">
+          <div className="flex justify-between items-end mb-10">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">Top Restaurants</h2>
+              <p className="text-neutral-500 text-sm mt-1">Hand-picked restaurants with top ratings</p>
+            </div>
+            <Link to="/restaurants">
+              <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1">
+                View All <ArrowRight size={14} />
+              </Button>
+            </Link>
+          </div>
+
+          {restaurantsLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <SkeletonCard key={i} variant="restaurant" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {(restaurants.length > 0 ? restaurants : mockRestaurants).slice(0, 3).map((res: any) => (
+                <Link key={res.id} to={`/restaurants/${res.slug}`}>
+                  <Card className="bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 overflow-hidden group h-full">
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={res.coverImage || res.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'}
+                        alt={res.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#08070F] to-transparent opacity-70" />
+                      {(res.featured || res.rating > 4.3) && (
+                        <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
+                          <Award size={10} /> Top Rated
+                        </span>
+                      )}
+                      <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
+                        <Star size={12} className="text-amber-400 fill-amber-400" />
+                        <span className="text-white text-xs font-bold">{typeof res.rating === 'number' ? res.rating.toFixed(1) : res.rating}</span>
+                      </div>
+                    </div>
+                    <CardContent className="p-5 space-y-3">
+                      <h3 className="font-bold text-white text-base group-hover:text-primary transition-colors">{res.name}</h3>
+                      <p className="text-xs text-neutral-400 line-clamp-2">{res.description || (res.categories ? res.categories.join(' • ') : '')}</p>
+                      <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-neutral-500">
+                        <span className="flex items-center gap-1">
+                          <Clock size={12} className="text-primary" /> 30-45 min
+                        </span>
+                        <span className="text-primary font-semibold flex items-center gap-1">
+                          View Menu <ArrowRight size={12} />
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* ═══════════════════════ TODAY'S OFFERS ═══════════════════════ */}
+        {coupons.length > 0 && (
+          <section className="py-16 px-6 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex justify-between items-end mb-10">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Sparkles size={18} className="text-amber-400" />
+                    <span className="text-amber-400 text-xs font-bold uppercase tracking-wider">Deals</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white">Today's Offers</h2>
+                  <p className="text-neutral-500 text-sm mt-1">Save more with exclusive coupon codes</p>
                 </div>
+                <Link to="/offers">
+                  <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1">
+                    All Offers <ArrowRight size={14} />
+                  </Button>
+                </Link>
+              </div>
 
-                <CardContent className="flex-grow flex flex-col justify-between p-5 space-y-4">
-                  <div>
-                    <h3 className="font-display font-bold text-base text-white tracking-tight leading-tight">
-                      {res.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground font-sans mt-1.5 flex flex-wrap gap-1">
-                      {res.categories.join(' • ')}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between border-t border-border/40 pt-4 text-xs font-sans">
-                    <div className="flex items-center gap-1 text-yellow-500">
-                      <Star size={14} fill="currentColor" />
-                      <span className="font-semibold text-white">{res.rating}</span>
-                      <span className="text-muted-foreground">({res.reviewsCount})</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {coupons.slice(0, 3).map((coupon) => (
+                  <div
+                    key={coupon.id}
+                    className="relative rounded-2xl border border-dashed border-primary/30 bg-primary/[0.04] p-6 space-y-3 hover:bg-primary/[0.06] transition-colors group"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="text-primary text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                          <Tag size={12} />
+                          {coupon.discountType === 'PERCENTAGE' ? `${coupon.discountValue}% OFF` : coupon.discountType === 'FIXED_AMOUNT' ? `₹${parseFloat(coupon.discountValue).toFixed(0)} OFF` : 'FREE DELIVERY'}
+                        </span>
+                        <h3 className="text-white font-bold text-xl mt-1">{coupon.code}</h3>
+                        {coupon.description && <p className="text-neutral-400 text-xs mt-1">{coupon.description}</p>}
+                      </div>
+                      <button
+                        onClick={() => handleCopyCoupon(coupon.code)}
+                        className="p-2.5 rounded-xl bg-white/5 hover:bg-primary/20 border border-white/10 text-neutral-400 hover:text-primary transition-colors"
+                        aria-label={`Copy code ${coupon.code}`}
+                      >
+                        <Copy size={16} />
+                      </button>
                     </div>
-
-                    <div className="flex items-center gap-4 text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <MapPin size={12} />
-                        {res.distance}
-                      </span>
-                      <span>Min: ${res.minOrder.toFixed(2)}</span>
-                    </div>
+                    {parseFloat(coupon.minimumAmount) > 0 && (
+                      <p className="text-neutral-500 text-xs">Min order: ₹{parseFloat(coupon.minimumAmount).toFixed(0)}</p>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══════════════════════ HOW IT WORKS ═══════════════════════ */}
+        <section className="py-20 px-6 max-w-6xl mx-auto w-full">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">How It Works</h2>
+            <p className="text-neutral-500 text-sm">Get your favorite meal in 3 simple steps</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              { step: '01', icon: MapPin, title: 'Choose Your Branch', desc: 'Select the nearest ABC branch or let us auto-detect your location for fastest delivery.' },
+              { step: '02', icon: ChefHat, title: 'Browse & Order', desc: 'Explore our menu, customize your meal, add items to cart, and apply coupons at checkout.' },
+              { step: '03', icon: Truck, title: 'Track & Enjoy', desc: 'Watch your order being prepared live and get it delivered hot to your doorstep.' },
+            ].map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="text-center space-y-4"
+              >
+                <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center shadow-lg ${
+                  i === 2 ? 'bg-primary text-white shadow-primary/20' : 'bg-white/[0.05] text-white border border-white/10'
+                }`}>
+                  <item.icon size={28} />
+                </div>
+                <h3 className="font-bold text-white text-lg">{item.title}</h3>
+                <p className="text-neutral-400 text-sm leading-relaxed max-w-xs mx-auto">{item.desc}</p>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        {/* WHY CHOOSE US */}
-        <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
-          <div className="text-center space-y-3 mb-12">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-              Why ABC?
-            </h2>
-            <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
-              Combining ancient culinary baking secrets with cutting-edge kitchen logistics.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <div className="glass-panel p-6 rounded-xl border border-border/40 space-y-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mx-auto md:mx-0 shadow-sm border border-primary/20">
-                <Flame size={24} />
-              </div>
-              <h3 className="font-display font-bold text-lg text-white">800°F Stone Hearth</h3>
-              <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                Our proprietary stone ovens bake each custom pizza in less than 3 minutes, locked
-                under supreme temperature controls for the perfect crust.
-              </p>
+        {/* ═══════════════════════ TESTIMONIALS ═══════════════════════ */}
+        <section className="py-20 px-6 bg-white/[0.01]">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">What Our Customers Say</h2>
+              <p className="text-neutral-500 text-sm">Loved by thousands of food enthusiasts</p>
             </div>
 
-            <div className="glass-panel p-6 rounded-xl border border-border/40 space-y-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mx-auto md:mx-0 shadow-sm border border-primary/20">
-                <Clock size={24} />
-              </div>
-              <h3 className="font-display font-bold text-lg text-white">Smart Kitchen Tracking</h3>
-              <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                Watch your order progress through prep, baking, packing, and dispatch with our
-                live-updating digital kitchen ticket dashboards.
-              </p>
-            </div>
-
-            <div className="glass-panel p-6 rounded-xl border border-border/40 space-y-4">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mx-auto md:mx-0 shadow-sm border border-primary/20">
-                <TrendingUp size={24} />
-              </div>
-              <h3 className="font-display font-bold text-lg text-white">Eco-friendly Delivery</h3>
-              <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                All outposts utilize optimized electric courier routes, delivering food hot in
-                thermally sealed containers with minimum carbon impact.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* HOW IT WORKS */}
-        <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
-          <div className="text-center space-y-3 mb-16">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-              How It Works
-            </h2>
-            <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
-              Get premium gourmet meals delivered directly to your doorstep in 3 simple steps.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative select-none">
-            {/* Step 1 */}
-            <div className="flex flex-col items-center text-center space-y-4 relative">
-              <div className="w-16 h-16 rounded-full bg-secondary border border-border flex items-center justify-center font-display font-extrabold text-lg text-white relative z-10 shadow">
-                01
-              </div>
-              <h3 className="font-display font-bold text-base text-white">Pick Nearest Outpost</h3>
-              <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Check our branches map. Select the closest ABC outpost to unlock its
-                customized food catalog.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex flex-col items-center text-center space-y-4 relative">
-              <div className="w-16 h-16 rounded-full bg-secondary border border-border flex items-center justify-center font-display font-extrabold text-lg text-white relative z-10 shadow">
-                02
-              </div>
-              <h3 className="font-display font-bold text-base text-white">Customize & Order</h3>
-              <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Build your perfect pizzas or burgers. Modify toppings, apply checkout coupons, and
-                pay securely.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex flex-col items-center text-center space-y-4 relative">
-              <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center font-display font-extrabold text-lg text-white relative z-10 shadow shadow-primary/20">
-                03
-              </div>
-              <h3 className="font-display font-bold text-base text-white">Live Tracking & Savor</h3>
-              <p className="text-xs text-muted-foreground font-sans max-w-xs leading-relaxed">
-                Watch the prep dashboard live. Savor delicious fire-baked culinary creations
-                delivered blazing hot.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* CUSTOMER TESTIMONIALS */}
-        <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
-          <div className="text-center space-y-3 mb-12">
-            <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-              What Our Foodies Say
-            </h2>
-            <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
-              Hear directly from some of our verified customers and active food critics.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mockTestimonials.map((t) => (
-              <Card
-                key={t.id}
-                className="bg-card/45 border-border/60 p-6 flex flex-col justify-between space-y-6"
-              >
-                <p className="text-sm text-foreground/80 font-sans italic leading-relaxed">
-                  &ldquo;{t.comment}&rdquo;
-                </p>
-                <div className="flex items-center gap-3.5 border-t border-border/40 pt-4">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    className="w-10 h-10 rounded-full object-cover border border-border/60"
-                  />
-                  <div>
-                    <h4 className="text-sm font-bold text-white leading-none">{t.name}</h4>
-                    <p className="text-[10px] text-muted-foreground mt-1 font-semibold">{t.role}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {mockTestimonials.map((t) => (
+                <Card key={t.id} className="bg-white/[0.03] border-white/[0.06] p-6 flex flex-col justify-between space-y-5">
+                  <div className="flex gap-1 mb-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} size={14} className={s <= Math.round(t.rating) ? 'text-amber-400 fill-amber-400' : 'text-neutral-700'} />
+                    ))}
                   </div>
-                  <div className="ml-auto flex items-center gap-0.5 text-yellow-500">
-                    <Star size={12} fill="currentColor" />
-                    <span className="text-xs text-white font-bold">{t.rating}</span>
+                  <p className="text-sm text-neutral-300 leading-relaxed flex-1">
+                    &ldquo;{t.comment}&rdquo;
+                  </p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+                    <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border border-white/10" />
+                    <div>
+                      <p className="text-sm font-semibold text-white">{t.name}</p>
+                      <p className="text-[10px] text-neutral-500">{t.role}</p>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* APP DOWNLOAD CTA */}
-        <section className="py-20 px-6 max-w-6xl mx-auto w-full border-b border-border/40">
-          <div className="relative rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/35 border border-border/60 p-8 md:p-12 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
-            <div className="space-y-6 max-w-xl text-center md:text-left z-10">
-              <h2 className="text-3xl font-display font-extrabold tracking-tight text-white">
-                Order Faster on the ABC App
+        {/* ═══════════════════════ APP DOWNLOAD CTA ═══════════════════════ */}
+        <section className="py-20 px-6 max-w-6xl mx-auto w-full">
+          <div className="relative rounded-3xl bg-gradient-to-r from-primary/15 to-amber-500/10 border border-white/10 p-8 md:p-14 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_var(--tw-gradient-stops))] from-primary/10 to-transparent pointer-events-none" />
+            <div className="space-y-5 max-w-lg text-center md:text-left z-10">
+              <h2 className="text-3xl font-bold text-white">
+                Order Faster on the <span className="text-primary">ABC App</span>
               </h2>
-              <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-                Download our companion mobile application for iOS and Android. Save favorite
-                addresses, manage payment cards, receive local deals, and unlock one-tap reorders.
+              <p className="text-neutral-400 text-sm leading-relaxed">
+                Get exclusive app-only deals, save your favorite addresses, reorder with one tap, and track your delivery live.
               </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                <Button variant="primary" size="sm" className="flex items-center gap-2">
-                  <Smartphone size={16} />
-                  <span>Download App Store</span>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <Button variant="primary" className="flex items-center gap-2 shadow-lg shadow-primary/20">
+                  <Smartphone size={16} /> App Store
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-border/60 text-white flex items-center gap-2 hover:bg-secondary/40"
-                >
-                  <Play size={14} fill="currentColor" />
-                  <span>Google Play Store</span>
+                <Button variant="outline" className="border-white/10 text-white flex items-center gap-2 hover:bg-white/5">
+                  <Play size={14} fill="currentColor" /> Google Play
                 </Button>
               </div>
             </div>
-            {/* Visual Phone Mockup */}
-            <div className="relative w-48 h-64 md:h-80 border-4 border-border/80 rounded-3xl bg-black overflow-hidden flex-shrink-0 shadow-2xl flex items-center justify-center select-none">
-              <div className="absolute top-0 w-24 h-4 bg-border/80 rounded-b-xl z-20" />
-              <div className="w-full h-full flex flex-col justify-between p-4 bg-gradient-to-b from-card to-background text-center relative">
-                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center mx-auto mt-4">
-                  <Flame size={12} className="text-primary" />
+            <div className="relative w-44 h-64 border-4 border-white/20 rounded-[2rem] bg-black overflow-hidden flex-shrink-0 shadow-2xl z-10 hidden md:block">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-3.5 bg-black rounded-b-xl z-20 border-b border-white/10" />
+              <div className="w-full h-full flex flex-col justify-center items-center p-4 bg-gradient-to-b from-neutral-900 to-black text-center">
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center mb-3">
+                  <Flame size={20} className="text-primary" />
                 </div>
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider block mt-2">
-                  ABC Mobile
-                </span>
-                <span className="text-[8px] text-muted-foreground block font-sans">
-                  Active Location: Midtown
-                </span>
-                <div className="bg-primary hover:bg-primary-hover text-[8px] text-white py-1.5 px-3 rounded-md mt-auto font-display font-bold">
-                  Quick Track #7209
-                </div>
+                <p className="text-[10px] font-bold text-white uppercase tracking-wider">ABC Restaurant</p>
+                <p className="text-[8px] text-neutral-500 mt-1">Order • Track • Enjoy</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* NEWSLETTER SECTION */}
-        <section className="py-20 px-6 max-w-md mx-auto w-full text-center">
-          <div className="space-y-4 mb-8">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mx-auto border border-primary/20 shadow-sm">
-              <Mail size={22} />
+        {/* ═══════════════════════ NEWSLETTER ═══════════════════════ */}
+        <section className="py-16 px-6 max-w-md mx-auto w-full text-center">
+          <div className="space-y-3 mb-6">
+            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto border border-primary/20">
+              <Mail size={20} />
             </div>
-            <h2 className="text-2xl font-display font-extrabold tracking-tight text-white">
-              Join the Newsletter
-            </h2>
-            <p className="text-xs text-muted-foreground leading-relaxed font-sans">
-              Stay in the loop with weekly discounts, new chef recipes, and upcoming branch
-              openings.
+            <h2 className="text-xl font-bold text-white">Stay Updated</h2>
+            <p className="text-xs text-neutral-500 leading-relaxed">
+              Get weekly deals, new menu launches, and exclusive offers straight to your inbox.
             </p>
           </div>
-
           <form onSubmit={handleNewsletterSubmit} className="flex gap-2 w-full">
             <Input
               type="email"
-              placeholder="Enter your email address"
+              placeholder="Enter your email"
               value={newsletterEmail}
               onChange={(e) => setNewsletterEmail(e.target.value)}
-              className="bg-card/90 border-border/80 text-xs py-2.5 h-11"
+              className="bg-white/[0.05] border-white/10 text-xs h-11"
               required
             />
-            <Button type="submit" variant="primary" className="h-11 text-xs px-5 shadow">
+            <Button type="submit" variant="primary" className="h-11 text-xs px-5 shadow-lg shadow-primary/20">
               Subscribe
             </Button>
           </form>

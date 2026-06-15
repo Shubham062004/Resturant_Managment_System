@@ -30,6 +30,15 @@ export const updateIngredient = async (req: Request, res: Response, next: NextFu
   }
 };
 
+export const deleteIngredient = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await InventoryService.deleteIngredient(req.params.id);
+    res.status(204).json({ status: 'success', data: null });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // SUPPLIERS
 export const getSuppliers = async (req: Request, res: Response, next: NextFunction) => {
   try {

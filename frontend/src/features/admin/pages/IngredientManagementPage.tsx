@@ -66,6 +66,10 @@ export default function IngredientManagementPage() {
   const [wasteQty, setWasteQty] = useState('');
   const [wasteReason, setWasteReason] = useState('EXPIRED');
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   // Transfer Modal state
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [transferSourceId, setTransferSourceId] = useState('');
@@ -80,7 +84,7 @@ export default function IngredientManagementPage() {
         apiClient.get('/inventory/ingredients'),
         apiClient.get('/admin/branches')
       ]);
-      setIngredients(ingredientsRes.data.data.ingredients || []);
+      setIngredients(ingredientsRes.data.data || []);
       setBranches(branchesRes.data.data || []);
     } catch (err: any) {
       toast.error('Failed to load ingredient and branch details.');
@@ -141,6 +145,17 @@ export default function IngredientManagementPage() {
     }
   };
 
+  const handleDeleteIngredient = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete ${name}?`)) return;
+    try {
+      await apiClient.delete(`/inventory/ingredients/${id}`);
+      toast.success(`Deleted ingredient: ${name}`);
+      loadData();
+    } catch (err: any) {
+      toast.error(err.response?.data?.error?.message || 'Error deleting ingredient. It may be in use.');
+    }
+  };
+
   const handleLogWaste = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!wasteIngredientId || !wasteBranchId || !wasteQty || !wasteReason) {
@@ -194,6 +209,13 @@ export default function IngredientManagementPage() {
     .filter(i => selectedCategory === 'ALL' || i.category === selectedCategory)
     .filter(i => i.name.toLowerCase().includes(searchTerm.toLowerCase()) || i.sku.toLowerCase().includes(searchTerm.toLowerCase()));
 
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
+  const paginatedIngredients = filteredIngredients.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   // Stats
   const lowStockCount = ingredients.filter(i => i.reorderPoint > 15).length; // Estimate
   const totalCost = ingredients.reduce((sum, i) => sum + i.costPrice, 0) * 150;
@@ -204,7 +226,7 @@ export default function IngredientManagementPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold font-display tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-            Ingredient Control Center
+            Ingredient Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
             Central repository for ingredient master files, cost configuration, waste management, and real-time alerts.
@@ -317,14 +339,14 @@ export default function IngredientManagementPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/40">
-              {filteredIngredients.length === 0 ? (
+              {paginatedIngredients.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-6 text-center text-slate-500 text-xs">
                     No ingredients found matching the parameters.
                   </td>
                 </tr>
               ) : (
-                filteredIngredients.map((i) => (
+                paginatedIngredients.map((i) => (
                   <tr key={i.id} className="hover:bg-slate-800/10 transition-colors">
                     <td className="py-3 font-mono text-slate-400 text-xs">{i.sku}</td>
                     <td className="py-3 font-semibold text-slate-200">{i.name}</td>
@@ -345,6 +367,13 @@ export default function IngredientManagementPage() {
                         >
                           <Edit2 size={12} />
                         </Button>
+                        <Button
+                          onClick={() => handleDeleteIngredient(i.id, i.name)}
+                          size="sm"
+                          className="p-1.5 bg-rose-950/40 hover:bg-rose-950/60 text-rose-400 border border-rose-900/50 rounded-lg"
+                        >
+                          <Trash2 size={12} />
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -353,6 +382,76 @@ export default function IngredientManagementPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Footer */}
+        {filteredIngredients.length > 0 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-800 bg-slate-900/50">
+            <div className="flex items-center text-sm text-slate-400">
+              <span className="mr-3">Showing</span>
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200 focus:outline-none focus:border-indigo-500 mr-3"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+              <span>
+                out of <strong className="text-slate-200">{filteredIngredients.length}</strong> entries
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-1">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+              </button>
+
+              {Array.from({ length: totalPages }).map((_, idx) => {
+                const pageNum = idx + 1;
+                // Simple logic to show a few pages around current page
+                if (
+                  pageNum === 1 ||
+                  pageNum === totalPages ||
+                  (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors font-medium text-sm ${currentPage === pageNum
+                          ? 'bg-indigo-500 border-indigo-500 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                        }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                }
+                if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                  return <span key={pageNum} className="text-slate-500 px-1">...</span>;
+                }
+                return null;
+              })}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+              </button>
+            </div>
+          </div>
+        )}
       </Card>
 
       {/* Add / Edit Modal */}

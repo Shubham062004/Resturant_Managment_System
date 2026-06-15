@@ -6,8 +6,9 @@ export const createIngredientSchema = {
     sku: z.string().min(2),
     category: z.string().min(2),
     unit: z.string(),
-    minimumStock: z.number().min(0),
+    minimumStock: z.number().min(0).optional().default(0),
     reorderPoint: z.number().min(0),
+    costPrice: z.number().min(0).optional().default(0),
   }),
 };
 
@@ -18,6 +19,7 @@ export const updateIngredientSchema = {
     unit: z.string().optional(),
     minimumStock: z.number().min(0).optional(),
     reorderPoint: z.number().min(0).optional(),
+    costPrice: z.number().min(0).optional(),
     active: z.boolean().optional(),
   }),
 };

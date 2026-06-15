@@ -48,7 +48,7 @@ export default function BranchManagementPage() {
   // Modals state
   const [showAddEditModal, setShowAddEditModal] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
-  
+
   // Form fields for Add/Edit
   const [formName, setFormName] = useState('');
   const [formAddress, setFormAddress] = useState('');
@@ -235,7 +235,7 @@ export default function BranchManagementPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold font-display tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-            Branch Control Center
+            Branch Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
             Configure branches, assign operational manager roles, and coordinate inter-branch stock logistics.
@@ -297,9 +297,8 @@ export default function BranchManagementPage() {
               key={b.id}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className={`p-6 rounded-2xl border bg-[#111827] relative overflow-hidden transition-all duration-200 hover:border-slate-700/60 hover:shadow-xl ${
-                b.isActive ? 'border-slate-800' : 'border-rose-900/40 opacity-75'
-              }`}
+              className={`p-6 rounded-2xl border bg-[#111827] relative overflow-hidden transition-all duration-200 hover:border-slate-700/60 hover:shadow-xl ${b.isActive ? 'border-slate-800' : 'border-rose-900/40 opacity-75'
+                }`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">
@@ -315,9 +314,8 @@ export default function BranchManagementPage() {
                 </div>
 
                 <div className="flex items-center space-x-1">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                    b.isActive ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                  }`}>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${b.isActive ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                    }`}>
                     {b.isActive ? 'Active' : 'Disabled'}
                   </span>
                 </div>
@@ -363,11 +361,10 @@ export default function BranchManagementPage() {
                   <Button
                     onClick={() => handleToggleActive(b)}
                     size="sm"
-                    className={`p-2 rounded-lg border ${
-                      b.isActive 
-                        ? 'bg-rose-950/20 hover:bg-rose-950 text-rose-450 border-rose-500/20' 
+                    className={`p-2 rounded-lg border ${b.isActive
+                        ? 'bg-rose-950/20 hover:bg-rose-950 text-rose-450 border-rose-500/20'
                         : 'bg-emerald-950/20 hover:bg-emerald-950 text-emerald-450 border-emerald-500/20'
-                    }`}
+                      }`}
                   >
                     <Power size={14} />
                   </Button>
