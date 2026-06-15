@@ -14,6 +14,7 @@
     "seed:mongodb": "ts-node-dev --transpile-only src/database/seed.mongodb.ts",
     "seed": "ts-node-dev --transpile-only src/database/seed.ts",
     "seed:inventory": "ts-node-dev --transpile-only src/database/seed.inventory.ts",
+    "seed:dummy-history": "ts-node-dev --transpile-only src/database/seeders/dummy-history-seeder.ts",
     "reset-demo": "prisma migrate reset --force --schema src/database/schema.prisma",
     "create-demo-data": "npm run reset-demo && npm run seed",
     "create-demo-environment": "npm run create-demo-data",
@@ -45,6 +46,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.17",
