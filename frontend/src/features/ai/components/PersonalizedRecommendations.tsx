@@ -6,8 +6,8 @@ import { Card } from '../../../shared/components/ui/Card';
 
 export default function PersonalizedRecommendations() {
   const dispatch = useAppDispatch();
-  const { recommendations, status } = useAppSelector(state => state.recommendation);
-  const { isAuthenticated } = useAppSelector(state => state.auth);
+  const { recommendations, status } = useAppSelector((state) => state.recommendation);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchRecommendations());
@@ -23,10 +23,17 @@ export default function PersonalizedRecommendations() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {recommendations.map((rec: any, idx: number) => (
-          <Card key={idx} className="bg-surface/50 border-border/50 hover:border-primary/50 transition-colors p-4 group cursor-pointer">
+          <Card
+            key={idx}
+            className="bg-surface/50 border-border/50 hover:border-primary/50 transition-colors p-4 group cursor-pointer"
+          >
             <div className="aspect-video bg-secondary/30 rounded-lg mb-3 flex items-center justify-center text-muted-foreground overflow-hidden relative">
               {rec.product.image ? (
-                <img src={rec.product.image} alt={rec.product.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
+                <img
+                  src={rec.product.image}
+                  alt={rec.product.name}
+                  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                />
               ) : (
                 <span>No Image</span>
               )}

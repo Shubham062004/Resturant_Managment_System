@@ -83,7 +83,9 @@ export const BranchesPage: React.FC = () => {
         const updated = mappedBranches
           .map((b) => ({
             ...b,
-            distance: parseFloat(calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng).toFixed(1)),
+            distance: parseFloat(
+              calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng).toFixed(1),
+            ),
           }))
           .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
@@ -153,7 +155,8 @@ export const BranchesPage: React.FC = () => {
                 <div>
                   <p className="text-white font-semibold">{nearestBranch.name}</p>
                   <p className="text-neutral-400 text-xs">
-                    {nearestBranch.distance} mi away · ~{Math.max(15, Math.round(nearestBranch.distance * 8))} min delivery
+                    {nearestBranch.distance} mi away · ~
+                    {Math.max(15, Math.round(nearestBranch.distance * 8))} min delivery
                   </p>
                 </div>
               </div>
@@ -227,7 +230,9 @@ export const BranchesPage: React.FC = () => {
               {activeBranchDetail ? (
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl space-y-5">
                   <div>
-                    <span className="text-primary text-[10px] font-bold uppercase tracking-widest">Branch Details</span>
+                    <span className="text-primary text-[10px] font-bold uppercase tracking-widest">
+                      Branch Details
+                    </span>
                     <h2 className="text-xl font-bold text-white mt-1">{activeBranchDetail.name}</h2>
                     <p className="text-sm text-neutral-400 mt-1">{activeBranchDetail.address}</p>
                   </div>
@@ -246,7 +251,10 @@ export const BranchesPage: React.FC = () => {
                     {activeBranchDetail.distance !== undefined && (
                       <div className="flex items-center gap-2 text-primary font-medium">
                         <Navigation size={16} className="flex-shrink-0" />
-                        <span>{activeBranchDetail.distance} mi away · ~{Math.max(15, Math.round(activeBranchDetail.distance * 8))} min delivery</span>
+                        <span>
+                          {activeBranchDetail.distance} mi away · ~
+                          {Math.max(15, Math.round(activeBranchDetail.distance * 8))} min delivery
+                        </span>
                       </div>
                     )}
                   </div>
@@ -255,9 +263,12 @@ export const BranchesPage: React.FC = () => {
                   <div className="aspect-video rounded-xl bg-neutral-900 border border-white/5 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
                     <MapPin size={28} className="text-primary z-10 animate-bounce" />
-                    <p className="text-xs text-white font-semibold mt-2 z-10">{activeBranchDetail.name}</p>
+                    <p className="text-xs text-white font-semibold mt-2 z-10">
+                      {activeBranchDetail.name}
+                    </p>
                     <p className="text-[10px] text-neutral-500 z-10 mt-1">
-                      {activeBranchDetail.coords.lat.toFixed(4)}, {activeBranchDetail.coords.lng.toFixed(4)}
+                      {activeBranchDetail.coords.lat.toFixed(4)},{' '}
+                      {activeBranchDetail.coords.lng.toFixed(4)}
                     </p>
                   </div>
 
@@ -266,7 +277,9 @@ export const BranchesPage: React.FC = () => {
                     className="w-full font-semibold shadow-lg shadow-primary/20"
                     onClick={() => handleSelectBranch(activeBranchDetail)}
                   >
-                    {selectedBranch?.id === activeBranchDetail.id ? '✓ Currently Selected' : 'Select This Branch'}
+                    {selectedBranch?.id === activeBranchDetail.id
+                      ? '✓ Currently Selected'
+                      : 'Select This Branch'}
                   </Button>
                 </div>
               ) : (

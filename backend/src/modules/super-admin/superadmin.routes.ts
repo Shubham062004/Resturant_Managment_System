@@ -11,27 +11,11 @@ const router = Router();
 router.use(authGuard);
 
 // Global Super Admin Endpoints (Unscoped, restricted to SUPER_ADMIN/PLATFORM_ADMIN)
-router.get(
-  '/dashboard',
-  restrictTo('SUPER_ADMIN'),
-  SuperAdminController.getGlobalDashboard,
-);
-router.get(
-  '/health',
-  restrictTo('SUPER_ADMIN'),
-  SuperAdminController.getPlatformHealth,
-);
+router.get('/dashboard', restrictTo('SUPER_ADMIN'), SuperAdminController.getGlobalDashboard);
+router.get('/health', restrictTo('SUPER_ADMIN'), SuperAdminController.getPlatformHealth);
 
-router.get(
-  '/organizations',
-  restrictTo('SUPER_ADMIN'),
-  OrganizationController.getOrganizations,
-);
-router.post(
-  '/organizations',
-  restrictTo('SUPER_ADMIN'),
-  OrganizationController.createOrganization,
-);
+router.get('/organizations', restrictTo('SUPER_ADMIN'), OrganizationController.getOrganizations);
+router.post('/organizations', restrictTo('SUPER_ADMIN'), OrganizationController.createOrganization);
 router.patch(
   '/organizations/:id',
   restrictTo('SUPER_ADMIN'),

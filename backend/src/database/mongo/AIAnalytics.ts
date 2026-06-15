@@ -19,7 +19,8 @@ const AIAnalyticsSchema = new Schema<IAIAnalytics>({
   totalTokensUsed: { type: Number, default: 0 },
   estimatedCost: { type: Number, default: 0 },
   predictionAccuracyScores: { type: Schema.Types.Mixed, default: {} },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
 });
 
-export const AIAnalytics = mongoose.models.AIAnalytics || mongoose.model<IAIAnalytics>('AIAnalytics', AIAnalyticsSchema);
+export const AIAnalytics =
+  mongoose.models.AIAnalytics || mongoose.model<IAIAnalytics>('AIAnalytics', AIAnalyticsSchema);

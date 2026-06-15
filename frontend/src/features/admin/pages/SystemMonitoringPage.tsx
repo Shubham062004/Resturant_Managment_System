@@ -12,7 +12,7 @@ import {
   RefreshCw,
   Clock,
   Wifi,
-  HardDrive
+  HardDrive,
 } from 'lucide-react';
 import { useToast } from '../../../shared/components/ui/Toast';
 import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
@@ -33,12 +33,14 @@ export default function SystemMonitoringPage() {
       'Prisma client connected to public schema - neon-db',
       'MongoDB analytics event stream dispatched - pos_cart_activity',
       'Upstash Redis socket connection initialized successfully',
-      'Garbage collector triggered - 14.2MB heap reclaimed'
+      'Garbage collector triggered - 14.2MB heap reclaimed',
     ];
     const newLogs = [];
     for (let i = 0; i < 5; i++) {
       const randomAction = actions[Math.floor(Math.random() * actions.length)];
-      newLogs.push(`[${new Date(Date.now() - i * 60000).toLocaleTimeString()}] System: ${randomAction}`);
+      newLogs.push(
+        `[${new Date(Date.now() - i * 60000).toLocaleTimeString()}] System: ${randomAction}`,
+      );
     }
     setLogs(newLogs);
   };
@@ -55,7 +57,7 @@ export default function SystemMonitoringPage() {
         cpuUsage: '14.2%',
         memoryUsage: '342MB / 1024MB',
         latency: '34ms',
-        activeConnections: '24'
+        activeConnections: '24',
       });
       generateLogs();
       setLoading(false);
@@ -81,7 +83,8 @@ export default function SystemMonitoringPage() {
             </h1>
           </div>
           <p className="text-slate-400 text-sm mt-1 ml-9">
-            NOC environment monitoring, database query latencies, CPU core loads, and real-time execution log streams.
+            NOC environment monitoring, database query latencies, CPU core loads, and real-time
+            execution log streams.
           </p>
         </div>
         <Button
@@ -103,10 +106,14 @@ export default function SystemMonitoringPage() {
           <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 rounded-bl-full pointer-events-none" />
           <CardHeader className="flex flex-row items-center gap-2 pb-2">
             <Activity className="text-[#16A34A] w-4 h-4" />
-            <h3 className="font-bold text-white text-sm uppercase tracking-wider">REST API Gateway</h3>
+            <h3 className="font-bold text-white text-sm uppercase tracking-wider">
+              REST API Gateway
+            </h3>
           </CardHeader>
           <CardContent className="mt-2">
-            <p className="text-2xl font-extrabold text-[#16A34A] font-display">{health?.api || 'CHECKING...'}</p>
+            <p className="text-2xl font-extrabold text-[#16A34A] font-display">
+              {health?.api || 'CHECKING...'}
+            </p>
             <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <div>
                 <span className="text-[10px] text-slate-500 block">Gateway Latency</span>
@@ -124,14 +131,20 @@ export default function SystemMonitoringPage() {
           <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-bl-full pointer-events-none" />
           <CardHeader className="flex flex-row items-center gap-2 pb-2">
             <Database className="text-[#2563EB] w-4 h-4" />
-            <h3 className="font-bold text-white text-sm uppercase tracking-wider">Neon PG & MongoDB</h3>
+            <h3 className="font-bold text-white text-sm uppercase tracking-wider">
+              Neon PG & MongoDB
+            </h3>
           </CardHeader>
           <CardContent className="mt-2">
-            <p className="text-2xl font-extrabold text-[#16A34A] font-display">{health?.database || 'CHECKING...'}</p>
+            <p className="text-2xl font-extrabold text-[#16A34A] font-display">
+              {health?.database || 'CHECKING...'}
+            </p>
             <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <div>
                 <span className="text-[10px] text-slate-500 block">Active Pools</span>
-                <span className="font-bold text-slate-200 mt-0.5 block">{health?.activeConnections} Sessions</span>
+                <span className="font-bold text-slate-200 mt-0.5 block">
+                  {health?.activeConnections} Sessions
+                </span>
               </div>
               <div>
                 <span className="text-[10px] text-slate-500 block">Read/Write Uptime</span>
@@ -145,10 +158,14 @@ export default function SystemMonitoringPage() {
           <div className="absolute top-0 right-0 w-20 h-20 bg-cyan-500/5 rounded-bl-full pointer-events-none" />
           <CardHeader className="flex flex-row items-center gap-2 pb-2">
             <AlertCircle className="text-[#06B6D4] w-4 h-4" />
-            <h3 className="font-bold text-white text-sm uppercase tracking-wider">Upstash Redis Stream</h3>
+            <h3 className="font-bold text-white text-sm uppercase tracking-wider">
+              Upstash Redis Stream
+            </h3>
           </CardHeader>
           <CardContent className="mt-2">
-            <p className="text-2xl font-extrabold text-[#16A34A] font-display">{health?.redis || 'CHECKING...'}</p>
+            <p className="text-2xl font-extrabold text-[#16A34A] font-display">
+              {health?.redis || 'CHECKING...'}
+            </p>
             <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <div>
                 <span className="text-[10px] text-slate-500 block">Websocket Pipeline</span>
@@ -167,12 +184,16 @@ export default function SystemMonitoringPage() {
         {/* Hardware & Resource Loads (left) */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="bg-[#111827] border-slate-800 shadow-xl p-6">
-            <h3 className="text-base font-bold font-display text-white mb-4">Core Virtual Machine Health</h3>
-            
+            <h3 className="text-base font-bold font-display text-white mb-4">
+              Core Virtual Machine Health
+            </h3>
+
             <div className="space-y-4 font-sans text-xs">
               <div className="p-3 bg-slate-950/40 border border-slate-850 rounded-xl space-y-2">
                 <div className="flex justify-between items-center text-slate-450">
-                  <span className="flex items-center gap-1.5"><Cpu size={13} /> CPU Load Allocation</span>
+                  <span className="flex items-center gap-1.5">
+                    <Cpu size={13} /> CPU Load Allocation
+                  </span>
                   <span className="font-bold text-white">{health?.cpuUsage}</span>
                 </div>
                 <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -182,7 +203,9 @@ export default function SystemMonitoringPage() {
 
               <div className="p-3 bg-slate-950/40 border border-slate-850 rounded-xl space-y-2">
                 <div className="flex justify-between items-center text-slate-450">
-                  <span className="flex items-center gap-1.5"><HardDrive size={13} /> RAM Usage</span>
+                  <span className="flex items-center gap-1.5">
+                    <HardDrive size={13} /> RAM Usage
+                  </span>
                   <span className="font-bold text-white">{health?.memoryUsage}</span>
                 </div>
                 <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -192,7 +215,9 @@ export default function SystemMonitoringPage() {
 
               <div className="p-3 bg-slate-950/40 border border-slate-850 rounded-xl space-y-2">
                 <div className="flex justify-between items-center text-slate-450">
-                  <span className="flex items-center gap-1.5"><Wifi size={13} /> Network Node</span>
+                  <span className="flex items-center gap-1.5">
+                    <Wifi size={13} /> Network Node
+                  </span>
                   <span className="font-bold text-[#16A34A]">ONLINE</span>
                 </div>
                 <div className="flex justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-900">
@@ -204,7 +229,9 @@ export default function SystemMonitoringPage() {
           </Card>
 
           <Card className="bg-[#111827] border-slate-800 shadow-xl p-6 space-y-3">
-            <h3 className="text-base font-bold font-display text-white">Environment Configuration</h3>
+            <h3 className="text-base font-bold font-display text-white">
+              Environment Configuration
+            </h3>
             <div className="space-y-2 text-xs font-mono text-slate-350">
               <div className="flex justify-between py-1 border-b border-slate-850">
                 <span className="text-slate-500">NODE_ENV:</span>
@@ -243,18 +270,25 @@ export default function SystemMonitoringPage() {
 
               <div className="mt-5 space-y-3 font-mono text-[11px] bg-slate-950 p-4 rounded-xl border border-slate-900 max-h-[300px] overflow-y-auto text-slate-300">
                 {logs.map((log, idx) => (
-                  <div key={idx} className="hover:bg-slate-900/40 py-1 px-1.5 rounded transition-colors break-words">
+                  <div
+                    key={idx}
+                    className="hover:bg-slate-900/40 py-1 px-1.5 rounded transition-colors break-words"
+                  >
                     {log}
                   </div>
                 ))}
                 {logs.length === 0 && (
-                  <p className="text-slate-500 text-center py-12 italic">Log stream currently empty.</p>
+                  <p className="text-slate-500 text-center py-12 italic">
+                    Log stream currently empty.
+                  </p>
                 )}
               </div>
             </div>
 
             <div className="pt-6 mt-6 border-t border-slate-800 flex justify-between items-center">
-              <span className="text-[10px] text-slate-500">Logs synchronized continuously via Websocket.</span>
+              <span className="text-[10px] text-slate-500">
+                Logs synchronized continuously via Websocket.
+              </span>
               <Button
                 onClick={() => {
                   generateLogs();

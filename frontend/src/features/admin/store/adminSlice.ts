@@ -22,9 +22,7 @@ const initialState: AdminState = {
 export const fetchDashboardOverview = createAsyncThunk(
   'admin/fetchDashboard',
   async (branchId: string) => {
-    const response = await apiClient.get(
-      `/admin/dashboard?branchId=${branchId}`
-    );
+    const response = await apiClient.get(`/admin/dashboard?branchId=${branchId}`);
     return response.data.data;
   },
 );

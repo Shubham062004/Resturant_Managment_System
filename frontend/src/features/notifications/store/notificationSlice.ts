@@ -9,10 +9,7 @@ export const fetchNotifications = createAsyncThunk('notifications/fetchAll', asy
 export const markNotificationRead = createAsyncThunk(
   'notifications/markRead',
   async (id: string) => {
-    await apiClient.patch(
-      `/notifications/${id}/read`,
-      {}
-    );
+    await apiClient.patch(`/notifications/${id}/read`, {});
     return id;
   },
 );

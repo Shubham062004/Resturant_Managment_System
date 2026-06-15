@@ -9,16 +9,16 @@ const request = (path, method = 'GET', data = null, token = null) => {
       method: method,
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
     };
-    
+
     if (token) {
       options.headers['Authorization'] = `Bearer ${token}`;
     }
 
     const req = http.request(options, (res) => {
       let body = '';
-      res.on('data', chunk => body += chunk);
+      res.on('data', (chunk) => (body += chunk));
       res.on('end', () => {
         try {
           resolve({ status: res.statusCode, data: JSON.parse(body || '{}') });
@@ -38,23 +38,23 @@ const request = (path, method = 'GET', data = null, token = null) => {
 };
 
 async function runTests() {
-  console.log("--- PHASE 4: AUTHENTICATION TESTING ---");
-  console.log("Testing Customer Login...");
+  console.log('--- PHASE 4: AUTHENTICATION TESTING ---');
+  console.log('Testing Customer Login...');
   try {
     const loginRes = await request('/api/v1/auth/login', 'POST', {
       email: 'customer@abc.com',
-      password: 'Customer@123'
+      password: 'Customer@123',
     });
-    
+
     if (loginRes.status === 200) {
-      console.log("✅ Customer Login SUCCESS!");
-      console.log("Token received:", loginRes.data.token ? "Yes" : "No");
+      console.log('✅ Customer Login SUCCESS!');
+      console.log('Token received:', loginRes.data.token ? 'Yes' : 'No');
     } else {
       console.log(`❌ Customer Login FAILED! Status: ${loginRes.status}`);
       console.log(loginRes.data);
     }
   } catch (error) {
-    console.log("Network error:", error.message);
+    console.log('Network error:', error.message);
   }
 }
 

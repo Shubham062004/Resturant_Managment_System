@@ -40,25 +40,31 @@ export class KitchenService {
     });
 
     if (assignedCategory) {
-      return orders.map(ko => {
-        if (!ko.order) return null;
-        const matchedItems = ko.order.items.filter(item => {
-          const catSlug = item.product.category.slug.toLowerCase();
-          const catName = item.product.category.name.toLowerCase();
-          const filterSlug = assignedCategory.toLowerCase();
-          return catSlug.includes(filterSlug) || catName.includes(filterSlug) || filterSlug.includes(catSlug);
-        });
+      return orders
+        .map((ko) => {
+          if (!ko.order) return null;
+          const matchedItems = ko.order.items.filter((item) => {
+            const catSlug = item.product.category.slug.toLowerCase();
+            const catName = item.product.category.name.toLowerCase();
+            const filterSlug = assignedCategory.toLowerCase();
+            return (
+              catSlug.includes(filterSlug) ||
+              catName.includes(filterSlug) ||
+              filterSlug.includes(catSlug)
+            );
+          });
 
-        if (matchedItems.length === 0) return null;
+          if (matchedItems.length === 0) return null;
 
-        return {
-          ...ko,
-          order: {
-            ...ko.order,
-            items: matchedItems
-          }
-        };
-      }).filter((o): o is NonNullable<typeof o> => o !== null);
+          return {
+            ...ko,
+            order: {
+              ...ko.order,
+              items: matchedItems,
+            },
+          };
+        })
+        .filter((o): o is NonNullable<typeof o> => o !== null);
     }
 
     return orders;
@@ -69,7 +75,7 @@ export class KitchenService {
    */
   public static async getStaffOrders(userId: string) {
     const user = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
     if (!user) throw new AppError('User not found', 404);
 
@@ -99,25 +105,31 @@ export class KitchenService {
     });
 
     if (assignedCategory) {
-      return orders.map(ko => {
-        if (!ko.order) return null;
-        const matchedItems = ko.order.items.filter(item => {
-          const catSlug = item.product.category.slug.toLowerCase();
-          const catName = item.product.category.name.toLowerCase();
-          const filterSlug = assignedCategory.toLowerCase();
-          return catSlug.includes(filterSlug) || catName.includes(filterSlug) || filterSlug.includes(catSlug);
-        });
+      return orders
+        .map((ko) => {
+          if (!ko.order) return null;
+          const matchedItems = ko.order.items.filter((item) => {
+            const catSlug = item.product.category.slug.toLowerCase();
+            const catName = item.product.category.name.toLowerCase();
+            const filterSlug = assignedCategory.toLowerCase();
+            return (
+              catSlug.includes(filterSlug) ||
+              catName.includes(filterSlug) ||
+              filterSlug.includes(catSlug)
+            );
+          });
 
-        if (matchedItems.length === 0) return null;
+          if (matchedItems.length === 0) return null;
 
-        return {
-          ...ko,
-          order: {
-            ...ko.order,
-            items: matchedItems
-          }
-        };
-      }).filter((o): o is NonNullable<typeof o> => o !== null);
+          return {
+            ...ko,
+            order: {
+              ...ko.order,
+              items: matchedItems,
+            },
+          };
+        })
+        .filter((o): o is NonNullable<typeof o> => o !== null);
     }
 
     return orders;

@@ -10,7 +10,7 @@ describe('aiService', () => {
   it('should switch providers successfully', () => {
     aiService.setActiveProvider('OPENAI');
     expect(aiService.getActiveProviderName()).toBe('OPENAI');
-    
+
     // Switch back
     aiService.setActiveProvider('GEMINI');
     expect(aiService.getActiveProviderName()).toBe('GEMINI');

@@ -121,7 +121,11 @@ export class AuthService {
     });
 
     if (!user || !user.passwordHash) {
-      if (user) await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'FAILED', error: 'Incorrect password' });
+      if (user)
+        await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, {
+          status: 'FAILED',
+          error: 'Incorrect password',
+        });
       throw new AppError('Incorrect credentials. Access denied.', 401);
     }
 
@@ -132,7 +136,10 @@ export class AuthService {
     // Compare passwords
     const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordCorrect) {
-      await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'FAILED', error: 'Incorrect password' });
+      await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, {
+        status: 'FAILED',
+        error: 'Incorrect password',
+      });
       throw new AppError('Incorrect credentials. Access denied.', 401);
     }
 
@@ -143,10 +150,15 @@ export class AuthService {
     if (user.role !== Role.CUSTOMER) {
       // Generate & Dispatch OTP
       const otp = OtpService.generateOtp();
-      await OtpService.saveOtp({ userId: user.id, email: user.email, phone: user.phone || undefined }, otp);
+      await OtpService.saveOtp(
+        { userId: user.id, email: user.email, phone: user.phone || undefined },
+        otp,
+      );
       await OtpService.dispatchOtp(user.phone || user.email, otp, 'MOCK'); // or SMS provider
-      
-      await AuditService.writeLog(user.id, 'PASSWORD_RESET', ipAddress, userAgent, { status: 'OTP_REQUESTED' }); // using existing types or custom
+
+      await AuditService.writeLog(user.id, 'PASSWORD_RESET', ipAddress, userAgent, {
+        status: 'OTP_REQUESTED',
+      }); // using existing types or custom
 
       return {
         requireOtp: true,
@@ -200,9 +212,12 @@ export class AuthService {
     }
 
     const isValid = await OtpService.verifyOtp({ email, phone }, otp);
-    
+
     if (!isValid) {
-      await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, { status: 'FAILED', error: 'Invalid OTP' });
+      await AuditService.writeLog(user.id, 'LOGIN', ipAddress, userAgent, {
+        status: 'FAILED',
+        error: 'Invalid OTP',
+      });
       throw new AppError('Invalid or expired OTP.', 401);
     }
 

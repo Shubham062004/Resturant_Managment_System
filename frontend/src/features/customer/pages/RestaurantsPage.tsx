@@ -50,14 +50,17 @@ export const RestaurantsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-16 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Header section with Location */}
         <div className="relative mb-10 flex flex-col items-center text-center sm:text-left sm:flex-row sm:justify-between sm:items-end gap-6">
           <div className="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
-          
+
           <div className="space-y-2">
             {selectedBranch && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-1.5 text-primary text-sm font-semibold mb-2">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-1.5 text-primary text-sm font-semibold mb-2"
+              >
                 <MapPin size={16} />
                 <span>Delivering near {selectedBranch.name}</span>
               </motion.div>
@@ -66,10 +69,10 @@ export const RestaurantsPage: React.FC = () => {
               Restaurants Near You
             </h1>
             <p className="text-neutral-400 text-sm max-w-xl">
-              Explore top-rated restaurants, exclusive deals, and popular dishes ready to be delivered hot to your door.
+              Explore top-rated restaurants, exclusive deals, and popular dishes ready to be
+              delivered hot to your door.
             </p>
           </div>
-          
         </div>
 
         {/* Filters Panel */}
@@ -212,11 +215,13 @@ export const RestaurantsPage: React.FC = () => {
                     >
                       <Link to={`/restaurants/${restaurant.slug}`} className="block h-full group">
                         <div className="rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/20 transition-all duration-300 overflow-hidden flex flex-col h-full">
-                          
                           {/* Image area */}
                           <div className="relative h-48 overflow-hidden">
                             <img
-                              src={restaurant.coverImage || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'}
+                              src={
+                                restaurant.coverImage ||
+                                'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'
+                              }
                               alt={restaurant.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               loading="lazy"
@@ -230,9 +235,10 @@ export const RestaurantsPage: React.FC = () => {
                                 </span>
                               )}
                             </div>
-                            
+
                             <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-amber-400 font-bold text-xs border border-white/10">
-                              <Star className="h-3 w-3 fill-current" /> {restaurant.rating.toFixed(1)}
+                              <Star className="h-3 w-3 fill-current" />{' '}
+                              {restaurant.rating.toFixed(1)}
                             </div>
                           </div>
 
@@ -252,7 +258,8 @@ export const RestaurantsPage: React.FC = () => {
                                 )}
                               </div>
                               <p className="text-neutral-400 text-xs line-clamp-2 leading-relaxed mb-4">
-                                {restaurant.description || 'Enjoy our delicious meals crafted with love and fresh ingredients.'}
+                                {restaurant.description ||
+                                  'Enjoy our delicious meals crafted with love and fresh ingredients.'}
                               </p>
                             </div>
 

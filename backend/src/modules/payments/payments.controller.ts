@@ -47,7 +47,7 @@ export class PaymentsController {
         res.status(400).send('Missing stripe-signature header');
         return;
       }
-      
+
       const result = await PaymentsService.handleStripeWebhook(signature, req.body);
       res.status(200).json(result);
     } catch (error) {

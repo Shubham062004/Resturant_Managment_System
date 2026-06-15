@@ -7,7 +7,15 @@ import EmptyState from '../../../shared/components/ui/EmptyState';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { useCart, useAddresses, useValidateCoupon, type Address } from '../store/cartQueries';
 import { useAppSelector } from '../../../app/store';
-import { Tag, MapPin, CreditCard, CheckCircle2, ChevronRight, ShoppingBag, ShieldCheck } from 'lucide-react';
+import {
+  Tag,
+  MapPin,
+  CreditCard,
+  CheckCircle2,
+  ChevronRight,
+  ShoppingBag,
+  ShieldCheck,
+} from 'lucide-react';
 
 type CheckoutStep = 'address' | 'coupon' | 'payment';
 
@@ -52,11 +60,14 @@ export const CheckoutPage: React.FC = () => {
     );
   }
 
-  const subtotal = cart.items.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
+  const subtotal = cart.items.reduce(
+    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    0,
+  );
   const taxAmount = subtotal * 0.05; // 5% GST
   const deliveryFee = subtotal > 500 ? 0 : 40; // Free delivery above 500
   const total = Math.max(0, subtotal + taxAmount + deliveryFee - discountAmount);
-  
+
   const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];
 
   const handleApplyCoupon = async () => {
@@ -83,19 +94,23 @@ export const CheckoutPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="Secure Checkout — ABC Restaurant" description="Complete your ABC Restaurant order securely." />
+      <SEO
+        title="Secure Checkout — ABC Restaurant"
+        description="Complete your ABC Restaurant order securely."
+      />
       <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-32 font-sans">
         <div className="max-w-6xl mx-auto px-6 space-y-10">
-          
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/5 pb-6">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold font-display text-white">Secure Checkout</h1>
+              <h1 className="text-3xl md:text-4xl font-bold font-display text-white">
+                Secure Checkout
+              </h1>
               <p className="text-neutral-400 text-sm mt-2 flex items-center gap-1">
                 <ShieldCheck size={16} className="text-emerald-500" /> End-to-end encrypted payment
               </p>
             </div>
-            
+
             {/* Stepper */}
             <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto scrollbar-hide py-2">
               {(['address', 'coupon', 'payment'] as CheckoutStep[]).map((s, i) => (
@@ -109,7 +124,9 @@ export const CheckoutPage: React.FC = () => {
                         : 'bg-white/5 text-neutral-400 border border-white/5 hover:text-white'
                     }`}
                   >
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === s ? 'bg-primary text-white' : 'bg-white/10 text-neutral-500'}`}>
+                    <span
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === s ? 'bg-primary text-white' : 'bg-white/10 text-neutral-500'}`}
+                    >
                       {i + 1}
                     </span>
                     {s}
@@ -121,10 +138,8 @@ export const CheckoutPage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
             {/* Left Column: Steps */}
             <div className="lg:col-span-7 space-y-8">
-              
               {step === 'address' && (
                 <section className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 sm:p-8 space-y-6 animate-fade-in">
                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
@@ -133,10 +148,12 @@ export const CheckoutPage: React.FC = () => {
                     </div>
                     <h2 className="text-xl font-bold font-display">Delivery Address</h2>
                   </div>
-                  
+
                   {addresses.length === 0 ? (
                     <div className="text-center py-8">
-                      <p className="text-neutral-400 mb-4">You don't have any saved addresses yet.</p>
+                      <p className="text-neutral-400 mb-4">
+                        You don't have any saved addresses yet.
+                      </p>
                       <Button variant="outline" onClick={() => navigate('/addresses')}>
                         Add New Address
                       </Button>
@@ -163,13 +180,18 @@ export const CheckoutPage: React.FC = () => {
                           </div>
                           <div>
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="font-bold text-white text-base">{addr.fullName}</span>
+                              <span className="font-bold text-white text-base">
+                                {addr.fullName}
+                              </span>
                               {addr.isDefault && (
-                                <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded-full font-semibold uppercase">Default</span>
+                                <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded-full font-semibold uppercase">
+                                  Default
+                                </span>
                               )}
                             </div>
                             <p className="text-sm text-neutral-400 leading-relaxed">
-                              {addr.addressLine1}<br />
+                              {addr.addressLine1}
+                              <br />
                               {addr.city}, {addr.state} {addr.postalCode}
                             </p>
                           </div>
@@ -177,9 +199,13 @@ export const CheckoutPage: React.FC = () => {
                       ))}
                     </div>
                   )}
-                  
+
                   <div className="pt-4 flex justify-end">
-                    <Button variant="primary" className="h-12 px-8 font-bold" onClick={() => setStep('coupon')}>
+                    <Button
+                      variant="primary"
+                      className="h-12 px-8 font-bold"
+                      onClick={() => setStep('coupon')}
+                    >
                       Continue to Coupon
                     </Button>
                   </div>
@@ -194,9 +220,11 @@ export const CheckoutPage: React.FC = () => {
                     </div>
                     <h2 className="text-xl font-bold font-display">Apply Promo Code</h2>
                   </div>
-                  
+
                   <div className="space-y-4">
-                    <p className="text-neutral-400 text-sm">Have a coupon code? Enter it below to get a discount on your order.</p>
+                    <p className="text-neutral-400 text-sm">
+                      Have a coupon code? Enter it below to get a discount on your order.
+                    </p>
                     <div className="flex gap-3">
                       <Input
                         value={couponCode}
@@ -216,16 +244,25 @@ export const CheckoutPage: React.FC = () => {
                     {discountAmount > 0 && (
                       <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20">
                         <CheckCircle2 size={18} />
-                        <span className="font-semibold text-sm">Code applied successfully! Saved ₹{discountAmount.toFixed(0)}</span>
+                        <span className="font-semibold text-sm">
+                          Code applied successfully! Saved ₹{discountAmount.toFixed(0)}
+                        </span>
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="pt-4 flex justify-between items-center border-t border-white/5">
-                    <button onClick={() => setStep('address')} className="text-sm text-neutral-400 hover:text-white transition-colors">
+                    <button
+                      onClick={() => setStep('address')}
+                      className="text-sm text-neutral-400 hover:text-white transition-colors"
+                    >
                       Back
                     </button>
-                    <Button variant="outline" className="h-12 px-8 font-bold" onClick={() => setStep('payment')}>
+                    <Button
+                      variant="outline"
+                      className="h-12 px-8 font-bold"
+                      onClick={() => setStep('payment')}
+                    >
                       Skip or Continue
                     </Button>
                   </div>
@@ -240,7 +277,7 @@ export const CheckoutPage: React.FC = () => {
                     </div>
                     <h2 className="text-xl font-bold font-display">Payment Method</h2>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {(['CARD', 'UPI', 'COD'] as const).map((provider) => (
                       <label
@@ -261,18 +298,29 @@ export const CheckoutPage: React.FC = () => {
                             className="w-4 h-4 text-primary bg-transparent border-white/20 focus:ring-primary focus:ring-offset-gray-900"
                           />
                           <span className="font-bold text-white tracking-wide">
-                            {provider === 'CARD' ? 'Credit / Debit Card' : provider === 'UPI' ? 'UPI (GPay, PhonePe, Paytm)' : 'Cash on Delivery'}
+                            {provider === 'CARD'
+                              ? 'Credit / Debit Card'
+                              : provider === 'UPI'
+                                ? 'UPI (GPay, PhonePe, Paytm)'
+                                : 'Cash on Delivery'}
                           </span>
                         </div>
                       </label>
                     ))}
                   </div>
-                  
+
                   <div className="pt-4 flex justify-between items-center border-t border-white/5">
-                    <button onClick={() => setStep('coupon')} className="text-sm text-neutral-400 hover:text-white transition-colors">
+                    <button
+                      onClick={() => setStep('coupon')}
+                      className="text-sm text-neutral-400 hover:text-white transition-colors"
+                    >
                       Back
                     </button>
-                    <Button variant="primary" className="h-14 px-10 font-bold shadow-lg shadow-primary/20 text-base" onClick={handlePlaceOrder}>
+                    <Button
+                      variant="primary"
+                      className="h-14 px-10 font-bold shadow-lg shadow-primary/20 text-base"
+                      onClick={handlePlaceOrder}
+                    >
                       Pay ₹{total.toFixed(0)} & Place Order
                     </Button>
                   </div>
@@ -286,7 +334,7 @@ export const CheckoutPage: React.FC = () => {
                 <h3 className="text-xl font-bold font-display text-white border-b border-white/5 pb-4 flex items-center gap-2">
                   <ShoppingBag size={20} className="text-primary" /> Order Details
                 </h3>
-                
+
                 <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                   {cart.items.map((item) => (
                     <div key={item.id} className="flex justify-between gap-4">
@@ -295,11 +343,17 @@ export const CheckoutPage: React.FC = () => {
                           {item.quantity}x
                         </span>
                         <div>
-                          <p className="text-sm font-semibold text-white line-clamp-1">{item.product.name}</p>
-                          {item.variant && <p className="text-xs text-neutral-500">{item.variant.name}</p>}
+                          <p className="text-sm font-semibold text-white line-clamp-1">
+                            {item.product.name}
+                          </p>
+                          {item.variant && (
+                            <p className="text-xs text-neutral-500">{item.variant.name}</p>
+                          )}
                         </div>
                       </div>
-                      <p className="text-sm font-bold text-white shrink-0">₹{(parseFloat(item.price) * item.quantity).toFixed(0)}</p>
+                      <p className="text-sm font-bold text-white shrink-0">
+                        ₹{(parseFloat(item.price) * item.quantity).toFixed(0)}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -309,19 +363,19 @@ export const CheckoutPage: React.FC = () => {
                     <span>Subtotal</span>
                     <span className="text-white">₹{subtotal.toFixed(0)}</span>
                   </div>
-                  
+
                   {discountAmount > 0 && (
                     <div className="flex justify-between text-emerald-400 font-medium">
                       <span>Discount (Coupon)</span>
                       <span>-₹{discountAmount.toFixed(0)}</span>
                     </div>
                   )}
-                  
+
                   <div className="flex justify-between text-neutral-400">
                     <span>Taxes (5% GST)</span>
                     <span className="text-white">₹{taxAmount.toFixed(0)}</span>
                   </div>
-                  
+
                   <div className="flex justify-between text-neutral-400">
                     <span>Delivery Fee</span>
                     {deliveryFee === 0 ? (
@@ -335,10 +389,11 @@ export const CheckoutPage: React.FC = () => {
                 <div className="border-t border-white/5 pt-5 mt-5 flex justify-between items-end">
                   <div>
                     <span className="text-sm text-neutral-400 block mb-1">Total to pay</span>
-                    <span className="text-3xl font-bold font-display text-primary">₹{total.toFixed(0)}</span>
+                    <span className="text-3xl font-bold font-display text-primary">
+                      ₹{total.toFixed(0)}
+                    </span>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>

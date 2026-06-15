@@ -17,7 +17,15 @@ router.post('/:id/cancel', OrdersController.cancelOrder);
 // Admin / Staff Routes
 router.patch(
   '/:id/status',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'DELIVERY_PARTNER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER', 'BRANCH_MANAGER'),
+  restrictTo(
+    'ADMIN',
+    'SUPER_ADMIN',
+    'KITCHEN_STAFF',
+    'DELIVERY_PARTNER',
+    'ORGANIZATION_OWNER',
+    'FRANCHISE_OWNER',
+    'BRANCH_MANAGER',
+  ),
   validate(updateOrderStatusSchema),
   OrdersController.updateOrderStatus,
 );

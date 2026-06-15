@@ -32,7 +32,9 @@ export class PaymentsService {
     // 2. Recalculate everything securely
     let subtotal = 0;
     for (const item of cart.items) {
-      const price = item.variant ? item.variant.price.toNumber() : item.product.basePrice.toNumber();
+      const price = item.variant
+        ? item.variant.price.toNumber()
+        : item.product.basePrice.toNumber();
       subtotal += price * item.quantity;
     }
 
@@ -96,7 +98,7 @@ export class PaymentsService {
    */
   public static async handleStripeWebhook(signature: string, rawBody: Buffer) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
-    
+
     let event: any;
     try {
       event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
@@ -133,15 +135,17 @@ export class PaymentsService {
 
       if (cart && cart.items.length > 0) {
         const orderDraft = await prisma.orderDraft.findUnique({ where: { id: orderDraftId } });
-        
+
         if (orderDraft) {
           // In production, grab branchId and restaurantId from cart items
           const firstProductId = cart.items[0].productId;
-          const product = await prisma.product.findUnique({ where: { id: firstProductId }});
-          
+          const product = await prisma.product.findUnique({ where: { id: firstProductId } });
+
           if (product) {
-            const branch = await prisma.branch.findFirst({ where: { restaurantId: product.restaurantId }});
-            
+            const branch = await prisma.branch.findFirst({
+              where: { restaurantId: product.restaurantId },
+            });
+
             const newOrder = await prisma.order.create({
               data: {
                 userId,
@@ -155,7 +159,7 @@ export class PaymentsService {
                 status: 'PLACED',
                 orderType: 'DELIVERY',
                 orderNumber: `ORD-${Date.now()}`,
-              }
+              },
             });
 
             // Convert CartItems to OrderItems
@@ -171,11 +175,11 @@ export class PaymentsService {
 
             // Clear Cart
             await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
-            
+
             // Link Payment to Order
             await prisma.payment.updateMany({
               where: { transactionId: paymentIntent.id },
-              data: { orderDraftId: newOrder.id } // Note: Schema might require linking Payment to Order properly, but we'll adapt.
+              data: { orderDraftId: newOrder.id }, // Note: Schema might require linking Payment to Order properly, but we'll adapt.
             });
           }
         }

@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function walk(dir) {
-  fs.readdirSync(dir, { withFileTypes: true }).forEach(f => {
+  fs.readdirSync(dir, { withFileTypes: true }).forEach((f) => {
     const p = path.join(dir, f.name);
     if (f.isDirectory()) {
       walk(p);

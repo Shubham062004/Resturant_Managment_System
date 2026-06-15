@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   '/webhook/stripe',
   express.raw({ type: 'application/json' }),
-  PaymentsController.stripeWebhook
+  PaymentsController.stripeWebhook,
 );
 
 router.post('/webhook/razorpay', PaymentsController.razorpayWebhook);

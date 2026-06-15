@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 
 export async function seedOrgsAndBranches(prisma: PrismaClient) {
   console.log('🌱 Seeding Organizations & Branches...');
-  
+
   // Clean existing
   await prisma.branch.deleteMany();
   await prisma.restaurantGroup.deleteMany();
@@ -58,8 +58,8 @@ export async function seedOrgsAndBranches(prisma: PrismaClient) {
         address: `123 Main St, ${city} Center`,
         city: city,
         state: city === 'Delhi' ? 'DL' : 'MH',
-        latitude: 28.6139 + (i * 0.1),
-        longitude: 77.2090 + (i * 0.1),
+        latitude: 28.6139 + i * 0.1,
+        longitude: 77.209 + i * 0.1,
         openingTime: '09:00 AM',
         closingTime: '11:00 PM',
         deliveryRadius: 10.0,

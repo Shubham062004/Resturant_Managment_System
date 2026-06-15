@@ -26,12 +26,13 @@ const PromptLogSchema = new Schema<IPromptLog>({
   tokenUsage: {
     promptTokens: { type: Number, default: 0 },
     completionTokens: { type: Number, default: 0 },
-    totalTokens: { type: Number, default: 0 }
+    totalTokens: { type: Number, default: 0 },
   },
   latencyMs: { type: Number, required: true },
   status: { type: String, enum: ['SUCCESS', 'ERROR'], required: true },
   errorMessage: { type: String },
-  timestamp: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now },
 });
 
-export const PromptLog = mongoose.models.PromptLog || mongoose.model<IPromptLog>('PromptLog', PromptLogSchema);
+export const PromptLog =
+  mongoose.models.PromptLog || mongoose.model<IPromptLog>('PromptLog', PromptLogSchema);

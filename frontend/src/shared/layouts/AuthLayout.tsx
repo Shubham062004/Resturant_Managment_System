@@ -10,13 +10,14 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
       {/* Visual Image Pane (Left Side) */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-secondary overflow-hidden">
         {/* High-quality Restaurant/Food Imagery */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')"
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
           }}
         />
-        
+
         {/* Optional overlay gradient to ensure the image looks premium and text (if any) is legible */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
 
@@ -45,9 +46,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
           <p className="text-muted-foreground font-sans text-sm">Fresh Food. Fast Service.</p>
         </div>
 
-        <div className="w-full max-w-md mx-auto z-10 animate-fade-in-up">
-          {children}
-        </div>
+        <div className="w-full max-w-md mx-auto z-10 animate-fade-in-up">{children}</div>
       </div>
     </div>
   );

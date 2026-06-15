@@ -12,7 +12,7 @@ export class AIService {
   constructor() {
     this.geminiProvider = new GeminiProvider();
     this.openaiProvider = new OpenAIProvider();
-    
+
     this.geminiProvider.initialize();
     this.openaiProvider.initialize();
 
@@ -61,7 +61,13 @@ export class AIService {
     }
   }
 
-  private async logPrompt(prompt: string, response: string, latencyMs: number, status: 'SUCCESS' | 'ERROR', errorMessage?: string) {
+  private async logPrompt(
+    prompt: string,
+    response: string,
+    latencyMs: number,
+    status: 'SUCCESS' | 'ERROR',
+    errorMessage?: string,
+  ) {
     try {
       await PromptLog.create({
         provider: this.getActiveProviderName(),
@@ -78,19 +84,25 @@ export class AIService {
     }
   }
 
-  private async logChat(messages: AIChatMessage[], response: string, _latencyMs: number, status: 'SUCCESS' | 'ERROR', _errorMessage?: string) {
+  private async logChat(
+    messages: AIChatMessage[],
+    response: string,
+    _latencyMs: number,
+    status: 'SUCCESS' | 'ERROR',
+    _errorMessage?: string,
+  ) {
     try {
       const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
-      const chatMessages = messages.map(msg => ({
+      const chatMessages = messages.map((msg) => ({
         role: msg.role,
         content: msg.content,
-        timestamp: new Date()
+        timestamp: new Date(),
       }));
       if (response && status === 'SUCCESS') {
         chatMessages.push({
           role: 'assistant',
           content: response,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
       await ChatLog.create({

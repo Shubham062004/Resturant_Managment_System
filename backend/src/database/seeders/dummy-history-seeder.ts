@@ -16,7 +16,9 @@ const END_DATE = new Date('2026-06-30T23:59:59.000Z');
 
 async function main() {
   console.log('🚀 Starting Massive Dummy History Generation...');
-  console.log(`Period: ${START_DATE.toISOString().split('T')[0]} to ${END_DATE.toISOString().split('T')[0]}`);
+  console.log(
+    `Period: ${START_DATE.toISOString().split('T')[0]} to ${END_DATE.toISOString().split('T')[0]}`,
+  );
 
   // PHASE 1: ORGANIZATION & FRANCHISE
   console.log('Building Foundations...');
@@ -26,17 +28,19 @@ async function main() {
     create: {
       name: 'ABC Restaurant Group',
       slug: 'abc-restaurant-group',
-    }
+    },
   });
 
-  const franchise = await prisma.franchise.findFirst({
-    where: { organizationId: org.id }
-  }) || await prisma.franchise.create({
-    data: {
-      organizationId: org.id,
-      ownerName: 'Mr. ABC Owner',
-    }
-  });
+  const franchise =
+    (await prisma.franchise.findFirst({
+      where: { organizationId: org.id },
+    })) ||
+    (await prisma.franchise.create({
+      data: {
+        organizationId: org.id,
+        ownerName: 'Mr. ABC Owner',
+      },
+    }));
 
   const restGroup = await prisma.restaurantGroup.upsert({
     where: { slug: 'abc-restaurants' },
@@ -46,37 +50,55 @@ async function main() {
       name: 'ABC Restaurants',
       slug: 'abc-restaurants',
       description: 'The best multi-cuisine restaurant chain.',
-    }
+    },
   });
 
   // PHASE 2: BRANCHES
   const branchNames = [
-    'ABC Hazratganj', 'ABC Gomti Nagar', 'ABC Aliganj', 'ABC Indira Nagar',
-    'ABC Vibhuti Khand', 'ABC Kanpur', 'ABC Noida', 'ABC Delhi', 'ABC Gurgaon', 'ABC Ghaziabad'
+    'ABC Connaught Place',
+    'ABC Rajouri Garden',
+    'ABC Saket',
+    'ABC Dwarka Sector 12',
+    'ABC Rohini Sector 8',
+    'ABC Karol Bagh',
+    'ABC Janakpuri',
+    'ABC Lajpat Nagar',
+    'ABC Nehru Place',
+    'ABC Chandni Chowk',
+    'ABC Pitampura',
+    'ABC Vasant Kunj',
   ];
 
   const branches = await Promise.all(
-    branchNames.map(name => prisma.branch.create({
-      data: {
-        organizationId: org.id,
-        franchiseId: franchise.id,
-        restaurantId: restGroup.id,
-        name: name,
-        address: faker.location.streetAddress(),
-        city: name.split(' ')[1] || 'City',
-        state: 'Uttar Pradesh',
-        latitude: faker.location.latitude({ max: 28, min: 26 }),
-        longitude: faker.location.longitude({ max: 81, min: 77 }),
-        openingTime: '10:00',
-        closingTime: '23:00',
-        deliveryRadius: 10.0,
-      }
-    }))
+    branchNames.map((name) =>
+      prisma.branch.create({
+        data: {
+          organizationId: org.id,
+          franchiseId: franchise.id,
+          restaurantId: restGroup.id,
+          name: name,
+          address: faker.location.streetAddress(),
+          city: name.replace('ABC ', ''),
+          state: 'Delhi',
+          latitude: faker.location.latitude({ max: 28.8, min: 28.4 }),
+          longitude: faker.location.longitude({ max: 77.4, min: 76.8 }),
+          openingTime: '10:00',
+          closingTime: '23:00',
+          deliveryRadius: 10.0,
+        },
+      }),
+    ),
   );
   console.log(`✅ Created ${branches.length} Branches.`);
 
   // PHASE 3: STAFF
-  const roles = [Role.BRANCH_MANAGER, Role.CASHIER, Role.HEAD_CHEF, Role.KITCHEN_STAFF, Role.DELIVERY_PARTNER];
+  const roles = [
+    Role.BRANCH_MANAGER,
+    Role.CASHIER,
+    Role.HEAD_CHEF,
+    Role.KITCHEN_STAFF,
+    Role.DELIVERY_PARTNER,
+  ];
   const staffData = Array.from({ length: NUM_STAFF }).map(() => ({
     email: faker.internet.email(),
     phone: faker.phone.number(),
@@ -107,7 +129,10 @@ async function main() {
   for (let i = 0; i < customerData.length; i += 1000) {
     await prisma.user.createMany({ data: customerData.slice(i, i + 1000), skipDuplicates: true });
   }
-  const allCustomers = await prisma.user.findMany({ where: { role: Role.CUSTOMER }, select: { id: true } });
+  const allCustomers = await prisma.user.findMany({
+    where: { role: Role.CUSTOMER },
+    select: { id: true },
+  });
   console.log(`✅ Created ${allCustomers.length} Customers.`);
 
   // PHASE 5: SUPPLIERS & INGREDIENTS
@@ -156,12 +181,12 @@ async function main() {
   // PHASE 6: CATEGORIES & MENU ITEMS
   const categories = ['Pizza', 'Burger', 'Chinese', 'Beverages', 'Desserts', 'Combos'];
   await prisma.category.createMany({
-    data: categories.map(c => ({
+    data: categories.map((c) => ({
       restaurantId: restGroup.id,
       name: c,
-      slug: c.toLowerCase()
+      slug: c.toLowerCase(),
     })),
-    skipDuplicates: true
+    skipDuplicates: true,
   });
   const dbCategories = await prisma.category.findMany();
 
@@ -180,12 +205,12 @@ async function main() {
   console.log(`✅ Created ${allProducts.length} Menu Items.`);
 
   // PHASE 7: TIME-SERIES DAILY SIMULATION
-  // To keep generation within a reasonable time limit for testing, we will simulate 10 days 
+  // To keep generation within a reasonable time limit for testing, we will simulate 10 days
   // with heavy volume instead of 365 days, or sparse records across 365 days.
   // We will do sparse 365 days (e.g. 5 orders per branch per day = 50 orders/day = ~18,000 orders total)
-  
+
   console.log('⏳ Starting 365-Day Time-Series Simulation... This may take a few minutes.');
-  
+
   let currentDate = new Date(START_DATE);
   let totalOrdersGenerated = 0;
 
@@ -193,15 +218,20 @@ async function main() {
   const orderStatuses = [OrderStatus.DELIVERED, OrderStatus.DELIVERED];
 
   const allOrderInserts = [];
-  
+
   while (currentDate <= END_DATE) {
     const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
-    const ordersPerBranch = isWeekend ? faker.number.int({ min: 8, max: 15 }) : faker.number.int({ min: 3, max: 8 });
+    const ordersPerBranch = isWeekend
+      ? faker.number.int({ min: 8, max: 15 })
+      : faker.number.int({ min: 3, max: 8 });
 
     for (const branch of branches) {
       for (let i = 0; i < ordersPerBranch; i++) {
         const orderTime = new Date(currentDate);
-        orderTime.setHours(faker.number.int({ min: 11, max: 22 }), faker.number.int({ min: 0, max: 59 }));
+        orderTime.setHours(
+          faker.number.int({ min: 11, max: 22 }),
+          faker.number.int({ min: 0, max: 59 }),
+        );
 
         const customer = faker.helpers.arrayElement(allCustomers);
         const type = faker.helpers.arrayElement(orderTypes);
@@ -223,7 +253,7 @@ async function main() {
         totalOrdersGenerated++;
       }
     }
-    
+
     // Increment day
     currentDate.setDate(currentDate.getDate() + 1);
   }

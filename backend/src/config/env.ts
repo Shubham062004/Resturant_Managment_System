@@ -12,16 +12,36 @@ const envSchema = z.object({
     .transform((v) => parseInt(v, 10))
     .default('5000'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  DATABASE_URL: z.string({
-    required_error: 'DATABASE_URL relational link is required',
-  }).refine(url => !((process.env.NODE_ENV === 'production' || process.env.RENDER === 'true') && (url.includes('localhost') || url.includes('127.0.0.1'))), {
-    message: 'DATABASE_URL must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
-  }),
-  MONGODB_URI: z.string({
-    required_error: 'MONGODB_URI document database link is required',
-  }).refine(url => !((process.env.NODE_ENV === 'production' || process.env.RENDER === 'true') && (url.includes('localhost') || url.includes('127.0.0.1'))), {
-    message: 'MONGODB_URI must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
-  }),
+  DATABASE_URL: z
+    .string({
+      required_error: 'DATABASE_URL relational link is required',
+    })
+    .refine(
+      (url) =>
+        !(
+          (process.env.NODE_ENV === 'production' || process.env.RENDER === 'true') &&
+          (url.includes('localhost') || url.includes('127.0.0.1'))
+        ),
+      {
+        message:
+          'DATABASE_URL must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
+      },
+    ),
+  MONGODB_URI: z
+    .string({
+      required_error: 'MONGODB_URI document database link is required',
+    })
+    .refine(
+      (url) =>
+        !(
+          (process.env.NODE_ENV === 'production' || process.env.RENDER === 'true') &&
+          (url.includes('localhost') || url.includes('127.0.0.1'))
+        ),
+      {
+        message:
+          'MONGODB_URI must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
+      },
+    ),
   JWT_SECRET: z
     .string({
       required_error: 'JWT_SECRET signature key is required',

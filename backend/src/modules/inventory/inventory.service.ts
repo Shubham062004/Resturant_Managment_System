@@ -58,7 +58,10 @@ export class InventoryService {
 
   static async createPurchaseOrder(data: { supplierId: string; branchId: string; items: any[] }) {
     // Calculate total
-    const totalAmount = data.items.reduce((sum: number, item: any) => sum + item.quantity * item.costPrice, 0);
+    const totalAmount = data.items.reduce(
+      (sum: number, item: any) => sum + item.quantity * item.costPrice,
+      0,
+    );
 
     const po = await prisma.purchaseOrder.create({
       data: {
@@ -384,13 +387,13 @@ export class InventoryService {
       include: {
         branch: true,
         requestedBy: {
-          select: { id: true, firstName: true, lastName: true, email: true }
+          select: { id: true, firstName: true, lastName: true, email: true },
         },
         items: {
-          include: { ingredient: true }
-        }
+          include: { ingredient: true },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -407,16 +410,16 @@ export class InventoryService {
         notes: data.notes,
         status: 'PENDING',
         items: {
-          create: data.items.map(item => ({
+          create: data.items.map((item) => ({
             ingredientId: item.ingredientId,
             requestedQuantity: item.requestedQuantity,
-          }))
-        }
+          })),
+        },
       },
       include: {
         items: { include: { ingredient: true } },
-        branch: true
-      }
+        branch: true,
+      },
     });
 
     const io = getIO();
@@ -430,15 +433,16 @@ export class InventoryService {
       status: 'APPROVED' | 'REJECTED';
       notes?: string;
       items?: Array<{ id?: string; ingredientId?: string; approvedQuantity: number }>;
-    }
+    },
   ) {
     const request = await prisma.inventoryRequest.findUnique({
       where: { id },
-      include: { items: true }
+      include: { items: true },
     });
 
     if (!request) throw new AppError('Inventory Request not found', 404);
-    if (request.status !== 'PENDING') throw new AppError('Inventory Request is already processed', 400);
+    if (request.status !== 'PENDING')
+      throw new AppError('Inventory Request is already processed', 400);
 
     // Update items approvedQuantity
     if (data.status === 'APPROVED') {
@@ -447,7 +451,7 @@ export class InventoryService {
           if (itemUpdate.id) {
             await prisma.inventoryRequestItem.update({
               where: { id: itemUpdate.id },
-              data: { approvedQuantity: itemUpdate.approvedQuantity }
+              data: { approvedQuantity: itemUpdate.approvedQuantity },
             });
           } else if (itemUpdate.ingredientId) {
             await prisma.inventoryRequestItem.create({
@@ -455,8 +459,8 @@ export class InventoryService {
                 requestId: id,
                 ingredientId: itemUpdate.ingredientId,
                 requestedQuantity: 0,
-                approvedQuantity: itemUpdate.approvedQuantity
-              }
+                approvedQuantity: itemUpdate.approvedQuantity,
+              },
             });
           }
         }
@@ -465,7 +469,7 @@ export class InventoryService {
         for (const item of request.items) {
           await prisma.inventoryRequestItem.update({
             where: { id: item.id },
-            data: { approvedQuantity: item.requestedQuantity }
+            data: { approvedQuantity: item.requestedQuantity },
           });
         }
       }
@@ -476,15 +480,15 @@ export class InventoryService {
       data: {
         status: data.status,
         notes: data.notes ? data.notes : request.notes,
-        approvedAt: data.status === 'APPROVED' ? new Date() : null
+        approvedAt: data.status === 'APPROVED' ? new Date() : null,
       },
       include: {
         items: { include: { ingredient: true } },
         branch: true,
         requestedBy: {
-          select: { id: true, firstName: true, lastName: true, email: true }
-        }
-      }
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+      },
     });
 
     const io = getIO();
@@ -492,10 +496,13 @@ export class InventoryService {
     return updatedRequest;
   }
 
-  static async updateInventoryRequestStatus(id: string, status: 'PACKED' | 'DISPATCHED' | 'DELIVERED') {
+  static async updateInventoryRequestStatus(
+    id: string,
+    status: 'PACKED' | 'DISPATCHED' | 'DELIVERED',
+  ) {
     const request = await prisma.inventoryRequest.findUnique({
       where: { id },
-      include: { items: true }
+      include: { items: true },
     });
 
     if (!request) throw new AppError('Inventory Request not found', 404);
@@ -514,9 +521,9 @@ export class InventoryService {
         items: { include: { ingredient: true } },
         branch: true,
         requestedBy: {
-          select: { id: true, firstName: true, lastName: true, email: true }
-        }
-      }
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+      },
     });
 
     // If delivered, we adjust local branch stock levels!
@@ -529,7 +536,7 @@ export class InventoryService {
           quantity: qty,
           reason: `Stock replenishment from Request ${updatedRequest.id}`,
           referenceId: updatedRequest.id,
-          type: 'TRANSFER'
+          type: 'TRANSFER',
         });
       }
     }

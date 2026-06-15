@@ -12,7 +12,7 @@ interface SmartComboProps {
 
 export default function SmartComboSuggestion({ cartItemIds }: SmartComboProps) {
   const dispatch = useAppDispatch();
-  const { combos, status } = useAppSelector(state => state.recommendation);
+  const { combos, status } = useAppSelector((state) => state.recommendation);
 
   useEffect(() => {
     if (cartItemIds.length > 0) {
@@ -29,12 +29,16 @@ export default function SmartComboSuggestion({ cartItemIds }: SmartComboProps) {
         <h4 className="font-bold">Smart Combo Suggestion</h4>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        {combos.comboTitle} - Add these to get a <Badge variant="success">{combos.discountPercentage}% discount</Badge>!
+        {combos.comboTitle} - Add these to get a{' '}
+        <Badge variant="success">{combos.discountPercentage}% discount</Badge>!
       </p>
-      
+
       <div className="space-y-3">
         {combos.items?.map((item: any) => (
-          <div key={item.id} className="flex justify-between items-center p-3 bg-surface rounded-lg">
+          <div
+            key={item.id}
+            className="flex justify-between items-center p-3 bg-surface rounded-lg"
+          >
             <div>
               <p className="font-semibold text-white text-sm">{item.name}</p>
               <p className="text-xs text-muted-foreground">₹{item.basePrice}</p>

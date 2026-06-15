@@ -6,14 +6,14 @@ import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
 import { Card } from '../../../shared/components/ui/Card';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChefHat, 
-  Clock, 
-  UtensilsCrossed, 
+import {
+  ChefHat,
+  Clock,
+  UtensilsCrossed,
   CheckCircle,
   Play,
   Flame,
-  AlertTriangle
+  AlertTriangle,
 } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -22,11 +22,11 @@ export default function StaffWorkQueuePage() {
   const { user } = useAppSelector((state) => state.auth);
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Since we don't have assignedCategory in DB yet, we simulate it here.
   // In a real app, `assignedCategory` comes directly from the logged-in user profile.
   const [assignedCategory, setAssignedCategory] = useState<string>('ALL');
-  
+
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -50,14 +50,14 @@ export default function StaffWorkQueuePage() {
     // 2. Setup WebSocket for live order updates
     const token = localStorage.getItem('token');
     const socket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
-    
+
     // Listen for new orders or status updates
     socket.on('kds_new_order', (kitchenOrder: any) => {
-      setOrders(prev => [kitchenOrder, ...prev]);
+      setOrders((prev) => [kitchenOrder, ...prev]);
     });
 
     socket.on('kds_status_update', (kitchenOrder: any) => {
-      setOrders(prev => prev.map(o => o.id === kitchenOrder.id ? kitchenOrder : o));
+      setOrders((prev) => prev.map((o) => (o.id === kitchenOrder.id ? kitchenOrder : o)));
     });
 
     // 3. Setup interval for live timers
@@ -80,15 +80,17 @@ export default function StaffWorkQueuePage() {
   const handleUpdateItemStatus = async (orderId: string, taskId: string, newStatus: string) => {
     try {
       // Optimistic update
-      setOrders(prev => prev.map(order => {
-        if (order.id !== orderId) return order;
-        return {
-          ...order,
-          tasks: order.tasks.map((task: any) => 
-            task.id === taskId ? { ...task, status: newStatus } : task
-          )
-        };
-      }));
+      setOrders((prev) =>
+        prev.map((order) => {
+          if (order.id !== orderId) return order;
+          return {
+            ...order,
+            tasks: order.tasks.map((task: any) =>
+              task.id === taskId ? { ...task, status: newStatus } : task,
+            ),
+          };
+        }),
+      );
 
       // In real app, call API to update item status
       // await apiClient.patch(`/kitchen/tasks/${taskId}/status`, { status: newStatus });
@@ -99,17 +101,17 @@ export default function StaffWorkQueuePage() {
 
   // Flatten and Filter Tasks based on assigned category
   const assignedTasks: any[] = [];
-  
-  orders.forEach(order => {
+
+  orders.forEach((order) => {
     // Determine order-level elapsed time
     const elapsed = getElapsedTime(order.createdAt);
-    
+
     order.tasks?.forEach((task: any) => {
       // Category filtering:
       // Assuming product.category exists. For mock, if assignedCategory === 'ALL', show all.
       // Else, we try to match category. If category is missing, we randomly mock it or hide it.
       const taskCategory = task.product?.category?.name?.toUpperCase() || 'UNKNOWN';
-      
+
       if (assignedCategory === 'ALL' || taskCategory.includes(assignedCategory)) {
         // Skip packed/delivered items
         if (task.status !== 'PACKED' && task.status !== 'DELIVERED') {
@@ -123,7 +125,7 @@ export default function StaffWorkQueuePage() {
             notes: order.order?.notes,
             priority: elapsed > 20 ? 'HIGH' : 'NORMAL',
             elapsed,
-            orderCreatedAt: order.createdAt
+            orderCreatedAt: order.createdAt,
           });
         }
       }
@@ -134,33 +136,46 @@ export default function StaffWorkQueuePage() {
   assignedTasks.sort((a, b) => b.elapsed - a.elapsed);
 
   // Group by status for counters
-  const pendingCount = assignedTasks.filter(t => t.status === 'PENDING').length;
-  const preparingCount = assignedTasks.filter(t => t.status === 'COOKING').length;
-  const readyCount = assignedTasks.filter(t => t.status === 'READY').length;
+  const pendingCount = assignedTasks.filter((t) => t.status === 'PENDING').length;
+  const preparingCount = assignedTasks.filter((t) => t.status === 'COOKING').length;
+  const readyCount = assignedTasks.filter((t) => t.status === 'READY').length;
 
   return (
     <div className="flex flex-col h-full space-y-6">
-      
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 shrink-0">
         <div>
           <h1 className="text-3xl font-bold font-display text-white tracking-tight">Work Queue</h1>
-          <p className="text-sm text-slate-400 mt-1">Manage and prepare items assigned to your station.</p>
+          <p className="text-sm text-slate-400 mt-1">
+            Manage and prepare items assigned to your station.
+          </p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-slate-900 border border-border/30 rounded-xl px-4 py-2">
-            <span className="text-slate-400 text-xs uppercase tracking-widest font-bold">Station:</span>
+            <span className="text-slate-400 text-xs uppercase tracking-widest font-bold">
+              Station:
+            </span>
             <select
               value={assignedCategory}
               onChange={(e) => setAssignedCategory(e.target.value)}
               className="bg-transparent text-sm font-bold text-orange-500 focus:outline-none cursor-pointer appearance-none"
             >
-              <option value="ALL" className="bg-slate-900 text-white">ALL STATIONS</option>
-              <option value="PIZZA" className="bg-slate-900 text-white">PIZZA</option>
-              <option value="BURGERS" className="bg-slate-900 text-white">BURGERS</option>
-              <option value="DESSERT" className="bg-slate-900 text-white">DESSERTS</option>
-              <option value="DRINKS" className="bg-slate-900 text-white">BEVERAGES</option>
+              <option value="ALL" className="bg-slate-900 text-white">
+                ALL STATIONS
+              </option>
+              <option value="PIZZA" className="bg-slate-900 text-white">
+                PIZZA
+              </option>
+              <option value="BURGERS" className="bg-slate-900 text-white">
+                BURGERS
+              </option>
+              <option value="DESSERT" className="bg-slate-900 text-white">
+                DESSERTS
+              </option>
+              <option value="DRINKS" className="bg-slate-900 text-white">
+                BEVERAGES
+              </option>
             </select>
           </div>
         </div>
@@ -194,7 +209,9 @@ export default function StaffWorkQueuePage() {
             <span>Avg Prep Time</span>
             <UtensilsCrossed className="text-sky-500 w-4 h-4" />
           </div>
-          <span className="text-2xl font-bold text-white">12<span className="text-sm text-slate-500 ml-1 font-normal">mins</span></span>
+          <span className="text-2xl font-bold text-white">
+            12<span className="text-sm text-slate-500 ml-1 font-normal">mins</span>
+          </span>
         </Card>
       </div>
 
@@ -202,7 +219,9 @@ export default function StaffWorkQueuePage() {
       <div className="flex-1 overflow-y-auto custom-scrollbar pb-6">
         {loading ? (
           <div className="space-y-4">
-            {[1, 2, 3].map(i => <div key={i} className="h-32 bg-slate-900/50 animate-pulse rounded-2xl" />)}
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-32 bg-slate-900/50 animate-pulse rounded-2xl" />
+            ))}
           </div>
         ) : assignedTasks.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-slate-500 opacity-60">
@@ -220,17 +239,24 @@ export default function StaffWorkQueuePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   className={`p-5 rounded-2xl border flex flex-col gap-4 shadow-lg transition-colors ${
-                    task.status === 'COOKING' ? 'bg-orange-500/10 border-orange-500/30' :
-                    task.priority === 'HIGH' ? 'bg-rose-500/10 border-rose-500/30' :
-                    'bg-slate-900/80 border-border/20'
+                    task.status === 'COOKING'
+                      ? 'bg-orange-500/10 border-orange-500/30'
+                      : task.priority === 'HIGH'
+                        ? 'bg-rose-500/10 border-rose-500/30'
+                        : 'bg-slate-900/80 border-border/20'
                   }`}
                 >
                   {/* Card Header */}
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-slate-200 font-mono">#{task.orderNumber}</span>
-                        <Badge variant="neutral" className="text-[9px] bg-slate-800 text-slate-300 border-none px-1.5 py-0.5">
+                        <span className="font-bold text-slate-200 font-mono">
+                          #{task.orderNumber}
+                        </span>
+                        <Badge
+                          variant="neutral"
+                          className="text-[9px] bg-slate-800 text-slate-300 border-none px-1.5 py-0.5"
+                        >
                           {task.orderType?.replace('_', ' ')}
                         </Badge>
                       </div>
@@ -239,12 +265,18 @@ export default function StaffWorkQueuePage() {
                       </p>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      {task.priority === 'HIGH' && <AlertTriangle size={14} className="text-rose-500 animate-pulse" />}
-                      <Badge className={`text-[10px] font-bold px-2 flex items-center gap-1 border-none ${
-                        task.elapsed > 20 ? 'bg-rose-500/20 text-rose-400' : 
-                        task.elapsed > 10 ? 'bg-amber-500/20 text-amber-400' : 
-                        'bg-slate-800 text-slate-400'
-                      }`}>
+                      {task.priority === 'HIGH' && (
+                        <AlertTriangle size={14} className="text-rose-500 animate-pulse" />
+                      )}
+                      <Badge
+                        className={`text-[10px] font-bold px-2 flex items-center gap-1 border-none ${
+                          task.elapsed > 20
+                            ? 'bg-rose-500/20 text-rose-400'
+                            : task.elapsed > 10
+                              ? 'bg-amber-500/20 text-amber-400'
+                              : 'bg-slate-800 text-slate-400'
+                        }`}
+                      >
                         <Clock size={10} /> {task.elapsed}m
                       </Badge>
                     </div>
@@ -258,7 +290,7 @@ export default function StaffWorkQueuePage() {
                       </h3>
                       <span className="text-xl font-black text-orange-500">x{task.quantity}</span>
                     </div>
-                    
+
                     {task.notes && (
                       <div className="mt-3 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
                         <p className="text-xs text-yellow-500 font-medium flex items-center gap-1">
@@ -271,16 +303,16 @@ export default function StaffWorkQueuePage() {
                   {/* Status Actions */}
                   <div className="pt-1 flex gap-2">
                     {(!task.status || task.status === 'PENDING') && (
-                      <Button 
+                      <Button
                         className="w-full bg-slate-800 hover:bg-orange-600 text-white border-none font-bold"
                         onClick={() => handleUpdateItemStatus(task.orderId, task.id, 'COOKING')}
                       >
                         <Play size={16} className="mr-2" /> Start Preparing
                       </Button>
                     )}
-                    
+
                     {task.status === 'COOKING' && (
-                      <Button 
+                      <Button
                         className="w-full bg-orange-600 hover:bg-emerald-600 text-white border-none font-bold animate-pulse"
                         onClick={() => handleUpdateItemStatus(task.orderId, task.id, 'READY')}
                       >
@@ -289,7 +321,7 @@ export default function StaffWorkQueuePage() {
                     )}
 
                     {task.status === 'READY' && (
-                      <Button 
+                      <Button
                         disabled
                         className="w-full bg-emerald-500/20 text-emerald-500 border-emerald-500/30 font-bold"
                       >
@@ -303,7 +335,6 @@ export default function StaffWorkQueuePage() {
           </div>
         )}
       </div>
-
     </div>
   );
 }

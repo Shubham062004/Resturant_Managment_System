@@ -11,7 +11,7 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
   // Skip if models are stripped, but assume full schema
   const suppliers = [];
   const ingredients = [];
-  
+
   for (let i = 1; i <= 10; i++) {
     suppliers.push({
       id: randomUUID(),
@@ -23,7 +23,7 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
       active: true,
     });
   }
-  
+
   await prisma.supplier.createMany({ data: suppliers });
 
   // Add Ingredients (we will assign them to the first branch for demo)
@@ -40,7 +40,7 @@ export async function seedInventory(prisma: PrismaClient, branches: any[]) {
   }
 
   await prisma.ingredient.createMany({ data: ingredients });
-  
+
   // Link to branches via Inventory table
   const inventoryItems = [];
   for (const branch of branches) {

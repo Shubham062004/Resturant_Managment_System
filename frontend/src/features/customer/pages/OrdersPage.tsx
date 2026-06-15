@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../../../shared/components/SEO';
 import EmptyState from '../../../shared/components/ui/EmptyState';
-import { ClipboardList, Flame, Truck, Activity, PackageCheck, History, CheckCircle2 } from 'lucide-react';
+import {
+  ClipboardList,
+  Flame,
+  Truck,
+  Activity,
+  PackageCheck,
+  History,
+  CheckCircle2,
+} from 'lucide-react';
 
 export const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
@@ -36,7 +44,6 @@ export const OrdersPage: React.FC = () => {
       />
 
       <div className="space-y-8 font-sans">
-        
         {/* Head details */}
         <div className="border-b border-white/5 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
           <div>
@@ -78,12 +85,10 @@ export const OrdersPage: React.FC = () => {
           <div className="space-y-8">
             {/* Active order panel */}
             <div className="bg-white/[0.02] border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative">
-              
               {/* Top Banner highlight */}
               <div className="h-2 bg-gradient-to-r from-primary via-amber-500 to-primary" />
-              
+
               <div className="p-6 md:p-8 space-y-8">
-                
                 {/* Header details of active order */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
                   <div className="space-y-2">
@@ -99,10 +104,14 @@ export const OrdersPage: React.FC = () => {
                       <span>{activeOrder.date}</span>
                     </p>
                   </div>
-                  
+
                   <div className="text-left md:text-right bg-white/[0.03] p-4 rounded-xl border border-white/5">
-                    <p className="text-xs text-neutral-500 uppercase tracking-widest font-semibold mb-1">Total Paid</p>
-                    <p className="text-2xl font-bold text-white">₹{activeOrder.amount.toFixed(2)}</p>
+                    <p className="text-xs text-neutral-500 uppercase tracking-widest font-semibold mb-1">
+                      Total Paid
+                    </p>
+                    <p className="text-2xl font-bold text-white">
+                      ₹{activeOrder.amount.toFixed(2)}
+                    </p>
                   </div>
                 </div>
 
@@ -121,7 +130,10 @@ export const OrdersPage: React.FC = () => {
 
                     <div className="grid grid-cols-4 gap-2">
                       {activeOrder.steps.map((step) => (
-                        <div key={step.key} className="flex flex-col items-center text-center space-y-3">
+                        <div
+                          key={step.key}
+                          className="flex flex-col items-center text-center space-y-3"
+                        >
                           <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                               step.current
@@ -133,7 +145,9 @@ export const OrdersPage: React.FC = () => {
                           >
                             {step.key === 'received' && <PackageCheck size={18} />}
                             {step.key === 'preparing' && <CheckCircle2 size={18} />}
-                            {step.key === 'baking' && <Flame size={18} className={step.current ? 'animate-bounce' : ''} />}
+                            {step.key === 'baking' && (
+                              <Flame size={18} className={step.current ? 'animate-bounce' : ''} />
+                            )}
                             {step.key === 'dispatched' && <Truck size={18} />}
                           </div>
                           <span
@@ -160,7 +174,10 @@ export const OrdersPage: React.FC = () => {
                   </h3>
                   <div className="space-y-4 text-sm">
                     {activeOrder.items.map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-start gap-4 text-neutral-300">
+                      <div
+                        key={idx}
+                        className="flex justify-between items-start gap-4 text-neutral-300"
+                      >
                         <div>
                           <p className="font-bold text-white">
                             <span className="text-primary mr-2">{item.qty}x</span>
@@ -176,12 +193,12 @@ export const OrdersPage: React.FC = () => {
                     ))}
                   </div>
                 </div>
-
               </div>
             </div>
 
             <div className="text-center py-4 text-sm text-neutral-500 bg-primary/5 rounded-xl border border-primary/10">
-              <span className="text-primary font-semibold">Tip:</span> You will receive a notification when your order is out for delivery.
+              <span className="text-primary font-semibold">Tip:</span> You will receive a
+              notification when your order is out for delivery.
             </div>
           </div>
         ) : (
@@ -190,9 +207,13 @@ export const OrdersPage: React.FC = () => {
             <History size={48} className="mx-auto text-neutral-600 mb-4" />
             <h3 className="text-xl font-bold text-white mb-2">No Past Orders Found</h3>
             <p className="text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-              You haven't completed any orders yet. Discover our delicious menu and place your first order today!
+              You haven't completed any orders yet. Discover our delicious menu and place your first
+              order today!
             </p>
-            <button onClick={() => navigate('/restaurants')} className="px-6 py-3 bg-primary text-white rounded-xl text-sm font-bold">
+            <button
+              onClick={() => navigate('/restaurants')}
+              className="px-6 py-3 bg-primary text-white rounded-xl text-sm font-bold"
+            >
               Browse Menu
             </button>
           </div>

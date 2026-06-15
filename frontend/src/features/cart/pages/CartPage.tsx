@@ -5,7 +5,13 @@ import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import EmptyState from '../../../shared/components/ui/EmptyState';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { useCart, useUpdateCartItem, useRemoveCartItem, useClearCart, useValidateCoupon } from '../store/cartQueries';
+import {
+  useCart,
+  useUpdateCartItem,
+  useRemoveCartItem,
+  useClearCart,
+  useValidateCoupon,
+} from '../store/cartQueries';
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Tag, Info, X } from 'lucide-react';
 import { useAppSelector } from '../../../app/store';
 import SmartComboSuggestion from '../../ai/components/SmartComboSuggestion';
@@ -21,7 +27,10 @@ export const CartPage: React.FC = () => {
   const validateCoupon = useValidateCoupon();
 
   const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountAmount: number } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discountAmount: number;
+  } | null>(null);
 
   if (!isAuthenticated) {
     return (
@@ -63,7 +72,7 @@ export const CartPage: React.FC = () => {
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
     0,
   );
-  
+
   const discount = appliedCoupon ? appliedCoupon.discountAmount : 0;
   const total = Math.max(0, subtotal - discount);
 
@@ -109,7 +118,6 @@ export const CartPage: React.FC = () => {
       <SEO title="My Cart — ABC Restaurant" description="Review your order before checkout." />
       <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-32">
         <div className="max-w-6xl mx-auto px-6 space-y-8">
-          
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/5">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold font-display flex items-center gap-3">
@@ -146,7 +154,6 @@ export const CartPage: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-              
               {/* Left Column: Cart Items */}
               <div className="lg:col-span-8 space-y-6">
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 sm:p-4 space-y-2">
@@ -232,7 +239,6 @@ export const CartPage: React.FC = () => {
 
               {/* Right Column: Order Summary */}
               <div className="lg:col-span-4 sticky top-24 space-y-6">
-                
                 {/* Coupon Code Box */}
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6">
                   <h3 className="font-bold text-white mb-4 flex items-center gap-2">
@@ -241,10 +247,15 @@ export const CartPage: React.FC = () => {
                   {appliedCoupon ? (
                     <div className="flex items-center justify-between p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
                       <div className="flex flex-col">
-                        <span className="text-emerald-400 font-bold text-sm">{appliedCoupon.code}</span>
+                        <span className="text-emerald-400 font-bold text-sm">
+                          {appliedCoupon.code}
+                        </span>
                         <span className="text-emerald-500/80 text-xs">Coupon Applied</span>
                       </div>
-                      <button onClick={handleRemoveCoupon} className="text-neutral-400 hover:text-white p-1">
+                      <button
+                        onClick={handleRemoveCoupon}
+                        className="text-neutral-400 hover:text-white p-1"
+                      >
                         <X size={16} />
                       </button>
                     </div>
@@ -257,7 +268,12 @@ export const CartPage: React.FC = () => {
                         onChange={(e) => setCouponCode(e.target.value)}
                         className="bg-black/40 border-white/10 text-sm h-11 uppercase"
                       />
-                      <Button type="submit" variant="outline" className="h-11 border-white/10 hover:bg-white/5 font-semibold shrink-0" disabled={validateCoupon.isPending}>
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        className="h-11 border-white/10 hover:bg-white/5 font-semibold shrink-0"
+                        disabled={validateCoupon.isPending}
+                      >
                         {validateCoupon.isPending ? '...' : 'Apply'}
                       </Button>
                     </form>
@@ -267,7 +283,7 @@ export const CartPage: React.FC = () => {
                 {/* Summary Box */}
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 space-y-4">
                   <h3 className="font-bold text-white text-lg">Order Summary</h3>
-                  
+
                   <div className="space-y-3 text-sm pt-2">
                     <div className="flex justify-between text-neutral-400">
                       <span>Subtotal</span>
@@ -280,7 +296,9 @@ export const CartPage: React.FC = () => {
                       </div>
                     )}
                     <div className="flex justify-between text-neutral-400">
-                      <span className="flex items-center gap-1">Taxes & Fees <Info size={12} /></span>
+                      <span className="flex items-center gap-1">
+                        Taxes & Fees <Info size={12} />
+                      </span>
                       <span className="text-white">Calculated at checkout</span>
                     </div>
                   </div>
@@ -290,17 +308,19 @@ export const CartPage: React.FC = () => {
                       <span className="font-semibold text-white">Estimated Total</span>
                       <span className="text-2xl font-bold text-primary">₹{total.toFixed(0)}</span>
                     </div>
-                    <Button 
-                      variant="primary" 
-                      className="w-full h-14 font-bold text-base shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group" 
+                    <Button
+                      variant="primary"
+                      className="w-full h-14 font-bold text-base shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group"
                       onClick={() => navigate('/checkout')}
                     >
                       Proceed to Checkout
-                      <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight
+                        size={18}
+                        className="group-hover:translate-x-1 transition-transform"
+                      />
                     </Button>
                   </div>
                 </div>
-
               </div>
             </div>
           )}

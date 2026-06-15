@@ -23,7 +23,11 @@ export class OtpService {
   /**
    * Dispatches OTP via SMS or Email abstractly.
    */
-  public static async dispatchOtp(phoneOrEmail: string, otp: string, provider: 'TWILIO' | 'MSG91' | 'FIREBASE' | 'MOCK' = 'MOCK'): Promise<void> {
+  public static async dispatchOtp(
+    phoneOrEmail: string,
+    otp: string,
+    provider: 'TWILIO' | 'MSG91' | 'FIREBASE' | 'MOCK' = 'MOCK',
+  ): Promise<void> {
     logger.info(`[OTP Service] Dispatching OTP using ${provider} to ${phoneOrEmail}...`);
 
     if (process.env.NODE_ENV === 'development') {
@@ -50,7 +54,10 @@ export class OtpService {
   /**
    * Saves the OTP to the database, overwriting previous active ones for this identifier.
    */
-  public static async saveOtp(identifier: { email?: string; phone?: string; userId?: string }, otp: string) {
+  public static async saveOtp(
+    identifier: { email?: string; phone?: string; userId?: string },
+    otp: string,
+  ) {
     const codeHash = this.hashOtp(otp);
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
 
@@ -78,18 +85,18 @@ export class OtpService {
   /**
    * Validates an OTP.
    */
-  public static async verifyOtp(identifier: { email?: string; phone?: string }, otp: string): Promise<boolean> {
+  public static async verifyOtp(
+    identifier: { email?: string; phone?: string },
+    otp: string,
+  ): Promise<boolean> {
     const codeHash = this.hashOtp(otp);
 
     const otpRecord = await prisma.otp.findFirst({
       where: {
-        OR: [
-          { email: identifier.email || undefined },
-          { phone: identifier.phone || undefined }
-        ],
+        OR: [{ email: identifier.email || undefined }, { phone: identifier.phone || undefined }],
         codeHash,
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     if (!otpRecord) return false;
@@ -102,7 +109,7 @@ export class OtpService {
 
     // Burn OTP after successful use
     await prisma.otp.delete({ where: { id: otpRecord.id } });
-    
+
     return true;
   }
 }

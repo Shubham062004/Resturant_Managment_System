@@ -11,7 +11,13 @@ interface BranchCardProps {
   onFocus?: (branch: Branch) => void;
 }
 
-const BranchCard: React.FC<BranchCardProps> = ({ branch, isSelected, isFocused, onSelect, onFocus }) => {
+const BranchCard: React.FC<BranchCardProps> = ({
+  branch,
+  isSelected,
+  isFocused,
+  onSelect,
+  onFocus,
+}) => {
   const isOpen = branch.active !== false;
 
   return (
@@ -33,12 +39,16 @@ const BranchCard: React.FC<BranchCardProps> = ({ branch, isSelected, isFocused, 
                 ✓ Selected
               </span>
             )}
-            <span className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-              isOpen
-                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                : 'bg-red-500/10 text-red-400 border-red-500/20'
-            }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`} />
+            <span
+              className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                isOpen
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border-red-500/20'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`}
+              />
               {isOpen ? 'Open' : 'Closed'}
             </span>
           </div>

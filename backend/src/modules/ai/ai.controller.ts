@@ -18,7 +18,7 @@ export class AIController {
 
   public static async getCombos(req: Request, res: Response, next: NextFunction) {
     try {
-      const productIds = (req.query.productIds as string || '').split(',').filter(Boolean);
+      const productIds = ((req.query.productIds as string) || '').split(',').filter(Boolean);
       const combos = await RecommendationService.getSmartCombos(productIds);
       res.status(200).json({ status: 'success', data: combos });
     } catch (error) {
@@ -50,7 +50,7 @@ export class AIController {
   public static async getPredictions(req: Request, res: Response, next: NextFunction) {
     try {
       const { branchId, type } = req.query; // type can be 'demand' or 'inventory'
-      
+
       let data;
       if (type === 'inventory') {
         data = await ForecastingService.predictInventory(branchId as string);
@@ -67,7 +67,7 @@ export class AIController {
   // --- Customer Segmentation ---
   public static async getCustomerSegment(req: Request, res: Response, next: NextFunction) {
     try {
-      const userIds = (req.query.userIds as string || '').split(',').filter(Boolean);
+      const userIds = ((req.query.userIds as string) || '').split(',').filter(Boolean);
       const segments = await MarketingService.segmentCustomers(userIds);
       res.status(200).json({ status: 'success', data: segments });
     } catch (error) {

@@ -110,9 +110,11 @@ export const Navbar: React.FC = () => {
 
       {/* Call to Actions / User profile */}
       <div className="hidden md:flex items-center gap-5">
-        
         {/* Cart Icon */}
-        <Link to="/cart" className="relative p-2 text-neutral-400 hover:text-white transition-colors">
+        <Link
+          to="/cart"
+          className="relative p-2 text-neutral-400 hover:text-white transition-colors"
+        >
           <ShoppingBag size={22} />
           {cartItemCount > 0 && (
             <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md border border-[#08070F]">

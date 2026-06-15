@@ -123,9 +123,7 @@ describe('Catalog API Integration Tests', () => {
         products: [],
       });
 
-      const response = await request(app).get(
-        '/api/v1/catalog/restaurants/slug/abc-firehouse',
-      );
+      const response = await request(app).get('/api/v1/catalog/restaurants/slug/abc-firehouse');
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);

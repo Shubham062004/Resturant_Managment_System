@@ -23,7 +23,6 @@ const InventoryEventSchema: Schema = new Schema({
 InventoryEventSchema.index({ ingredientId: 1, branchId: 1, createdAt: -1 });
 InventoryEventSchema.index({ eventType: 1, createdAt: -1 });
 
-export const InventoryEvent = mongoose.models.InventoryEvent || mongoose.model<IInventoryEvent>(
-  'InventoryEvent',
-  InventoryEventSchema,
-);
+export const InventoryEvent =
+  mongoose.models.InventoryEvent ||
+  mongoose.model<IInventoryEvent>('InventoryEvent', InventoryEventSchema);

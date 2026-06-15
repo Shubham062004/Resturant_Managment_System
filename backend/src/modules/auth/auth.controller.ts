@@ -22,7 +22,7 @@ export class AuthController {
     try {
       // Force customer role for public registration
       req.body.role = Role.CUSTOMER;
-      
+
       const user = await AuthService.registerUser(
         req.body,
         req.ip || '127.0.0.1',
@@ -69,7 +69,11 @@ export class AuthController {
     }
   }
 
-  public static async verifyLoginOtp(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async verifyLoginOtp(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { accessToken, refreshToken, user } = await AuthService.verifyLoginOtpUser(
         req.body,

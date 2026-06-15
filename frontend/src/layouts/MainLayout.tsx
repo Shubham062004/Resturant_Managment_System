@@ -49,10 +49,13 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
     <div className="min-h-screen bg-background flex text-foreground overflow-hidden">
       <Helmet>
         <title>ABC - Restaurant Management System</title>
-        <meta name="description" content="Enterprise-grade Restaurant Management System featuring AI insights, live kitchen displays, and seamless delivery integration." />
+        <meta
+          name="description"
+          content="Enterprise-grade Restaurant Management System featuring AI insights, live kitchen displays, and seamless delivery integration."
+        />
         <html lang="en" />
       </Helmet>
-      
+
       {/* Side Navigation Panel */}
       <AnimatePresence mode="wait">
         {isSidebarOpen && (

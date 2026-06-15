@@ -49,8 +49,8 @@ export const AboutPage: React.FC = () => {
               The Hearth & The Code
             </h2>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-              ABC began with a single vision: how to serve authentic Neapolitan-style stone
-              crust pizzas and handcrafted gourmet burger blends without the traditional restaurant
+              ABC began with a single vision: how to serve authentic Neapolitan-style stone crust
+              pizzas and handcrafted gourmet burger blends without the traditional restaurant
               delays.
             </p>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">

@@ -42,9 +42,7 @@ const initialState: ReservationState = {
 export const fetchBranchReservations = createAsyncThunk(
   'reservations/fetchBranch',
   async (branchId: string) => {
-    const response = await apiClient.get(
-      `/reservations/branch?branchId=${branchId}`
-    );
+    const response = await apiClient.get(`/reservations/branch?branchId=${branchId}`);
     return response.data.data;
   },
 );
@@ -60,10 +58,7 @@ export const fetchWaitlist = createAsyncThunk(
 export const updateReservationStatus = createAsyncThunk(
   'reservations/updateStatus',
   async ({ id, status, tableId }: { id: string; status: string; tableId?: string }) => {
-    const response = await apiClient.patch(
-      `/reservations/${id}`,
-      { status, tableId }
-    );
+    const response = await apiClient.patch(`/reservations/${id}`, { status, tableId });
     return response.data.data;
   },
 );
@@ -71,10 +66,7 @@ export const updateReservationStatus = createAsyncThunk(
 export const updateWaitlistStatus = createAsyncThunk(
   'reservations/updateWaitlist',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await apiClient.patch(
-      `/waitlist/${id}`,
-      { status }
-    );
+    const response = await apiClient.patch(`/waitlist/${id}`, { status });
     return response.data.data;
   },
 );

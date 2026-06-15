@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchNotifications, markNotificationRead, addRealtimeNotification } from '../store/notificationSlice';
+import {
+  fetchNotifications,
+  markNotificationRead,
+  addRealtimeNotification,
+} from '../store/notificationSlice';
 import { Bell, X } from 'lucide-react';
 import { io } from 'socket.io-client';
 
@@ -60,7 +64,7 @@ export default function NotificationCenter() {
           </div>
 
           <div className="max-h-96 overflow-y-auto">
-            {(!list || list.length === 0) ? (
+            {!list || list.length === 0 ? (
               <div className="p-6 text-center text-slate-500">No recent notifications</div>
             ) : (
               list?.map((notif: any) => (

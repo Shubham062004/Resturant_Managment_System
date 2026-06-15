@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import { Star, Clock, Heart, Plus, Minus, Flame, Leaf } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAppSelector } from '../../../app/store';
-import { useAddToCart, useUpdateCartItem, useRemoveCartItem, useCart } from '../../cart/store/cartQueries';
+import {
+  useAddToCart,
+  useUpdateCartItem,
+  useRemoveCartItem,
+  useCart,
+} from '../../cart/store/cartQueries';
 import { useToggleFavorite } from '../store/catalogQueries';
 import { useToast } from '../../../shared/components/ui/Toast';
 import type { Product } from '../store/catalogQueries';
@@ -134,12 +139,16 @@ const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, clas
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
                 <Star size={12} className="text-amber-400 fill-amber-400" />
-                <span className="text-white text-xs font-bold">{product.rating?.toFixed(1) || '4.0'}</span>
+                <span className="text-white text-xs font-bold">
+                  {product.rating?.toFixed(1) || '4.0'}
+                </span>
               </div>
               {product.preparationTime && (
                 <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
                   <Clock size={12} className="text-white/70" />
-                  <span className="text-white text-xs font-medium">{product.preparationTime} min</span>
+                  <span className="text-white text-xs font-medium">
+                    {product.preparationTime} min
+                  </span>
                 </div>
               )}
             </div>

@@ -22,10 +22,12 @@ const AbandonedCartEventSchema: Schema = new Schema(
   },
 );
 
-export const AbandonedCartEvent = mongoose.models.AbandonedCartEvent || mongoose.model<IAbandonedCartEvent>(
-  'AbandonedCartEvent',
-  AbandonedCartEventSchema,
-  'abandoned_cart_events',
-);
+export const AbandonedCartEvent =
+  mongoose.models.AbandonedCartEvent ||
+  mongoose.model<IAbandonedCartEvent>(
+    'AbandonedCartEvent',
+    AbandonedCartEventSchema,
+    'abandoned_cart_events',
+  );
 
 export default AbandonedCartEvent;

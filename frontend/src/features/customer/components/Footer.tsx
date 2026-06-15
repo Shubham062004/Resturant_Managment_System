@@ -22,7 +22,6 @@ export const Footer: React.FC = () => {
       <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-full max-w-lg h-48 bg-primary/10 rounded-full blur-[100px] -z-10" />
 
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-        
         {/* Brand identity column */}
         <div className="space-y-6 lg:pr-4">
           <Link
@@ -35,16 +34,26 @@ export const Footer: React.FC = () => {
             <span>ABC</span>
           </Link>
           <p className="text-sm leading-relaxed text-neutral-400">
-            Premium food delivery service bringing fire-baked pizzas, gourmet burgers, and authentic cuisines directly to your door in 30 minutes.
+            Premium food delivery service bringing fire-baked pizzas, gourmet burgers, and authentic
+            cuisines directly to your door in 30 minutes.
           </p>
           <div className="flex gap-4 pt-2">
-            <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all">
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all"
+            >
               <Facebook size={18} />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all">
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all"
+            >
               <Twitter size={18} />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all">
+            <a
+              href="#"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary hover:border-primary/30 transition-all"
+            >
               <Instagram size={18} />
             </a>
           </div>
@@ -57,27 +66,42 @@ export const Footer: React.FC = () => {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <Link to="/search?category=pizza" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Link
+                to="/search?category=pizza"
+                className="hover:text-primary transition-colors flex items-center gap-2"
+              >
                 <span>🍕</span> Wood-fired Pizza
               </Link>
             </li>
             <li>
-              <Link to="/search?category=burgers" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Link
+                to="/search?category=burgers"
+                className="hover:text-primary transition-colors flex items-center gap-2"
+              >
                 <span>🍔</span> Gourmet Burgers
               </Link>
             </li>
             <li>
-              <Link to="/search?category=chinese" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Link
+                to="/search?category=chinese"
+                className="hover:text-primary transition-colors flex items-center gap-2"
+              >
                 <span>🍜</span> Asian Fusion
               </Link>
             </li>
             <li>
-              <Link to="/search?category=desserts" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Link
+                to="/search?category=desserts"
+                className="hover:text-primary transition-colors flex items-center gap-2"
+              >
                 <span>🍰</span> Sweet Desserts
               </Link>
             </li>
             <li>
-              <Link to="/search?category=healthy" className="hover:text-primary transition-colors flex items-center gap-2">
+              <Link
+                to="/search?category=healthy"
+                className="hover:text-primary transition-colors flex items-center gap-2"
+              >
                 <span>🥗</span> Healthy Salads
               </Link>
             </li>
@@ -86,7 +110,9 @@ export const Footer: React.FC = () => {
 
         {/* Company information column */}
         <div className="space-y-6">
-          <h3 className="text-white font-display font-bold text-base tracking-wide uppercase">Company</h3>
+          <h3 className="text-white font-display font-bold text-base tracking-wide uppercase">
+            Company
+          </h3>
           <ul className="space-y-3 text-sm">
             <li>
               <Link to="/about" className="hover:text-primary transition-colors">
@@ -118,7 +144,9 @@ export const Footer: React.FC = () => {
 
         {/* Newsletter subscription column */}
         <div className="space-y-6">
-          <h3 className="text-white font-display font-bold text-base tracking-wide uppercase">Newsletter</h3>
+          <h3 className="text-white font-display font-bold text-base tracking-wide uppercase">
+            Newsletter
+          </h3>
           <p className="text-sm leading-relaxed text-neutral-400">
             Subscribe to get exclusive promo codes, special offers, and updates on new menu items.
           </p>
@@ -146,10 +174,18 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
         <span>© {new Date().getFullYear()} ABC Restaurant Group. All rights reserved.</span>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
-          <a href="#" className="hover:text-white transition-colors">Refund Policy</a>
+          <a href="#" className="hover:text-white transition-colors">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:text-white transition-colors">
+            Terms of Service
+          </a>
+          <a href="#" className="hover:text-white transition-colors">
+            Cookie Policy
+          </a>
+          <a href="#" className="hover:text-white transition-colors">
+            Refund Policy
+          </a>
         </div>
       </div>
     </footer>

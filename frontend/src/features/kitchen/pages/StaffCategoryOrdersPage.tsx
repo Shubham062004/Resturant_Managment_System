@@ -92,7 +92,8 @@ export default function StaffCategoryOrdersPage() {
               Kitchen Station Queue
             </h1>
             <p className="text-xs text-slate-400 font-sans mt-0.5">
-              Station category assignment: <span className="text-primary font-bold">{assignedCategory}</span>
+              Station category assignment:{' '}
+              <span className="text-primary font-bold">{assignedCategory}</span>
             </p>
           </div>
         </div>
@@ -110,20 +111,36 @@ export default function StaffCategoryOrdersPage() {
         {/* NEW TICKETS */}
         <Card className="border-border/40 bg-slate-900/30 backdrop-blur-md rounded-2xl p-5 min-h-[500px] flex flex-col">
           <div className="flex justify-between items-center pb-3 border-b border-border/20 mb-4">
-            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">New Tickets</h3>
+            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">
+              New Tickets
+            </h3>
             <Badge className="bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold px-2 py-0.5 text-xs">
               {queuedOrders.length}
             </Badge>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4">
             {queuedOrders.length === 0 ? (
-              <p className="text-slate-600 text-xs text-center italic py-8">No new tickets queued</p>
+              <p className="text-slate-600 text-xs text-center italic py-8">
+                No new tickets queued
+              </p>
             ) : (
               queuedOrders.map((order) => (
-                <div key={order.id} className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3">
+                <div
+                  key={order.id}
+                  className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3"
+                >
                   <div className="flex justify-between">
-                    <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant={order.priority === 'URGENT' || order.priority === 'HIGH' ? 'error' : 'neutral'} className="text-[9px]">
+                    <span className="font-bold text-sm text-slate-200">
+                      Ticket #{order.order.orderNumber}
+                    </span>
+                    <Badge
+                      variant={
+                        order.priority === 'URGENT' || order.priority === 'HIGH'
+                          ? 'error'
+                          : 'neutral'
+                      }
+                      className="text-[9px]"
+                    >
                       {order.priority}
                     </Badge>
                   </div>
@@ -150,20 +167,31 @@ export default function StaffCategoryOrdersPage() {
         {/* COOKING */}
         <Card className="border-border/40 bg-slate-900/30 backdrop-blur-md rounded-2xl p-5 min-h-[500px] flex flex-col">
           <div className="flex justify-between items-center pb-3 border-b border-border/20 mb-4">
-            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">In Cook Station</h3>
+            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">
+              In Cook Station
+            </h3>
             <Badge className="bg-orange-500/10 text-orange-500 border border-orange-500/20 font-bold px-2 py-0.5 text-xs">
               {cookingOrders.length}
             </Badge>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4">
             {cookingOrders.length === 0 ? (
-              <p className="text-slate-600 text-xs text-center italic py-8">No active cooking tickets</p>
+              <p className="text-slate-600 text-xs text-center italic py-8">
+                No active cooking tickets
+              </p>
             ) : (
               cookingOrders.map((order) => (
-                <div key={order.id} className="p-4 bg-slate-950/70 border border-border/25 rounded-xl space-y-3">
+                <div
+                  key={order.id}
+                  className="p-4 bg-slate-950/70 border border-border/25 rounded-xl space-y-3"
+                >
                   <div className="flex justify-between">
-                    <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant="warning" className="text-[9px]">Cooking</Badge>
+                    <span className="font-bold text-sm text-slate-200">
+                      Ticket #{order.order.orderNumber}
+                    </span>
+                    <Badge variant="warning" className="text-[9px]">
+                      Cooking
+                    </Badge>
                   </div>
                   <div className="space-y-1 text-xs text-slate-400">
                     {order.tasks.map((t) => (
@@ -188,7 +216,9 @@ export default function StaffCategoryOrdersPage() {
         {/* COOKED / READY */}
         <Card className="border-border/40 bg-slate-900/30 backdrop-blur-md rounded-2xl p-5 min-h-[500px] flex flex-col">
           <div className="flex justify-between items-center pb-3 border-b border-border/20 mb-4">
-            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">Ready for Packing</h3>
+            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">
+              Ready for Packing
+            </h3>
             <Badge className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-bold px-2 py-0.5 text-xs">
               {readyOrders.length}
             </Badge>
@@ -198,10 +228,17 @@ export default function StaffCategoryOrdersPage() {
               <p className="text-slate-600 text-xs text-center italic py-8">No ready tickets</p>
             ) : (
               readyOrders.map((order) => (
-                <div key={order.id} className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3">
+                <div
+                  key={order.id}
+                  className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3"
+                >
                   <div className="flex justify-between">
-                    <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant="success" className="text-[9px]">Ready</Badge>
+                    <span className="font-bold text-sm text-slate-200">
+                      Ticket #{order.order.orderNumber}
+                    </span>
+                    <Badge variant="success" className="text-[9px]">
+                      Ready
+                    </Badge>
                   </div>
                   <div className="space-y-1 text-xs text-slate-400">
                     {order.tasks.map((t) => (

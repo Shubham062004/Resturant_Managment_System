@@ -41,7 +41,7 @@ app.use(
     origin: [
       'http://localhost:5173',
       'http://localhost:5174',
-      process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app'
+      process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app',
     ],
     credentials: true,
   }),

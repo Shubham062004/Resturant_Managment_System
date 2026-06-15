@@ -20,7 +20,16 @@ const router = Router();
 
 // All kitchen routes are protected
 router.use(authGuard);
-router.use(restrictTo('KITCHEN_STAFF', 'HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'BRANCH_MANAGER'));
+router.use(
+  restrictTo(
+    'KITCHEN_STAFF',
+    'HEAD_CHEF',
+    'ADMIN',
+    'SUPER_ADMIN',
+    'ORGANIZATION_OWNER',
+    'BRANCH_MANAGER',
+  ),
+);
 
 router.route('/orders').get(getActiveOrders);
 
@@ -39,6 +48,8 @@ router
     createStation,
   );
 
-router.route('/analytics').get(restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER'), getAnalytics);
+router
+  .route('/analytics')
+  .get(restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER'), getAnalytics);
 
 export default router;

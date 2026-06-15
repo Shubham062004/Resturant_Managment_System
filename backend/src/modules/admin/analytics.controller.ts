@@ -146,12 +146,10 @@ export class AnalyticsController {
         { name: 'Desserts', value: 10 },
       ];
 
-      res
-        .status(200)
-        .json({
-          status: 'success',
-          data: { topProducts: populatedItems, categories: categoryBreakdown },
-        });
+      res.status(200).json({
+        status: 'success',
+        data: { topProducts: populatedItems, categories: categoryBreakdown },
+      });
     } catch (error) {
       next(error);
     }
@@ -193,7 +191,7 @@ export class AnalyticsController {
         activeStaff,
         lowStockItems,
         pendingRequestsCount,
-        reservationsCount
+        reservationsCount,
       ] = await Promise.all([
         prisma.order.findMany({
           where: {
@@ -229,16 +227,22 @@ export class AnalyticsController {
         }),
       ]);
 
-      const revenueToday = todaysOrders.reduce((sum: number, order: any) => sum + Number(order.totalAmount), 0);
-      const revenueThisMonth = monthlyOrders.reduce((sum: number, order: any) => sum + Number(order.totalAmount), 0);
-      
+      const revenueToday = todaysOrders.reduce(
+        (sum: number, order: any) => sum + Number(order.totalAmount),
+        0,
+      );
+      const revenueThisMonth = monthlyOrders.reduce(
+        (sum: number, order: any) => sum + Number(order.totalAmount),
+        0,
+      );
+
       const ordersTodayCount = await prisma.order.count({
         where: { createdAt: { gte: today } },
       });
 
       // 2. Orders By Branch
       const branches = await prisma.branch.findMany({
-        include: { restaurant: true }
+        include: { restaurant: true },
       });
 
       const branchPerformance = await Promise.all(
@@ -251,31 +255,31 @@ export class AnalyticsController {
           });
 
           const bRevenue = bOrders
-            .filter(o => o.status === 'DELIVERED' || o.status === 'PICKED_UP')
+            .filter((o) => o.status === 'DELIVERED' || o.status === 'PICKED_UP')
             .reduce((sum, o) => sum + Number(o.totalAmount), 0);
 
           const bKitchenQueue = await prisma.kitchenOrder.count({
             where: {
               status: { in: ['QUEUED', 'COOKING'] },
-              order: { branchId: branch.id }
-            }
+              order: { branchId: branch.id },
+            },
           });
 
           const bPendingDeliveries = await prisma.deliveryAssignment.count({
             where: {
               status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] },
-              order: { branchId: branch.id }
-            }
+              order: { branchId: branch.id },
+            },
           });
 
           const bInventoryHealth = await prisma.inventory.count({
             where: {
               branchId: branch.id,
-              quantity: { lte: 50 }
-            }
+              quantity: { lte: 50 },
+            },
           });
 
-          const rating = 4.2 + (idx * 0.15); // Simulated rating
+          const rating = 4.2 + idx * 0.15; // Simulated rating
 
           return {
             branchId: branch.id,
@@ -287,9 +291,9 @@ export class AnalyticsController {
             kitchenQueue: bKitchenQueue,
             pendingDeliveries: bPendingDeliveries,
             inventoryHealth: bInventoryHealth > 5 ? 'Low Stock' : 'Optimal',
-            customerRating: parseFloat(Math.min(5.0, rating).toFixed(1))
+            customerRating: parseFloat(Math.min(5.0, rating).toFixed(1)),
           };
-        })
+        }),
       );
 
       // 3. Top Products
@@ -297,7 +301,7 @@ export class AnalyticsController {
         by: ['productId'],
         _sum: { quantity: true },
         orderBy: { _sum: { quantity: 'desc' } },
-        take: 5
+        take: 5,
       });
 
       const topProducts = await Promise.all(
@@ -306,29 +310,29 @@ export class AnalyticsController {
           return {
             name: prod?.name || 'Special Product',
             quantity: item._sum.quantity || 0,
-            revenue: (item._sum.quantity || 0) * Number(prod?.basePrice || 10)
+            revenue: (item._sum.quantity || 0) * Number(prod?.basePrice || 10),
           };
-        })
+        }),
       );
 
       // 4. Low stock alerts
       const lowStockAlertsData = await prisma.inventory.findMany({
         where: { quantity: { lte: 50 } },
         include: { ingredient: true, branch: true },
-        take: 5
+        take: 5,
       });
 
-      const lowStockAlerts = lowStockAlertsData.map(item => ({
+      const lowStockAlerts = lowStockAlertsData.map((item) => ({
         id: item.id,
         ingredientName: item.ingredient?.name || 'Ingredient',
         branchName: item.branch?.name.replace('ABC - ', '') || 'Branch',
         quantity: item.quantity,
-        unit: item.ingredient?.unit || 'Units'
+        unit: item.ingredient?.unit || 'Units',
       }));
 
       // 5. Kitchen Load
       const activeKitchen = await prisma.kitchenOrder.count({
-        where: { status: { not: 'COMPLETED' } }
+        where: { status: { not: 'COMPLETED' } },
       });
 
       res.status(200).json({
@@ -342,12 +346,12 @@ export class AnalyticsController {
             lowStockCount: lowStockItems,
             pendingRequestsCount,
             reservationsCount,
-            staffOnline: activeStaff
+            staffOnline: activeStaff,
           },
           branchPerformance,
           topProducts,
-          lowStockAlerts
-        }
+          lowStockAlerts,
+        },
       });
     } catch (error) {
       next(error);

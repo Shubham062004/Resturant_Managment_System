@@ -27,7 +27,6 @@ POSAnalyticsEventSchema.index({ branchId: 1, eventType: 1, timestamp: -1 });
 POSAnalyticsEventSchema.index({ terminalId: 1, timestamp: -1 });
 POSAnalyticsEventSchema.index({ cashierId: 1, timestamp: -1 });
 
-export const POSAnalyticsEvent = mongoose.models.POSAnalyticsEvent || mongoose.model<IPOSAnalyticsEvent>(
-  'POSAnalyticsEvent',
-  POSAnalyticsEventSchema,
-);
+export const POSAnalyticsEvent =
+  mongoose.models.POSAnalyticsEvent ||
+  mongoose.model<IPOSAnalyticsEvent>('POSAnalyticsEvent', POSAnalyticsEventSchema);

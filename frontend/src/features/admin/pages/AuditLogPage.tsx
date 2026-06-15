@@ -16,7 +16,7 @@ import {
   Terminal,
   Activity,
   AlertTriangle,
-  FileCode
+  FileCode,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -54,22 +54,33 @@ export default function AuditLogPage() {
     loadData();
   }, []);
 
-  const actionTypes = Array.from(new Set(logs.map(log => log.actionType)));
+  const actionTypes = Array.from(new Set(logs.map((log) => log.actionType)));
 
   const filteredLogs = logs
-    .filter(log => actionFilter === 'ALL' || log.actionType === actionFilter)
-    .filter(log =>
-      log.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.actionType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.targetId.toLowerCase().includes(searchTerm.toLowerCase())
+    .filter((log) => actionFilter === 'ALL' || log.actionType === actionFilter)
+    .filter(
+      (log) =>
+        log.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        log.actionType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        log.targetId.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
   const getSeverityStyle = (action: string) => {
     const act = action.toUpperCase();
-    if (act.includes('DELETE') || act.includes('REMOVE') || act.includes('BREACH') || act.includes('DROP')) {
+    if (
+      act.includes('DELETE') ||
+      act.includes('REMOVE') ||
+      act.includes('BREACH') ||
+      act.includes('DROP')
+    ) {
       return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
     }
-    if (act.includes('UPDATE') || act.includes('PATCH') || act.includes('EDIT') || act.includes('MODIFY')) {
+    if (
+      act.includes('UPDATE') ||
+      act.includes('PATCH') ||
+      act.includes('EDIT') ||
+      act.includes('MODIFY')
+    ) {
       return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
     }
     if (act.includes('CREATE') || act.includes('ADD') || act.includes('SAVE')) {
@@ -80,11 +91,11 @@ export default function AuditLogPage() {
 
   // Metrics calculations
   const totalEvents = logs.length;
-  const criticalEvents = logs.filter(log => {
+  const criticalEvents = logs.filter((log) => {
     const act = log.actionType.toUpperCase();
     return act.includes('DELETE') || act.includes('REMOVE') || act.includes('BREACH');
   }).length;
-  const uniqueActors = new Set(logs.map(log => log.userId)).size;
+  const uniqueActors = new Set(logs.map((log) => log.userId)).size;
 
   return (
     <div className="space-y-8 p-6 text-[#F8FAFC] bg-[#0F172A] min-h-screen font-sans">
@@ -100,7 +111,8 @@ export default function AuditLogPage() {
             </h1>
           </div>
           <p className="text-slate-400 text-sm mt-1 ml-9">
-            Cryptographically logged administrator actions, permission escalations, core catalog adjustments, and security state telemetry.
+            Cryptographically logged administrator actions, permission escalations, core catalog
+            adjustments, and security state telemetry.
           </p>
         </div>
         <Button
@@ -117,30 +129,46 @@ export default function AuditLogPage() {
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Operations Logged</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Total Operations Logged
+            </p>
             <Activity className="text-blue-400 w-4 h-4" />
           </div>
-          <p className="text-3xl font-extrabold font-display mt-2 text-white">{totalEvents} Events</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Immutable append-only ledger</span>
+          <p className="text-3xl font-extrabold font-display mt-2 text-white">
+            {totalEvents} Events
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Immutable append-only ledger
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-bl-full pointer-events-none" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Critical Outflows / Deletions</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Critical Outflows / Deletions
+            </p>
             <ShieldAlert className="text-rose-400 w-4 h-4" />
           </div>
-          <p className="text-3xl font-extrabold font-display mt-2 text-rose-400">{criticalEvents} Incidents</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Requires manual audit verification</span>
+          <p className="text-3xl font-extrabold font-display mt-2 text-rose-400">
+            {criticalEvents} Incidents
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Requires manual audit verification
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-full pointer-events-none" />
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active System Operators</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Active System Operators
+            </p>
             <Key className="text-emerald-400 w-4 h-4" />
           </div>
-          <p className="text-3xl font-extrabold font-display mt-2 text-white">{uniqueActors} Accounts</p>
+          <p className="text-3xl font-extrabold font-display mt-2 text-white">
+            {uniqueActors} Accounts
+          </p>
           <span className="text-[10px] text-slate-500 mt-1 block">Unique credentials verified</span>
         </Card>
       </div>
@@ -152,7 +180,9 @@ export default function AuditLogPage() {
           <Card className="border-slate-800 bg-[#111827] rounded-2xl p-6 shadow-xl">
             <CardHeader className="border-none p-0 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h3 className="text-lg font-bold font-display text-white">System Events Explorer</h3>
+                <h3 className="text-lg font-bold font-display text-white">
+                  System Events Explorer
+                </h3>
                 <p className="text-xs text-slate-400">Filter and audit secure action logs</p>
               </div>
 
@@ -177,9 +207,13 @@ export default function AuditLogPage() {
                     onChange={(e) => setActionFilter(e.target.value)}
                     className="bg-transparent text-white font-semibold focus:outline-none cursor-pointer"
                   >
-                    <option value="ALL" className="bg-slate-900">All Event Types</option>
-                    {actionTypes.map(type => (
-                      <option key={type} value={type} className="bg-slate-900">{type}</option>
+                    <option value="ALL" className="bg-slate-900">
+                      All Event Types
+                    </option>
+                    {actionTypes.map((type) => (
+                      <option key={type} value={type} className="bg-slate-900">
+                        {type}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -192,7 +226,9 @@ export default function AuditLogPage() {
                 <p className="text-xs text-slate-400">Parsing security registers...</p>
               </div>
             ) : filteredLogs.length === 0 ? (
-              <p className="text-slate-500 text-sm text-center py-16">No matching security events logged.</p>
+              <p className="text-slate-500 text-sm text-center py-16">
+                No matching security events logged.
+              </p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
@@ -218,7 +254,9 @@ export default function AuditLogPage() {
                           }`}
                         >
                           <td className="py-3.5 px-4 font-bold text-white">
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono border ${getSeverityStyle(log.actionType)}`}>
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono border ${getSeverityStyle(log.actionType)}`}
+                            >
                               {log.actionType}
                             </span>
                           </td>
@@ -229,7 +267,9 @@ export default function AuditLogPage() {
                             </div>
                           </td>
                           <td className="py-3.5 px-4 text-slate-400 font-mono text-[10px]">
-                            {log.targetId.length > 20 ? `${log.targetId.slice(0, 18)}...` : log.targetId}
+                            {log.targetId.length > 20
+                              ? `${log.targetId.slice(0, 18)}...`
+                              : log.targetId}
                           </td>
                           <td className="py-3.5 px-4 text-right text-slate-400 font-medium">
                             <div className="flex items-center justify-end gap-1.5">
@@ -259,17 +299,25 @@ export default function AuditLogPage() {
               {selectedLog ? (
                 <div className="mt-5 space-y-5 font-sans text-xs">
                   <div className="space-y-1">
-                    <span className="text-slate-500 font-semibold uppercase text-[9px] block">Event ID</span>
-                    <span className="text-slate-200 font-mono">{selectedLog.id || selectedLog._id}</span>
+                    <span className="text-slate-500 font-semibold uppercase text-[9px] block">
+                      Event ID
+                    </span>
+                    <span className="text-slate-200 font-mono">
+                      {selectedLog.id || selectedLog._id}
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <span className="text-slate-500 font-semibold uppercase text-[9px] block">Operator</span>
+                      <span className="text-slate-500 font-semibold uppercase text-[9px] block">
+                        Operator
+                      </span>
                       <span className="text-slate-200 font-medium">{selectedLog.userId}</span>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-slate-500 font-semibold uppercase text-[9px] block">Action Date</span>
+                      <span className="text-slate-500 font-semibold uppercase text-[9px] block">
+                        Action Date
+                      </span>
                       <span className="text-slate-200 font-medium">
                         {new Date(selectedLog.createdAt).toLocaleDateString()}
                       </span>
@@ -277,12 +325,18 @@ export default function AuditLogPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <span className="text-slate-500 font-semibold uppercase text-[9px] block">Full Target Resource Path</span>
-                    <span className="text-slate-300 font-mono break-all">{selectedLog.targetId}</span>
+                    <span className="text-slate-500 font-semibold uppercase text-[9px] block">
+                      Full Target Resource Path
+                    </span>
+                    <span className="text-slate-300 font-mono break-all">
+                      {selectedLog.targetId}
+                    </span>
                   </div>
 
                   <div className="space-y-2">
-                    <span className="text-slate-500 font-semibold uppercase text-[9px] block">Data Payload Diff</span>
+                    <span className="text-slate-500 font-semibold uppercase text-[9px] block">
+                      Data Payload Diff
+                    </span>
                     {selectedLog.changes ? (
                       <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-x-auto max-h-[300px] font-mono text-[11px] text-emerald-400">
                         <pre>{JSON.stringify(selectedLog.changes, null, 2)}</pre>
@@ -297,7 +351,10 @@ export default function AuditLogPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-24 text-center text-slate-500">
                   <FileCode size={36} className="text-slate-600 mb-3" />
-                  <p className="text-xs font-semibold">Select a security event row from the explorer table to inspect its payload properties.</p>
+                  <p className="text-xs font-semibold">
+                    Select a security event row from the explorer table to inspect its payload
+                    properties.
+                  </p>
                 </div>
               )}
             </div>

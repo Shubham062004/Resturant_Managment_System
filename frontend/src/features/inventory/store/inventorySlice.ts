@@ -43,28 +43,45 @@ export const fetchAnalytics = createAsyncThunk('inventory/fetchAnalytics', async
   return response.data.data;
 });
 
-export const fetchInventoryRequests = createAsyncThunk('inventory/fetchInventoryRequests', async (branchId?: string) => {
-  const url = branchId ? `/inventory/requests?branchId=${branchId}` : '/inventory/requests';
-  const response = await api.get(url);
-  return response.data.data;
-});
+export const fetchInventoryRequests = createAsyncThunk(
+  'inventory/fetchInventoryRequests',
+  async (branchId?: string) => {
+    const url = branchId ? `/inventory/requests?branchId=${branchId}` : '/inventory/requests';
+    const response = await api.get(url);
+    return response.data.data;
+  },
+);
 
-export const createInventoryRequest = createAsyncThunk('inventory/createInventoryRequest', async (data: any) => {
-  const response = await api.post('/inventory/requests', data);
-  return response.data.data;
-});
+export const createInventoryRequest = createAsyncThunk(
+  'inventory/createInventoryRequest',
+  async (data: any) => {
+    const response = await api.post('/inventory/requests', data);
+    return response.data.data;
+  },
+);
 
-export const approveInventoryRequest = createAsyncThunk('inventory/approveInventoryRequest', async ({ id, data }: { id: string; data: any }) => {
-  const response = await api.patch(`/inventory/requests/${id}/approve`, data);
-  return response.data.data;
-});
+export const approveInventoryRequest = createAsyncThunk(
+  'inventory/approveInventoryRequest',
+  async ({ id, data }: { id: string; data: any }) => {
+    const response = await api.patch(`/inventory/requests/${id}/approve`, data);
+    return response.data.data;
+  },
+);
 
 export const updateInventoryRequestStatus = createAsyncThunk(
   'inventory/updateStatus',
-  async ({ id, status, type }: { id: string; status: 'PACKED' | 'DISPATCHED' | 'DELIVERED'; type: 'dispatch' | 'deliver' }) => {
+  async ({
+    id,
+    status,
+    type,
+  }: {
+    id: string;
+    status: 'PACKED' | 'DISPATCHED' | 'DELIVERED';
+    type: 'dispatch' | 'deliver';
+  }) => {
     const response = await api.patch(`/inventory/requests/${id}/${type}`, { status });
     return response.data.data;
-  }
+  },
 );
 
 const inventorySlice = createSlice({
@@ -92,7 +109,7 @@ const inventorySlice = createSlice({
       } else {
         state.inventoryRequests.push(action.payload);
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,5 +150,6 @@ const inventorySlice = createSlice({
   },
 });
 
-export const { socketInventoryUpdate, socketPurchaseReceived, socketInventoryRequestUpdated } = inventorySlice.actions;
+export const { socketInventoryUpdate, socketPurchaseReceived, socketInventoryRequestUpdated } =
+  inventorySlice.actions;
 export default inventorySlice.reducer;

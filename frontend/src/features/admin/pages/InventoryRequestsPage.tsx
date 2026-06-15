@@ -5,7 +5,6 @@ import { Box, Check, X, Eye, Package, Truck, CheckCircle2 } from 'lucide-react';
 import apiClient from '../../../services/apiClient';
 import { useToast } from '../../../shared/components/ui/Toast';
 
-
 interface InventoryRequestItem {
   id: string;
   ingredient: { name: string; unit: string };
@@ -71,7 +70,10 @@ export default function InventoryRequestsPage() {
   };
 
   const totalPages = Math.ceil(requests.length / itemsPerPage);
-  const paginatedRequests = requests.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const paginatedRequests = requests.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
   const getStatusBadge = (status: string) => {
     const styles: any = {
@@ -135,20 +137,18 @@ export default function InventoryRequestsPage() {
                 paginatedRequests.map((req) => (
                   <tr key={req.id} className="hover:bg-slate-800/20 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-slate-300">
-                      {new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).format(new Date(req.createdAt))}
+                      {new Intl.DateTimeFormat('en-US', {
+                        month: 'short',
+                        day: '2-digit',
+                        year: 'numeric',
+                      }).format(new Date(req.createdAt))}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-slate-200">
-                      {req.branch.name}
-                    </td>
+                    <td className="px-6 py-4 font-semibold text-slate-200">{req.branch.name}</td>
                     <td className="px-6 py-4 text-slate-400">
                       {req.requestedBy.firstName} {req.requestedBy.lastName}
                     </td>
-                    <td className="px-6 py-4 text-slate-300 font-mono">
-                      {req.items.length} items
-                    </td>
-                    <td className="px-6 py-4">
-                      {getStatusBadge(req.status)}
-                    </td>
+                    <td className="px-6 py-4 text-slate-300 font-mono">{req.items.length} items</td>
+                    <td className="px-6 py-4">{getStatusBadge(req.status)}</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <Button
@@ -189,10 +189,10 @@ export default function InventoryRequestsPage() {
                 out of <strong className="text-white">{requests.length}</strong> entries
               </span>
             </div>
-            
+
             <div className="flex items-center space-x-1">
               <button
-                onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
                 className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-50"
               >
@@ -212,7 +212,7 @@ export default function InventoryRequestsPage() {
                 </button>
               ))}
               <button
-                onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
                 className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-50"
               >
@@ -229,11 +229,14 @@ export default function InventoryRequestsPage() {
           <div className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl">
             <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
               <h2 className="text-xl font-bold font-display">Request Details</h2>
-              <button onClick={() => setSelectedRequest(null)} className="text-slate-400 hover:text-white">
+              <button
+                onClick={() => setSelectedRequest(null)}
+                className="text-slate-400 hover:text-white"
+              >
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="p-6">
               <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
                 <div>
@@ -242,7 +245,12 @@ export default function InventoryRequestsPage() {
                 </div>
                 <div>
                   <p className="text-slate-500">Date</p>
-                  <p className="font-semibold text-lg">{new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(selectedRequest.createdAt))}</p>
+                  <p className="font-semibold text-lg">
+                    {new Intl.DateTimeFormat('en-US', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    }).format(new Date(selectedRequest.createdAt))}
+                  </p>
                 </div>
                 <div>
                   <p className="text-slate-500">Status</p>
@@ -261,17 +269,24 @@ export default function InventoryRequestsPage() {
                   <thead className="bg-slate-900/50">
                     <tr>
                       <th className="px-4 py-3 text-slate-400 font-medium">Ingredient</th>
-                      <th className="px-4 py-3 text-slate-400 font-medium text-right">Requested Qty</th>
-                      <th className="px-4 py-3 text-slate-400 font-medium text-right">Approved Qty</th>
+                      <th className="px-4 py-3 text-slate-400 font-medium text-right">
+                        Requested Qty
+                      </th>
+                      <th className="px-4 py-3 text-slate-400 font-medium text-right">
+                        Approved Qty
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/40">
-                    {selectedRequest.items.map(item => (
+                    {selectedRequest.items.map((item) => (
                       <tr key={item.id}>
                         <td className="px-4 py-3 font-medium">{item.ingredient.name}</td>
-                        <td className="px-4 py-3 text-right font-mono text-slate-300">{item.requestedQuantity} {item.ingredient.unit}</td>
+                        <td className="px-4 py-3 text-right font-mono text-slate-300">
+                          {item.requestedQuantity} {item.ingredient.unit}
+                        </td>
                         <td className="px-4 py-3 text-right font-mono text-emerald-400">
-                          {item.approvedQuantity !== null ? item.approvedQuantity : '-'} {item.ingredient.unit}
+                          {item.approvedQuantity !== null ? item.approvedQuantity : '-'}{' '}
+                          {item.ingredient.unit}
                         </td>
                       </tr>
                     ))}
@@ -289,30 +304,50 @@ export default function InventoryRequestsPage() {
               <div className="flex gap-3 justify-end pt-4 border-t border-slate-800">
                 {selectedRequest.status === 'PENDING' && (
                   <>
-                    <Button onClick={() => handleApprove(selectedRequest.id, 'REJECTED')} variant="outline" className="text-rose-400 border-rose-900/50 hover:bg-rose-950/40">
+                    <Button
+                      onClick={() => handleApprove(selectedRequest.id, 'REJECTED')}
+                      variant="outline"
+                      className="text-rose-400 border-rose-900/50 hover:bg-rose-950/40"
+                    >
                       <X size={16} className="mr-2" /> Reject
                     </Button>
-                    <Button onClick={() => handleApprove(selectedRequest.id, 'APPROVED')} className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                    <Button
+                      onClick={() => handleApprove(selectedRequest.id, 'APPROVED')}
+                      className="bg-emerald-600 hover:bg-emerald-500 text-white"
+                    >
                       <Check size={16} className="mr-2" /> Approve Request
                     </Button>
                   </>
                 )}
                 {selectedRequest.status === 'APPROVED' && (
-                  <Button onClick={() => handleUpdateStatus(selectedRequest.id, 'PACKED')} className="bg-blue-600 hover:bg-blue-500">
+                  <Button
+                    onClick={() => handleUpdateStatus(selectedRequest.id, 'PACKED')}
+                    className="bg-blue-600 hover:bg-blue-500"
+                  >
                     <Package size={16} className="mr-2" /> Mark as Packed
                   </Button>
                 )}
                 {selectedRequest.status === 'PACKED' && (
-                  <Button onClick={() => handleUpdateStatus(selectedRequest.id, 'DISPATCHED')} className="bg-purple-600 hover:bg-purple-500">
+                  <Button
+                    onClick={() => handleUpdateStatus(selectedRequest.id, 'DISPATCHED')}
+                    className="bg-purple-600 hover:bg-purple-500"
+                  >
                     <Truck size={16} className="mr-2" /> Mark as Dispatched
                   </Button>
                 )}
                 {selectedRequest.status === 'DISPATCHED' && (
-                  <Button onClick={() => handleUpdateStatus(selectedRequest.id, 'DELIVERED')} className="bg-slate-700 hover:bg-slate-600 text-white">
+                  <Button
+                    onClick={() => handleUpdateStatus(selectedRequest.id, 'DELIVERED')}
+                    className="bg-slate-700 hover:bg-slate-600 text-white"
+                  >
                     <CheckCircle2 size={16} className="mr-2" /> Confirm Delivery
                   </Button>
                 )}
-                <Button onClick={() => setSelectedRequest(null)} variant="outline" className="border-slate-700 text-slate-300">
+                <Button
+                  onClick={() => setSelectedRequest(null)}
+                  variant="outline"
+                  className="border-slate-700 text-slate-300"
+                >
                   Close
                 </Button>
               </div>

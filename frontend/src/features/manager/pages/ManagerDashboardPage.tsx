@@ -15,7 +15,7 @@ import {
   AlertTriangle,
   Users,
   TrendingUp,
-  Store
+  Store,
 } from 'lucide-react';
 
 export default function ManagerDashboardPage() {
@@ -34,14 +34,46 @@ export default function ManagerDashboardPage() {
     rating: 4.8,
     kitchenLoad: 'High',
     inventoryAlerts: 4,
-    staffPresent: 14
+    staffPresent: 14,
   });
 
   const [recentActivities] = useState([
-    { id: 1, type: 'order', message: 'New order #1042 received via Delivery', time: 'Just now', icon: ShoppingBag, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { id: 2, type: 'table', message: 'Table T-4 marked as Occupied', time: '5m ago', icon: LayoutGrid, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-    { id: 3, type: 'inventory', message: 'Low stock alert: Fresh Cream (2L left)', time: '12m ago', icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-rose-500/10' },
-    { id: 4, type: 'kitchen', message: 'Pizza Station delay reported (+5m avg)', time: '20m ago', icon: ChefHat, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+    {
+      id: 1,
+      type: 'order',
+      message: 'New order #1042 received via Delivery',
+      time: 'Just now',
+      icon: ShoppingBag,
+      color: 'text-blue-500',
+      bg: 'bg-blue-500/10',
+    },
+    {
+      id: 2,
+      type: 'table',
+      message: 'Table T-4 marked as Occupied',
+      time: '5m ago',
+      icon: LayoutGrid,
+      color: 'text-emerald-500',
+      bg: 'bg-emerald-500/10',
+    },
+    {
+      id: 3,
+      type: 'inventory',
+      message: 'Low stock alert: Fresh Cream (2L left)',
+      time: '12m ago',
+      icon: AlertTriangle,
+      color: 'text-rose-500',
+      bg: 'bg-rose-500/10',
+    },
+    {
+      id: 4,
+      type: 'kitchen',
+      message: 'Pizza Station delay reported (+5m avg)',
+      time: '20m ago',
+      icon: ChefHat,
+      color: 'text-amber-500',
+      bg: 'bg-amber-500/10',
+    },
   ]);
 
   useEffect(() => {
@@ -50,7 +82,7 @@ export default function ManagerDashboardPage() {
         const res = await apiClient.get('/catalog/branches');
         const fetchedBranches = res.data.data.branches || [];
         setBranches(fetchedBranches);
-        
+
         // Match user branch or pick first
         if (fetchedBranches.length > 0) {
           setSelectedBranchId(fetchedBranches[0].id);
@@ -78,7 +110,10 @@ export default function ManagerDashboardPage() {
               <Icon className={`w-5 h-5 ${colorClass.text}`} />
             </div>
             {trend && (
-              <Badge variant={trendUp ? 'success' : 'danger'} className="text-[10px] font-bold px-1.5 py-0">
+              <Badge
+                variant={trendUp ? 'success' : 'danger'}
+                className="text-[10px] font-bold px-1.5 py-0"
+              >
                 {trendUp ? '↑' : '↓'} {trend}
               </Badge>
             )}
@@ -94,12 +129,13 @@ export default function ManagerDashboardPage() {
 
   return (
     <div className="space-y-6">
-      
       {/* Header Area */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold font-display text-white tracking-tight">Overview</h1>
-          <p className="text-sm text-slate-400 mt-1">Real-time pulse of your restaurant operations.</p>
+          <p className="text-sm text-slate-400 mt-1">
+            Real-time pulse of your restaurant operations.
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -129,35 +165,35 @@ export default function ManagerDashboardPage() {
 
       {/* Primary KPIs Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard 
-          title="Today's Revenue" 
-          value={`₹${kpiData.revenue.toLocaleString()}`} 
-          icon={Banknote} 
-          trend="12.5%" 
+        <StatCard
+          title="Today's Revenue"
+          value={`₹${kpiData.revenue.toLocaleString()}`}
+          icon={Banknote}
+          trend="12.5%"
           trendUp={true}
           colorClass={{ bg: 'bg-emerald-500/10', text: 'text-emerald-500' }}
           delay={0.1}
         />
-        <StatCard 
-          title="Orders Today" 
-          value={kpiData.ordersToday} 
-          icon={ShoppingBag} 
-          trend="8.2%" 
+        <StatCard
+          title="Orders Today"
+          value={kpiData.ordersToday}
+          icon={ShoppingBag}
+          trend="8.2%"
           trendUp={true}
           colorClass={{ bg: 'bg-blue-500/10', text: 'text-blue-500' }}
           delay={0.2}
         />
-        <StatCard 
-          title="Pending Orders" 
-          value={kpiData.pendingOrders} 
-          icon={Clock} 
+        <StatCard
+          title="Pending Orders"
+          value={kpiData.pendingOrders}
+          icon={Clock}
           colorClass={{ bg: 'bg-rose-500/10', text: 'text-rose-500' }}
           delay={0.3}
         />
-        <StatCard 
-          title="Active Tables" 
-          value={`${kpiData.activeTables}/20`} 
-          icon={LayoutGrid} 
+        <StatCard
+          title="Active Tables"
+          value={`${kpiData.activeTables}/20`}
+          icon={LayoutGrid}
           colorClass={{ bg: 'bg-purple-500/10', text: 'text-purple-500' }}
           delay={0.4}
         />
@@ -165,36 +201,35 @@ export default function ManagerDashboardPage() {
 
       {/* Secondary Metrics & Activity Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        
         {/* Left Column: More KPIs */}
         <div className="xl:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 h-min">
-          <StatCard 
-            title="Active Reservations" 
-            value={kpiData.activeReservations} 
-            icon={CalendarCheck} 
+          <StatCard
+            title="Active Reservations"
+            value={kpiData.activeReservations}
+            icon={CalendarCheck}
             colorClass={{ bg: 'bg-sky-500/10', text: 'text-sky-500' }}
             delay={0.5}
           />
-          <StatCard 
-            title="Customer Rating" 
-            value={kpiData.rating} 
-            icon={Star} 
+          <StatCard
+            title="Customer Rating"
+            value={kpiData.rating}
+            icon={Star}
             trend="+0.1"
             trendUp={true}
             colorClass={{ bg: 'bg-amber-500/10', text: 'text-amber-500' }}
             delay={0.6}
           />
-          <StatCard 
-            title="Kitchen Load" 
-            value={kpiData.kitchenLoad} 
-            icon={ChefHat} 
+          <StatCard
+            title="Kitchen Load"
+            value={kpiData.kitchenLoad}
+            icon={ChefHat}
             colorClass={{ bg: 'bg-orange-500/10', text: 'text-orange-500' }}
             delay={0.7}
           />
-          <StatCard 
-            title="Staff Shift" 
-            value={`${kpiData.staffPresent} Present`} 
-            icon={Users} 
+          <StatCard
+            title="Staff Shift"
+            value={`${kpiData.staffPresent} Present`}
+            icon={Users}
             colorClass={{ bg: 'bg-indigo-500/10', text: 'text-indigo-500' }}
             delay={0.8}
           />
@@ -212,7 +247,7 @@ export default function ManagerDashboardPage() {
               <h3 className="font-display font-bold text-lg text-white">Live Activity</h3>
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
-            
+
             <div className="p-5 space-y-6 flex-1 overflow-y-auto custom-scrollbar">
               {recentActivities.map((activity, idx) => {
                 const ActivityIcon = activity.icon;
@@ -222,20 +257,24 @@ export default function ManagerDashboardPage() {
                     {idx !== recentActivities.length - 1 && (
                       <div className="absolute top-8 left-4 bottom-[-24px] w-[1px] bg-border/20" />
                     )}
-                    
-                    <div className={`w-8 h-8 rounded-full ${activity.bg} flex items-center justify-center shrink-0 border border-border/10 z-10`}>
+
+                    <div
+                      className={`w-8 h-8 rounded-full ${activity.bg} flex items-center justify-center shrink-0 border border-border/10 z-10`}
+                    >
                       <ActivityIcon className={`w-4 h-4 ${activity.color}`} />
                     </div>
-                    
+
                     <div className="flex-1 min-w-0 pt-1.5">
                       <p className="text-sm font-medium text-slate-200">{activity.message}</p>
-                      <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">{activity.time}</p>
+                      <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">
+                        {activity.time}
+                      </p>
                     </div>
                   </div>
                 );
               })}
             </div>
-            
+
             <div className="p-3 border-t border-border/20 bg-slate-950/30 shrink-0">
               <button className="w-full text-xs font-bold text-primary hover:text-primary-hover transition-colors">
                 View All Activity
@@ -243,7 +282,6 @@ export default function ManagerDashboardPage() {
             </div>
           </Card>
         </motion.div>
-
       </div>
     </div>
   );

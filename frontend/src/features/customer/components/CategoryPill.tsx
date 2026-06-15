@@ -10,7 +10,14 @@ interface CategoryPillProps {
   onClick?: () => void;
 }
 
-const CategoryPill: React.FC<CategoryPillProps> = ({ name, slug, image, emoji, isActive, onClick }) => {
+const CategoryPill: React.FC<CategoryPillProps> = ({
+  name,
+  slug,
+  image,
+  emoji,
+  isActive,
+  onClick,
+}) => {
   const content = (
     <div
       className={`flex flex-col items-center gap-2 px-4 py-3 rounded-2xl border cursor-pointer select-none transition-all duration-200 min-w-[90px] group ${
@@ -22,7 +29,12 @@ const CategoryPill: React.FC<CategoryPillProps> = ({ name, slug, image, emoji, i
     >
       {image ? (
         <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-primary/30 transition-colors">
-          <img src={image} alt={name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" loading="lazy" />
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            loading="lazy"
+          />
         </div>
       ) : (
         <span className="text-2xl">{emoji || '🍽️'}</span>
@@ -33,11 +45,7 @@ const CategoryPill: React.FC<CategoryPillProps> = ({ name, slug, image, emoji, i
 
   if (onClick) return content;
 
-  return (
-    <Link to={`/search?category=${slug}`}>
-      {content}
-    </Link>
-  );
+  return <Link to={`/search?category=${slug}`}>{content}</Link>;
 };
 
 export default CategoryPill;

@@ -18,7 +18,7 @@ export const initSocket = (server: HttpServer) => {
         'http://localhost:5173',
         'http://localhost:5174',
         process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app',
-        process.env.CLIENT_URL || 'https://resturant-managment-system-frontend.vercel.app'
+        process.env.CLIENT_URL || 'https://resturant-managment-system-frontend.vercel.app',
       ],
       methods: ['GET', 'POST'],
       credentials: true,

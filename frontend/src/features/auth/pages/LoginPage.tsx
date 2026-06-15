@@ -147,8 +147,13 @@ export const LoginPage: React.FC = () => {
             />
             <div className="flex items-center justify-between mt-2">
               <label className="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" className="rounded border-input text-primary focus:ring-primary cursor-pointer" />
-                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
+                <input
+                  type="checkbox"
+                  className="rounded border-input text-primary focus:ring-primary cursor-pointer"
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                  Remember me
+                </span>
               </label>
               <Link
                 to="/forgot-password"

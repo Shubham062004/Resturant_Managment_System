@@ -73,12 +73,22 @@ export class StaffController {
   public static async updateStaffProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const { salary, attendanceCount, performanceScore, assignedCategory, role, organizationId, franchiseId, isActive } = req.body;
+      const {
+        salary,
+        attendanceCount,
+        performanceScore,
+        assignedCategory,
+        role,
+        organizationId,
+        franchiseId,
+        isActive,
+      } = req.body;
 
       const updateData: any = {};
       if (salary !== undefined) updateData.salary = salary;
       if (attendanceCount !== undefined) updateData.attendanceCount = parseInt(attendanceCount);
-      if (performanceScore !== undefined) updateData.performanceScore = parseFloat(performanceScore);
+      if (performanceScore !== undefined)
+        updateData.performanceScore = parseFloat(performanceScore);
       if (assignedCategory !== undefined) updateData.assignedCategory = assignedCategory;
       if (role !== undefined) updateData.role = role;
       if (organizationId !== undefined) updateData.organizationId = organizationId;
@@ -130,7 +140,9 @@ export class StaffController {
         data: updateData,
       });
 
-      res.status(200).json({ status: 'success', message: `Successfully updated ${ids.length} staff members` });
+      res
+        .status(200)
+        .json({ status: 'success', message: `Successfully updated ${ids.length} staff members` });
     } catch (error) {
       next(error);
     }

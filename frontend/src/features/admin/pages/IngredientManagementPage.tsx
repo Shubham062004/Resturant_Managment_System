@@ -16,7 +16,7 @@ import {
   Trash,
   ArrowRightLeft,
   Search,
-  Filter
+  Filter,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -82,7 +82,7 @@ export default function IngredientManagementPage() {
       setLoading(true);
       const [ingredientsRes, branchesRes] = await Promise.all([
         apiClient.get('/inventory/ingredients'),
-        apiClient.get('/admin/branches')
+        apiClient.get('/admin/branches'),
       ]);
       setIngredients(ingredientsRes.data.data || []);
       setBranches(branchesRes.data.data || []);
@@ -128,7 +128,7 @@ export default function IngredientManagementPage() {
         category: formCategory,
         unit: formUnit,
         reorderPoint: parseFloat(formReorderPoint) || 0,
-        costPrice: parseFloat(formCostPrice) || 0
+        costPrice: parseFloat(formCostPrice) || 0,
       };
 
       if (selectedIngredient) {
@@ -152,7 +152,9 @@ export default function IngredientManagementPage() {
       toast.success(`Deleted ingredient: ${name}`);
       loadData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Error deleting ingredient. It may be in use.');
+      toast.error(
+        err.response?.data?.error?.message || 'Error deleting ingredient. It may be in use.',
+      );
     }
   };
 
@@ -167,7 +169,7 @@ export default function IngredientManagementPage() {
         ingredientId: wasteIngredientId,
         branchId: wasteBranchId,
         quantity: parseFloat(wasteQty),
-        reason: wasteReason
+        reason: wasteReason,
       });
       toast.success('Waste record logged and stock deducted successfully!');
       setShowWasteModal(false);
@@ -193,7 +195,7 @@ export default function IngredientManagementPage() {
         destinationBranchId: transferDestId,
         ingredientId: transferIngredientId,
         quantity: parseFloat(transferQty),
-        notes: 'Central Ingredient Control Panel Transfer'
+        notes: 'Central Ingredient Control Panel Transfer',
       });
       toast.success('Stock transfer completed successfully!');
       setShowTransferModal(false);
@@ -203,21 +205,25 @@ export default function IngredientManagementPage() {
     }
   };
 
-  const categories = Array.from(new Set(ingredients.map(i => i.category)));
+  const categories = Array.from(new Set(ingredients.map((i) => i.category)));
 
   const filteredIngredients = ingredients
-    .filter(i => selectedCategory === 'ALL' || i.category === selectedCategory)
-    .filter(i => i.name.toLowerCase().includes(searchTerm.toLowerCase()) || i.sku.toLowerCase().includes(searchTerm.toLowerCase()));
+    .filter((i) => selectedCategory === 'ALL' || i.category === selectedCategory)
+    .filter(
+      (i) =>
+        i.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        i.sku.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
   const paginatedIngredients = filteredIngredients.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   // Stats
-  const lowStockCount = ingredients.filter(i => i.reorderPoint > 15).length; // Estimate
+  const lowStockCount = ingredients.filter((i) => i.reorderPoint > 15).length; // Estimate
   const totalCost = ingredients.reduce((sum, i) => sum + i.costPrice, 0) * 150;
 
   return (
@@ -229,7 +235,8 @@ export default function IngredientManagementPage() {
             Ingredient Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Central repository for ingredient master files, cost configuration, waste management, and real-time alerts.
+            Central repository for ingredient master files, cost configuration, waste management,
+            and real-time alerts.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -257,14 +264,18 @@ export default function IngredientManagementPage() {
       {/* KPI Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Ingredients</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Total Ingredients
+          </p>
           <p className="text-3xl font-bold font-display mt-2 text-white">{ingredients.length}</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Active SKU catalog</span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
           <div className="flex justify-between items-center">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Low Stock SKUs</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Low Stock SKUs
+            </p>
             <AlertTriangle size={16} className="text-[#F59E0B]" />
           </div>
           <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">{lowStockCount}</p>
@@ -272,17 +283,23 @@ export default function IngredientManagementPage() {
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Waste This Month</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Waste This Month
+          </p>
           <p className="text-3xl font-bold font-display mt-2 text-[#DC2626]">₹3,450</p>
           <span className="text-[10px] text-slate-500 mt-1 block">Spoilage & expired log</span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
           <div className="flex justify-between items-center">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Ingredient Cost</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              Ingredient Cost
+            </p>
             <TrendingUp size={16} className="text-[#16A34A]" />
           </div>
-          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">₹{totalCost.toLocaleString('en-IN')}</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">
+            ₹{totalCost.toLocaleString('en-IN')}
+          </p>
           <span className="text-[10px] text-slate-500 mt-1 block">Est. cost this month</span>
         </Card>
       </div>
@@ -292,7 +309,9 @@ export default function IngredientManagementPage() {
         <CardHeader className="border-none p-0 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold font-display text-white">Ingredient Directory</h3>
-            <p className="text-xs text-slate-400">Search and filter active ingredient formulations and safety reorder parameters</p>
+            <p className="text-xs text-slate-400">
+              Search and filter active ingredient formulations and safety reorder parameters
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -316,9 +335,13 @@ export default function IngredientManagementPage() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="bg-transparent text-white font-semibold focus:outline-none cursor-pointer text-xs"
               >
-                <option value="ALL" className="bg-slate-900">All Categories</option>
-                {categories.map(c => (
-                  <option key={c} value={c} className="bg-slate-900">{c}</option>
+                <option value="ALL" className="bg-slate-900">
+                  All Categories
+                </option>
+                {categories.map((c) => (
+                  <option key={c} value={c} className="bg-slate-900">
+                    {c}
+                  </option>
                 ))}
               </select>
             </div>
@@ -356,8 +379,12 @@ export default function IngredientManagementPage() {
                       </span>
                     </td>
                     <td className="py-3 text-slate-300">{i.unit}</td>
-                    <td className="py-3 text-center text-slate-300 font-semibold">{i.reorderPoint}</td>
-                    <td className="py-3 text-right text-emerald-400 font-medium">₹{i.costPrice.toFixed(2)}</td>
+                    <td className="py-3 text-center text-slate-300 font-semibold">
+                      {i.reorderPoint}
+                    </td>
+                    <td className="py-3 text-right text-emerald-400 font-medium">
+                      ₹{i.costPrice.toFixed(2)}
+                    </td>
                     <td className="py-3 text-right">
                       <div className="flex justify-end gap-2">
                         <Button
@@ -402,17 +429,29 @@ export default function IngredientManagementPage() {
                 <option value={50}>50</option>
               </select>
               <span>
-                out of <strong className="text-slate-200">{filteredIngredients.length}</strong> entries
+                out of <strong className="text-slate-200">{filteredIngredients.length}</strong>{' '}
+                entries
               </span>
             </div>
 
             <div className="flex items-center space-x-1">
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
               </button>
 
               {Array.from({ length: totalPages }).map((_, idx) => {
@@ -427,27 +466,43 @@ export default function IngredientManagementPage() {
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors font-medium text-sm ${currentPage === pageNum
+                      className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors font-medium text-sm ${
+                        currentPage === pageNum
                           ? 'bg-indigo-500 border-indigo-500 text-white'
                           : 'border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200'
-                        }`}
+                      }`}
                     >
                       {pageNum}
                     </button>
                   );
                 }
                 if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
-                  return <span key={pageNum} className="text-slate-500 px-1">...</span>;
+                  return (
+                    <span key={pageNum} className="text-slate-500 px-1">
+                      ...
+                    </span>
+                  );
                 }
                 return null;
               })}
 
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
                 className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
               </button>
             </div>
           </div>
@@ -468,13 +523,20 @@ export default function IngredientManagementPage() {
                 <h2 className="text-lg font-bold font-display">
                   {selectedIngredient ? 'Modify Ingredient Master' : 'Create Ingredient Master'}
                 </h2>
-                <button onClick={() => setShowAddEditModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                <button
+                  onClick={() => setShowAddEditModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </div>
 
               <form onSubmit={handleSaveIngredient} className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Ingredient Name</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Ingredient Name
+                    </label>
                     <Input
                       required
                       value={formName}
@@ -485,7 +547,9 @@ export default function IngredientManagementPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">SKU Code</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      SKU Code
+                    </label>
                     <Input
                       required
                       value={formSku}
@@ -498,7 +562,9 @@ export default function IngredientManagementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Category</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Category
+                    </label>
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
@@ -528,7 +594,9 @@ export default function IngredientManagementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Reorder Point</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Reorder Point
+                    </label>
                     <Input
                       type="number"
                       required
@@ -539,7 +607,9 @@ export default function IngredientManagementPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Cost Price (₹)</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Cost Price (₹)
+                    </label>
                     <Input
                       type="number"
                       step="0.01"
@@ -582,12 +652,19 @@ export default function IngredientManagementPage() {
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">Log Spoilage / Waste Record</h2>
-                <button onClick={() => setShowWasteModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                <button
+                  onClick={() => setShowWasteModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </div>
 
               <form onSubmit={handleLogWaste} className="p-6 space-y-4">
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-400 font-semibold uppercase">Ingredient SKU</label>
+                  <label className="text-xs text-slate-400 font-semibold uppercase">
+                    Ingredient SKU
+                  </label>
                   <select
                     required
                     value={wasteIngredientId}
@@ -595,15 +672,19 @@ export default function IngredientManagementPage() {
                     className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none"
                   >
                     <option value="">-- Select --</option>
-                    {ingredients.map(ing => (
-                      <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>
+                    {ingredients.map((ing) => (
+                      <option key={ing.id} value={ing.id}>
+                        {ing.name} ({ing.unit})
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Outlet / Branch</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Outlet / Branch
+                    </label>
                     <select
                       required
                       value={wasteBranchId}
@@ -611,14 +692,18 @@ export default function IngredientManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none"
                     >
                       <option value="">-- Select --</option>
-                      {branches.map(b => (
-                        <option key={b.id} value={b.id}>{b.name}</option>
+                      {branches.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Quantity</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Quantity
+                    </label>
                     <Input
                       required
                       type="number"
@@ -676,13 +761,20 @@ export default function IngredientManagementPage() {
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">Inter-Branch Inventory Transfer</h2>
-                <button onClick={() => setShowTransferModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                <button
+                  onClick={() => setShowTransferModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </div>
 
               <form onSubmit={handleTransferStock} className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Source Branch</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Source Branch
+                    </label>
                     <select
                       required
                       value={transferSourceId}
@@ -690,14 +782,18 @@ export default function IngredientManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary"
                     >
                       <option value="">-- Select --</option>
-                      {branches.map(b => (
-                        <option key={b.id} value={b.id}>{b.name}</option>
+                      {branches.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Destination Branch</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Destination Branch
+                    </label>
                     <select
                       required
                       value={transferDestId}
@@ -705,8 +801,10 @@ export default function IngredientManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary"
                     >
                       <option value="">-- Select --</option>
-                      {branches.map(b => (
-                        <option key={b.id} value={b.id}>{b.name}</option>
+                      {branches.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -714,7 +812,9 @@ export default function IngredientManagementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Ingredient SKU</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Ingredient SKU
+                    </label>
                     <select
                       required
                       value={transferIngredientId}
@@ -722,14 +822,18 @@ export default function IngredientManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary"
                     >
                       <option value="">-- Select --</option>
-                      {ingredients.map(ing => (
-                        <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>
+                      {ingredients.map((ing) => (
+                        <option key={ing.id} value={ing.id}>
+                          {ing.name} ({ing.unit})
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Quantity</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Quantity
+                    </label>
                     <Input
                       required
                       type="number"

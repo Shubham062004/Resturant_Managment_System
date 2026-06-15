@@ -16,18 +16,22 @@ export const processSmsJob = async (jobData: any) => {
     const filename = `sms_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.json`;
     fs.writeFileSync(
       path.join(outboxDir, filename),
-      JSON.stringify({ to, message, channel: channel || 'SMS', sentAt: new Date().toISOString() }, null, 2)
+      JSON.stringify(
+        { to, message, channel: channel || 'SMS', sentAt: new Date().toISOString() },
+        null,
+        2,
+      ),
     );
 
     await new Promise((res) => setTimeout(res, 500));
-    
+
     if (notificationId) {
       await prisma.notification.update({
         where: { id: notificationId },
         data: { status: 'SENT', sentAt: new Date() },
       });
     }
-    
+
     await NotificationLog.create({
       notificationId: notificationId || 'system-alert',
       userId: userId || 'system',

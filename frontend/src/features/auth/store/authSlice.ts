@@ -37,7 +37,11 @@ export const login = createAsyncThunk(
     try {
       const response = await apiClient.post('/auth/login', credentials);
       if (response.data.data.requireOtp) {
-        return { requireOtp: true, email: response.data.data.email, phone: response.data.data.phone };
+        return {
+          requireOtp: true,
+          email: response.data.data.email,
+          phone: response.data.data.phone,
+        };
       }
       const { user } = response.data.data;
       return { requireOtp: false, user };

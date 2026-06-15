@@ -8,7 +8,9 @@ interface SkeletonCardProps {
 const SkeletonCard: React.FC<SkeletonCardProps> = ({ variant = 'food', className = '' }) => {
   if (variant === 'restaurant') {
     return (
-      <div className={`rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden animate-pulse ${className}`}>
+      <div
+        className={`rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden animate-pulse ${className}`}
+      >
         <div className="h-48 bg-white/5" />
         <div className="p-5 space-y-3">
           <div className="h-5 bg-white/10 rounded-lg w-3/4" />
@@ -25,7 +27,9 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({ variant = 'food', className
 
   if (variant === 'branch') {
     return (
-      <div className={`rounded-xl border border-white/5 bg-white/[0.02] p-5 animate-pulse ${className}`}>
+      <div
+        className={`rounded-xl border border-white/5 bg-white/[0.02] p-5 animate-pulse ${className}`}
+      >
         <div className="flex gap-4">
           <div className="w-20 h-20 rounded-xl bg-white/5 flex-shrink-0" />
           <div className="flex-1 space-y-2">
@@ -43,7 +47,9 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({ variant = 'food', className
 
   if (variant === 'offer') {
     return (
-      <div className={`rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6 animate-pulse ${className}`}>
+      <div
+        className={`rounded-xl border border-dashed border-white/10 bg-white/[0.02] p-6 animate-pulse ${className}`}
+      >
         <div className="flex justify-between items-start">
           <div className="space-y-2 flex-1">
             <div className="h-3 bg-white/10 rounded w-20" />
@@ -58,7 +64,9 @@ const SkeletonCard: React.FC<SkeletonCardProps> = ({ variant = 'food', className
 
   // Default: food card
   return (
-    <div className={`rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden animate-pulse ${className}`}>
+    <div
+      className={`rounded-2xl border border-white/5 bg-white/[0.02] overflow-hidden animate-pulse ${className}`}
+    >
       <div className="h-40 bg-white/5" />
       <div className="p-4 space-y-2">
         <div className="h-4 bg-white/10 rounded w-3/4" />

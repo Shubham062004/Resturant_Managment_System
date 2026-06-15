@@ -11,13 +11,19 @@ export interface IPredictionLog extends Document {
 }
 
 const PredictionLogSchema = new Schema<IPredictionLog>({
-  predictionType: { type: String, required: true, enum: ['DEMAND', 'INVENTORY', 'PEAK_HOURS', 'REVENUE'] },
+  predictionType: {
+    type: String,
+    required: true,
+    enum: ['DEMAND', 'INVENTORY', 'PEAK_HOURS', 'REVENUE'],
+  },
   targetDate: { type: Date, required: true, index: true },
   predictionValue: { type: Schema.Types.Mixed, required: true },
   confidence: { type: Number, required: true },
   actualValue: { type: Schema.Types.Mixed },
   modelUsed: { type: String, required: true },
-  generatedAt: { type: Date, default: Date.now }
+  generatedAt: { type: Date, default: Date.now },
 });
 
-export const PredictionLog = mongoose.models.PredictionLog || mongoose.model<IPredictionLog>('PredictionLog', PredictionLogSchema);
+export const PredictionLog =
+  mongoose.models.PredictionLog ||
+  mongoose.model<IPredictionLog>('PredictionLog', PredictionLogSchema);

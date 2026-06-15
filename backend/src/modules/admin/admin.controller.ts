@@ -20,7 +20,10 @@ export class AdminController {
           status: { in: ['DELIVERED', 'PICKED_UP'] },
         },
       });
-      const revenueToday = todaysOrders.reduce((sum: number, order: any) => sum + Number(order.totalAmount), 0);
+      const revenueToday = todaysOrders.reduce(
+        (sum: number, order: any) => sum + Number(order.totalAmount),
+        0,
+      );
 
       // 2. Orders Count Today
       const ordersTodayCount = await prisma.order.count({
@@ -67,7 +70,7 @@ export class AdminController {
         orderBy: { name: 'asc' },
         include: {
           restaurant: true,
-        }
+        },
       });
 
       res.status(200).json({
@@ -81,11 +84,27 @@ export class AdminController {
 
   public static async createBranch(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, address, city, state, latitude, longitude, openingTime, closingTime, deliveryRadius, isActive } = req.body;
+      const {
+        name,
+        address,
+        city,
+        state,
+        latitude,
+        longitude,
+        openingTime,
+        closingTime,
+        deliveryRadius,
+        isActive,
+      } = req.body;
 
       const restaurant = await prisma.restaurantGroup.findFirst();
       if (!restaurant) {
-        return res.status(400).json({ status: 'fail', message: 'No restaurant group found. Please seed the database first.' });
+        return res
+          .status(400)
+          .json({
+            status: 'fail',
+            message: 'No restaurant group found. Please seed the database first.',
+          });
       }
 
       const branch = await prisma.branch.create({
@@ -116,7 +135,18 @@ export class AdminController {
   public static async updateBranch(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const { name, address, city, state, latitude, longitude, openingTime, closingTime, deliveryRadius, isActive } = req.body;
+      const {
+        name,
+        address,
+        city,
+        state,
+        latitude,
+        longitude,
+        openingTime,
+        closingTime,
+        deliveryRadius,
+        isActive,
+      } = req.body;
 
       const branch = await prisma.branch.update({
         where: { id },
@@ -166,7 +196,7 @@ export class AdminController {
         include: {
           category: true,
           variants: true,
-        }
+        },
       });
 
       res.status(200).json({
@@ -181,7 +211,10 @@ export class AdminController {
   public static async createProduct(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, categoryId, basePrice, isVeg, description, isAvailable, featured } = req.body;
-      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
 
       const restaurant = await prisma.restaurantGroup.findFirst();
       if (!restaurant) {
@@ -215,11 +248,14 @@ export class AdminController {
     try {
       const { id } = req.params;
       const { name, categoryId, basePrice, isVeg, description, isAvailable, featured } = req.body;
-      
+
       const updateData: any = {};
       if (name !== undefined) {
         updateData.name = name;
-        updateData.slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        updateData.slug = name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
       }
       if (categoryId !== undefined) updateData.categoryId = categoryId;
       if (basePrice !== undefined) updateData.basePrice = Number(basePrice);
@@ -290,7 +326,7 @@ export class AdminController {
             targetId: 'Replenishment Req #890',
             changes: { status: 'APPROVED' },
             createdAt: new Date(Date.now() - 7200000),
-          }
+          },
         ];
       }
 
@@ -311,8 +347,8 @@ export class AdminController {
         include: {
           items: {
             include: {
-              product: true
-            }
+              product: true,
+            },
           },
           restaurant: true,
           branch: true,
@@ -330,4 +366,3 @@ export class AdminController {
     }
   }
 }
-

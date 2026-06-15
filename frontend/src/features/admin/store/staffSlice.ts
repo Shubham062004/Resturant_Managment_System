@@ -17,10 +17,7 @@ export const updateStaffProfile = createAsyncThunk(
 export const bulkUpdateStaff = createAsyncThunk(
   'staff/bulkUpdate',
   async ({ ids, data }: { ids: string[]; data: any }) => {
-    const response = await apiClient.patch(
-      '/admin/staff/bulk-update',
-      { ids, ...data }
-    );
+    const response = await apiClient.patch('/admin/staff/bulk-update', { ids, ...data });
     return { ids, updatedData: data, result: response.data };
   },
 );

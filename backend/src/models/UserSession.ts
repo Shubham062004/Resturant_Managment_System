@@ -26,9 +26,7 @@ const UserSessionSchema: Schema = new Schema(
   },
 );
 
-export const UserSession = mongoose.models.UserSession || mongoose.model<IUserSession>(
-  'UserSession',
-  UserSessionSchema,
-  'user_sessions',
-);
+export const UserSession =
+  mongoose.models.UserSession ||
+  mongoose.model<IUserSession>('UserSession', UserSessionSchema, 'user_sessions');
 export default UserSession;

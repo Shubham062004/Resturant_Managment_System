@@ -6,7 +6,7 @@ export async function seedPOS(prisma: PrismaClient, branches: any[], _cashiers: 
 
   const terminals = [];
   const tables = [];
-  
+
   for (const branch of branches) {
     // 2 Terminals per branch
     for (let i = 1; i <= 2; i++) {
@@ -26,7 +26,7 @@ export async function seedPOS(prisma: PrismaClient, branches: any[], _cashiers: 
         branchId: branch.id,
         number: `${branchPrefix}-T${i}`,
         capacity: i % 2 === 0 ? 4 : 2,
-        status: TableStatus.AVAILABLE
+        status: TableStatus.AVAILABLE,
       });
     }
   }

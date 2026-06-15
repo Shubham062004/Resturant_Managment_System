@@ -43,7 +43,10 @@ export const FavoritesPage: React.FC = () => {
           <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-8 text-center">
             <p className="text-red-400 font-semibold mb-2">Could not load favorites</p>
             <p className="text-neutral-400 text-sm mb-4">Please sign in and try again.</p>
-            <button onClick={() => navigate('/login')} className="px-6 py-2 bg-primary text-white rounded-xl text-sm font-bold">
+            <button
+              onClick={() => navigate('/login')}
+              className="px-6 py-2 bg-primary text-white rounded-xl text-sm font-bold"
+            >
               Sign In
             </button>
           </div>
@@ -52,9 +55,13 @@ export const FavoritesPage: React.FC = () => {
             <Heart size={48} className="mx-auto text-neutral-600 mb-4" />
             <h3 className="text-xl font-bold text-white mb-2">Your Favorites List is Empty</h3>
             <p className="text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-              Browse our menu, discover delicious items, and tap the heart icon on any product to save it here for later.
+              Browse our menu, discover delicious items, and tap the heart icon on any product to
+              save it here for later.
             </p>
-            <button onClick={() => navigate('/restaurants')} className="px-6 py-3 bg-primary text-white rounded-xl text-sm font-bold">
+            <button
+              onClick={() => navigate('/restaurants')}
+              className="px-6 py-3 bg-primary text-white rounded-xl text-sm font-bold"
+            >
               Discover Menu
             </button>
           </div>

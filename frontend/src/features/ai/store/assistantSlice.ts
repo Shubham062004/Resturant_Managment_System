@@ -2,12 +2,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../../services/apiClient';
 
 interface AssistantState {
-  messages: Array<{ role: 'user' | 'assistant' | 'system', content: string }>;
+  messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }>;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: AssistantState = {
-  messages: [{ role: 'assistant', content: 'Hello! I am your ABC AI Assistant. How can I help you today?' }],
+  messages: [
+    { role: 'assistant', content: 'Hello! I am your ABC AI Assistant. How can I help you today?' },
+  ],
   status: 'idle',
 };
 
@@ -25,7 +27,7 @@ const assistantSlice = createSlice({
     },
     clearChat(state) {
       state.messages = initialState.messages;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder

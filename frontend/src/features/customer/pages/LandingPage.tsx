@@ -49,7 +49,10 @@ export const LandingPage: React.FC = () => {
   // API data
   const { data: featuredRes, isLoading: featuredLoading } = useFeaturedProducts();
   const featuredProducts = featuredRes?.data ?? [];
-  const { data: restaurantsRes, isLoading: restaurantsLoading } = useRestaurants({ page: 1, limit: 6 });
+  const { data: restaurantsRes, isLoading: restaurantsLoading } = useRestaurants({
+    page: 1,
+    limit: 6,
+  });
   const restaurants = restaurantsRes?.data ?? [];
   const { data: coupons = [] } = useActiveCoupons();
 
@@ -106,12 +109,20 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-6 space-y-7 text-center lg:text-left">
               {/* Delivery badge */}
               {selectedBranch ? (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold px-4 py-2 rounded-full">
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold px-4 py-2 rounded-full"
+                >
                   <MapPin size={14} />
                   <span>Delivering from: {selectedBranch.name}</span>
                 </motion.div>
               ) : (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-4 py-2 rounded-full">
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold px-4 py-2 rounded-full"
+                >
                   <Zap size={14} className="animate-pulse" />
                   <span>Order & get delivered in 30 minutes</span>
                 </motion.div>
@@ -135,7 +146,8 @@ export const LandingPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-neutral-400 text-base sm:text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed"
               >
-                From fire-baked pizzas to gourmet burgers — browse our menu, customize your order, and track it live to your doorstep.
+                From fire-baked pizzas to gourmet burgers — browse our menu, customize your order,
+                and track it live to your doorstep.
               </motion.p>
 
               {/* Search bar */}
@@ -157,7 +169,11 @@ export const LandingPage: React.FC = () => {
                       className="bg-white/[0.06] border-white/10 text-white placeholder-neutral-500 h-13 focus:border-primary/50 shadow-xl"
                     />
                   </div>
-                  <Button type="submit" variant="primary" className="h-13 px-6 shadow-lg shadow-primary/20 font-semibold">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    className="h-13 px-6 shadow-lg shadow-primary/20 font-semibold"
+                  >
                     Search
                   </Button>
                 </div>
@@ -171,13 +187,21 @@ export const LandingPage: React.FC = () => {
                 className="flex flex-wrap items-center justify-center lg:justify-start gap-3"
               >
                 <Link to="/restaurants">
-                  <Button variant="primary" size="lg" className="shadow-lg shadow-primary/20 font-semibold flex items-center gap-2">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    className="shadow-lg shadow-primary/20 font-semibold flex items-center gap-2"
+                  >
                     <span>Order Now</span>
                     <ArrowRight size={16} />
                   </Button>
                 </Link>
                 <Link to="/branches">
-                  <Button variant="outline" size="lg" className="border-white/10 text-white hover:bg-white/5 font-semibold flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-white/10 text-white hover:bg-white/5 font-semibold flex items-center gap-2"
+                  >
                     <MapPin size={16} />
                     <span>Find Branch</span>
                   </Button>
@@ -274,7 +298,9 @@ export const LandingPage: React.FC = () => {
         {/* ═══════════════════════ POPULAR CATEGORIES ═══════════════════════ */}
         <section className="py-16 px-6 max-w-7xl mx-auto w-full">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">What are you craving?</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              What are you craving?
+            </h2>
             <p className="text-neutral-500 text-sm">Explore our most popular food categories</p>
           </div>
 
@@ -291,13 +317,19 @@ export const LandingPage: React.FC = () => {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp size={18} className="text-primary" />
-                <span className="text-primary text-xs font-bold uppercase tracking-wider">Trending</span>
+                <span className="text-primary text-xs font-bold uppercase tracking-wider">
+                  Trending
+                </span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white">Popular Right Now</h2>
               <p className="text-neutral-500 text-sm mt-1">Our most ordered dishes this week</p>
             </div>
             <Link to="/restaurants">
-              <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1"
+              >
                 View All <ArrowRight size={14} />
               </Button>
             </Link>
@@ -323,10 +355,16 @@ export const LandingPage: React.FC = () => {
           <div className="flex justify-between items-end mb-10">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white">Top Restaurants</h2>
-              <p className="text-neutral-500 text-sm mt-1">Hand-picked restaurants with top ratings</p>
+              <p className="text-neutral-500 text-sm mt-1">
+                Hand-picked restaurants with top ratings
+              </p>
             </div>
             <Link to="/restaurants">
-              <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1"
+              >
                 View All <ArrowRight size={14} />
               </Button>
             </Link>
@@ -340,42 +378,54 @@ export const LandingPage: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {(restaurants.length > 0 ? restaurants : mockRestaurants).slice(0, 3).map((res: any) => (
-                <Link key={res.id} to={`/restaurants/${res.slug}`}>
-                  <Card className="bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 overflow-hidden group h-full">
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={res.coverImage || res.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'}
-                        alt={res.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08070F] to-transparent opacity-70" />
-                      {(res.featured || res.rating > 4.3) && (
-                        <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
-                          <Award size={10} /> Top Rated
-                        </span>
-                      )}
-                      <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
-                        <Star size={12} className="text-amber-400 fill-amber-400" />
-                        <span className="text-white text-xs font-bold">{typeof res.rating === 'number' ? res.rating.toFixed(1) : res.rating}</span>
+              {(restaurants.length > 0 ? restaurants : mockRestaurants)
+                .slice(0, 3)
+                .map((res: any) => (
+                  <Link key={res.id} to={`/restaurants/${res.slug}`}>
+                    <Card className="bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 overflow-hidden group h-full">
+                      <div className="relative h-48 overflow-hidden">
+                        <img
+                          src={
+                            res.coverImage ||
+                            res.image ||
+                            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'
+                          }
+                          alt={res.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#08070F] to-transparent opacity-70" />
+                        {(res.featured || res.rating > 4.3) && (
+                          <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
+                            <Award size={10} /> Top Rated
+                          </span>
+                        )}
+                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
+                          <Star size={12} className="text-amber-400 fill-amber-400" />
+                          <span className="text-white text-xs font-bold">
+                            {typeof res.rating === 'number' ? res.rating.toFixed(1) : res.rating}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <CardContent className="p-5 space-y-3">
-                      <h3 className="font-bold text-white text-base group-hover:text-primary transition-colors">{res.name}</h3>
-                      <p className="text-xs text-neutral-400 line-clamp-2">{res.description || (res.categories ? res.categories.join(' • ') : '')}</p>
-                      <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-neutral-500">
-                        <span className="flex items-center gap-1">
-                          <Clock size={12} className="text-primary" /> 30-45 min
-                        </span>
-                        <span className="text-primary font-semibold flex items-center gap-1">
-                          View Menu <ArrowRight size={12} />
-                        </span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                      <CardContent className="p-5 space-y-3">
+                        <h3 className="font-bold text-white text-base group-hover:text-primary transition-colors">
+                          {res.name}
+                        </h3>
+                        <p className="text-xs text-neutral-400 line-clamp-2">
+                          {res.description || (res.categories ? res.categories.join(' • ') : '')}
+                        </p>
+                        <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-neutral-500">
+                          <span className="flex items-center gap-1">
+                            <Clock size={12} className="text-primary" /> 30-45 min
+                          </span>
+                          <span className="text-primary font-semibold flex items-center gap-1">
+                            View Menu <ArrowRight size={12} />
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
             </div>
           )}
         </section>
@@ -388,13 +438,21 @@ export const LandingPage: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Sparkles size={18} className="text-amber-400" />
-                    <span className="text-amber-400 text-xs font-bold uppercase tracking-wider">Deals</span>
+                    <span className="text-amber-400 text-xs font-bold uppercase tracking-wider">
+                      Deals
+                    </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-bold text-white">Today's Offers</h2>
-                  <p className="text-neutral-500 text-sm mt-1">Save more with exclusive coupon codes</p>
+                  <p className="text-neutral-500 text-sm mt-1">
+                    Save more with exclusive coupon codes
+                  </p>
                 </div>
                 <Link to="/offers">
-                  <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1"
+                  >
                     All Offers <ArrowRight size={14} />
                   </Button>
                 </Link>
@@ -410,10 +468,16 @@ export const LandingPage: React.FC = () => {
                       <div>
                         <span className="text-primary text-xs font-bold uppercase tracking-wider flex items-center gap-1">
                           <Tag size={12} />
-                          {coupon.discountType === 'PERCENTAGE' ? `${coupon.discountValue}% OFF` : coupon.discountType === 'FIXED_AMOUNT' ? `₹${parseFloat(coupon.discountValue).toFixed(0)} OFF` : 'FREE DELIVERY'}
+                          {coupon.discountType === 'PERCENTAGE'
+                            ? `${coupon.discountValue}% OFF`
+                            : coupon.discountType === 'FIXED_AMOUNT'
+                              ? `₹${parseFloat(coupon.discountValue).toFixed(0)} OFF`
+                              : 'FREE DELIVERY'}
                         </span>
                         <h3 className="text-white font-bold text-xl mt-1">{coupon.code}</h3>
-                        {coupon.description && <p className="text-neutral-400 text-xs mt-1">{coupon.description}</p>}
+                        {coupon.description && (
+                          <p className="text-neutral-400 text-xs mt-1">{coupon.description}</p>
+                        )}
                       </div>
                       <button
                         onClick={() => handleCopyCoupon(coupon.code)}
@@ -424,7 +488,9 @@ export const LandingPage: React.FC = () => {
                       </button>
                     </div>
                     {parseFloat(coupon.minimumAmount) > 0 && (
-                      <p className="text-neutral-500 text-xs">Min order: ₹{parseFloat(coupon.minimumAmount).toFixed(0)}</p>
+                      <p className="text-neutral-500 text-xs">
+                        Min order: ₹{parseFloat(coupon.minimumAmount).toFixed(0)}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -442,9 +508,24 @@ export const LandingPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
-              { step: '01', icon: MapPin, title: 'Choose Your Branch', desc: 'Select the nearest ABC branch or let us auto-detect your location for fastest delivery.' },
-              { step: '02', icon: ChefHat, title: 'Browse & Order', desc: 'Explore our menu, customize your meal, add items to cart, and apply coupons at checkout.' },
-              { step: '03', icon: Truck, title: 'Track & Enjoy', desc: 'Watch your order being prepared live and get it delivered hot to your doorstep.' },
+              {
+                step: '01',
+                icon: MapPin,
+                title: 'Choose Your Branch',
+                desc: 'Select the nearest ABC branch or let us auto-detect your location for fastest delivery.',
+              },
+              {
+                step: '02',
+                icon: ChefHat,
+                title: 'Browse & Order',
+                desc: 'Explore our menu, customize your meal, add items to cart, and apply coupons at checkout.',
+              },
+              {
+                step: '03',
+                icon: Truck,
+                title: 'Track & Enjoy',
+                desc: 'Watch your order being prepared live and get it delivered hot to your doorstep.',
+              },
             ].map((item, i) => (
               <motion.div
                 key={item.step}
@@ -454,13 +535,19 @@ export const LandingPage: React.FC = () => {
                 transition={{ delay: i * 0.15 }}
                 className="text-center space-y-4"
               >
-                <div className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center shadow-lg ${
-                  i === 2 ? 'bg-primary text-white shadow-primary/20' : 'bg-white/[0.05] text-white border border-white/10'
-                }`}>
+                <div
+                  className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center shadow-lg ${
+                    i === 2
+                      ? 'bg-primary text-white shadow-primary/20'
+                      : 'bg-white/[0.05] text-white border border-white/10'
+                  }`}
+                >
                   <item.icon size={28} />
                 </div>
                 <h3 className="font-bold text-white text-lg">{item.title}</h3>
-                <p className="text-neutral-400 text-sm leading-relaxed max-w-xs mx-auto">{item.desc}</p>
+                <p className="text-neutral-400 text-sm leading-relaxed max-w-xs mx-auto">
+                  {item.desc}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -470,23 +557,40 @@ export const LandingPage: React.FC = () => {
         <section className="py-20 px-6 bg-white/[0.01]">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">What Our Customers Say</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                What Our Customers Say
+              </h2>
               <p className="text-neutral-500 text-sm">Loved by thousands of food enthusiasts</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {mockTestimonials.map((t) => (
-                <Card key={t.id} className="bg-white/[0.03] border-white/[0.06] p-6 flex flex-col justify-between space-y-5">
+                <Card
+                  key={t.id}
+                  className="bg-white/[0.03] border-white/[0.06] p-6 flex flex-col justify-between space-y-5"
+                >
                   <div className="flex gap-1 mb-1">
                     {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} size={14} className={s <= Math.round(t.rating) ? 'text-amber-400 fill-amber-400' : 'text-neutral-700'} />
+                      <Star
+                        key={s}
+                        size={14}
+                        className={
+                          s <= Math.round(t.rating)
+                            ? 'text-amber-400 fill-amber-400'
+                            : 'text-neutral-700'
+                        }
+                      />
                     ))}
                   </div>
                   <p className="text-sm text-neutral-300 leading-relaxed flex-1">
                     &ldquo;{t.comment}&rdquo;
                   </p>
                   <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                    <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border border-white/10" />
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="w-10 h-10 rounded-full object-cover border border-white/10"
+                    />
                     <div>
                       <p className="text-sm font-semibold text-white">{t.name}</p>
                       <p className="text-[10px] text-neutral-500">{t.role}</p>
@@ -507,13 +611,20 @@ export const LandingPage: React.FC = () => {
                 Order Faster on the <span className="text-primary">ABC App</span>
               </h2>
               <p className="text-neutral-400 text-sm leading-relaxed">
-                Get exclusive app-only deals, save your favorite addresses, reorder with one tap, and track your delivery live.
+                Get exclusive app-only deals, save your favorite addresses, reorder with one tap,
+                and track your delivery live.
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                <Button variant="primary" className="flex items-center gap-2 shadow-lg shadow-primary/20">
+                <Button
+                  variant="primary"
+                  className="flex items-center gap-2 shadow-lg shadow-primary/20"
+                >
                   <Smartphone size={16} /> App Store
                 </Button>
-                <Button variant="outline" className="border-white/10 text-white flex items-center gap-2 hover:bg-white/5">
+                <Button
+                  variant="outline"
+                  className="border-white/10 text-white flex items-center gap-2 hover:bg-white/5"
+                >
                   <Play size={14} fill="currentColor" /> Google Play
                 </Button>
               </div>
@@ -524,7 +635,9 @@ export const LandingPage: React.FC = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center mb-3">
                   <Flame size={20} className="text-primary" />
                 </div>
-                <p className="text-[10px] font-bold text-white uppercase tracking-wider">ABC Restaurant</p>
+                <p className="text-[10px] font-bold text-white uppercase tracking-wider">
+                  ABC Restaurant
+                </p>
                 <p className="text-[8px] text-neutral-500 mt-1">Order • Track • Enjoy</p>
               </div>
             </div>
@@ -551,7 +664,11 @@ export const LandingPage: React.FC = () => {
               className="bg-white/[0.05] border-white/10 text-xs h-11"
               required
             />
-            <Button type="submit" variant="primary" className="h-11 text-xs px-5 shadow-lg shadow-primary/20">
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-11 text-xs px-5 shadow-lg shadow-primary/20"
+            >
               Subscribe
             </Button>
           </form>

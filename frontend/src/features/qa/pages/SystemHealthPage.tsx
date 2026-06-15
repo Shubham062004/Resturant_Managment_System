@@ -4,7 +4,9 @@ import { ShieldCheck, Activity, CheckCircle, AlertTriangle } from 'lucide-react'
 import { Card, CardContent } from '../../../shared/components/ui/Card';
 
 export default function SystemHealthPage() {
-  const { systemHealth, coverage, lastBuildStatus, testResults } = useAppSelector(state => state.qa);
+  const { systemHealth, coverage, lastBuildStatus, testResults } = useAppSelector(
+    (state) => state.qa,
+  );
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-10">
@@ -21,8 +23,14 @@ export default function SystemHealthPage() {
           <CardContent className="p-6">
             <h3 className="text-sm text-muted-foreground font-bold mb-2">System Status</h3>
             <div className="flex items-center gap-2">
-              {systemHealth === 'HEALTHY' ? <CheckCircle className="text-success" /> : <AlertTriangle className="text-danger" />}
-              <span className={`text-2xl font-bold ${systemHealth === 'HEALTHY' ? 'text-success' : 'text-danger'}`}>
+              {systemHealth === 'HEALTHY' ? (
+                <CheckCircle className="text-success" />
+              ) : (
+                <AlertTriangle className="text-danger" />
+              )}
+              <span
+                className={`text-2xl font-bold ${systemHealth === 'HEALTHY' ? 'text-success' : 'text-danger'}`}
+              >
                 {systemHealth}
               </span>
             </div>
@@ -33,12 +41,16 @@ export default function SystemHealthPage() {
           <CardContent className="p-6">
             <h3 className="text-sm text-muted-foreground font-bold mb-2">Build Status</h3>
             <div className="flex items-center gap-2">
-              {lastBuildStatus === 'SUCCESS' ? <ShieldCheck className="text-success" /> : <AlertTriangle className="text-danger" />}
+              {lastBuildStatus === 'SUCCESS' ? (
+                <ShieldCheck className="text-success" />
+              ) : (
+                <AlertTriangle className="text-danger" />
+              )}
               <span className="text-2xl font-bold text-white">{lastBuildStatus}</span>
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="bg-surface/50 border-border/50">
           <CardContent className="p-6">
             <h3 className="text-sm text-muted-foreground font-bold mb-2">Test Coverage</h3>
@@ -50,7 +62,9 @@ export default function SystemHealthPage() {
         <Card className="bg-surface/50 border-border/50">
           <CardContent className="p-6">
             <h3 className="text-sm text-muted-foreground font-bold mb-2">Tests Passed</h3>
-            <span className="text-2xl font-bold text-success">{testResults.passed} / {testResults.total}</span>
+            <span className="text-2xl font-bold text-success">
+              {testResults.passed} / {testResults.total}
+            </span>
           </CardContent>
         </Card>
       </div>

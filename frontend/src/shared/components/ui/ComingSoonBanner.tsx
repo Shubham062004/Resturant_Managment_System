@@ -64,11 +64,11 @@ const ComingSoonBanner: React.FC<ComingSoonBannerProps> = ({
           </div>
           <p className="text-xs text-amber-200/60 leading-relaxed">
             The data displayed on this page is{' '}
-            <span className="text-amber-300/80 font-medium">sample / demo data</span>{' '}
-            for preview purposes. Full functionality — including live backend integration,
-            CRUD operations, and real-time updates — is{' '}
-            <span className="text-amber-300/80 font-medium">actively under development</span>{' '}
-            and will be released in an upcoming sprint.
+            <span className="text-amber-300/80 font-medium">sample / demo data</span> for preview
+            purposes. Full functionality — including live backend integration, CRUD operations, and
+            real-time updates — is{' '}
+            <span className="text-amber-300/80 font-medium">actively under development</span> and
+            will be released in an upcoming sprint.
           </p>
         </div>
 

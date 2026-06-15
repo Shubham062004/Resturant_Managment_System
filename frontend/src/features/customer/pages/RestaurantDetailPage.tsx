@@ -74,7 +74,10 @@ export const RestaurantDetailPage: React.FC = () => {
       {/* 1. Hero Cover Banner */}
       <div className="relative h-80 md:h-[480px] overflow-hidden">
         <img
-          src={restaurant.coverImage || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop'}
+          src={
+            restaurant.coverImage ||
+            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop'
+          }
           alt={restaurant.name}
           className="w-full h-full object-cover"
         />
@@ -148,7 +151,6 @@ export const RestaurantDetailPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         {activeTab === 'menu' ? (
           <div className="flex flex-col lg:flex-row gap-10 items-start">
-            
             {/* Sticky categories sidebar navigation */}
             <aside className="w-full lg:w-64 shrink-0 rounded-2xl border border-white/5 bg-white/[0.02] sticky top-40 z-20 hidden lg:block p-3">
               <p className="text-xs font-bold text-neutral-500 tracking-wider uppercase mb-3 px-3 pt-2">
@@ -158,15 +160,19 @@ export const RestaurantDetailPage: React.FC = () => {
                 {categories.map((cat) => {
                   const count = (productsByCategory[cat.id] || []).length;
                   if (count === 0) return null;
-                  
+
                   return (
                     <button
                       key={cat.id}
                       onClick={() => handleScrollToCategory(cat.id)}
                       className="w-full text-left py-2.5 px-3 rounded-xl text-sm text-neutral-400 hover:text-white hover:bg-white/[0.04] transition-all flex justify-between items-center group font-medium"
                     >
-                      <span className="group-hover:translate-x-1 transition-transform">{cat.name}</span>
-                      <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full">{count}</span>
+                      <span className="group-hover:translate-x-1 transition-transform">
+                        {cat.name}
+                      </span>
+                      <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full">
+                        {count}
+                      </span>
                     </button>
                   );
                 })}
@@ -215,7 +221,8 @@ export const RestaurantDetailPage: React.FC = () => {
                   <div>
                     <p className="font-bold text-white text-lg">{primaryBranch?.name}</p>
                     <p className="text-neutral-400 text-sm mt-1 leading-relaxed">
-                      {primaryBranch?.address}<br />
+                      {primaryBranch?.address}
+                      <br />
                       {primaryBranch?.city}, {primaryBranch?.state}
                     </p>
                   </div>
@@ -252,7 +259,8 @@ export const RestaurantDetailPage: React.FC = () => {
                 <MapPin className="h-12 w-12 text-primary mb-3 animate-bounce z-10" />
                 <p className="font-bold text-white z-10">{primaryBranch?.name}</p>
                 <p className="text-neutral-500 text-xs mt-2 z-10 max-w-[200px] mx-auto">
-                  Map integration would be displayed here using coordinates ({primaryBranch?.latitude}, {primaryBranch?.longitude}).
+                  Map integration would be displayed here using coordinates (
+                  {primaryBranch?.latitude}, {primaryBranch?.longitude}).
                 </p>
               </div>
             </div>

@@ -2,26 +2,26 @@ import React, { useState } from 'react';
 import { Card } from '../../../shared/components/ui/Card';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
-import { 
-  Clock, 
-  Calendar, 
-  Coffee, 
-  LogOut, 
-  UserCheck, 
+import {
+  Clock,
+  Calendar,
+  Coffee,
+  LogOut,
+  UserCheck,
   AlertTriangle,
   History,
   CheckCircle,
-  FileX
+  FileX,
 } from 'lucide-react';
 import { useToast } from '../../../shared/components/ui/Toast';
 
 export default function StaffAttendancePage() {
   const toast = useToast();
-  
+
   // Simulated state for today's attendance
   const [status, setStatus] = useState<'OFF_DUTY' | 'ON_DUTY' | 'ON_BREAK'>('OFF_DUTY');
   const [clockInTime, setClockInTime] = useState<string | null>(null);
-  
+
   const handleClockIn = () => {
     setStatus('ON_DUTY');
     setClockInTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -45,29 +45,57 @@ export default function StaffAttendancePage() {
 
   // Mock History
   const history = [
-    { date: 'Today', checkIn: clockInTime || '--:--', checkOut: '--:--', status: 'Present', late: false },
-    { date: 'Yesterday', checkIn: '09:05 AM', checkOut: '05:30 PM', status: 'Present', late: false },
-    { date: '2 days ago', checkIn: '09:15 AM', checkOut: '05:40 PM', status: 'Present', late: true },
+    {
+      date: 'Today',
+      checkIn: clockInTime || '--:--',
+      checkOut: '--:--',
+      status: 'Present',
+      late: false,
+    },
+    {
+      date: 'Yesterday',
+      checkIn: '09:05 AM',
+      checkOut: '05:30 PM',
+      status: 'Present',
+      late: false,
+    },
+    {
+      date: '2 days ago',
+      checkIn: '09:15 AM',
+      checkOut: '05:40 PM',
+      status: 'Present',
+      late: true,
+    },
     { date: '3 days ago', checkIn: '--:--', checkOut: '--:--', status: 'Leave', late: false },
-    { date: '4 days ago', checkIn: '08:55 AM', checkOut: '05:05 PM', status: 'Present', late: false },
+    {
+      date: '4 days ago',
+      checkIn: '08:55 AM',
+      checkOut: '05:05 PM',
+      status: 'Present',
+      late: false,
+    },
   ];
 
   return (
     <div className="flex flex-col space-y-6 h-full overflow-y-auto custom-scrollbar pb-10">
-      
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold font-display text-white tracking-tight">Time & Attendance</h1>
-        <p className="text-sm text-slate-400 mt-1">Manage your shifts, breaks, and view attendance history.</p>
+        <h1 className="text-3xl font-bold font-display text-white tracking-tight">
+          Time & Attendance
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Manage your shifts, breaks, and view attendance history.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Left Column: Clock Controls */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="p-6 bg-slate-900/60 border-border/20 text-center">
-            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Current Status</h2>
-            
+            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">
+              Current Status
+            </h2>
+
             <div className="flex justify-center mb-6">
               {status === 'OFF_DUTY' && (
                 <div className="w-32 h-32 rounded-full border-4 border-slate-800 flex flex-col items-center justify-center text-slate-500 bg-slate-900/50">
@@ -91,26 +119,32 @@ export default function StaffAttendancePage() {
 
             <div className="space-y-3">
               {status === 'OFF_DUTY' ? (
-                <Button onClick={handleClockIn} className="w-full h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Button
+                  onClick={handleClockIn}
+                  className="w-full h-12 text-base font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
                   <Clock size={18} className="mr-2" /> Clock In Now
                 </Button>
               ) : (
                 <div className="grid grid-cols-2 gap-3">
-                  <Button 
-                    onClick={handleBreakToggle} 
-                    variant="outline" 
+                  <Button
+                    onClick={handleBreakToggle}
+                    variant="outline"
                     className={`h-12 text-sm font-bold border-transparent ${status === 'ON_BREAK' ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-slate-800 hover:bg-slate-700 text-amber-500'}`}
                   >
-                    <Coffee size={16} className="mr-2" /> 
+                    <Coffee size={16} className="mr-2" />
                     {status === 'ON_BREAK' ? 'End Break' : 'Start Break'}
                   </Button>
-                  <Button onClick={handleClockOut} className="h-12 text-sm font-bold bg-rose-600 hover:bg-rose-700 text-white border-none">
+                  <Button
+                    onClick={handleClockOut}
+                    className="h-12 text-sm font-bold bg-rose-600 hover:bg-rose-700 text-white border-none"
+                  >
                     <LogOut size={16} className="mr-2" /> Clock Out
                   </Button>
                 </div>
               )}
             </div>
-            
+
             {status !== 'OFF_DUTY' && (
               <p className="text-xs text-slate-500 mt-4">
                 Clocked in at <span className="font-bold text-slate-300">{clockInTime}</span>
@@ -154,11 +188,15 @@ export default function StaffAttendancePage() {
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
               <History size={20} className="text-primary" /> Attendance Log
             </h3>
-            <Button variant="outline" size="sm" className="h-8 border-border/30 text-xs text-slate-300">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 border-border/30 text-xs text-slate-300"
+            >
               Request Leave
             </Button>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto p-2">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -172,15 +210,22 @@ export default function StaffAttendancePage() {
               </thead>
               <tbody className="text-sm">
                 {history.map((record, i) => (
-                  <tr key={i} className="border-b border-border/5 hover:bg-slate-800/30 transition-colors">
+                  <tr
+                    key={i}
+                    className="border-b border-border/5 hover:bg-slate-800/30 transition-colors"
+                  >
                     <td className="p-4 font-semibold text-slate-200">{record.date}</td>
                     <td className="p-4 font-mono text-slate-400">{record.checkIn}</td>
                     <td className="p-4 font-mono text-slate-400">{record.checkOut}</td>
                     <td className="p-4">
                       {record.status === 'Present' ? (
-                        <Badge className="bg-emerald-500/10 text-emerald-400 border-none px-2 py-0.5 text-[10px]">Present</Badge>
+                        <Badge className="bg-emerald-500/10 text-emerald-400 border-none px-2 py-0.5 text-[10px]">
+                          Present
+                        </Badge>
                       ) : (
-                        <Badge className="bg-rose-500/10 text-rose-400 border-none px-2 py-0.5 text-[10px]">Leave</Badge>
+                        <Badge className="bg-rose-500/10 text-rose-400 border-none px-2 py-0.5 text-[10px]">
+                          Leave
+                        </Badge>
                       )}
                     </td>
                     <td className="p-4 text-right">
@@ -198,7 +243,6 @@ export default function StaffAttendancePage() {
             </table>
           </div>
         </Card>
-
       </div>
     </div>
   );

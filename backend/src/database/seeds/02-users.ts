@@ -4,32 +4,141 @@ import { randomUUID } from 'crypto';
 
 export async function seedUsers(prisma: PrismaClient, orgId: string, branches: any[]) {
   console.log('🌱 Seeding Users (Admin, Staff, Customers)...');
-  
+
   await prisma.user.deleteMany();
 
   const salt = bcrypt.genSaltSync(10);
   const passwordHash = bcrypt.hashSync('Admin@123', salt);
-  
+
   const usersToCreate: any[] = [];
-  
+
   // Explicit/Standard logins for testing (total 16 logins)
   const explicitUsers = [
-    { email: 'customer@abc.com', role: Role.CUSTOMER, firstName: 'Standard', lastName: 'Customer', phone: '9000000001' },
-    { email: 'vipcustomer@abc.com', role: Role.CUSTOMER, firstName: 'VIP', lastName: 'Customer', phone: '9000000002' },
-    { email: 'cashier@abc.com', role: Role.CASHIER, firstName: 'Main', lastName: 'Cashier', phone: '9000000010', salary: 22000 },
-    { email: 'kitchen@abc.com', role: Role.KITCHEN_STAFF, firstName: 'Line', lastName: 'Cook', phone: '9000000011', salary: 25000, assignedCategory: 'burger' },
-    { email: 'chef@abc.com', role: Role.HEAD_CHEF, firstName: 'Head', lastName: 'Chef', phone: '9000000012', salary: 35000 },
-    { email: 'kitchenmanager@abc.com', role: Role.KITCHEN_MANAGER, firstName: 'Kitchen', lastName: 'Manager', phone: '9000000013', salary: 30000 },
-    { email: 'driver@abc.com', role: Role.DELIVERY_PARTNER, firstName: 'Delivery', lastName: 'Partner', phone: '9000000014', salary: 20000 },
-    { email: 'deliverymanager@abc.com', role: Role.DELIVERY_MANAGER, firstName: 'Delivery', lastName: 'Manager', phone: '9000000015', salary: 28000 },
-    { email: 'branchmanager@abc.com', role: Role.BRANCH_MANAGER, firstName: 'Branch', lastName: 'Manager', phone: '9000000016', salary: 45000 },
-    { email: 'operations@abc.com', role: Role.OPERATIONS_MANAGER, firstName: 'Operations', lastName: 'Manager', phone: '9000000017', salary: 40000 },
-    { email: 'finance@abc.com', role: Role.FINANCE_MANAGER, firstName: 'Finance', lastName: 'Manager', phone: '9000000018', salary: 38000 },
-    { email: 'admin@abc.com', role: Role.ADMIN, firstName: 'System', lastName: 'Admin', phone: '9000000019', salary: 50000 },
-    { email: 'franchise@abc.com', role: Role.FRANCHISE_OWNER, firstName: 'Franchise', lastName: 'Owner', phone: '9000000020', salary: 60000 },
-    { email: 'owner@abc.com', role: Role.ORGANIZATION_OWNER, firstName: 'Organization', lastName: 'Owner', phone: '9000000021' },
-    { email: 'superadmin@abc.com', role: Role.SUPER_ADMIN, firstName: 'Super', lastName: 'Admin', phone: '9000000022' },
-    { email: 'inventory@abc.com', role: Role.INVENTORY_MANAGER, firstName: 'Inventory', lastName: 'Manager', phone: '9000000023', salary: 35000 }
+    {
+      email: 'customer@abc.com',
+      role: Role.CUSTOMER,
+      firstName: 'Standard',
+      lastName: 'Customer',
+      phone: '9000000001',
+    },
+    {
+      email: 'vipcustomer@abc.com',
+      role: Role.CUSTOMER,
+      firstName: 'VIP',
+      lastName: 'Customer',
+      phone: '9000000002',
+    },
+    {
+      email: 'cashier@abc.com',
+      role: Role.CASHIER,
+      firstName: 'Main',
+      lastName: 'Cashier',
+      phone: '9000000010',
+      salary: 22000,
+    },
+    {
+      email: 'kitchen@abc.com',
+      role: Role.KITCHEN_STAFF,
+      firstName: 'Line',
+      lastName: 'Cook',
+      phone: '9000000011',
+      salary: 25000,
+      assignedCategory: 'burger',
+    },
+    {
+      email: 'chef@abc.com',
+      role: Role.HEAD_CHEF,
+      firstName: 'Head',
+      lastName: 'Chef',
+      phone: '9000000012',
+      salary: 35000,
+    },
+    {
+      email: 'kitchenmanager@abc.com',
+      role: Role.KITCHEN_MANAGER,
+      firstName: 'Kitchen',
+      lastName: 'Manager',
+      phone: '9000000013',
+      salary: 30000,
+    },
+    {
+      email: 'driver@abc.com',
+      role: Role.DELIVERY_PARTNER,
+      firstName: 'Delivery',
+      lastName: 'Partner',
+      phone: '9000000014',
+      salary: 20000,
+    },
+    {
+      email: 'deliverymanager@abc.com',
+      role: Role.DELIVERY_MANAGER,
+      firstName: 'Delivery',
+      lastName: 'Manager',
+      phone: '9000000015',
+      salary: 28000,
+    },
+    {
+      email: 'branchmanager@abc.com',
+      role: Role.BRANCH_MANAGER,
+      firstName: 'Branch',
+      lastName: 'Manager',
+      phone: '9000000016',
+      salary: 45000,
+    },
+    {
+      email: 'operations@abc.com',
+      role: Role.OPERATIONS_MANAGER,
+      firstName: 'Operations',
+      lastName: 'Manager',
+      phone: '9000000017',
+      salary: 40000,
+    },
+    {
+      email: 'finance@abc.com',
+      role: Role.FINANCE_MANAGER,
+      firstName: 'Finance',
+      lastName: 'Manager',
+      phone: '9000000018',
+      salary: 38000,
+    },
+    {
+      email: 'admin@abc.com',
+      role: Role.ADMIN,
+      firstName: 'System',
+      lastName: 'Admin',
+      phone: '9000000019',
+      salary: 50000,
+    },
+    {
+      email: 'franchise@abc.com',
+      role: Role.FRANCHISE_OWNER,
+      firstName: 'Franchise',
+      lastName: 'Owner',
+      phone: '9000000020',
+      salary: 60000,
+    },
+    {
+      email: 'owner@abc.com',
+      role: Role.ORGANIZATION_OWNER,
+      firstName: 'Organization',
+      lastName: 'Owner',
+      phone: '9000000021',
+    },
+    {
+      email: 'superadmin@abc.com',
+      role: Role.SUPER_ADMIN,
+      firstName: 'Super',
+      lastName: 'Admin',
+      phone: '9000000022',
+    },
+    {
+      email: 'inventory@abc.com',
+      role: Role.INVENTORY_MANAGER,
+      firstName: 'Inventory',
+      lastName: 'Manager',
+      phone: '9000000023',
+      salary: 35000,
+    },
   ];
 
   for (const u of explicitUsers) {
@@ -41,7 +150,22 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
       phone: u.phone,
       role: u.role,
       otpEnabled: u.role !== Role.CUSTOMER,
-      passwordHash: bcrypt.hashSync(u.role === Role.CUSTOMER ? 'Customer@123' : u.role === Role.CASHIER ? 'Cashier@123' : u.role === Role.KITCHEN_STAFF ? 'Kitchen@123' : u.role === Role.HEAD_CHEF ? 'Chef@123' : u.role === Role.BRANCH_MANAGER ? 'BranchManager@123' : u.role === Role.INVENTORY_MANAGER ? 'Inventory@123' : 'Admin@123', salt),
+      passwordHash: bcrypt.hashSync(
+        u.role === Role.CUSTOMER
+          ? 'Customer@123'
+          : u.role === Role.CASHIER
+            ? 'Cashier@123'
+            : u.role === Role.KITCHEN_STAFF
+              ? 'Kitchen@123'
+              : u.role === Role.HEAD_CHEF
+                ? 'Chef@123'
+                : u.role === Role.BRANCH_MANAGER
+                  ? 'BranchManager@123'
+                  : u.role === Role.INVENTORY_MANAGER
+                    ? 'Inventory@123'
+                    : 'Admin@123',
+        salt,
+      ),
       organizationId: u.role === Role.SUPER_ADMIN ? null : orgId,
       isEmailVerified: true,
       isPhoneVerified: true,
@@ -165,8 +289,8 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
 
   // Seed customers for orders
   const customers: string[] = [];
-  customers.push(usersToCreate.find(u => u.email === 'customer@abc.com').id);
-  customers.push(usersToCreate.find(u => u.email === 'vipcustomer@abc.com').id);
+  customers.push(usersToCreate.find((u) => u.email === 'customer@abc.com').id);
+  customers.push(usersToCreate.find((u) => u.email === 'vipcustomer@abc.com').id);
 
   for (let i = 1; i <= 40; i++) {
     const custId = randomUUID();
@@ -187,10 +311,14 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
   }
 
   // Extract lists for other seeders
-  const managers = usersToCreate.filter(u => u.role === Role.BRANCH_MANAGER).map(u => u.id);
-  const kitchenStaff = usersToCreate.filter(u => u.role === Role.KITCHEN_STAFF || u.role === Role.HEAD_CHEF).map(u => u.id);
-  const deliveryStaff = usersToCreate.filter(u => u.role === Role.DELIVERY_PARTNER).map(u => u.id);
-  const cashiers = usersToCreate.filter(u => u.role === Role.CASHIER).map(u => u.id);
+  const managers = usersToCreate.filter((u) => u.role === Role.BRANCH_MANAGER).map((u) => u.id);
+  const kitchenStaff = usersToCreate
+    .filter((u) => u.role === Role.KITCHEN_STAFF || u.role === Role.HEAD_CHEF)
+    .map((u) => u.id);
+  const deliveryStaff = usersToCreate
+    .filter((u) => u.role === Role.DELIVERY_PARTNER)
+    .map((u) => u.id);
+  const cashiers = usersToCreate.filter((u) => u.role === Role.CASHIER).map((u) => u.id);
 
   // Batch insert
   const batchSize = 50;

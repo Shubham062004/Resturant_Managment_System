@@ -10,9 +10,21 @@ export async function seedMenu(prisma: PrismaClient, restaurants: any[], custome
   await prisma.category.deleteMany();
 
   const categoryNames = [
-    'Pizza', 'Burger', 'Wraps', 'Pasta', 'Desserts', 
-    'Drinks', 'Indian Meals', 'Chinese', 'Salads', 'Appetizers',
-    'Sandwiches', 'Sushi', 'Tacos', 'Breakfast', 'Vegan'
+    'Pizza',
+    'Burger',
+    'Wraps',
+    'Pasta',
+    'Desserts',
+    'Drinks',
+    'Indian Meals',
+    'Chinese',
+    'Salads',
+    'Appetizers',
+    'Sandwiches',
+    'Sushi',
+    'Tacos',
+    'Breakfast',
+    'Vegan',
   ];
 
   const categories = [];
@@ -36,8 +48,8 @@ export async function seedMenu(prisma: PrismaClient, restaurants: any[], custome
       // Create 6-7 products per category per restaurant to reach >100 products easily
       for (let i = 1; i <= 7; i++) {
         const productId = randomUUID();
-        const basePrice = 5.99 + (i * 2);
-        
+        const basePrice = 5.99 + i * 2;
+
         products.push({
           id: productId,
           restaurantId: restaurant.id,
@@ -48,8 +60,8 @@ export async function seedMenu(prisma: PrismaClient, restaurants: any[], custome
           shortDescription: `Hot and fresh ${catName}.`,
           image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80',
           basePrice: new Prisma.Decimal(basePrice),
-          rating: 4.0 + (Math.random()),
-          calories: 300 + (i * 50),
+          rating: 4.0 + Math.random(),
+          calories: 300 + i * 50,
           preparationTime: 15 + i,
           isAvailable: true,
           isVeg: i % 2 === 0,
@@ -79,7 +91,7 @@ export async function seedMenu(prisma: PrismaClient, restaurants: any[], custome
 
   // Batch inserts
   await prisma.category.createMany({ data: categories });
-  
+
   const pBatch = 100;
   for (let i = 0; i < products.length; i += pBatch) {
     await prisma.product.createMany({ data: products.slice(i, i + pBatch) });

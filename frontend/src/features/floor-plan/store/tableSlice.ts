@@ -33,10 +33,7 @@ export const fetchTables = createAsyncThunk('tables/fetchBranch', async (branchI
 export const updateTablePosition = createAsyncThunk(
   'tables/updatePosition',
   async ({ id, x, y }: { id: string; x: number; y: number }) => {
-    const response = await apiClient.patch(
-      `/tables/${id}`,
-      { x, y }
-    );
+    const response = await apiClient.patch(`/tables/${id}`, { x, y });
     return response.data.data;
   },
 );
@@ -44,10 +41,7 @@ export const updateTablePosition = createAsyncThunk(
 export const updateTableStatus = createAsyncThunk(
   'tables/updateStatus',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await apiClient.patch(
-      `/tables/${id}`,
-      { status }
-    );
+    const response = await apiClient.patch(`/tables/${id}`, { status });
     return response.data.data;
   },
 );

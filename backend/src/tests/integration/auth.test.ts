@@ -6,7 +6,7 @@ import { describe, it, expect, vi } from 'vitest';
 // We mock app here just for the example structure, assuming supertest wraps an Express instance.
 // If app is not directly importable without starting the server, we might need a separate app.ts file.
 vi.mock('../../server', () => ({
-  app: {} // Mock express app if necessary, or better, export it from server.ts
+  app: {}, // Mock express app if necessary, or better, export it from server.ts
 }));
 
 describe('Auth API Integration', () => {

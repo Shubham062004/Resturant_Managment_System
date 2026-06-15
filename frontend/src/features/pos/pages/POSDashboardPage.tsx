@@ -23,7 +23,7 @@ import {
   Store,
   Printer,
   History,
-  QrCode
+  QrCode,
 } from 'lucide-react';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { Alert } from '../../../shared/components/ui/Alert';
@@ -45,7 +45,9 @@ export default function POSDashboardPage() {
   const [upiReference, setUpiReference] = useState('');
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [printedReceipt, setPrintedReceipt] = useState<any | null>(null);
-  const [alertMsg, setAlertMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [alertMsg, setAlertMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(
+    null,
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -86,10 +88,14 @@ export default function POSDashboardPage() {
               reference: method === 'UPI' ? upiReference : undefined,
             },
           ],
-        })
+        }),
       ).unwrap();
 
-      if (result.status === 'PAID' || result.order?.status === 'PAID' || result.state?.status === 'PAID') {
+      if (
+        result.status === 'PAID' ||
+        result.order?.status === 'PAID' ||
+        result.state?.status === 'PAID'
+      ) {
         setAlertMsg({ type: 'success', text: 'Payment completed successfully. Order closed.' });
         // Set receipt content to print
         setPrintedReceipt(activeOrder);
@@ -168,7 +174,6 @@ export default function POSDashboardPage() {
 
   return (
     <div className="h-[calc(100vh-6rem)] flex flex-col gap-4 p-4 text-slate-100 max-w-7xl mx-auto">
-      
       {/* Dynamic Print CSS Injection */}
       <style>{`
         @media print {
@@ -210,7 +215,10 @@ export default function POSDashboardPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="info" className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <Badge
+            variant="info"
+            className="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
+          >
             REGISTER ACTIVE: #{activeDrawer.terminalId?.slice(0, 6) || 'Main Register'}
           </Badge>
         </div>
@@ -218,10 +226,7 @@ export default function POSDashboardPage() {
 
       {alertMsg && (
         <div className="relative mb-1">
-          <Alert
-            variant={alertMsg.type === 'success' ? 'success' : 'error'}
-            className="pr-10"
-          >
+          <Alert variant={alertMsg.type === 'success' ? 'success' : 'error'} className="pr-10">
             {alertMsg.text}
           </Alert>
           <button
@@ -237,7 +242,6 @@ export default function POSDashboardPage() {
         <div className="flex-1 flex gap-6 overflow-hidden">
           {/* Left Column: Menu Items Grid */}
           <div className="flex-1 flex flex-col bg-slate-900/50 rounded-xl border border-slate-850 overflow-hidden">
-            
             {/* Category selection */}
             <div className="p-3 bg-slate-950/40 border-b border-slate-800 flex gap-2 overflow-x-auto hide-scrollbar">
               <Badge
@@ -283,12 +287,16 @@ export default function POSDashboardPage() {
                     <h3 className="text-white text-xs font-semibold leading-tight line-clamp-2 min-h-[32px]">
                       {product.name}
                     </h3>
-                    <p className="text-indigo-400 font-mono text-sm font-bold">₹{parseFloat(product.basePrice).toFixed(2)}</p>
+                    <p className="text-indigo-400 font-mono text-sm font-bold">
+                      ₹{parseFloat(product.basePrice).toFixed(2)}
+                    </p>
                   </div>
                 </Card>
               ))}
               {filteredProducts.length === 0 && (
-                <div className="col-span-full py-16 text-center text-slate-500">No items available under this category.</div>
+                <div className="col-span-full py-16 text-center text-slate-500">
+                  No items available under this category.
+                </div>
               )}
             </div>
           </div>
@@ -372,7 +380,11 @@ export default function POSDashboardPage() {
 
               {!activeOrder ? (
                 <div className="flex gap-2">
-                  <Button variant="outline" className="h-12 border-slate-700 text-slate-300" onClick={() => dispatch(clearCart())}>
+                  <Button
+                    variant="outline"
+                    className="h-12 border-slate-700 text-slate-300"
+                    onClick={() => dispatch(clearCart())}
+                  >
                     <Trash2 className="w-4 h-4 text-rose-500" />
                   </Button>
                   <Button
@@ -395,7 +407,9 @@ export default function POSDashboardPage() {
                       <span className="text-[10px] uppercase font-extrabold text-slate-400 flex items-center gap-1">
                         <QrCode className="w-3.5 h-3.5 text-indigo-400" /> UPI Pay QR Code
                       </span>
-                      <span className="text-[10px] font-mono text-indigo-400 font-bold">abc_restaurant@upi</span>
+                      <span className="text-[10px] font-mono text-indigo-400 font-bold">
+                        abc_restaurant@upi
+                      </span>
                     </div>
                     <Input
                       id="upi-ref-no"
@@ -445,15 +459,23 @@ export default function POSDashboardPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {receipts.map((rec: any, idx) => (
-              <Card key={rec.id || idx} className="bg-slate-900 border-slate-800 p-4 space-y-3 flex flex-col justify-between">
+              <Card
+                key={rec.id || idx}
+                className="bg-slate-900 border-slate-800 p-4 space-y-3 flex flex-col justify-between"
+              >
                 <div>
                   <div className="flex justify-between items-center border-b border-slate-850 pb-2">
-                    <span className="font-semibold text-white text-sm">Invoice #{rec.id?.slice(0, 8)}</span>
+                    <span className="font-semibold text-white text-sm">
+                      Invoice #{rec.id?.slice(0, 8)}
+                    </span>
                     <Badge variant="success">Completed</Badge>
                   </div>
                   <div className="text-xs text-slate-400 mt-2 font-mono flex flex-col gap-1">
                     <span>Order Type: {rec.orderType || 'Walk-In'}</span>
-                    <span>Total Amount Charged: ${parseFloat(rec.order?.totalAmount || rec.total || 0).toFixed(2)}</span>
+                    <span>
+                      Total Amount Charged: $
+                      {parseFloat(rec.order?.totalAmount || rec.total || 0).toFixed(2)}
+                    </span>
                     <span>Payments Settled: CASH / CARD / UPI</span>
                   </div>
                 </div>
@@ -525,7 +547,9 @@ export default function POSDashboardPage() {
                     <div>
                       {item.name || item.product?.name} x {item.quantity}
                     </div>
-                    <div className="font-semibold text-right w-16">₹{((item.price || item.product?.basePrice || 0) * item.quantity).toFixed(2)}</div>
+                    <div className="font-semibold text-right w-16">
+                      ₹{((item.price || item.product?.basePrice || 0) * item.quantity).toFixed(2)}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -534,11 +558,22 @@ export default function POSDashboardPage() {
               <div className="border-t border-dashed border-black/35 pt-2 text-[10px] space-y-1">
                 <div className="flex justify-between font-bold text-[11px]">
                   <span>NET TAX (5%):</span>
-                  <span>₹{(parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0) * 0.05).toFixed(2)}</span>
+                  <span>
+                    ₹
+                    {(
+                      parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0) *
+                      0.05
+                    ).toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between font-extrabold text-sm border-t border-black/40 pt-1">
                   <span>TOTAL PAID:</span>
-                  <span>₹{parseFloat(printedReceipt.order?.totalAmount || printedReceipt.total || 0).toFixed(2)}</span>
+                  <span>
+                    ₹
+                    {parseFloat(
+                      printedReceipt.order?.totalAmount || printedReceipt.total || 0,
+                    ).toFixed(2)}
+                  </span>
                 </div>
               </div>
 
@@ -558,14 +593,17 @@ export default function POSDashboardPage() {
               >
                 Close Slip
               </Button>
-              <Button variant="primary" onClick={triggerPrintReceipt} className="bg-indigo-600 hover:bg-indigo-700">
+              <Button
+                variant="primary"
+                onClick={triggerPrintReceipt}
+                className="bg-indigo-600 hover:bg-indigo-700"
+              >
                 Print Receipt
               </Button>
             </div>
           </Card>
         </div>
       )}
-
     </div>
   );
 }

@@ -8,12 +8,12 @@ import {
   setOrderType,
   addToCart,
   clearCart,
-  updateQuantity
+  updateQuantity,
 } from '../../pos/store/posSlice';
 import { fetchCategories, fetchProducts } from '../../menu/store/menuSlice';
 import {
   fetchBranchReservations,
-  updateReservationStatus
+  updateReservationStatus,
 } from '../../reservations/store/reservationSlice';
 import apiClient from '../../../services/apiClient';
 import { Card, CardHeader } from '../../../shared/components/ui/Card';
@@ -34,7 +34,7 @@ import {
   PlusCircle,
   ClipboardList,
   Building,
-  Search
+  Search,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -86,7 +86,7 @@ export default function BranchManagerDashboardPage() {
     try {
       const [branchRes, ingredientRes] = await Promise.all([
         apiClient.get('/catalog/branches'),
-        apiClient.get('/inventory/ingredients')
+        apiClient.get('/inventory/ingredients'),
       ]);
 
       const fetchedBranches = branchRes.data.data.branches || [];
@@ -132,8 +132,8 @@ export default function BranchManagerDashboardPage() {
       endShift({
         drawerId: activeDrawer.id,
         closingAmount,
-        notes: closingNotes
-      })
+        notes: closingNotes,
+      }),
     )
       .unwrap()
       .then(() => {
@@ -155,9 +155,9 @@ export default function BranchManagerDashboardPage() {
       items: cart.items.map((item) => ({
         productId: item.productId,
         quantity: item.quantity,
-        price: item.price
+        price: item.price,
       })),
-      discount: cart.discount
+      discount: cart.discount,
     };
 
     apiClient
@@ -176,8 +176,8 @@ export default function BranchManagerDashboardPage() {
     dispatch(
       processPayment({
         posOrderId: activeOrder.id,
-        payments: [{ method, amount: activeOrder.order.totalAmount }]
-      })
+        payments: [{ method, amount: activeOrder.order.totalAmount }],
+      }),
     )
       .unwrap()
       .then(() => {
@@ -205,8 +205,8 @@ export default function BranchManagerDashboardPage() {
         ingredientId: selectedIngredientId,
         ingredientName: ing.name,
         quantity: reqQuantity,
-        unit: ing.unit
-      }
+        unit: ing.unit,
+      },
     ]);
     setSelectedIngredientId('');
   };
@@ -225,8 +225,8 @@ export default function BranchManagerDashboardPage() {
         notes: replenishmentNotes,
         items: replenishmentList.map((item) => ({
           ingredientId: item.ingredientId,
-          requestedQuantity: item.quantity
-        }))
+          requestedQuantity: item.quantity,
+        })),
       };
 
       await apiClient.post('/inventory/requests', payload);
@@ -264,7 +264,8 @@ export default function BranchManagerDashboardPage() {
             Branch Operations Console
           </h1>
           <p className="text-slate-400 text-xs mt-1 font-sans">
-            Unified dashboard for walk-in POS billing, shift drawer balance, reservations, and inventory requests.
+            Unified dashboard for walk-in POS billing, shift drawer balance, reservations, and
+            inventory requests.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -316,7 +317,10 @@ export default function BranchManagerDashboardPage() {
                   className="bg-slate-950 border-border/30 text-white"
                 />
               </div>
-              <Button onClick={handleStartShift} className="w-full h-12 text-base font-bold bg-primary text-white hover:bg-primary-hover">
+              <Button
+                onClick={handleStartShift}
+                className="w-full h-12 text-base font-bold bg-primary text-white hover:bg-primary-hover"
+              >
                 Open Cash Drawer Shift
               </Button>
             </div>
@@ -376,8 +380,8 @@ export default function BranchManagerDashboardPage() {
                           productId: product.id,
                           quantity: 1,
                           name: product.name,
-                          price: product.basePrice
-                        })
+                          price: product.basePrice,
+                        }),
                       )
                     }
                     className="glass-card bg-slate-900/40 p-4 rounded-xl border border-border/20 cursor-pointer flex flex-col justify-between items-center text-center group hover:border-primary/40"
@@ -407,7 +411,9 @@ export default function BranchManagerDashboardPage() {
               </CardHeader>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {reservations.length === 0 ? (
-                  <p className="text-slate-500 text-xs py-4 col-span-2 text-center">No reservations booked.</p>
+                  <p className="text-slate-500 text-xs py-4 col-span-2 text-center">
+                    No reservations booked.
+                  </p>
                 ) : (
                   reservations.map((res: any) => (
                     <div
@@ -429,8 +435,8 @@ export default function BranchManagerDashboardPage() {
                             res.status === 'PENDING'
                               ? 'warning'
                               : res.status === 'CONFIRMED'
-                              ? 'success'
-                              : 'neutral'
+                                ? 'success'
+                                : 'neutral'
                           }
                           className="text-[10px]"
                         >
@@ -471,9 +477,7 @@ export default function BranchManagerDashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-sm font-semibold text-slate-200">Active Shift Log</h4>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Terminal ID: Main Register (Demo)
-                  </p>
+                  <p className="text-xs text-slate-400 mt-0.5">Terminal ID: Main Register (Demo)</p>
                 </div>
                 <Button
                   size="sm"
@@ -543,7 +547,14 @@ export default function BranchManagerDashboardPage() {
                       <div className="flex items-center gap-2 bg-slate-900 rounded-lg p-1 border border-border/10">
                         <button
                           className="p-1 text-slate-400 hover:text-white"
-                          onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: item.quantity - 1 }))}
+                          onClick={() =>
+                            dispatch(
+                              updateQuantity({
+                                productId: item.productId,
+                                quantity: item.quantity - 1,
+                              }),
+                            )
+                          }
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
@@ -552,7 +563,14 @@ export default function BranchManagerDashboardPage() {
                         </span>
                         <button
                           className="p-1 text-slate-400 hover:text-white"
-                          onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: item.quantity + 1 }))}
+                          onClick={() =>
+                            dispatch(
+                              updateQuantity({
+                                productId: item.productId,
+                                quantity: item.quantity + 1,
+                              }),
+                            )
+                          }
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
@@ -625,7 +643,9 @@ export default function BranchManagerDashboardPage() {
               <CardHeader className="border-none p-0 flex flex-row items-center justify-between">
                 <div>
                   <h3 className="text-base font-bold font-display">Replenishment Request</h3>
-                  <p className="text-xs text-slate-400 font-sans">Submit stock requirements to owner</p>
+                  <p className="text-xs text-slate-400 font-sans">
+                    Submit stock requirements to owner
+                  </p>
                 </div>
                 <ClipboardList className="text-slate-400 w-5 h-5" />
               </CardHeader>
@@ -634,7 +654,10 @@ export default function BranchManagerDashboardPage() {
               {replenishmentList.length > 0 && (
                 <div className="space-y-2 bg-slate-950/60 p-3 rounded-xl border border-border/10 max-h-40 overflow-y-auto">
                   {replenishmentList.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center text-xs border-b border-border/10 pb-1.5 last:border-b-0 last:pb-0">
+                    <div
+                      key={idx}
+                      className="flex justify-between items-center text-xs border-b border-border/10 pb-1.5 last:border-b-0 last:pb-0"
+                    >
                       <span>
                         {item.ingredientName} ({item.quantity} {item.unit})
                       </span>

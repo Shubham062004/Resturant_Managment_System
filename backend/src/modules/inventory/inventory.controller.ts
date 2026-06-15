@@ -175,7 +175,11 @@ export const getInventoryRequests = async (req: Request, res: Response, next: Ne
   }
 };
 
-export const createInventoryRequest = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createInventoryRequest = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const requestedById = req.user!.id;
     const request = await InventoryService.createInventoryRequest({
@@ -197,7 +201,11 @@ export const approveInventoryRequest = async (req: Request, res: Response, next:
   }
 };
 
-export const updateInventoryRequestStatus = async (req: Request, res: Response, next: NextFunction) => {
+export const updateInventoryRequestStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { status } = req.body;
     const request = await InventoryService.updateInventoryRequestStatus(req.params.id, status);

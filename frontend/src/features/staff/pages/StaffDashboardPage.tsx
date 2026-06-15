@@ -4,17 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '../../../shared/components/ui/Card';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
-import { 
-  ClipboardList, 
-  CheckCircle, 
-  Clock, 
-  UserCheck, 
-  CalendarDays, 
-  Star, 
-  Wallet, 
+import {
+  ClipboardList,
+  CheckCircle,
+  Clock,
+  UserCheck,
+  CalendarDays,
+  Star,
+  Wallet,
   Gift,
   ArrowRight,
-  UserCircle
+  UserCircle,
 } from 'lucide-react';
 import apiClient from '../../../services/apiClient';
 
@@ -29,7 +29,7 @@ export default function StaffDashboardPage() {
     currentShift: 'Morning (9AM - 5PM)',
     performanceScore: 4.8,
     todayEarnings: 600,
-    bonusEarned: 25
+    bonusEarned: 25,
   });
 
   const [loading, setLoading] = useState(true);
@@ -42,16 +42,16 @@ export default function StaffDashboardPage() {
         // Fetch active orders to get task count (mock calculation)
         const res = await apiClient.get('/orders/active');
         const activeOrders = res.data.data || [];
-        
-        // This is where category assignment logic would filter activeOrders 
+
+        // This is where category assignment logic would filter activeOrders
         // to count only tasks assigned to THIS staff member.
         // Assuming 15 tasks for the day, 10 completed, 5 pending based on live queue.
-        setMetrics(prev => ({
+        setMetrics((prev) => ({
           ...prev,
           todayTasks: 15,
           completedTasks: 10,
           pendingTasks: activeOrders.length,
-          performanceScore: user?.rating || 4.8
+          performanceScore: user?.rating || 4.8,
         }));
       } catch (err) {
         console.error('Failed to load dashboard data', err);
@@ -59,19 +59,47 @@ export default function StaffDashboardPage() {
         setLoading(false);
       }
     };
-    
+
     fetchDashboardData();
   }, [user]);
 
   const quickActions = [
-    { label: 'Mark Attendance', icon: UserCheck, color: 'text-emerald-500', bg: 'bg-emerald-500/10', path: '/staff/attendance' },
-    { label: 'Open Work Queue', icon: ClipboardList, color: 'text-orange-500', bg: 'bg-orange-500/10', path: '/staff/work' },
-    { label: 'View Schedule', icon: CalendarDays, color: 'text-sky-500', bg: 'bg-sky-500/10', path: '/staff/attendance' },
-    { label: 'View Profile', icon: UserCircle, color: 'text-purple-500', bg: 'bg-purple-500/10', path: '/staff/profile' },
+    {
+      label: 'Mark Attendance',
+      icon: UserCheck,
+      color: 'text-emerald-500',
+      bg: 'bg-emerald-500/10',
+      path: '/staff/attendance',
+    },
+    {
+      label: 'Open Work Queue',
+      icon: ClipboardList,
+      color: 'text-orange-500',
+      bg: 'bg-orange-500/10',
+      path: '/staff/work',
+    },
+    {
+      label: 'View Schedule',
+      icon: CalendarDays,
+      color: 'text-sky-500',
+      bg: 'bg-sky-500/10',
+      path: '/staff/attendance',
+    },
+    {
+      label: 'View Profile',
+      icon: UserCircle,
+      color: 'text-purple-500',
+      bg: 'bg-purple-500/10',
+      path: '/staff/profile',
+    },
   ];
 
   if (loading) {
-    return <div className="h-full flex items-center justify-center text-slate-500 animate-pulse">Loading dashboard...</div>;
+    return (
+      <div className="h-full flex items-center justify-center text-slate-500 animate-pulse">
+        Loading dashboard...
+      </div>
+    );
   }
 
   return (
@@ -88,13 +116,14 @@ export default function StaffDashboardPage() {
         </div>
         <div className="flex items-center gap-2 bg-slate-900 border border-border/20 rounded-xl px-4 py-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">{metrics.attendanceStatus}</span>
+          <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+            {metrics.attendanceStatus}
+          </span>
         </div>
       </div>
 
       {/* KPI Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        
         <Card className="p-5 bg-slate-900/60 border-border/20 backdrop-blur-xl group hover:border-orange-500/30 transition-colors">
           <div className="flex justify-between items-start mb-4">
             <div className="p-2.5 rounded-xl bg-orange-500/10">
@@ -102,18 +131,24 @@ export default function StaffDashboardPage() {
             </div>
           </div>
           <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.todayTasks}</h3>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Today's Tasks</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Today's Tasks
+          </p>
         </Card>
-        
+
         <Card className="p-5 bg-slate-900/60 border-border/20 backdrop-blur-xl group hover:border-emerald-500/30 transition-colors">
           <div className="flex justify-between items-start mb-4">
             <div className="p-2.5 rounded-xl bg-emerald-500/10">
               <CheckCircle className="w-5 h-5 text-emerald-500" />
             </div>
-            <Badge className="bg-emerald-500/20 text-emerald-400 border-none text-[10px]">Good pace</Badge>
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-none text-[10px]">
+              Good pace
+            </Badge>
           </div>
           <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.completedTasks}</h3>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Completed Tasks</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Completed Tasks
+          </p>
         </Card>
 
         <Card className="p-5 bg-slate-900/60 border-border/20 backdrop-blur-xl group hover:border-rose-500/30 transition-colors">
@@ -123,7 +158,9 @@ export default function StaffDashboardPage() {
             </div>
           </div>
           <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.pendingTasks}</h3>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pending Tasks</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Pending Tasks
+          </p>
         </Card>
 
         <Card className="p-5 bg-slate-900/60 border-border/20 backdrop-blur-xl group hover:border-amber-500/30 transition-colors">
@@ -131,16 +168,20 @@ export default function StaffDashboardPage() {
             <div className="p-2.5 rounded-xl bg-amber-500/10">
               <Star className="w-5 h-5 text-amber-500 fill-amber-500/20" />
             </div>
-            <Badge className="bg-slate-800 text-slate-300 border-none text-[10px]">Avg Rating</Badge>
+            <Badge className="bg-slate-800 text-slate-300 border-none text-[10px]">
+              Avg Rating
+            </Badge>
           </div>
-          <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.performanceScore} / 5.0</h3>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Performance Score</p>
+          <h3 className="text-2xl font-bold font-mono text-white mb-1">
+            {metrics.performanceScore} / 5.0
+          </h3>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Performance Score
+          </p>
         </Card>
-
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Earnings & Shift Status */}
         <div className="lg:col-span-1 space-y-6">
           <Card className="bg-slate-900/40 border-border/20 overflow-hidden">
@@ -164,12 +205,20 @@ export default function StaffDashboardPage() {
             </div>
             <div className="p-5 grid grid-cols-2 gap-4 relative">
               <div>
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Base Wage</p>
-                <p className="text-2xl font-bold text-slate-200 font-mono">₹{metrics.todayEarnings}</p>
+                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">
+                  Base Wage
+                </p>
+                <p className="text-2xl font-bold text-slate-200 font-mono">
+                  ₹{metrics.todayEarnings}
+                </p>
               </div>
               <div>
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Bonus</p>
-                <p className="text-2xl font-bold text-emerald-400 font-mono">+₹{metrics.bonusEarned}</p>
+                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">
+                  Bonus
+                </p>
+                <p className="text-2xl font-bold text-emerald-400 font-mono">
+                  +₹{metrics.bonusEarned}
+                </p>
               </div>
             </div>
           </Card>
@@ -193,7 +242,9 @@ export default function StaffDashboardPage() {
                     <Icon className={`w-6 h-6 ${action.color}`} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-200 group-hover:text-white transition-colors">{action.label}</h4>
+                    <h4 className="font-bold text-slate-200 group-hover:text-white transition-colors">
+                      {action.label}
+                    </h4>
                     <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 group-hover:text-orange-400 transition-colors">
                       Proceed <ArrowRight size={12} />
                     </p>
@@ -204,7 +255,6 @@ export default function StaffDashboardPage() {
           </div>
         </Card>
       </div>
-
     </div>
   );
 }

@@ -9,8 +9,8 @@ export const handlers = [
         email: 'test@example.com',
         firstName: 'Test',
         lastName: 'User',
-        role: 'CUSTOMER'
-      }
+        role: 'CUSTOMER',
+      },
     });
   }),
   // Additional mocked endpoints go here

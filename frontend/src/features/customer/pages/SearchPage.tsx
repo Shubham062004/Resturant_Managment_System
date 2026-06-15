@@ -67,7 +67,6 @@ export const SearchPage: React.FC = () => {
 
       <div className="min-h-screen bg-[#08070F] pt-24 pb-16">
         <div className="max-w-6xl mx-auto px-6 space-y-10">
-          
           {/* Header */}
           <div className="space-y-3">
             <h1 className="text-3xl md:text-5xl font-bold font-display text-white">
@@ -103,13 +102,16 @@ export const SearchPage: React.FC = () => {
                 </button>
               )}
             </div>
-            <Button type="submit" variant="primary" className="h-14 px-8 shrink-0 font-bold shadow-lg shadow-primary/20">
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-14 px-8 shrink-0 font-bold shadow-lg shadow-primary/20"
+            >
               Search
             </Button>
           </form>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start pt-6">
-            
             {/* Sidebar tags & logs */}
             <div className="lg:col-span-4 space-y-8">
               {!searchTerm && <PersonalizedRecommendations />}
@@ -167,9 +169,7 @@ export const SearchPage: React.FC = () => {
             <div className="lg:col-span-8">
               <div className="flex justify-between items-center text-xs text-neutral-400 mb-6">
                 <span>
-                  {isSearchLoading
-                    ? 'Searching...'
-                    : `Showing ${searchProducts.length} results`}
+                  {isSearchLoading ? 'Searching...' : `Showing ${searchProducts.length} results`}
                 </span>
                 {debouncedSearch && (
                   <span>

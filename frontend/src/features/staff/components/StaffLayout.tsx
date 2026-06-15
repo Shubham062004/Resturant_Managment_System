@@ -12,7 +12,7 @@ import {
   Menu,
   X,
   Bell,
-  ChefHat
+  ChefHat,
 } from 'lucide-react';
 
 const NAV_LINKS = [
@@ -39,10 +39,9 @@ export default function StaffLayout() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-200 overflow-hidden font-sans">
-      
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={closeSidebar}
         />
@@ -61,8 +60,12 @@ export default function StaffLayout() {
               <ChefHat className="w-4 h-4 text-orange-500" />
             </div>
             <div>
-              <h1 className="font-display font-bold text-white text-sm tracking-wide">STAFF PORTAL</h1>
-              <p className="text-[10px] font-semibold text-orange-500 uppercase tracking-widest">{user?.role?.replace('_', ' ') || 'STAFF'}</p>
+              <h1 className="font-display font-bold text-white text-sm tracking-wide">
+                STAFF PORTAL
+              </h1>
+              <p className="text-[10px] font-semibold text-orange-500 uppercase tracking-widest">
+                {user?.role?.replace('_', ' ') || 'STAFF'}
+              </p>
             </div>
           </div>
           <button className="lg:hidden text-slate-400 hover:text-white" onClick={closeSidebar}>
@@ -72,12 +75,14 @@ export default function StaffLayout() {
 
         {/* Navigation Links */}
         <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1 custom-scrollbar">
-          <p className="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">My Workspace</p>
-          
+          <p className="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
+            My Workspace
+          </p>
+
           {NAV_LINKS.map((link) => {
             const Icon = link.icon;
-            const isActive = link.exact 
-              ? location.pathname === link.path 
+            const isActive = link.exact
+              ? location.pathname === link.path
               : location.pathname.startsWith(link.path);
 
             return (
@@ -86,19 +91,26 @@ export default function StaffLayout() {
                 to={link.path}
                 onClick={closeSidebar}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 group ${
-                  isActive 
-                    ? 'bg-orange-500/10 text-orange-500 font-semibold' 
+                  isActive
+                    ? 'bg-orange-500/10 text-orange-500 font-semibold'
                     : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} className={isActive ? 'text-orange-500' : 'text-slate-500 group-hover:text-slate-300'} />
+                  <Icon
+                    size={18}
+                    className={
+                      isActive ? 'text-orange-500' : 'text-slate-500 group-hover:text-slate-300'
+                    }
+                  />
                   <span className="text-sm">{link.label}</span>
                 </div>
                 {link.badge && (
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    isActive ? 'bg-orange-500 text-white' : 'bg-slate-800 text-slate-300'
-                  }`}>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      isActive ? 'bg-orange-500 text-white' : 'bg-slate-800 text-slate-300'
+                    }`}
+                  >
                     {link.badge}
                   </span>
                 )}
@@ -114,15 +126,19 @@ export default function StaffLayout() {
               {user?.avatar ? (
                 <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <span className="text-sm font-bold text-slate-300">{user?.firstName?.[0] || 'S'}</span>
+                <span className="text-sm font-bold text-slate-300">
+                  {user?.firstName?.[0] || 'S'}
+                </span>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white truncate">{user?.firstName} {user?.lastName}</p>
+              <p className="text-sm font-bold text-white truncate">
+                {user?.firstName} {user?.lastName}
+              </p>
               <p className="text-xs text-slate-500 truncate">{user?.email}</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors"
           >
@@ -134,11 +150,10 @@ export default function StaffLayout() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-950">
-        
         {/* Top Header */}
         <header className="h-16 flex items-center justify-between px-6 border-b border-slate-900 bg-slate-950/80 backdrop-blur-sm shrink-0">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               className="lg:hidden text-slate-400 hover:text-white"
               onClick={() => setIsSidebarOpen(true)}
             >

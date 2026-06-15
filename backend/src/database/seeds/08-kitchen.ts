@@ -9,7 +9,7 @@ export async function seedKitchen(prisma: PrismaClient) {
     { id: randomUUID(), name: 'Pizza', description: 'Pizzas and Flatbreads' },
     { id: randomUUID(), name: 'Salad Bar', description: 'Cold prep and Salads' },
     { id: randomUUID(), name: 'Fryer', description: 'Fries and Appetizers' },
-    { id: randomUUID(), name: 'Dessert Prep', description: 'Sweets and Shakes' }
+    { id: randomUUID(), name: 'Dessert Prep', description: 'Sweets and Shakes' },
   ];
 
   await prisma.kitchenStation.deleteMany();

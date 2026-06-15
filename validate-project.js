@@ -24,7 +24,9 @@ function checkLocalhostInProduction() {
     if (content.includes('localhost') && content.includes('refine')) {
       console.log('   ✓ Backend env.ts correctly guards against localhost URLs in production.');
     } else {
-      console.warn('   ⚠️ Backend env.ts is missing validation to block localhost links in production.');
+      console.warn(
+        '   ⚠️ Backend env.ts is missing validation to block localhost links in production.',
+      );
     }
   }
 
@@ -32,12 +34,23 @@ function checkLocalhostInProduction() {
   const srcPath = path.join(__dirname, 'frontend/src');
   if (fs.existsSync(srcPath)) {
     const files = getFilesRecursive(srcPath);
-    files.forEach(file => {
-      if (file.endsWith('.ts') || file.endsWith('.tsx') || file.endsWith('.js') || file.endsWith('.jsx')) {
+    files.forEach((file) => {
+      if (
+        file.endsWith('.ts') ||
+        file.endsWith('.tsx') ||
+        file.endsWith('.js') ||
+        file.endsWith('.jsx')
+      ) {
         const content = fs.readFileSync(file, 'utf8');
         const localhostRegex = /localhost:(3000|5000|5173|5174)/i;
-        if (localhostRegex.test(content) && !file.includes('mock') && !file.includes('setupTests')) {
-          console.warn(`   ⚠️ Warning: Active localhost reference found in ${path.relative(__dirname, file)}`);
+        if (
+          localhostRegex.test(content) &&
+          !file.includes('mock') &&
+          !file.includes('setupTests')
+        ) {
+          console.warn(
+            `   ⚠️ Warning: Active localhost reference found in ${path.relative(__dirname, file)}`,
+          );
           hasError = true;
         }
       }
@@ -53,7 +66,7 @@ function checkLocalhostInProduction() {
 function getFilesRecursive(dir) {
   let results = [];
   const list = fs.readdirSync(dir);
-  list.forEach(file => {
+  list.forEach((file) => {
     const fullPath = path.join(dir, file);
     const stat = fs.statSync(fullPath);
     if (stat && stat.isDirectory()) {

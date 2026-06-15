@@ -36,9 +36,7 @@ export default function TakeawayQueuePage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await apiClient.get(
-        `/orders?branchId=${branchId}&orderType=PICKUP`
-      );
+      const response = await apiClient.get(`/orders?branchId=${branchId}&orderType=PICKUP`);
       setOrders(response.data.data.orders || []);
     } catch (err) {
       console.error('Failed to fetch takeaway orders', err);
@@ -47,10 +45,7 @@ export default function TakeawayQueuePage() {
 
   const updateOrderStatus = async (id: string, status: string) => {
     try {
-      await apiClient.patch(
-        `/orders/${id}/status`,
-        { status }
-      );
+      await apiClient.patch(`/orders/${id}/status`, { status });
       fetchOrders();
     } catch (err) {
       console.error('Failed to update status', err);
