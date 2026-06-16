@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 
+import historyRouter from './api/history/history.routes';
 import errorHandler from './middleware/errorHandler';
 import { apiRateLimiter } from './middleware/rateLimiter';
 import addressRouter from './modules/addresses/addresses.routes';
@@ -17,21 +18,20 @@ import cartRouter from './modules/cart/cart.routes';
 import catalogRouter from './modules/catalog/catalog.routes';
 import couponRouter from './modules/coupons/coupons.routes';
 import deliveryRouter from './modules/delivery/delivery.routes';
+import inventoryRouter from './modules/inventory/inventory.routes';
 import kitchenRouter from './modules/kitchen/kitchen.routes';
+import notificationRouter from './modules/notifications/notification.routes';
 import ordersRouter from './modules/orders/orders.routes';
 import paymentsRouter from './modules/payments/payments.routes';
-import refundsRouter from './modules/refunds/refunds.routes';
-import inventoryRouter from './modules/inventory/inventory.routes';
 import posRouter from './modules/pos/pos.routes';
+import qrRouter from './modules/qr-ordering/qr.routes';
+import refundsRouter from './modules/refunds/refunds.routes';
 import reservationRouter from './modules/reservations/reservation.routes';
 import superAdminRouter from './modules/super-admin/superadmin.routes';
 import tableRouter from './modules/tables/table.routes';
 import usersRouter from './modules/users/users.routes';
 import waitlistRouter from './modules/waitlist/waitlist.routes';
-import qrRouter from './modules/qr-ordering/qr.routes';
-import notificationRouter from './modules/notifications/notification.routes';
 import healthRouter from './routes/health.routes';
-import historyRouter from './api/history/history.routes';
 import AppError from './utils/appError';
 import logger from './utils/logger';
 

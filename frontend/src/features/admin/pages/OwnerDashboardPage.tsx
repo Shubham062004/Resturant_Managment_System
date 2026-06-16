@@ -60,6 +60,7 @@ import { Button } from '../../../shared/components/ui/Button';
 import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
 import { useToast } from '../../../shared/components/ui/Toast';
+import { formatCurrency } from '../../../shared/utils/currency';
 
 interface SummaryData {
   revenueToday: number;
@@ -70,6 +71,13 @@ interface SummaryData {
   pendingRequestsCount: number;
   reservationsCount: number;
   staffOnline: number;
+  expensesThisMonth: number;
+  netProfitThisMonth: number;
+  payrollCost: number;
+  inventoryCost: number;
+  refundCost: number;
+  taxesCost: number;
+  bonusPaid: number;
 }
 
 interface BranchPerformance {
@@ -594,27 +602,27 @@ export default function OwnerDashboardPage() {
   const yesterdayRevenue = Math.round(todayRevenue * 0.94);
   const totalOrders = summary?.ordersToday || 0;
 
-  const grossProfit = Math.round(monthlyRevenue * 0.68);
-  const netProfit = Math.round(monthlyRevenue * 0.28);
-  const payrollCost = Math.round(monthlyRevenue * 0.25);
-  const inventoryCost = Math.round(monthlyRevenue * 0.3);
+  const inventoryCost = summary?.inventoryCost || 0;
+  const grossProfit = monthlyRevenue - inventoryCost;
+  const netProfit = summary?.netProfitThisMonth || 0;
+  const payrollCost = summary?.payrollCost || 0;
   const deliveryCost = Math.round(monthlyRevenue * 0.12);
   const marketingCost = Math.round(monthlyRevenue * 0.05);
-  const refundCost = Math.round(monthlyRevenue * 0.02);
-  const taxesCost = Math.round(monthlyRevenue * 0.05);
-  const operatingExpenses = monthlyRevenue - netProfit;
+  const refundCost = summary?.refundCost || 0;
+  const taxesCost = summary?.taxesCost || 0;
+  const operatingExpenses = summary?.expensesThisMonth || 0;
 
-  const bonusDistributed = Math.round((summary?.lowStockCount || 0) * 120 + 2400);
+  const bonusDistributed = summary?.bonusPaid || 0;
   const wasteCost = Math.round((summary?.lowStockCount || 0) * 450 + 1500);
-  const foodCostPercent = 28.4;
-  const wasteCostPercent = 1.8;
+  const foodCostPercent = monthlyRevenue > 0 ? parseFloat(((inventoryCost / monthlyRevenue) * 100).toFixed(1)) : 0;
+  const wasteCostPercent = monthlyRevenue > 0 ? parseFloat(((wasteCost / monthlyRevenue) * 100).toFixed(1)) : 0;
   const aov = totalOrders > 0 ? Math.round(todayRevenue / totalOrders) : 0;
 
   // --- 20 CEO KPI Configuration ---
   const ceoKpis = [
     {
       title: "Today's Revenue",
-      value: `₹${todayRevenue.toLocaleString('en-IN')}`,
+      value: formatCurrency(todayRevenue),
       desc: 'Sales closed today',
       trend: '▲ 12.4%',
       isGrow: true,
@@ -623,7 +631,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Yesterday Revenue',
-      value: `₹${yesterdayRevenue.toLocaleString('en-IN')}`,
+      value: formatCurrency(yesterdayRevenue),
       desc: 'Finalized closed sales',
       trend: '▼ 2.4%',
       isGrow: false,
@@ -632,7 +640,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Weekly Revenue',
-      value: `₹${weeklyRevenue.toLocaleString('en-IN')}`,
+      value: formatCurrency(weeklyRevenue),
       desc: 'Estimated weekly totals',
       trend: '▲ 8.1%',
       isGrow: true,
@@ -641,7 +649,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Monthly Revenue',
-      value: `₹${monthlyRevenue.toLocaleString('en-IN')}`,
+      value: formatCurrency(monthlyRevenue),
       desc: 'Month-to-date sales',
       trend: '▲ 11.8%',
       isGrow: true,
@@ -650,7 +658,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Annual Revenue',
-      value: `₹${annualRevenue.toLocaleString('en-IN')}`,
+      value: formatCurrency(annualRevenue),
       desc: 'Projected annual run-rate',
       trend: '▲ 12.4%',
       isGrow: true,
@@ -659,7 +667,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Gross Profit',
-      value: `₹${grossProfit.toLocaleString('en-IN')}`,
+      value: formatCurrency(grossProfit),
       desc: '68% catalog gross margins',
       trend: '▲ 10.2%',
       isGrow: true,
@@ -668,7 +676,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Net Profit',
-      value: `₹${netProfit.toLocaleString('en-IN')}`,
+      value: formatCurrency(netProfit),
       desc: '28% operational net profit',
       trend: '▲ 12.7%',
       isGrow: true,
@@ -677,7 +685,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Total Expenses',
-      value: `₹${operatingExpenses.toLocaleString('en-IN')}`,
+      value: formatCurrency(operatingExpenses),
       desc: 'Cost of operations + raw stock',
       trend: '▲ 4.5%',
       isGrow: true,
@@ -686,7 +694,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Inventory Cost',
-      value: `₹${inventoryCost.toLocaleString('en-IN')}`,
+      value: formatCurrency(inventoryCost),
       desc: 'Stock purchases this month',
       trend: '▲ 2.1%',
       isGrow: true,
@@ -695,7 +703,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Payroll Cost',
-      value: `₹${payrollCost.toLocaleString('en-IN')}`,
+      value: formatCurrency(payrollCost),
       desc: 'Base salary contracts paid',
       trend: 'Stable 0.0%',
       isGrow: true,
@@ -704,7 +712,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Bonus Distributed',
-      value: `₹${bonusDistributed.toLocaleString('en-IN')}`,
+      value: formatCurrency(bonusDistributed),
       desc: 'Customer rating bonus pool',
       trend: '▲ 15.4%',
       isGrow: true,
@@ -713,7 +721,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Refund Amount',
-      value: `₹${refundCost.toLocaleString('en-IN')}`,
+      value: formatCurrency(refundCost),
       desc: 'Total transaction chargebacks',
       trend: '▼ 8.5%',
       isGrow: false,
@@ -722,7 +730,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Tax Liability',
-      value: `₹${taxesCost.toLocaleString('en-IN')}`,
+      value: formatCurrency(taxesCost),
       desc: 'GST + Sales Tax calculations',
       trend: '▲ 9.4%',
       isGrow: true,
@@ -749,7 +757,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Avg Order Value',
-      value: `₹${aov}`,
+      value: formatCurrency(aov),
       desc: 'Average transaction size',
       trend: '▲ 3.8%',
       isGrow: true,
@@ -785,7 +793,7 @@ export default function OwnerDashboardPage() {
     },
     {
       title: 'Inventory Value',
-      value: `₹${(inventoryCost * 1.4).toLocaleString('en-IN')}`,
+      value: formatCurrency(inventoryCost * 1.4),
       desc: 'Warehouse valuation',
       trend: '▲ 5.4%',
       isGrow: true,

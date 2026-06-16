@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, Leaf, TrendingDown, AlertTriangle, Activity } from 'lucide-react';
 import { format } from 'date-fns';
-import { useHistoryQuery } from '../../../../api/hooks/useHistory';
-import { formatCurrency } from '../../../../shared/utils/currency';
+import { Download, Search, Leaf, TrendingDown, AlertTriangle, Activity } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
+
+import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
+import { formatCurrency } from '../../../shared/utils/currency';
+
 
 export default function IngredientHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,7 +40,7 @@ export default function IngredientHistoryPage() {
       name: r.name,
       consumed: Math.floor(Math.random() * 500) + 50, // Demo calculation for now
       wasted: Math.floor(Math.random() * 50)
-    })).sort((a, b) => b.consumed - a.consumed).slice(0, 7);
+    })).sort((a: any, b: any) => b.consumed - a.consumed).slice(0, 7);
 
     return { consumptionMap };
   }, [records]);

@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, MapPin, Store, Users, ShoppingBag } from 'lucide-react';
 import { format } from 'date-fns';
-import { useHistoryQuery } from '../../../../api/hooks/useHistory';
-import { formatCurrency } from '../../../../shared/utils/currency';
+import { Download, Search, MapPin, Store, Users, ShoppingBag } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+
+import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
+import { formatCurrency } from '../../../shared/utils/currency';
+
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -43,7 +45,7 @@ export default function BranchHistoryPage() {
       name: r.name.replace('ABC ', ''),
       orders: r._count?.Order || 0,
       revenue: (r._count?.Order || 0) * 450 // Mocked AOV of 450 INR
-    })).sort((a, b) => b.orders - a.orders);
+    })).sort((a: any, b: any) => b.orders - a.orders);
 
     return { branchComparison };
   }, [records]);
@@ -108,7 +110,7 @@ export default function BranchHistoryPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={chartData.branchComparison} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="orders" nameKey="name">
-                    {chartData.branchComparison.map((entry, index) => (
+                    {chartData.branchComparison.map((entry: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>

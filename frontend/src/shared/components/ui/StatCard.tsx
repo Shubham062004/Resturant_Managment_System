@@ -1,6 +1,7 @@
-import React from 'react';
-import { Card, CardContent } from './Card';
 import { LucideIcon } from 'lucide-react';
+import React from 'react';
+
+import { Card, CardContent } from './Card';
 
 interface StatCardProps {
   title: string;

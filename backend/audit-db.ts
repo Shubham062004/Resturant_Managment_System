@@ -12,7 +12,7 @@ async function audit() {
   console.log('--- DATABASE AUDIT REPORT ---');
   for (const model of models) {
     try {
-      // @ts-ignore
+      // @ts-expect-error: prisma index requires dynamic keys
       const count = await prisma[model].count();
       console.log(`${model.padEnd(20)}: ${count} records`);
     } catch (e: any) {

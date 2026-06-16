@@ -11,7 +11,7 @@ import { Card } from '../../../shared/components/ui/Card';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { fetchTables, updateTablePosition, tableUpdated } from '../../floor-plan/store/tableSlice';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 export default function ManagerTablesPage() {
   const toast = useToast();

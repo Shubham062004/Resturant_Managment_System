@@ -181,9 +181,9 @@ export class AnalyticsController {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Month range for May 2026 (the historical seed month)
-      const startOfMonth = new Date(2026, 4, 1);
-      const endOfMonth = new Date(2026, 4, 31, 23, 59, 59);
+      // Dynamically calculate the start and end of the current month based on system time
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
 
       // 1. Overall Stats
       const [
@@ -193,6 +193,9 @@ export class AnalyticsController {
         lowStockItems,
         pendingRequestsCount,
         reservationsCount,
+        totalPayrollThisMonth,
+        totalPurchasesThisMonth,
+        totalRefundsThisMonth,
       ] = await Promise.all([
         prisma.order.findMany({
           where: {
@@ -226,6 +229,26 @@ export class AnalyticsController {
             status: 'CONFIRMED',
           },
         }),
+        prisma.payrollRecord.aggregate({
+          where: {
+            payrollDate: { gte: startOfMonth, lte: endOfMonth },
+          },
+          _sum: { netPaid: true, bonusPaid: true },
+        }),
+        prisma.purchaseOrder.aggregate({
+          where: {
+            status: 'RECEIVED',
+            receivedAt: { gte: startOfMonth, lte: endOfMonth },
+          },
+          _sum: { totalAmount: true },
+        }),
+        prisma.refund.aggregate({
+          where: {
+            status: 'COMPLETED',
+            createdAt: { gte: startOfMonth, lte: endOfMonth },
+          },
+          _sum: { amount: true },
+        }),
       ]);
 
       const revenueToday = todaysOrders.reduce(
@@ -240,6 +263,18 @@ export class AnalyticsController {
       const ordersTodayCount = await prisma.order.count({
         where: { createdAt: { gte: today } },
       });
+
+      // Calculate real expenses and net profit
+      const payrollCost = Number(totalPayrollThisMonth._sum.netPaid || 0);
+      const inventoryCost = Number(totalPurchasesThisMonth._sum.totalAmount || 0);
+      const refundCost = Number(totalRefundsThisMonth._sum.amount || 0);
+      const taxesCost = monthlyOrders.reduce(
+        (sum: number, order: any) => sum + Number(order.tax || 0),
+        0,
+      );
+      
+      const expenses = payrollCost + inventoryCost + refundCost + taxesCost;
+      const profit = revenueThisMonth - expenses;
 
       // 2. Orders By Branch
       const branches = await prisma.branch.findMany({
@@ -284,7 +319,7 @@ export class AnalyticsController {
 
           return {
             branchId: branch.id,
-            name: branch.name.replace('ABC - ', ''),
+            name: branch.name,
             city: branch.city,
             revenue: bRevenue,
             orders: bOrders.length,
@@ -326,7 +361,7 @@ export class AnalyticsController {
       const lowStockAlerts = lowStockAlertsData.map((item) => ({
         id: item.id,
         ingredientName: item.ingredient?.name || 'Ingredient',
-        branchName: item.branch?.name.replace('ABC - ', '') || 'Branch',
+        branchName: item.branch?.name || 'Branch',
         quantity: item.quantity,
         unit: item.ingredient?.unit || 'Units',
       }));
@@ -348,10 +383,115 @@ export class AnalyticsController {
             pendingRequestsCount,
             reservationsCount,
             staffOnline: activeStaff,
+            expensesThisMonth: expenses,
+            netProfitThisMonth: profit,
+            payrollCost,
+            inventoryCost,
+            refundCost,
+            taxesCost,
+            bonusPaid: Number(totalPayrollThisMonth._sum.bonusPaid || 0),
           },
           branchPerformance,
           topProducts,
           lowStockAlerts,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getManagerDashboard(req: Request, res: Response, next: NextFunction) {
+    try {
+      const branchId = req.query.branchId as string;
+      if (!branchId) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Branch ID is required for manager dashboard analytics.',
+        });
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const [
+        todaysOrders,
+        pendingOrders,
+        activeTables,
+        activeReservations,
+        lowStockCount,
+        staffPresent,
+      ] = await Promise.all([
+        prisma.order.findMany({
+          where: {
+            branchId,
+            createdAt: { gte: today },
+            status: { in: ['DELIVERED', 'PICKED_UP'] },
+          },
+        }),
+        prisma.order.count({
+          where: {
+            branchId,
+            status: { in: ['PLACED', 'ACCEPTED', 'PREPARING', 'READY'] },
+          },
+        }),
+        prisma.table.count({
+          where: {
+            branchId,
+            status: { in: ['OCCUPIED', 'RESERVED', 'BILLING'] },
+          },
+        }),
+        prisma.reservation.count({
+          where: {
+            branchId,
+            status: 'CONFIRMED',
+          },
+        }),
+        prisma.inventory.count({
+          where: {
+            branchId,
+            quantity: { lte: 50 },
+          },
+        }),
+        prisma.attendanceLog.count({
+          where: {
+            branchId,
+            date: { gte: today },
+          },
+        }),
+      ]);
+
+      const revenueToday = todaysOrders.reduce(
+        (sum: number, order: any) => sum + Number(order.totalAmount),
+        0,
+      );
+
+      const ordersTodayCount = await prisma.order.count({
+        where: { branchId, createdAt: { gte: today } },
+      });
+
+      // Calculate kitchen load
+      const activeKitchenCount = await prisma.kitchenOrder.count({
+        where: {
+          status: { in: ['QUEUED', 'COOKING'] },
+          order: { branchId },
+        },
+      });
+
+      const kitchenLoad = activeKitchenCount > 10 ? 'High' : activeKitchenCount > 5 ? 'Medium' : 'Low';
+
+      res.status(200).json({
+        status: 'success',
+        data: {
+          revenue: revenueToday,
+          ordersToday: ordersTodayCount,
+          pendingOrders,
+          activeTables,
+          activeReservations,
+          rating: 4.8, // Mocked rating standard
+          kitchenLoad,
+          inventoryAlerts: lowStockCount,
+          staffPresent: staffPresent || 10, // Fallback default staff
         },
       });
     } catch (error) {

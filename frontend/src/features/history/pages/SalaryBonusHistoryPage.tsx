@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, DollarSign, Wallet, Eye, EyeOff, FileText } from 'lucide-react';
 import { format } from 'date-fns';
-import { useHistoryQuery } from '../../../api/hooks/useHistory';
-import { formatCurrency } from '../../../shared/utils/currency';
+import { Download, Search, DollarSign, Wallet, Eye, EyeOff, FileText } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
+
+import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
+import { formatCurrency } from '../../../shared/utils/currency';
+
 
 export default function SalaryBonusHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');

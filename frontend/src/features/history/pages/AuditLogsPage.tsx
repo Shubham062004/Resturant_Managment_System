@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, Shield, ShieldAlert, Key, ActivitySquare } from 'lucide-react';
 import { format } from 'date-fns';
+import { Download, Search, Shield, ShieldAlert, Key, ActivitySquare } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
 
 export default function AuditLogsPage() {
   const [searchTerm, setSearchTerm] = useState('');

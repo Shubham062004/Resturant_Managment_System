@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, Truck, DollarSign, Star, Clock } from 'lucide-react';
 import { format } from 'date-fns';
-import { useHistoryQuery } from '../../../../api/hooks/useHistory';
-import { formatCurrency } from '../../../../shared/utils/currency';
+import { Download, Search, Truck, DollarSign, Star, Clock } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
+
+import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
+import { formatCurrency } from '../../../shared/utils/currency';
+
 
 export default function SupplierHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,7 +41,7 @@ export default function SupplierHistoryPage() {
     const rankingMap = records.map((r: any) => ({
       name: r.name,
       orders: r.purchaseOrders?.length || 0
-    })).sort((a, b) => b.orders - a.orders).slice(0, 5);
+    })).sort((a: any, b: any) => b.orders - a.orders).slice(0, 5);
 
     // Mock Monthly Spend
     const monthlySpend = [

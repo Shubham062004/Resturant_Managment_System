@@ -1,7 +1,9 @@
-import { Router } from 'express';
-import { historyController } from './history.controller';
-import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { Role } from '@prisma/client';
+import { Router } from 'express';
+
+import { authGuard, restrictTo } from '../../middleware/authGuard';
+
+import { historyController } from './history.controller';
 
 const router = Router();
 

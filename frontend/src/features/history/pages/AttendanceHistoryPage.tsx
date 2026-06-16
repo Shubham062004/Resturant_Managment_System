@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, Clock, CalendarDays, UserX, AlertCircle } from 'lucide-react';
 import { format } from 'date-fns';
-import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Download, Search, Clock, CalendarDays, UserX, AlertCircle } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
+
+import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
+
 
 export default function AttendanceHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');

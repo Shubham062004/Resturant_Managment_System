@@ -161,7 +161,7 @@ async function main() {
   const insertInChunks = async (modelName: string, data: any[], chunkSize: number = 5000) => {
     console.log(`Inserting ${data.length} ${modelName}...`);
     for (let i = 0; i < data.length; i += chunkSize) {
-      // @ts-ignore
+      // @ts-expect-error: dynamic keys for prisma client access
       await prisma[modelName].createMany({ data: data.slice(i, i + chunkSize), skipDuplicates: true });
       process.stdout.write('.');
     }

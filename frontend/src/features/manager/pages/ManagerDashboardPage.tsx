@@ -18,6 +18,7 @@ import { useAppSelector } from '../../../app/store';
 import apiClient from '../../../services/apiClient';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { Card, CardContent } from '../../../shared/components/ui/Card';
+import { formatCurrency } from '../../../shared/utils/currency';
 
 export default function ManagerDashboardPage() {
   const { user: _user } = useAppSelector((state) => state.auth);
@@ -25,17 +26,17 @@ export default function ManagerDashboardPage() {
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Mocked KPI Data (To be replaced with real analytics endpoint)
-  const [kpiData, _setKpiData] = useState({
-    revenue: 45200,
-    ordersToday: 86,
-    pendingOrders: 12,
-    activeTables: 8,
-    activeReservations: 3,
+  // Real KPI Data (Loaded dynamically from database)
+  const [kpiData, setKpiData] = useState({
+    revenue: 0,
+    ordersToday: 0,
+    pendingOrders: 0,
+    activeTables: 0,
+    activeReservations: 0,
     rating: 4.8,
-    kitchenLoad: 'High',
-    inventoryAlerts: 4,
-    staffPresent: 14,
+    kitchenLoad: 'Low',
+    inventoryAlerts: 0,
+    staffPresent: 0,
   });
 
   const [recentActivities] = useState([
@@ -96,6 +97,21 @@ export default function ManagerDashboardPage() {
     };
     fetchBranches();
   }, []);
+
+  useEffect(() => {
+    if (!selectedBranchId) return;
+    const fetchKpis = async () => {
+      try {
+        const res = await apiClient.get(`/admin/analytics/manager-dashboard?branchId=${selectedBranchId}`);
+        if (res.data?.status === 'success') {
+          setKpiData(res.data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch manager dashboard KPI data', err);
+      }
+    };
+    fetchKpis();
+  }, [selectedBranchId]);
 
   const StatCard = ({ title, value, icon: Icon, trend, trendUp, colorClass, delay }: any) => (
     <motion.div
@@ -168,7 +184,7 @@ export default function ManagerDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Today's Revenue"
-          value={`₹${kpiData.revenue.toLocaleString()}`}
+          value={formatCurrency(kpiData.revenue)}
           icon={Banknote}
           trend="12.5%"
           trendUp={true}

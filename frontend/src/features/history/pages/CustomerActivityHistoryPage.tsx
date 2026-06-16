@@ -1,12 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { StatCard } from '../../../shared/components/ui/StatCard';
-import { Download, Search, Users, Activity, Heart, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
-import { useHistoryQuery } from '../../../api/hooks/useHistory';
-import { formatCurrency } from '../../../shared/utils/currency';
+import { Download, Search, Users, Activity, Heart, Calendar } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+
+import { useHistoryQuery } from '../../../api/hooks/useHistory';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import { StatCard } from '../../../shared/components/ui/StatCard';
+import { formatCurrency } from '../../../shared/utils/currency';
+
 
 export default function CustomerActivityHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');

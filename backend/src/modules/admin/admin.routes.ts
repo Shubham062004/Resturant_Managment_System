@@ -84,6 +84,7 @@ router.patch(
 
 // Analytics
 router.get('/analytics/owner-dashboard', AnalyticsController.getOwnerDashboard);
+router.get('/analytics/manager-dashboard', AnalyticsController.getManagerDashboard);
 router.get('/analytics/executive', AnalyticsController.getExecutiveSummary);
 router.get('/analytics/sales-trends', AnalyticsController.getSalesTrends);
 router.get('/analytics/customer', AnalyticsController.getCustomerAnalytics);
