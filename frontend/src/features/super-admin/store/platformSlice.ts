@@ -1,10 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import apiClient from '../../../services/apiClient';
 
-export const fetchPlatformDashboard = createAsyncThunk('platform/fetchDashboard', async () => {
-  const response = await apiClient.get('/super-admin/dashboard');
-  return response.data.data;
-});
+export const fetchPlatformDashboard = createAsyncThunk(
+  'platform/fetchDashboard',
+  async () => {
+    const response = await apiClient.get('/super-admin/dashboard');
+    return response.data.data;
+  }
+);
 
 const platformSlice = createSlice({
   name: 'platform',

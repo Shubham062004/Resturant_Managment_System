@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../../types/express';
+
 import { prisma } from '../../config/db';
+import { AuthRequest } from '../../types/express';
 import AppError from '../../utils/appError';
 
 export class UsersController {
@@ -10,11 +11,13 @@ export class UsersController {
   public static async updateProfile(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {
-        return next(new AppError('Authentication credentials are missing.', 401));
+        return next(
+          new AppError('Authentication credentials are missing.', 401)
+        );
       }
 
       const { firstName, lastName, phone } = req.body;
@@ -35,7 +38,10 @@ export class UsersController {
         });
         if (existingPhoneUser) {
           return next(
-            new AppError('This phone number is already registered to another account.', 409),
+            new AppError(
+              'This phone number is already registered to another account.',
+              409
+            )
           );
         }
       }

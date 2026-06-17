@@ -35,9 +35,15 @@ const refreshAccessToken = async (): Promise<boolean> => {
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry
+    ) {
       const url = originalRequest.url || '';
       const isAuthRoute =
         url.includes('/auth/login') ||
@@ -71,13 +77,16 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       }
 
-      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+      if (
+        window.location.pathname !== '/login' &&
+        window.location.pathname !== '/register'
+      ) {
         window.location.href = '/login';
       }
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default apiClient;

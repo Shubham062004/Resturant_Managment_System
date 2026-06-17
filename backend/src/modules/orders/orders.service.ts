@@ -1,7 +1,8 @@
-import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
-import { getIO } from '../../config/socket';
 import { OrderStatus, OrderType } from '@prisma/client';
+
+import { prisma } from '../../config/db';
+import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 import logger from '../../utils/logger';
 
 export class OrdersService {
@@ -17,7 +18,7 @@ export class OrdersService {
       paymentId?: string;
       orderType?: OrderType;
       notes?: string;
-    },
+    }
   ) {
     const cart = await prisma.cart.findUnique({
       where: { userId },
@@ -29,7 +30,10 @@ export class OrdersService {
     }
 
     // Calculate totals
-    const subtotal = cart.items.reduce((sum: number, item: any) => sum + Number(item.price) * item.quantity, 0);
+    const subtotal = cart.items.reduce(
+      (sum: number, item: any) => sum + Number(item.price) * item.quantity,
+      0
+    );
     const tax = subtotal * 0.05; // Fixed 5% tax for simplicity
     const deliveryFee = data.orderType === 'DELIVERY' ? 5.0 : 0.0;
     const discount = 0.0; // Extend to support coupons later
@@ -111,7 +115,11 @@ export class OrdersService {
   /**
    * Get single order by ID
    */
-  public static async getOrderById(orderId: string, userId: string, role: string) {
+  public static async getOrderById(
+    orderId: string,
+    userId: string,
+    role: string
+  ) {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
       include: {
@@ -139,7 +147,7 @@ export class OrdersService {
   public static async updateOrderStatus(
     orderId: string,
     newStatus: OrderStatus,
-    changerId: string,
+    changerId: string
   ) {
     const existing = await prisma.order.findUnique({ where: { id: orderId } });
     if (!existing) throw new AppError('Order not found', 404);
@@ -172,7 +180,11 @@ export class OrdersService {
   /**
    * Cancel Order
    */
-  public static async cancelOrder(orderId: string, userId: string, role: string) {
+  public static async cancelOrder(
+    orderId: string,
+    userId: string,
+    role: string
+  ) {
     const order = await prisma.order.findUnique({ where: { id: orderId } });
     if (!order) throw new AppError('Order not found', 404);
 
@@ -182,7 +194,10 @@ export class OrdersService {
 
     if (role === 'CUSTOMER') {
       if (order.status !== 'PLACED') {
-        throw new AppError('Order cannot be cancelled at this stage by customer.', 400);
+        throw new AppError(
+          'Order cannot be cancelled at this stage by customer.',
+          400
+        );
       }
     }
 

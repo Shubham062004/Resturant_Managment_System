@@ -23,12 +23,14 @@ const UserSessionSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
-export const UserSession = mongoose.models.UserSession || mongoose.model<IUserSession>(
-  'UserSession',
-  UserSessionSchema,
-  'user_sessions',
-);
+export const UserSession =
+  mongoose.models.UserSession ||
+  mongoose.model<IUserSession>(
+    'UserSession',
+    UserSessionSchema,
+    'user_sessions'
+  );
 export default UserSession;

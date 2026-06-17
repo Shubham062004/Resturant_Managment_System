@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { logout } from '../../auth/store/authSlice';
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -17,16 +13,31 @@ import {
   Menu,
   X,
   Bell,
-  Store
+  Store,
 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { Badge } from '../../../shared/components/ui/Badge';
+import { logout } from '../../auth/store/authSlice';
 
 const NAV_LINKS = [
   { path: '/manager', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { path: '/manager/orders', label: 'Live Orders', icon: ShoppingBag, badge: '5' },
+  {
+    path: '/manager/orders',
+    label: 'Live Orders',
+    icon: ShoppingBag,
+    badge: '5',
+  },
   { path: '/manager/pos', label: 'POS Billing', icon: MonitorSmartphone },
   { path: '/manager/tables', label: 'Floor Plan', icon: LayoutGrid },
-  { path: '/manager/reservations', label: 'Reservations', icon: CalendarCheck, badge: '2' },
+  {
+    path: '/manager/reservations',
+    label: 'Reservations',
+    icon: CalendarCheck,
+    badge: '2',
+  },
   { path: '/manager/kitchen', label: 'Kitchen KDS', icon: ChefHat },
   { path: '/manager/staff', label: 'Staff Shift', icon: Users },
   { path: '/manager/inventory', label: 'Stock Requests', icon: Package },
@@ -50,10 +61,9 @@ export default function BranchManagerLayout() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-200 overflow-hidden font-sans">
-      
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={closeSidebar}
         />
@@ -72,23 +82,32 @@ export default function BranchManagerLayout() {
               <Store className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h1 className="font-display font-bold text-white text-sm tracking-wide">ABC RESTAURANT</h1>
-              <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">Branch Manager</p>
+              <h1 className="font-display font-bold text-white text-sm tracking-wide">
+                ABC RESTAURANT
+              </h1>
+              <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">
+                Branch Manager
+              </p>
             </div>
           </div>
-          <button className="lg:hidden text-slate-400 hover:text-white" onClick={closeSidebar}>
+          <button
+            className="lg:hidden text-slate-400 hover:text-white"
+            onClick={closeSidebar}
+          >
             <X size={20} />
           </button>
         </div>
 
         {/* Navigation Links */}
         <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1 custom-scrollbar">
-          <p className="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Operations Center</p>
-          
+          <p className="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
+            Operations Center
+          </p>
+
           {NAV_LINKS.map((link) => {
             const Icon = link.icon;
-            const isActive = link.exact 
-              ? location.pathname === link.path 
+            const isActive = link.exact
+              ? location.pathname === link.path
               : location.pathname.startsWith(link.path);
 
             return (
@@ -97,19 +116,30 @@ export default function BranchManagerLayout() {
                 to={link.path}
                 onClick={closeSidebar}
                 className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 group ${
-                  isActive 
-                    ? 'bg-primary/10 text-primary font-semibold' 
+                  isActive
+                    ? 'bg-primary/10 text-primary font-semibold'
                     : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} className={isActive ? 'text-primary' : 'text-slate-500 group-hover:text-slate-300'} />
+                  <Icon
+                    size={18}
+                    className={
+                      isActive
+                        ? 'text-primary'
+                        : 'text-slate-500 group-hover:text-slate-300'
+                    }
+                  />
                   <span className="text-sm">{link.label}</span>
                 </div>
                 {link.badge && (
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    isActive ? 'bg-primary text-white' : 'bg-slate-800 text-slate-300'
-                  }`}>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      isActive
+                        ? 'bg-primary text-white'
+                        : 'bg-slate-800 text-slate-300'
+                    }`}
+                  >
                     {link.badge}
                   </span>
                 )}
@@ -123,17 +153,25 @@ export default function BranchManagerLayout() {
           <div className="flex items-center gap-3 px-2 mb-4">
             <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden">
               {user?.avatar ? (
-                <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                <img
+                  src={user.avatar}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               ) : (
-                <span className="text-sm font-bold text-slate-300">{user?.firstName?.[0] || 'M'}</span>
+                <span className="text-sm font-bold text-slate-300">
+                  {user?.firstName?.[0] || 'M'}
+                </span>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white truncate">{user?.firstName} {user?.lastName}</p>
+              <p className="text-sm font-bold text-white truncate">
+                {user?.firstName} {user?.lastName}
+              </p>
               <p className="text-xs text-slate-500 truncate">{user?.email}</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={handleLogout}
             className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-rose-500 hover:bg-rose-500/10 rounded-xl transition-colors"
           >
@@ -145,11 +183,10 @@ export default function BranchManagerLayout() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-950">
-        
         {/* Top Header */}
         <header className="h-16 flex items-center justify-between px-6 border-b border-slate-900 bg-slate-950/80 backdrop-blur-sm shrink-0">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               className="lg:hidden text-slate-400 hover:text-white"
               onClick={() => setIsSidebarOpen(true)}
             >
@@ -157,7 +194,9 @@ export default function BranchManagerLayout() {
             </button>
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-slate-300">Live System: Connected</span>
+              <span className="text-xs font-semibold text-slate-300">
+                Live System: Connected
+              </span>
             </div>
           </div>
 

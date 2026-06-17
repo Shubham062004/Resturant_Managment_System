@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import apiClient from '../services/apiClient';
+
 import NotFoundPage from '../features/customer/pages/NotFoundPage';
+import apiClient from '../services/apiClient';
 
 interface BackendMonitorProps {
   children: React.ReactNode;
@@ -41,7 +42,7 @@ const BackendMonitor: React.FC<BackendMonitorProps> = ({ children }) => {
   }
 
   if (!isBackendOnline) {
-    console.error("404 Bad Request - Backend connection failed.");
+    console.error('404 Bad Request - Backend connection failed.');
     // Render the NotFoundPage directly wrapped in a BrowserRouter to provide the routing context
     return (
       <BrowserRouter>

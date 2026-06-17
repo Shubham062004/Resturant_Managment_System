@@ -54,7 +54,7 @@ export const createPurchaseOrderSchema = {
           ingredientId: z.string().uuid(),
           quantity: z.number().positive(),
           costPrice: z.number().positive(),
-        }),
+        })
       )
       .min(1),
   }),
@@ -98,7 +98,7 @@ export const createInventoryRequestSchema = {
         z.object({
           ingredientId: z.string().uuid(),
           requestedQuantity: z.number().positive(),
-        }),
+        })
       )
       .min(1),
   }),
@@ -114,7 +114,7 @@ export const approveInventoryRequestSchema = {
           id: z.string().uuid().optional(),
           ingredientId: z.string().uuid().optional(),
           approvedQuantity: z.number().nonnegative(),
-        }),
+        })
       )
       .optional(),
   }),

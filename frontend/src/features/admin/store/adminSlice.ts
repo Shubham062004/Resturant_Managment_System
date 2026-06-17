@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import apiClient from '../../../services/apiClient';
 
 interface DashboardData {
@@ -26,7 +27,7 @@ export const fetchDashboardOverview = createAsyncThunk(
       `/admin/dashboard?branchId=${branchId}`
     );
     return response.data.data;
-  },
+  }
 );
 
 const adminSlice = createSlice({

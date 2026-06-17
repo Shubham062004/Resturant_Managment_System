@@ -1,11 +1,12 @@
+import { Mail, ArrowLeft, Send } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Alert from '../../../shared/components/ui/Alert';
+
 import apiClient from '../../../services/apiClient';
-import { Mail, ArrowLeft, Send } from 'lucide-react';
+import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
 
 export const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -28,10 +29,14 @@ export const ForgotPasswordPage: React.FC = () => {
     try {
       const response = await apiClient.post('/auth/forgot-password', { email });
       setSuccessMessage(
-        response.data.message || 'If registered, a password reset link has been dispatched.',
+        response.data.message ||
+          'If registered, a password reset link has been dispatched.'
       );
     } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to request password reset.');
+      setError(
+        err.response?.data?.error?.message ||
+          'Failed to request password reset.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -64,8 +69,8 @@ export const ForgotPasswordPage: React.FC = () => {
               {successMessage}
             </Alert>
             <p className="text-muted-foreground font-sans text-sm leading-relaxed px-1">
-              Please check your system logs or email inbox. The reset link is valid for exactly 1
-              hour.
+              Please check your system logs or email inbox. The reset link is
+              valid for exactly 1 hour.
             </p>
             <Link
               to="/login"

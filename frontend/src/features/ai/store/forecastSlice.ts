@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import api from '../../../services/apiClient';
 
 interface ForecastState {
@@ -13,10 +14,21 @@ const initialState: ForecastState = {
   status: 'idle',
 };
 
-export const fetchPredictions = createAsyncThunk('forecast/fetchPredictions', async ({ branchId, type }: { branchId: string, type: 'demand' | 'inventory' }) => {
-  const response = await api.get(`/ai/predictions?branchId=${branchId}&type=${type}`);
-  return { type, data: response.data.data };
-});
+export const fetchPredictions = createAsyncThunk(
+  'forecast/fetchPredictions',
+  async ({
+    branchId,
+    type,
+  }: {
+    branchId: string;
+    type: 'demand' | 'inventory';
+  }) => {
+    const response = await api.get(
+      `/ai/predictions?branchId=${branchId}&type=${type}`
+    );
+    return { type, data: response.data.data };
+  }
+);
 
 const forecastSlice = createSlice({
   name: 'forecast',

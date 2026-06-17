@@ -1,8 +1,9 @@
+import { Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useCategoryBySlug, useToggleFavorite } from '../store/catalogQueries';
+
 import { useAppSelector } from '../../../app/store';
-import { Heart, Clock, Flame, ArrowLeft, Layers } from 'lucide-react';
+import { useCategoryBySlug, useToggleFavorite } from '../store/catalogQueries';
 
 export const CategoryDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -23,7 +24,9 @@ export const CategoryDetailPage: React.FC = () => {
       <div className="min-h-screen bg-[#08070F] text-white pt-32 pb-20 px-4">
         <div className="glass-card max-w-lg mx-auto p-10 border border-red-500/10 bg-red-500/[0.02] text-center">
           <Layers className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <p className="text-red-400 font-bold mb-4 font-display text-2xl">Category Not Found</p>
+          <p className="text-red-400 font-bold mb-4 font-display text-2xl">
+            Category Not Found
+          </p>
           <p className="text-neutral-400 text-sm mb-6">
             The requested category menu details could not be retrieved.
           </p>
@@ -113,7 +116,9 @@ export const CategoryDetailPage: React.FC = () => {
                     >
                       <Heart
                         className={`h-4.5 w-4.5 transition-colors ${
-                          isFavorited ? 'fill-red-500 text-red-500 text-red-500' : ''
+                          isFavorited
+                            ? 'fill-red-500 text-red-500 text-red-500'
+                            : ''
                         }`}
                       />
                     </button>
@@ -158,20 +163,23 @@ export const CategoryDetailPage: React.FC = () => {
                       <div className="flex items-center gap-3 text-xs text-neutral-500">
                         {product.calories && (
                           <span className="flex items-center gap-0.5">
-                            <Flame className="h-3.5 w-3.5 text-amber-500" /> {product.calories} kcal
+                            <Flame className="h-3.5 w-3.5 text-amber-500" />{' '}
+                            {product.calories} kcal
                           </span>
                         )}
                         {product.preparationTime && (
                           <span className="flex items-center gap-0.5">
-                            <Clock className="h-3.5 w-3.5 text-primary" /> {product.preparationTime}{' '}
-                            mins
+                            <Clock className="h-3.5 w-3.5 text-primary" />{' '}
+                            {product.preparationTime} mins
                           </span>
                         )}
                       </div>
 
                       <div className="flex items-center gap-3">
                         <span className="text-white font-bold text-base">
-                          <span className="font-semibold text-primary">₹{parseFloat(product.basePrice).toFixed(2)}</span>
+                          <span className="font-semibold text-primary">
+                            ₹{parseFloat(product.basePrice).toFixed(2)}
+                          </span>
                         </span>
                         <Link
                           to={`/product/${product.slug}`}

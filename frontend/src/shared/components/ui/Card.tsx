@@ -1,5 +1,6 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import React from 'react';
+
 import { hoverScalePreset } from '../../theme/animations';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,11 +34,15 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     }
 
     return (
-      <div ref={ref} className={`${baseStyles} ${variants[variant]} ${className}`} {...props}>
+      <div
+        ref={ref}
+        className={`${baseStyles} ${variants[variant]} ${className}`}
+        {...props}
+      >
         {children}
       </div>
     );
-  },
+  }
 );
 
 Card.displayName = 'Card';
@@ -47,7 +52,10 @@ export const CardHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
   className = '',
   ...props
 }) => (
-  <div className={`p-6 flex flex-col gap-1.5 border-b border-border/40 ${className}`} {...props}>
+  <div
+    className={`p-6 flex flex-col gap-1.5 border-b border-border/40 ${className}`}
+    {...props}
+  >
     {children}
   </div>
 );

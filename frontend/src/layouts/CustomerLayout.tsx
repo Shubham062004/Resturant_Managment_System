@@ -1,7 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from '../features/customer/components/Navbar';
+
 import Footer from '../features/customer/components/Footer';
+import Navbar from '../features/customer/components/Navbar';
 
 export const CustomerLayout: React.FC = () => {
   return (

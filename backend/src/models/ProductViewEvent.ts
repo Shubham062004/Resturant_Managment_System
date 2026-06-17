@@ -17,13 +17,15 @@ const ProductViewEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
-export const ProductViewEvent = mongoose.models.ProductViewEvent || mongoose.model<IProductViewEvent>(
-  'ProductViewEvent',
-  ProductViewEventSchema,
-  'product_view_events',
-);
+export const ProductViewEvent =
+  mongoose.models.ProductViewEvent ||
+  mongoose.model<IProductViewEvent>(
+    'ProductViewEvent',
+    ProductViewEventSchema,
+    'product_view_events'
+  );
 
 export default ProductViewEvent;

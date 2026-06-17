@@ -1,5 +1,6 @@
-import { PrismaClient, Prisma, KitchenPriority } from '@prisma/client';
 import { randomUUID } from 'crypto';
+
+import { PrismaClient, Prisma, KitchenPriority } from '@prisma/client';
 
 export async function seedTransactions(
   prisma: PrismaClient,
@@ -38,13 +39,19 @@ export async function seedTransactions(
     const cookId = kitchenStaffIds[i % kitchenStaffIds.length];
     const deliveryPartner = partners[i % partners.length];
 
-    const branchTerminals = terminals.filter(t => t.branchId === branch.id);
-    const terminal = branchTerminals.length > 0 ? branchTerminals[i % branchTerminals.length] : null;
+    const branchTerminals = terminals.filter((t) => t.branchId === branch.id);
+    const terminal =
+      branchTerminals.length > 0
+        ? branchTerminals[i % branchTerminals.length]
+        : null;
 
-    const branchTables = tables.filter(t => t.branchId === branch.id);
-    const table = branchTables.length > 0 ? branchTables[i % branchTables.length] : null;
+    const branchTables = tables.filter((t) => t.branchId === branch.id);
+    const table =
+      branchTables.length > 0 ? branchTables[i % branchTables.length] : null;
 
-    const branchProducts = products.filter(p => p.restaurantId === branch.restaurantId);
+    const branchProducts = products.filter(
+      (p) => p.restaurantId === branch.restaurantId
+    );
     const productsToUse = branchProducts.length > 0 ? branchProducts : products;
 
     // Distribute evenly in May 2026 (May 1 to May 31)
@@ -74,7 +81,7 @@ export async function seedTransactions(
     const itemCount = (i % 3) + 1;
     let subtotal = 0;
     const selectedProducts: any[] = [];
-    
+
     for (let k = 0; k < itemCount; k++) {
       const prod = productsToUse[(i + k) % productsToUse.length];
       selectedProducts.push(prod);
@@ -82,7 +89,7 @@ export async function seedTransactions(
     }
 
     const tax = parseFloat((subtotal * 0.08).toFixed(2));
-    const deliveryFee = orderType === 'DELIVERY' ? 5.00 : 0.00;
+    const deliveryFee = orderType === 'DELIVERY' ? 5.0 : 0.0;
     const totalAmount = parseFloat((subtotal + tax + deliveryFee).toFixed(2));
 
     const orderId = randomUUID();
@@ -126,7 +133,12 @@ export async function seedTransactions(
         terminalId: terminal.id,
         cashierId,
         orderId,
-        status: status === 'REFUNDED' ? 'REFUNDED' : status === 'CANCELLED' ? 'VOIDED' : 'PAID',
+        status:
+          status === 'REFUNDED'
+            ? 'REFUNDED'
+            : status === 'CANCELLED'
+              ? 'VOIDED'
+              : 'PAID',
         createdAt: orderDate,
         updatedAt: orderDate,
       });
@@ -179,7 +191,12 @@ export async function seedTransactions(
         id: deliveryAssignmentId,
         orderId,
         driverId: deliveryPartner.id,
-        status: status === 'REFUNDED' ? 'DELIVERED' : status === 'CANCELLED' ? 'FAILED' : 'DELIVERED',
+        status:
+          status === 'REFUNDED'
+            ? 'DELIVERED'
+            : status === 'CANCELLED'
+              ? 'FAILED'
+              : 'DELIVERED',
         assignedAt: orderDate,
         acceptedAt: orderDate,
         pickedUpAt: orderDate,
@@ -195,8 +212,8 @@ export async function seedTransactions(
           id: randomUUID(),
           driverId: deliveryPartner.id,
           orderId,
-          earnings: new Prisma.Decimal(50.00),
-          bonus: new Prisma.Decimal(is5Star ? 5.00 : 0.00),
+          earnings: new Prisma.Decimal(50.0),
+          bonus: new Prisma.Decimal(is5Star ? 5.0 : 0.0),
           createdAt: orderDate,
         });
       }
@@ -218,7 +235,7 @@ export async function seedTransactions(
 
   // Batch insert all arrays
   const batchSize = 500;
-  
+
   console.log(`Inserting ${orders.length} orders...`);
   for (let idx = 0; idx < orders.length; idx += batchSize) {
     await prisma.order.createMany({ data: orders.slice(idx, idx + batchSize) });
@@ -226,37 +243,53 @@ export async function seedTransactions(
 
   console.log(`Inserting ${orderItems.length} order items...`);
   for (let idx = 0; idx < orderItems.length; idx += batchSize) {
-    await prisma.orderItem.createMany({ data: orderItems.slice(idx, idx + batchSize) });
+    await prisma.orderItem.createMany({
+      data: orderItems.slice(idx, idx + batchSize),
+    });
   }
 
   console.log(`Inserting ${posOrders.length} POS orders...`);
   for (let idx = 0; idx < posOrders.length; idx += batchSize) {
-    await prisma.pOSOrder.createMany({ data: posOrders.slice(idx, idx + batchSize) });
+    await prisma.pOSOrder.createMany({
+      data: posOrders.slice(idx, idx + batchSize),
+    });
   }
 
   console.log(`Inserting ${posPayments.length} POS payments...`);
   for (let idx = 0; idx < posPayments.length; idx += batchSize) {
-    await prisma.pOSPayment.createMany({ data: posPayments.slice(idx, idx + batchSize) });
+    await prisma.pOSPayment.createMany({
+      data: posPayments.slice(idx, idx + batchSize),
+    });
   }
 
   console.log(`Inserting ${kitchenOrders.length} kitchen orders...`);
   for (let idx = 0; idx < kitchenOrders.length; idx += batchSize) {
-    await prisma.kitchenOrder.createMany({ data: kitchenOrders.slice(idx, idx + batchSize) });
+    await prisma.kitchenOrder.createMany({
+      data: kitchenOrders.slice(idx, idx + batchSize),
+    });
   }
 
   console.log(`Inserting ${kitchenTasks.length} kitchen tasks...`);
   for (let idx = 0; idx < kitchenTasks.length; idx += batchSize) {
-    await prisma.kitchenTask.createMany({ data: kitchenTasks.slice(idx, idx + batchSize) });
+    await prisma.kitchenTask.createMany({
+      data: kitchenTasks.slice(idx, idx + batchSize),
+    });
   }
 
-  console.log(`Inserting ${deliveryAssignments.length} delivery assignments...`);
+  console.log(
+    `Inserting ${deliveryAssignments.length} delivery assignments...`
+  );
   for (let idx = 0; idx < deliveryAssignments.length; idx += batchSize) {
-    await prisma.deliveryAssignment.createMany({ data: deliveryAssignments.slice(idx, idx + batchSize) });
+    await prisma.deliveryAssignment.createMany({
+      data: deliveryAssignments.slice(idx, idx + batchSize),
+    });
   }
 
   console.log(`Inserting ${driverEarnings.length} driver earnings...`);
   for (let idx = 0; idx < driverEarnings.length; idx += batchSize) {
-    await prisma.driverEarnings.createMany({ data: driverEarnings.slice(idx, idx + batchSize) });
+    await prisma.driverEarnings.createMany({
+      data: driverEarnings.slice(idx, idx + batchSize),
+    });
   }
 
   console.log(`Inserting ${bills.length} bills...`);
@@ -264,6 +297,8 @@ export async function seedTransactions(
     await prisma.bill.createMany({ data: bills.slice(idx, idx + batchSize) });
   }
 
-  console.log(`✅ Seeded ${orders.length} historical orders for May 2026 successfully.`);
+  console.log(
+    `✅ Seeded ${orders.length} historical orders for May 2026 successfully.`
+  );
   return { orderCount: orders.length };
 }

@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { RefundsController } from './refunds.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
+
+import { RefundsController } from './refunds.controller';
 import { createRefundSchema } from './refunds.validation';
 
 const router = Router();
@@ -13,7 +15,7 @@ router.post(
   '/',
   restrictTo('ADMIN', 'SUPER_ADMIN'),
   validate(createRefundSchema),
-  RefundsController.processRefund,
+  RefundsController.processRefund
 );
 
 router.get('/:id', RefundsController.getRefundById);

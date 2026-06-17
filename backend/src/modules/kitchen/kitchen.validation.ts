@@ -9,7 +9,13 @@ export const createStationSchema = {
 
 export const updateOrderStatusSchema = {
   body: z.object({
-    status: z.enum(['QUEUED', 'COOKING', 'READY_FOR_PACKING', 'PACKED', 'COMPLETED']),
+    status: z.enum([
+      'QUEUED',
+      'COOKING',
+      'READY_FOR_PACKING',
+      'PACKED',
+      'COMPLETED',
+    ]),
   }),
 };
 

@@ -16,4 +16,6 @@ const KitchenMetricSchema = new Schema<IKitchenMetric>({
   delayedOrders: { type: Number, default: 0 },
 });
 
-export const KitchenMetric = mongoose.models.KitchenMetric || mongoose.model<IKitchenMetric>('KitchenMetric', KitchenMetricSchema);
+export const KitchenMetric =
+  mongoose.models.KitchenMetric ||
+  mongoose.model<IKitchenMetric>('KitchenMetric', KitchenMetricSchema);

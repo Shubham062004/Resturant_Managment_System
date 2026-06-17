@@ -1,9 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { prisma } from '../../config/db';
 import { AuditLog } from '../../database/mongo/AuditLog';
 
 export class AdminController {
-  public static async getDashboardOverview(req: Request, res: Response, next: NextFunction) {
+  public static async getDashboardOverview(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const branchId = req.query.branchId as string;
       const today = new Date();
@@ -20,7 +25,10 @@ export class AdminController {
           status: { in: ['DELIVERED', 'PICKED_UP'] },
         },
       });
-      const revenueToday = todaysOrders.reduce((sum: number, order: any) => sum + Number(order.totalAmount), 0);
+      const revenueToday = todaysOrders.reduce(
+        (sum: number, order: any) => sum + Number(order.totalAmount),
+        0
+      );
 
       // 2. Orders Count Today
       const ordersTodayCount = await prisma.order.count({
@@ -61,13 +69,17 @@ export class AdminController {
     }
   }
 
-  public static async getBranches(req: Request, res: Response, next: NextFunction) {
+  public static async getBranches(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const branches = await prisma.branch.findMany({
         orderBy: { name: 'asc' },
         include: {
           restaurant: true,
-        }
+        },
       });
 
       res.status(200).json({
@@ -79,13 +91,31 @@ export class AdminController {
     }
   }
 
-  public static async createBranch(req: Request, res: Response, next: NextFunction) {
+  public static async createBranch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { name, address, city, state, latitude, longitude, openingTime, closingTime, deliveryRadius, isActive } = req.body;
+      const {
+        name,
+        address,
+        city,
+        state,
+        latitude,
+        longitude,
+        openingTime,
+        closingTime,
+        deliveryRadius,
+        isActive,
+      } = req.body;
 
       const restaurant = await prisma.restaurantGroup.findFirst();
       if (!restaurant) {
-        return res.status(400).json({ status: 'fail', message: 'No restaurant group found. Please seed the database first.' });
+        return res.status(400).json({
+          status: 'fail',
+          message: 'No restaurant group found. Please seed the database first.',
+        });
       }
 
       const branch = await prisma.branch.create({
@@ -113,10 +143,25 @@ export class AdminController {
     }
   }
 
-  public static async updateBranch(req: Request, res: Response, next: NextFunction) {
+  public static async updateBranch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
-      const { name, address, city, state, latitude, longitude, openingTime, closingTime, deliveryRadius, isActive } = req.body;
+      const {
+        name,
+        address,
+        city,
+        state,
+        latitude,
+        longitude,
+        openingTime,
+        closingTime,
+        deliveryRadius,
+        isActive,
+      } = req.body;
 
       const branch = await prisma.branch.update({
         where: { id },
@@ -126,10 +171,14 @@ export class AdminController {
           city,
           state,
           latitude: latitude !== undefined ? parseFloat(latitude) : undefined,
-          longitude: longitude !== undefined ? parseFloat(longitude) : undefined,
+          longitude:
+            longitude !== undefined ? parseFloat(longitude) : undefined,
           openingTime,
           closingTime,
-          deliveryRadius: deliveryRadius !== undefined ? parseFloat(deliveryRadius) : undefined,
+          deliveryRadius:
+            deliveryRadius !== undefined
+              ? parseFloat(deliveryRadius)
+              : undefined,
           isActive,
         },
       });
@@ -143,7 +192,11 @@ export class AdminController {
     }
   }
 
-  public static async deleteBranch(req: Request, res: Response, next: NextFunction) {
+  public static async deleteBranch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       await prisma.branch.delete({
@@ -159,14 +212,18 @@ export class AdminController {
     }
   }
 
-  public static async getProducts(req: Request, res: Response, next: NextFunction) {
+  public static async getProducts(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const products = await prisma.product.findMany({
         orderBy: { name: 'asc' },
         include: {
           category: true,
           variants: true,
-        }
+        },
       });
 
       res.status(200).json({
@@ -178,14 +235,31 @@ export class AdminController {
     }
   }
 
-  public static async createProduct(req: Request, res: Response, next: NextFunction) {
+  public static async createProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { name, categoryId, basePrice, isVeg, description, isAvailable, featured } = req.body;
-      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const {
+        name,
+        categoryId,
+        basePrice,
+        isVeg,
+        description,
+        isAvailable,
+        featured,
+      } = req.body;
+      const slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
 
       const restaurant = await prisma.restaurantGroup.findFirst();
       if (!restaurant) {
-        return res.status(400).json({ status: 'fail', message: 'No restaurant group found.' });
+        return res
+          .status(400)
+          .json({ status: 'fail', message: 'No restaurant group found.' });
       }
 
       const product = await prisma.product.create({
@@ -211,15 +285,30 @@ export class AdminController {
     }
   }
 
-  public static async updateProduct(req: Request, res: Response, next: NextFunction) {
+  public static async updateProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
-      const { name, categoryId, basePrice, isVeg, description, isAvailable, featured } = req.body;
-      
+      const {
+        name,
+        categoryId,
+        basePrice,
+        isVeg,
+        description,
+        isAvailable,
+        featured,
+      } = req.body;
+
       const updateData: any = {};
       if (name !== undefined) {
         updateData.name = name;
-        updateData.slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        updateData.slug = name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
       }
       if (categoryId !== undefined) updateData.categoryId = categoryId;
       if (basePrice !== undefined) updateData.basePrice = Number(basePrice);
@@ -242,7 +331,11 @@ export class AdminController {
     }
   }
 
-  public static async deleteProduct(req: Request, res: Response, next: NextFunction) {
+  public static async deleteProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       await prisma.product.delete({
@@ -258,13 +351,20 @@ export class AdminController {
     }
   }
 
-  public static async getAuditLogs(req: Request, res: Response, next: NextFunction) {
+  public static async getAuditLogs(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       let logs = [];
       try {
         logs = await AuditLog.find().sort({ createdAt: -1 }).limit(100);
       } catch (mongoErr) {
-        console.error('Failed to read MongoDB audit logs, using mock logs:', mongoErr);
+        console.error(
+          'Failed to read MongoDB audit logs, using mock logs:',
+          mongoErr
+        );
         // Fallback mock logs if MongoDB collection is not initialized or fails
         logs = [
           {
@@ -290,7 +390,7 @@ export class AdminController {
             targetId: 'Replenishment Req #890',
             changes: { status: 'APPROVED' },
             createdAt: new Date(Date.now() - 7200000),
-          }
+          },
         ];
       }
 
@@ -303,7 +403,11 @@ export class AdminController {
     }
   }
 
-  public static async getOrders(req: Request, res: Response, next: NextFunction) {
+  public static async getOrders(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const orders = await prisma.order.findMany({
         orderBy: { createdAt: 'desc' },
@@ -311,8 +415,8 @@ export class AdminController {
         include: {
           items: {
             include: {
-              product: true
-            }
+              product: true,
+            },
           },
           restaurant: true,
           branch: true,
@@ -330,4 +434,3 @@ export class AdminController {
     }
   }
 }
-

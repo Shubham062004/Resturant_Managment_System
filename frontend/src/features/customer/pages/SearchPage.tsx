@@ -1,17 +1,24 @@
+import {
+  Search as SearchIcon,
+  Clock,
+  Trash2,
+  X,
+  TrendingUp,
+} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+
 import { useAppSelector, useAppDispatch } from '../../../app/store';
-import { addRecentSearch, clearRecentSearches } from '../store/customerSlice';
 import useDebounce from '../../../hooks/useDebounce';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
 import EmptyState from '../../../shared/components/ui/EmptyState';
-import { Search as SearchIcon, Clock, Trash2, X, TrendingUp } from 'lucide-react';
-import { useProducts } from '../store/catalogQueries';
+import { Input } from '../../../shared/components/ui/Input';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import PersonalizedRecommendations from '../../ai/components/PersonalizedRecommendations';
 import FoodCard from '../components/FoodCard';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import { useProducts } from '../store/catalogQueries';
+import { addRecentSearch, clearRecentSearches } from '../store/customerSlice';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,7 +31,13 @@ export const SearchPage: React.FC = () => {
   const [inputVal, setInputVal] = useState(queryParam || categoryParam);
   const debouncedSearch = useDebounce(inputVal, 400);
 
-  const popularSearches = ['Pizza', 'Burgers', 'Biryani', 'Desserts', 'Cold Drinks'];
+  const popularSearches = [
+    'Pizza',
+    'Burgers',
+    'Biryani',
+    'Desserts',
+    'Cold Drinks',
+  ];
 
   useEffect(() => {
     setInputVal(queryParam || categoryParam);
@@ -67,14 +80,14 @@ export const SearchPage: React.FC = () => {
 
       <div className="min-h-screen bg-[#08070F] pt-24 pb-16">
         <div className="max-w-6xl mx-auto px-6 space-y-10">
-          
           {/* Header */}
           <div className="space-y-3">
             <h1 className="text-3xl md:text-5xl font-bold font-display text-white">
               What are you craving?
             </h1>
             <p className="text-neutral-400 text-sm md:text-base max-w-lg">
-              Search for dishes, cuisines, or even specific restaurants near you.
+              Search for dishes, cuisines, or even specific restaurants near
+              you.
             </p>
           </div>
 
@@ -86,7 +99,9 @@ export const SearchPage: React.FC = () => {
                 placeholder="Search for pizza, burgers, biryani..."
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                prefixIcon={<SearchIcon size={18} className="text-neutral-400" />}
+                prefixIcon={
+                  <SearchIcon size={18} className="text-neutral-400" />
+                }
                 className="bg-white/[0.04] border-white/10 text-white placeholder-neutral-500 h-14 text-sm focus:border-primary/50 shadow-xl"
               />
               {inputVal && (
@@ -103,13 +118,16 @@ export const SearchPage: React.FC = () => {
                 </button>
               )}
             </div>
-            <Button type="submit" variant="primary" className="h-14 px-8 shrink-0 font-bold shadow-lg shadow-primary/20">
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-14 px-8 shrink-0 font-bold shadow-lg shadow-primary/20"
+            >
               Search
             </Button>
           </form>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start pt-6">
-            
             {/* Sidebar tags & logs */}
             <div className="lg:col-span-4 space-y-8">
               {!searchTerm && <PersonalizedRecommendations />}
@@ -173,7 +191,10 @@ export const SearchPage: React.FC = () => {
                 </span>
                 {debouncedSearch && (
                   <span>
-                    Results for <strong className="text-white">"{debouncedSearch}"</strong>
+                    Results for{' '}
+                    <strong className="text-white">
+                      &quot;{debouncedSearch}&quot;
+                    </strong>
                   </span>
                 )}
               </div>

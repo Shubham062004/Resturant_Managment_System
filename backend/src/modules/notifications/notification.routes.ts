@@ -1,7 +1,9 @@
 import { Router } from 'express';
+
+import { authGuard } from '../../middleware/authGuard';
+
 import { NotificationController } from './notification.controller';
 import { PreferenceController } from './preference.controller';
-import { authGuard } from '../../middleware/authGuard';
 
 const router = Router();
 

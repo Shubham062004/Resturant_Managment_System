@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { OrganizationController } from './organization.controller';
-import { FranchiseController } from './franchise.controller';
-import { SuperAdminController } from './superadmin.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { tenantGuard } from '../../middleware/tenant';
+
+import { FranchiseController } from './franchise.controller';
+import { OrganizationController } from './organization.controller';
+import { SuperAdminController } from './superadmin.controller';
 
 const router = Router();
 
@@ -14,28 +16,28 @@ router.use(authGuard);
 router.get(
   '/dashboard',
   restrictTo('SUPER_ADMIN'),
-  SuperAdminController.getGlobalDashboard,
+  SuperAdminController.getGlobalDashboard
 );
 router.get(
   '/health',
   restrictTo('SUPER_ADMIN'),
-  SuperAdminController.getPlatformHealth,
+  SuperAdminController.getPlatformHealth
 );
 
 router.get(
   '/organizations',
   restrictTo('SUPER_ADMIN'),
-  OrganizationController.getOrganizations,
+  OrganizationController.getOrganizations
 );
 router.post(
   '/organizations',
   restrictTo('SUPER_ADMIN'),
-  OrganizationController.createOrganization,
+  OrganizationController.createOrganization
 );
 router.patch(
   '/organizations/:id',
   restrictTo('SUPER_ADMIN'),
-  OrganizationController.updateOrganization,
+  OrganizationController.updateOrganization
 );
 
 // Scoped Endpoints (Requires tenantGuard to scope to Organization/Franchise)
@@ -44,12 +46,12 @@ router.use(tenantGuard);
 router.get(
   '/franchises',
   restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
-  FranchiseController.getFranchises,
+  FranchiseController.getFranchises
 );
 router.post(
   '/franchises',
   restrictTo('SUPER_ADMIN', 'ORGANIZATION_OWNER'),
-  FranchiseController.createFranchise,
+  FranchiseController.createFranchise
 );
 
 export default router;

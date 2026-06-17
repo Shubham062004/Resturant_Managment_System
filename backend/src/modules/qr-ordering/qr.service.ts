@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 
 export class QROrderingService {
   public static async getMenuForTable(qrCode: string) {
@@ -20,12 +20,16 @@ export class QROrderingService {
   }
 
   public static async placeOrder(qrCode: string, data: any) {
-    const table = await prisma.table.findUnique({ where: { qrCode, active: true } });
+    const table = await prisma.table.findUnique({
+      where: { qrCode, active: true },
+    });
     if (!table) throw new AppError('Invalid or inactive QR Code', 404);
 
     // Get an anonymous user or a dummy user for guest orders if not authenticated
     // In our system, order requires userId. We can find or create a GUEST user.
-    let guestUser = await prisma.user.findFirst({ where: { email: 'guest@abc.local' } });
+    let guestUser = await prisma.user.findFirst({
+      where: { email: 'guest@abc.local' },
+    });
     if (!guestUser) {
       guestUser = await prisma.user.create({
         data: {

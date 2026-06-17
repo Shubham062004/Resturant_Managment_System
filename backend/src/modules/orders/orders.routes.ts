@@ -1,8 +1,13 @@
 import { Router } from 'express';
-import { OrdersController } from './orders.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
-import { createOrderSchema, updateOrderStatusSchema } from './orders.validation';
+
+import { OrdersController } from './orders.controller';
+import {
+  createOrderSchema,
+  updateOrderStatusSchema,
+} from './orders.validation';
 
 const router = Router();
 
@@ -17,9 +22,17 @@ router.post('/:id/cancel', OrdersController.cancelOrder);
 // Admin / Staff Routes
 router.patch(
   '/:id/status',
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'DELIVERY_PARTNER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER', 'BRANCH_MANAGER'),
+  restrictTo(
+    'ADMIN',
+    'SUPER_ADMIN',
+    'KITCHEN_STAFF',
+    'DELIVERY_PARTNER',
+    'ORGANIZATION_OWNER',
+    'FRANCHISE_OWNER',
+    'BRANCH_MANAGER'
+  ),
   validate(updateOrderStatusSchema),
-  OrdersController.updateOrderStatus,
+  OrdersController.updateOrderStatus
 );
 
 export default router;

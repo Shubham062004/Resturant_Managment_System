@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import apiClient from '../../../services/apiClient';
 
 interface Refund {
@@ -24,15 +25,22 @@ const initialState: RefundState = {
 
 export const processRefund = createAsyncThunk(
   'refunds/process',
-  async (data: { orderId: string; amount: number; reason?: string }, { rejectWithValue }) => {
+  async (
+    data: { orderId: string; amount: number; reason?: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await apiClient.post('/refunds', data);
       return response.data.data.refund;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Failed to process refund');
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to process refund'
+      );
     }
-  },
+  }
 );
 
 const refundSlice = createSlice({

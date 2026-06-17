@@ -4,7 +4,10 @@ export class EmailService {
   /**
    * Sends a verification email containing a link
    */
-  public static async sendVerificationEmail(email: string, token: string): Promise<void> {
+  public static async sendVerificationEmail(
+    email: string,
+    token: string
+  ): Promise<void> {
     const link = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/verify-email?token=${token}`;
     logger.info(`
 =============================================================
@@ -18,7 +21,10 @@ Link: ${link}
   /**
    * Sends a password reset email containing a link
    */
-  public static async sendPasswordResetEmail(email: string, token: string): Promise<void> {
+  public static async sendPasswordResetEmail(
+    email: string,
+    token: string
+  ): Promise<void> {
     const link = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${token}`;
     logger.info(`
 =============================================================

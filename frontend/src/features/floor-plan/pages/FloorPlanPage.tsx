@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchTables, updateTablePosition, tableUpdated } from '../store/tableSlice';
 import { io } from 'socket.io-client';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import {
+  fetchTables,
+  updateTablePosition,
+  tableUpdated,
+} from '../store/tableSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -49,7 +54,9 @@ export default function FloorPlanPage() {
 
   return (
     <div className="p-6 bg-slate-50 min-h-screen">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Interactive Floor Plan</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">
+        Interactive Floor Plan
+      </h1>
 
       <div
         className="w-full h-[600px] bg-white border border-slate-200 rounded-xl relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
@@ -73,7 +80,9 @@ export default function FloorPlanPage() {
             }`}
           >
             <span>T{table.number}</span>
-            <span className="text-xs font-normal opacity-70">{table.capacity} pax</span>
+            <span className="text-xs font-normal opacity-70">
+              {table.capacity} pax
+            </span>
           </div>
         ))}
         {tables.length === 0 && (

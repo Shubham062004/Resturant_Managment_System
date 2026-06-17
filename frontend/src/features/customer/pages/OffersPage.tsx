@@ -1,9 +1,10 @@
-import React from 'react';
-import SEO from '../../../shared/components/SEO';
-import { useToast } from '../../../shared/components/ui/Toast';
 import { Tag, Calendar, Copy, Percent, Sparkles } from 'lucide-react';
-import { useActiveCoupons } from '../../cart/store/cartQueries';
+import React from 'react';
+
+import SEO from '../../../shared/components/SEO';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { useActiveCoupons } from '../../cart/store/cartQueries';
 
 export const OffersPage: React.FC = () => {
   const toast = useToast();
@@ -24,11 +25,10 @@ export const OffersPage: React.FC = () => {
 
       <div className="min-h-screen bg-[#08070F] pt-24 pb-20 font-sans">
         <div className="max-w-6xl mx-auto px-6 space-y-12">
-          
           {/* Hero Banner */}
           <div className="relative rounded-3xl bg-gradient-to-br from-primary/20 via-primary/5 to-amber-500/10 border border-white/10 p-8 md:p-14 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_var(--tw-gradient-stops))] from-primary/20 to-transparent pointer-events-none" />
-            
+
             <div className="space-y-5 max-w-xl text-center md:text-left z-10">
               <span className="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 shadow-lg">
                 <Sparkles size={12} />
@@ -38,10 +38,11 @@ export const OffersPage: React.FC = () => {
                 Deals & Offers
               </h1>
               <p className="text-base text-neutral-400 leading-relaxed font-sans">
-                Apply these promo codes at checkout to unlock savings on our delicious pizzas, burgers, and more.
+                Apply these promo codes at checkout to unlock savings on our
+                delicious pizzas, burgers, and more.
               </p>
             </div>
-            
+
             <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-tr from-primary to-amber-500 flex items-center justify-center text-white shrink-0 shadow-2xl shadow-primary/30 z-10 border-4 border-white/10">
               <Percent size={48} strokeWidth={2.5} />
               {/* Decorative elements */}
@@ -64,13 +65,19 @@ export const OffersPage: React.FC = () => {
               </div>
             ) : isError ? (
               <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-8 text-center max-w-md mx-auto">
-                <p className="text-red-400 font-semibold">Unable to load offers right now.</p>
+                <p className="text-red-400 font-semibold">
+                  Unable to load offers right now.
+                </p>
               </div>
             ) : coupons.length === 0 ? (
               <div className="text-center py-16 bg-white/[0.02] border border-white/5 rounded-2xl max-w-2xl mx-auto">
                 <Tag className="mx-auto text-neutral-600 mb-4" size={48} />
-                <p className="text-lg font-semibold text-white mb-2">No active offers at the moment</p>
-                <p className="text-neutral-500 text-sm">Check back later for new discounts and deals.</p>
+                <p className="text-lg font-semibold text-white mb-2">
+                  No active offers at the moment
+                </p>
+                <p className="text-neutral-500 text-sm">
+                  Check back later for new discounts and deals.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -86,7 +93,9 @@ export const OffersPage: React.FC = () => {
                             <Tag size={12} />
                             {offer.discountType.replace('_', ' ')}
                           </span>
-                          <h3 className="text-2xl font-bold font-display text-white tracking-tight">{offer.code}</h3>
+                          <h3 className="text-2xl font-bold font-display text-white tracking-tight">
+                            {offer.code}
+                          </h3>
                         </div>
                         <button
                           type="button"
@@ -113,16 +122,20 @@ export const OffersPage: React.FC = () => {
                             ? `₹${parseFloat(offer.discountValue).toFixed(0)} OFF`
                             : 'FREE DELIVERY'}
                       </p>
-                      
+
                       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500">
                         {parseFloat(offer.minimumAmount) > 0 ? (
-                          <span>Min order: ₹{parseFloat(offer.minimumAmount).toFixed(0)}</span>
+                          <span>
+                            Min order: ₹
+                            {parseFloat(offer.minimumAmount).toFixed(0)}
+                          </span>
                         ) : (
                           <span>No min order</span>
                         )}
                         <span className="flex items-center gap-1">
                           <Calendar size={12} />
-                          Valid till {new Date(offer.endDate).toLocaleDateString()}
+                          Valid till{' '}
+                          {new Date(offer.endDate).toLocaleDateString()}
                         </span>
                       </div>
                     </div>

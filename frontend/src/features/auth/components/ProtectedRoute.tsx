@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+
 import { useAppSelector } from '../../../app/store';
 import { getDashboardRouteByRole } from '../utils/roleRouting';
 
@@ -8,8 +9,13 @@ export interface ProtectedRouteProps {
   allowedRoles?: string[];
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
-  const { isAuthenticated, authStatus, user } = useAppSelector((state) => state.auth);
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles,
+}) => {
+  const { isAuthenticated, authStatus, user } = useAppSelector(
+    (state) => state.auth
+  );
   const location = useLocation();
 
   if (authStatus === 'loading') {

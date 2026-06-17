@@ -20,7 +20,8 @@ export const SEO: React.FC<SEOProps> = ({
   canonicalUrl,
   structuredData,
 }) => {
-  const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : '');
+  const currentUrl =
+    canonicalUrl || (typeof window !== 'undefined' ? window.location.href : '');
   const siteTitle = `${title} | ABC`;
 
   return (
@@ -47,7 +48,9 @@ export const SEO: React.FC<SEOProps> = ({
 
       {/* JSON-LD Schema Structured Data */}
       {structuredData && (
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
       )}
     </Helmet>
   );

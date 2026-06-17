@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import React, { useState } from 'react';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -25,7 +25,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       id,
       ...props
     },
-    ref,
+    ref
   ) => {
     const [showPassword, setShowPassword] = useState(false);
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
@@ -49,7 +49,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
 
     return (
-      <div className={`w-full flex flex-col gap-1.5 ${disabled ? 'opacity-50' : ''}`}>
+      <div
+        className={`w-full flex flex-col gap-1.5 ${disabled ? 'opacity-50' : ''}`}
+      >
         {label && (
           <label
             htmlFor={inputId}
@@ -72,7 +74,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={inputType}
             disabled={disabled}
             aria-invalid={isError ? 'true' : 'false'}
-            aria-describedby={helperText || error || success ? helperId : undefined}
+            aria-describedby={
+              helperText || error || success ? helperId : undefined
+            }
             className={`w-full bg-secondary border px-4 py-3 rounded-lg text-foreground focus:outline-none transition-all duration-200 font-sans text-sm
               ${prefixIcon ? 'pl-10' : ''}
               ${suffixIcon || isPassword ? 'pr-10' : ''}
@@ -114,7 +118,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 Input.displayName = 'Input';

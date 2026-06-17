@@ -36,13 +36,15 @@ const CheckoutEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
-export const CheckoutEvent = mongoose.models.CheckoutEvent || mongoose.model<ICheckoutEvent>(
-  'CheckoutEvent',
-  CheckoutEventSchema,
-  'checkout_events',
-);
+export const CheckoutEvent =
+  mongoose.models.CheckoutEvent ||
+  mongoose.model<ICheckoutEvent>(
+    'CheckoutEvent',
+    CheckoutEventSchema,
+    'checkout_events'
+  );
 
 export default CheckoutEvent;

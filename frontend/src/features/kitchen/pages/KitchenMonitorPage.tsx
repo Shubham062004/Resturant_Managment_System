@@ -1,22 +1,39 @@
+import { motion } from 'framer-motion';
+import { Flame, Clock, Layers } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Badge } from '../../../shared/components/ui/Badge';
 import {
   fetchActiveOrders,
   receiveNewOrder,
-  receiveOrderStatusUpdate
+  receiveOrderStatusUpdate,
 } from '../store/kitchenSlice';
-import { io } from 'socket.io-client';
-import { Flame, Clock, Layers } from 'lucide-react';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { motion } from 'framer-motion';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const COLUMNS = [
-  { id: 'QUEUED', title: 'New Tickets', color: 'text-amber-500 bg-amber-500/10 border-amber-500/20' },
-  { id: 'COOKING', title: 'In Cook Station', color: 'text-orange-500 bg-orange-500/10 border-orange-500/20' },
-  { id: 'READY_FOR_PACKING', title: 'Ready to Pack', color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' },
-  { id: 'PACKED', title: 'Completed / Packed', color: 'text-blue-500 bg-blue-500/10 border-blue-500/20' }
+  {
+    id: 'QUEUED',
+    title: 'New Tickets',
+    color: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
+  },
+  {
+    id: 'COOKING',
+    title: 'In Cook Station',
+    color: 'text-orange-500 bg-orange-500/10 border-orange-500/20',
+  },
+  {
+    id: 'READY_FOR_PACKING',
+    title: 'Ready to Pack',
+    color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
+  },
+  {
+    id: 'PACKED',
+    title: 'Completed / Packed',
+    color: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
+  },
 ];
 
 export default function KitchenMonitorPage() {
@@ -51,7 +68,9 @@ export default function KitchenMonitorPage() {
 
   const getElapsedTime = (createdAtStr: string) => {
     const created = new Date(createdAtStr);
-    const diff = Math.floor((currentTime.getTime() - created.getTime()) / 60000); // diff in minutes
+    const diff = Math.floor(
+      (currentTime.getTime() - created.getTime()) / 60000
+    ); // diff in minutes
     if (diff < 0) return 'Just now';
     return `${diff}m ago`;
   };
@@ -92,8 +111,12 @@ export default function KitchenMonitorPage() {
               className="flex-1 min-w-[320px] flex flex-col bg-slate-900/30 rounded-2xl border border-border/40 overflow-hidden"
             >
               {/* Column Header */}
-              <div className={`p-4 border-b border-border/30 flex justify-between items-center shrink-0 ${col.color}`}>
-                <h2 className="font-extrabold font-display tracking-widest text-sm uppercase">{col.title}</h2>
+              <div
+                className={`p-4 border-b border-border/30 flex justify-between items-center shrink-0 ${col.color}`}
+              >
+                <h2 className="font-extrabold font-display tracking-widest text-sm uppercase">
+                  {col.title}
+                </h2>
                 <Badge className="bg-slate-950 text-white border border-border/10 font-bold px-2.5 py-1 text-xs">
                   {colOrders.length}
                 </Badge>
@@ -131,9 +154,16 @@ export default function KitchenMonitorPage() {
                       {/* Task items list */}
                       <div className="border-t border-border/10 pt-2 space-y-2">
                         {order.tasks?.map((task) => (
-                          <div key={task.id} className="flex justify-between text-xs font-sans">
-                            <span className="text-slate-300 font-medium">{task.product?.name}</span>
-                            <span className="text-primary font-bold">x{task.quantity}</span>
+                          <div
+                            key={task.id}
+                            className="flex justify-between text-xs font-sans"
+                          >
+                            <span className="text-slate-300 font-medium">
+                              {task.product?.name}
+                            </span>
+                            <span className="text-primary font-bold">
+                              x{task.quantity}
+                            </span>
                           </div>
                         ))}
                       </div>

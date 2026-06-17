@@ -1,11 +1,17 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+
 import { useAppSelector } from '../../../app/store';
 
 export interface RoleProtectedRouteProps {
   children: React.ReactNode;
   allowedRoles: Array<
-    'CUSTOMER' | 'ADMIN' | 'KITCHEN_STAFF' | 'DELIVERY_PARTNER' | 'CASHIER' | 'SUPER_ADMIN'
+    | 'CUSTOMER'
+    | 'ADMIN'
+    | 'KITCHEN_STAFF'
+    | 'DELIVERY_PARTNER'
+    | 'CASHIER'
+    | 'SUPER_ADMIN'
   >;
 }
 
@@ -28,8 +34,9 @@ export const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
             Access Denied
           </h2>
           <p className="text-muted-foreground font-sans text-sm leading-relaxed">
-            You do not possess the required privilege level to view this terminal node. Please
-            contact your system administrator if you believe this is an error.
+            You do not possess the required privilege level to view this
+            terminal node. Please contact your system administrator if you
+            believe this is an error.
           </p>
           <button
             onClick={() => {

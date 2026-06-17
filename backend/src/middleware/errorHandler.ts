@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+
 import logger from '../utils/logger';
 
 interface OperationalError extends Error {
@@ -15,7 +16,7 @@ export const errorHandler = (
   err: OperationalError,
   req: Request,
   res: Response,
-  _next: NextFunction,
+  _next: NextFunction
 ) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -46,11 +47,15 @@ export const errorHandler = (
 
   // Handle Prisma Database errors (e.g. unique constraint violates)
   if (err.code && err.code.startsWith('P20')) {
+    logger.error(
+      `[Prisma Error] Code: ${err.code}, Meta: ${JSON.stringify(err.meta)}, Message: ${err.message}`
+    );
     return res.status(409).json({
       success: false,
       error: {
         code: 'CONFLICT_ERROR',
-        message: 'Database relational conflict constraint violated',
+        message:
+          'Unable to complete action due to missing account relationship. Please contact administrator.',
         details: [err.meta],
       },
     });
@@ -60,7 +65,9 @@ export const errorHandler = (
   res.status(err.statusCode).json({
     success: false,
     error: {
-      code: err.isOperational ? err.status.toUpperCase() : 'INTERNAL_SERVER_ERROR',
+      code: err.isOperational
+        ? err.status.toUpperCase()
+        : 'INTERNAL_SERVER_ERROR',
       message: err.message || 'An unexpected error occurred in the system core',
       details: err.details || [],
     },

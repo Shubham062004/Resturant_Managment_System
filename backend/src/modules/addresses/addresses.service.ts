@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
 
@@ -42,8 +43,14 @@ export class AddressService {
   /**
    * Update address
    */
-  public static async updateAddress(userId: string, addressId: string, data: AddressUpdateData) {
-    const existing = await prisma.address.findUnique({ where: { id: addressId } });
+  public static async updateAddress(
+    userId: string,
+    addressId: string,
+    data: AddressUpdateData
+  ) {
+    const existing = await prisma.address.findUnique({
+      where: { id: addressId },
+    });
     if (!existing || existing.userId !== userId) {
       throw new AppError('Address not found', 404);
     }
@@ -65,7 +72,9 @@ export class AddressService {
    * Delete address
    */
   public static async deleteAddress(userId: string, addressId: string) {
-    const existing = await prisma.address.findUnique({ where: { id: addressId } });
+    const existing = await prisma.address.findUnique({
+      where: { id: addressId },
+    });
     if (!existing || existing.userId !== userId) {
       throw new AppError('Address not found', 404);
     }

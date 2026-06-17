@@ -1,13 +1,14 @@
+import { Mail, Phone, Lock, User as UserIcon, UserPlus } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { registerUser, clearError } from '../store/authSlice';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
 import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { Mail, Phone, Lock, User as UserIcon, UserPlus } from 'lucide-react';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
+import { registerUser, clearError } from '../store/authSlice';
 
 export const RegisterPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -66,7 +67,9 @@ export const RegisterPage: React.FC = () => {
 
     const result = await dispatch(registerUser(payload));
     if (registerUser.fulfilled.match(result)) {
-      toast.success('Registration successful! Check your email for verification.');
+      toast.success(
+        'Registration successful! Check your email for verification.'
+      );
       navigate('/login');
     }
   };
@@ -104,7 +107,9 @@ export const RegisterPage: React.FC = () => {
           <h2 className="text-3xl font-display font-bold tracking-tight text-foreground">
             Create an Account
           </h2>
-          <p className="text-muted-foreground font-sans text-sm">Sign up to get started</p>
+          <p className="text-muted-foreground font-sans text-sm">
+            Sign up to get started
+          </p>
         </div>
 
         {(validationError || error) && (

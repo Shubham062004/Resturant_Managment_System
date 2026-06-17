@@ -27,9 +27,11 @@ const CartEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
-export const CartEvent = mongoose.models.CartEvent || mongoose.model<ICartEvent>('CartEvent', CartEventSchema, 'cart_events');
+export const CartEvent =
+  mongoose.models.CartEvent ||
+  mongoose.model<ICartEvent>('CartEvent', CartEventSchema, 'cart_events');
 
 export default CartEvent;

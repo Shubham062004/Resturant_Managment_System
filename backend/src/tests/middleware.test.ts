@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { authGuard, restrictTo } from '../middleware/authGuard';
-import { AuthRequest } from '../types/express';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+import { authGuard, restrictTo } from '../middleware/authGuard';
+import { AuthRequest } from '../types/express';
 import AppError from '../utils/appError';
 
 vi.mock('jsonwebtoken');
@@ -23,7 +24,11 @@ describe('Auth Middleware Tests', () => {
 
   describe('authGuard', () => {
     it('should fail with 401 if Authorization header is missing', async () => {
-      await authGuard(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
+      await authGuard(
+        mockRequest as AuthRequest,
+        mockResponse as Response,
+        nextFunction
+      );
 
       expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
       const error = (nextFunction as any).mock.calls[0][0];
@@ -40,9 +45,16 @@ describe('Auth Middleware Tests', () => {
       };
       (jwt.verify as any).mockReturnValue(mockDecoded);
 
-      await authGuard(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
+      await authGuard(
+        mockRequest as AuthRequest,
+        mockResponse as Response,
+        nextFunction
+      );
 
-      expect(jwt.verify).toHaveBeenCalledWith('valid-jwt-token', expect.any(String));
+      expect(jwt.verify).toHaveBeenCalledWith(
+        'valid-jwt-token',
+        expect.any(String)
+      );
       expect(mockRequest.user).toEqual({
         id: 'user-123',
         email: 'user@example.com',
@@ -57,7 +69,11 @@ describe('Auth Middleware Tests', () => {
         throw new Error('Invalid signature');
       });
 
-      await authGuard(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
+      await authGuard(
+        mockRequest as AuthRequest,
+        mockResponse as Response,
+        nextFunction
+      );
 
       expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
       const error = (nextFunction as any).mock.calls[0][0];
@@ -74,7 +90,11 @@ describe('Auth Middleware Tests', () => {
       };
 
       const restrictMiddleware = restrictTo('ADMIN', 'SUPER_ADMIN');
-      restrictMiddleware(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
+      restrictMiddleware(
+        mockRequest as AuthRequest,
+        mockResponse as Response,
+        nextFunction
+      );
 
       expect(nextFunction).toHaveBeenCalledWith();
     });
@@ -87,7 +107,11 @@ describe('Auth Middleware Tests', () => {
       };
 
       const restrictMiddleware = restrictTo('ADMIN', 'SUPER_ADMIN');
-      restrictMiddleware(mockRequest as AuthRequest, mockResponse as Response, nextFunction);
+      restrictMiddleware(
+        mockRequest as AuthRequest,
+        mockResponse as Response,
+        nextFunction
+      );
 
       expect(nextFunction).toHaveBeenCalledWith(expect.any(AppError));
       const error = (nextFunction as any).mock.calls[0][0];

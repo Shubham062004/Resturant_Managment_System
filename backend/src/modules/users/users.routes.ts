@@ -1,13 +1,16 @@
+import fs from 'fs';
+import path from 'path';
+
 import { Router } from 'express';
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { UsersController } from './users.controller';
+
 import { authGuard } from '../../middleware/authGuard';
-import { validate } from '../../middleware/validate';
-import { updateProfileSchema } from './users.validation';
 import { sanitizeInput } from '../../middleware/sanitize';
+import { validate } from '../../middleware/validate';
 import AppError from '../../utils/appError';
+
+import { UsersController } from './users.controller';
+import { updateProfileSchema } from './users.validation';
 
 const router = Router();
 
@@ -43,8 +46,8 @@ const upload = multer({
       cb(
         new AppError(
           'Invalid file type. Only JPEG, PNG, WEBP, and GIF images are allowed.',
-          400,
-        ) as any,
+          400
+        ) as any
       );
     }
   },
@@ -57,7 +60,7 @@ router.patch(
   upload.single('avatar'),
   sanitizeInput,
   validate({ body: updateProfileSchema }),
-  UsersController.updateProfile,
+  UsersController.updateProfile
 );
 
 export default router;

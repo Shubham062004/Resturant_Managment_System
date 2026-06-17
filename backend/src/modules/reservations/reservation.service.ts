@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import AppError from '../../utils/appError';
 import { getIO } from '../../config/socket';
+import AppError from '../../utils/appError';
 
 export class ReservationService {
   public static async createReservation(customerId: string, data: any) {
@@ -18,7 +18,9 @@ export class ReservationService {
       include: { customer: true, table: true },
     });
 
-    getIO().to(`branch_${data.branchId}`).emit('reservation-created', reservation);
+    getIO()
+      .to(`branch_${data.branchId}`)
+      .emit('reservation-created', reservation);
     return reservation;
   }
 
@@ -44,9 +46,11 @@ export class ReservationService {
 
   public static async updateReservationStatus(
     reservationId: string,
-    data: { status: any; tableId?: string },
+    data: { status: any; tableId?: string }
   ) {
-    const existing = await prisma.reservation.findUnique({ where: { id: reservationId } });
+    const existing = await prisma.reservation.findUnique({
+      where: { id: reservationId },
+    });
     if (!existing) throw new AppError('Reservation not found', 404);
 
     const updated = await prisma.reservation.update({
@@ -64,11 +68,15 @@ export class ReservationService {
         where: { id: updated.tableId },
         data: { status: 'OCCUPIED' },
       });
-      getIO().to(`branch_${updated.branchId}`).emit('table-occupied', { tableId: updated.tableId });
+      getIO()
+        .to(`branch_${updated.branchId}`)
+        .emit('table-occupied', { tableId: updated.tableId });
     }
 
     if (data.status === 'CONFIRMED') {
-      getIO().to(`branch_${updated.branchId}`).emit('reservation-confirmed', updated);
+      getIO()
+        .to(`branch_${updated.branchId}`)
+        .emit('reservation-confirmed', updated);
     }
 
     if (data.status === 'COMPLETED' && updated.tableId) {

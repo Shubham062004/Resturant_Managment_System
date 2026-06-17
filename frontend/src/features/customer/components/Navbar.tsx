@@ -1,13 +1,25 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Menu,
+  X,
+  Flame,
+  Search,
+  MapPin,
+  Tag,
+  Home,
+  LogOut,
+  User,
+  ShoppingBag,
+} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { useAppSelector, useAppDispatch } from '../../../app/store';
+import Avatar from '../../../shared/components/ui/Avatar';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { slideLeft } from '../../../shared/theme/animations';
 import { logout } from '../../auth/store/authSlice';
 import { useCart } from '../../cart/store/cartQueries';
-import { useToast } from '../../../shared/components/ui/Toast';
-import Avatar from '../../../shared/components/ui/Avatar';
-import { Menu, X, Flame, Search, MapPin, Tag, Home, LogOut, User, ShoppingBag } from 'lucide-react';
-import { slideLeft } from '../../../shared/theme/animations';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +94,9 @@ export const Navbar: React.FC = () => {
             className="hidden lg:flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-emerald-500/20 transition-all duration-200"
           >
             <MapPin size={12} />
-            <span>Delivering to: {selectedBranch.name.replace('ABC - ', '')}</span>
+            <span>
+              Delivering to: {selectedBranch.name.replace('ABC - ', '')}
+            </span>
           </Link>
         )}
       </div>
@@ -110,9 +124,11 @@ export const Navbar: React.FC = () => {
 
       {/* Call to Actions / User profile */}
       <div className="hidden md:flex items-center gap-5">
-        
         {/* Cart Icon */}
-        <Link to="/cart" className="relative p-2 text-neutral-400 hover:text-white transition-colors">
+        <Link
+          to="/cart"
+          className="relative p-2 text-neutral-400 hover:text-white transition-colors"
+        >
           <ShoppingBag size={22} />
           {cartItemCount > 0 && (
             <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md border border-[#08070F]">

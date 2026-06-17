@@ -1,5 +1,6 @@
-import React from 'react';
 import { MapPin, Clock, Star, Navigation, Phone } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '../../../shared/components/ui/Button';
 import type { Branch } from '../../../shared/data/branches';
 
@@ -11,7 +12,13 @@ interface BranchCardProps {
   onFocus?: (branch: Branch) => void;
 }
 
-const BranchCard: React.FC<BranchCardProps> = ({ branch, isSelected, isFocused, onSelect, onFocus }) => {
+const BranchCard: React.FC<BranchCardProps> = ({
+  branch,
+  isSelected,
+  isFocused,
+  onSelect,
+  onFocus,
+}) => {
   const isOpen = branch.active !== false;
 
   return (
@@ -27,25 +34,34 @@ const BranchCard: React.FC<BranchCardProps> = ({ branch, isSelected, isFocused, 
         <div className="flex-1 space-y-3">
           {/* Name + status */}
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-semibold text-white text-base">{branch.name}</h3>
+            <h3 className="font-semibold text-white text-base">
+              {branch.name}
+            </h3>
             {isSelected && (
               <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-emerald-500/30">
                 ✓ Selected
               </span>
             )}
-            <span className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-              isOpen
-                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                : 'bg-red-500/10 text-red-400 border-red-500/20'
-            }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`} />
+            <span
+              className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                isOpen
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border-red-500/20'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'}`}
+              />
               {isOpen ? 'Open' : 'Closed'}
             </span>
           </div>
 
           {/* Address */}
           <p className="text-sm text-neutral-400 leading-relaxed flex items-start gap-1.5">
-            <MapPin size={14} className="text-neutral-500 mt-0.5 flex-shrink-0" />
+            <MapPin
+              size={14}
+              className="text-neutral-500 mt-0.5 flex-shrink-0"
+            />
             {branch.address}
           </p>
 
@@ -58,7 +74,8 @@ const BranchCard: React.FC<BranchCardProps> = ({ branch, isSelected, isFocused, 
             {branch.distance !== undefined && (
               <span className="flex items-center gap-1 text-primary font-medium">
                 <Navigation size={10} />
-                {branch.distance} mi · ~{Math.max(15, Math.round(branch.distance * 8))} min
+                {branch.distance} mi · ~
+                {Math.max(15, Math.round(branch.distance * 8))} min
               </span>
             )}
             {branch.phone && (

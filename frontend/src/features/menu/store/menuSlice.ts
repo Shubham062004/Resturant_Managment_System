@@ -1,12 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const fetchCategories = createAsyncThunk('menu/fetchCategories', async () => {
-  return [];
-});
+export const fetchCategories = createAsyncThunk(
+  'menu/fetchCategories',
+  async () => {
+    return [];
+  }
+);
 
-export const fetchProducts = createAsyncThunk('menu/fetchProducts', async () => {
-  return [];
-});
+export const fetchProducts = createAsyncThunk(
+  'menu/fetchProducts',
+  async () => {
+    return [];
+  }
+);
 
 const menuSlice = createSlice({
   name: 'menu',

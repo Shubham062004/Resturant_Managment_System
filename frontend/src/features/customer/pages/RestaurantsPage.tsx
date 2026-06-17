@@ -1,5 +1,18 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Star,
+  Search,
+  Filter,
+  RotateCcw,
+  Compass,
+  Clock,
+  MapPin,
+} from 'lucide-react';
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import { useRestaurants } from '../store/catalogQueries';
 import {
   setSearch,
@@ -9,14 +22,12 @@ import {
   setSorting,
   resetFilters,
 } from '../store/restaurantSlice';
-import { Link } from 'react-router-dom';
-import { Star, Search, Filter, RotateCcw, Compass, Clock, MapPin } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 
 export const RestaurantsPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { filters, sortBy, sortOrder } = useAppSelector((state) => state.restaurant);
+  const { filters, sortBy, sortOrder } = useAppSelector(
+    (state) => state.restaurant
+  );
   const { selectedBranch } = useAppSelector((state) => state.customer);
 
   const { data, isLoading, isError, refetch } = useRestaurants({
@@ -50,14 +61,17 @@ export const RestaurantsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-16 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         {/* Header section with Location */}
         <div className="relative mb-10 flex flex-col items-center text-center sm:text-left sm:flex-row sm:justify-between sm:items-end gap-6">
           <div className="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
-          
+
           <div className="space-y-2">
             {selectedBranch && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-1.5 text-primary text-sm font-semibold mb-2">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-1.5 text-primary text-sm font-semibold mb-2"
+              >
                 <MapPin size={16} />
                 <span>Delivering near {selectedBranch.name}</span>
               </motion.div>
@@ -66,10 +80,10 @@ export const RestaurantsPage: React.FC = () => {
               Restaurants Near You
             </h1>
             <p className="text-neutral-400 text-sm max-w-xl">
-              Explore top-rated restaurants, exclusive deals, and popular dishes ready to be delivered hot to your door.
+              Explore top-rated restaurants, exclusive deals, and popular dishes
+              ready to be delivered hot to your door.
             </p>
           </div>
-          
         </div>
 
         {/* Filters Panel */}
@@ -101,7 +115,10 @@ export const RestaurantsPage: React.FC = () => {
             </div>
 
             {/* Reset */}
-            {(filters.search || filters.rating || filters.veg || filters.openNow) && (
+            {(filters.search ||
+              filters.rating ||
+              filters.veg ||
+              filters.openNow) && (
               <button
                 onClick={handleClearFilters}
                 className="flex items-center justify-center gap-2 py-2.5 px-4 text-sm text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 w-full md:w-auto"
@@ -144,7 +161,9 @@ export const RestaurantsPage: React.FC = () => {
               {[4.5, 4.0, 3.5].map((val) => (
                 <button
                   key={val}
-                  onClick={() => handleRatingChange(filters.rating === val ? null : val)}
+                  onClick={() =>
+                    handleRatingChange(filters.rating === val ? null : val)
+                  }
                   className={`py-1.5 px-3 rounded-lg text-xs font-semibold border transition-colors flex items-center gap-1 ${
                     filters.rating === val
                       ? 'bg-amber-500/20 border-amber-500/50 text-amber-400'
@@ -169,9 +188,12 @@ export const RestaurantsPage: React.FC = () => {
 
         {isError && (
           <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-10 text-center max-w-lg mx-auto">
-            <p className="text-red-400 font-semibold mb-2">Oops! Something went wrong.</p>
+            <p className="text-red-400 font-semibold mb-2">
+              Oops! Something went wrong.
+            </p>
             <p className="text-neutral-400 text-sm mb-6">
-              We couldn't load the restaurants near you. Please check your connection.
+              We couldn&apos;t load the restaurants near you. Please check your
+              connection.
             </p>
             <button
               onClick={() => refetch()}
@@ -187,7 +209,9 @@ export const RestaurantsPage: React.FC = () => {
             {data?.data.length === 0 ? (
               <div className="text-center py-20 rounded-2xl border border-white/5 bg-white/[0.02] max-w-xl mx-auto">
                 <Compass className="h-12 w-12 text-neutral-600 mx-auto mb-4" />
-                <p className="text-lg font-semibold text-white mb-1">No restaurants found</p>
+                <p className="text-lg font-semibold text-white mb-1">
+                  No restaurants found
+                </p>
                 <p className="text-neutral-500 text-sm mb-6">
                   Try tweaking your filters or expanding your search.
                 </p>
@@ -199,7 +223,10 @@ export const RestaurantsPage: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <motion.div
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
                 <AnimatePresence mode="popLayout">
                   {data?.data.map((restaurant) => (
                     <motion.div
@@ -210,13 +237,18 @@ export const RestaurantsPage: React.FC = () => {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Link to={`/restaurants/${restaurant.slug}`} className="block h-full group">
+                      <Link
+                        to={`/restaurants/${restaurant.slug}`}
+                        className="block h-full group"
+                      >
                         <div className="rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/20 transition-all duration-300 overflow-hidden flex flex-col h-full">
-                          
                           {/* Image area */}
                           <div className="relative h-48 overflow-hidden">
                             <img
-                              src={restaurant.coverImage || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'}
+                              src={
+                                restaurant.coverImage ||
+                                'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'
+                              }
                               alt={restaurant.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               loading="lazy"
@@ -230,9 +262,10 @@ export const RestaurantsPage: React.FC = () => {
                                 </span>
                               )}
                             </div>
-                            
+
                             <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-amber-400 font-bold text-xs border border-white/10">
-                              <Star className="h-3 w-3 fill-current" /> {restaurant.rating.toFixed(1)}
+                              <Star className="h-3 w-3 fill-current" />{' '}
+                              {restaurant.rating.toFixed(1)}
                             </div>
                           </div>
 
@@ -252,13 +285,15 @@ export const RestaurantsPage: React.FC = () => {
                                 )}
                               </div>
                               <p className="text-neutral-400 text-xs line-clamp-2 leading-relaxed mb-4">
-                                {restaurant.description || 'Enjoy our delicious meals crafted with love and fresh ingredients.'}
+                                {restaurant.description ||
+                                  'Enjoy our delicious meals crafted with love and fresh ingredients.'}
                               </p>
                             </div>
 
                             <div className="border-t border-white/5 pt-3 flex items-center justify-between text-xs text-neutral-500 font-medium">
                               <span className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-md">
-                                <Clock className="h-3.5 w-3.5 text-primary" /> 30-45 min
+                                <Clock className="h-3.5 w-3.5 text-primary" />{' '}
+                                30-45 min
                               </span>
                               {selectedBranch && (
                                 <span className="flex items-center gap-1">

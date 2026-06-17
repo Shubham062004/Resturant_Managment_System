@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useAppDispatch } from '../../../app/store';
+import { useToast } from '../../../shared/components/ui/Toast';
 import { googleAuthLogin } from '../store/authSlice';
 import { getDashboardRouteByRole } from '../utils/roleRouting';
-import { useToast } from '../../../shared/components/ui/Toast';
 
 export const GoogleCallbackPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,10 +19,14 @@ export const GoogleCallbackPage: React.FC = () => {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const searchParams = new URLSearchParams(window.location.search);
     const token =
-      hashParams.get('id_token') || searchParams.get('token') || hashParams.get('access_token');
+      hashParams.get('id_token') ||
+      searchParams.get('token') ||
+      hashParams.get('access_token');
 
     if (!token) {
-      toast.error('Authentication credential was missing from the callback parameters.');
+      toast.error(
+        'Authentication credential was missing from the callback parameters.'
+      );
       navigate('/login');
       return;
     }
@@ -32,10 +37,14 @@ export const GoogleCallbackPage: React.FC = () => {
 
       if (googleAuthLogin.fulfilled.match(result)) {
         toast.success('Successfully logged in via Google OAuth!');
-        const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
+        const dashboardRoute = getDashboardRouteByRole(
+          result.payload.user?.role
+        );
         navigate(dashboardRoute, { replace: true });
       } else {
-        toast.error((result.payload as string) || 'Google authentication failed.');
+        toast.error(
+          (result.payload as string) || 'Google authentication failed.'
+        );
         navigate('/login', { replace: true });
       }
     };

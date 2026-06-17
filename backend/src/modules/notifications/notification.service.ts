@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
-import { addNotificationJob } from '../../workers/notification.queue';
 import { getIO } from '../../config/socket';
+import { addNotificationJob } from '../../workers/notification.queue';
 
 interface SendNotificationArgs {
   userId: string;
@@ -14,10 +14,20 @@ interface SendNotificationArgs {
 
 export class NotificationService {
   public static async send(args: SendNotificationArgs) {
-    const { userId, type, title, message, channels, priority = 'NORMAL', payload } = args;
+    const {
+      userId,
+      type,
+      title,
+      message,
+      channels,
+      priority = 'NORMAL',
+      payload,
+    } = args;
 
     // 1. Check Preferences
-    let prefs = await prisma.notificationPreference.findUnique({ where: { userId } });
+    let prefs = await prisma.notificationPreference.findUnique({
+      where: { userId },
+    });
     if (!prefs) {
       prefs = await prisma.notificationPreference.create({ data: { userId } });
     }

@@ -1,35 +1,38 @@
-import express from 'express';
+import path from 'path';
+
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import path from 'path';
+
+import historyRouter from './api/history/history.routes';
 import errorHandler from './middleware/errorHandler';
 import { apiRateLimiter } from './middleware/rateLimiter';
-import AppError from './utils/appError';
-import logger from './utils/logger';
-import authRouter from './modules/auth/auth.routes';
-import usersRouter from './modules/users/users.routes';
-import catalogRouter from './modules/catalog/catalog.routes';
-import cartRouter from './modules/cart/cart.routes';
 import addressRouter from './modules/addresses/addresses.routes';
+import adminRouter from './modules/admin/admin.routes';
+import aiRouter from './modules/ai/ai.routes';
+import authRouter from './modules/auth/auth.routes';
+import cartRouter from './modules/cart/cart.routes';
+import catalogRouter from './modules/catalog/catalog.routes';
 import couponRouter from './modules/coupons/coupons.routes';
-import paymentsRouter from './modules/payments/payments.routes';
-import ordersRouter from './modules/orders/orders.routes';
-import refundsRouter from './modules/refunds/refunds.routes';
-import kitchenRouter from './modules/kitchen/kitchen.routes';
 import deliveryRouter from './modules/delivery/delivery.routes';
 import inventoryRouter from './modules/inventory/inventory.routes';
-import posRouter from './modules/pos/pos.routes';
-import reservationRouter from './modules/reservations/reservation.routes';
-import tableRouter from './modules/tables/table.routes';
-import waitlistRouter from './modules/waitlist/waitlist.routes';
-import qrRouter from './modules/qr-ordering/qr.routes';
-import adminRouter from './modules/admin/admin.routes';
-import superAdminRouter from './modules/super-admin/superadmin.routes';
+import kitchenRouter from './modules/kitchen/kitchen.routes';
 import notificationRouter from './modules/notifications/notification.routes';
+import ordersRouter from './modules/orders/orders.routes';
+import paymentsRouter from './modules/payments/payments.routes';
+import posRouter from './modules/pos/pos.routes';
+import qrRouter from './modules/qr-ordering/qr.routes';
+import refundsRouter from './modules/refunds/refunds.routes';
+import reservationRouter from './modules/reservations/reservation.routes';
+import superAdminRouter from './modules/super-admin/superadmin.routes';
+import tableRouter from './modules/tables/table.routes';
+import usersRouter from './modules/users/users.routes';
+import waitlistRouter from './modules/waitlist/waitlist.routes';
 import healthRouter from './routes/health.routes';
-import aiRouter from './modules/ai/ai.routes';
+import AppError from './utils/appError';
+import logger from './utils/logger';
 
 // Express application instance
 export const app = express();
@@ -41,10 +44,11 @@ app.use(
     origin: [
       'http://localhost:5173',
       'http://localhost:5174',
-      process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app'
+      process.env.FRONTEND_URL ||
+        'https://resturant-managment-system-frontend.vercel.app',
     ],
     credentials: true,
-  }),
+  })
 );
 app.use(apiRateLimiter);
 app.use(express.json({ limit: '1mb' }));
@@ -59,7 +63,7 @@ app.use(
     stream: {
       write: (message: string) => logger.info(message.trim()),
     },
-  }),
+  })
 );
 
 // 2. Health Monitoring Route
@@ -92,6 +96,7 @@ app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/super-admin', superAdminRouter);
 app.use('/api/v1/notifications', notificationRouter);
 app.use('/api/v1/ai', aiRouter);
+app.use('/api/v1/history', historyRouter);
 
 // 4. Root Welcome Route
 app.get('/', (req, res) => {
@@ -106,8 +111,8 @@ app.all('*', (req, res, next) => {
   next(
     new AppError(
       `Resource not found. The route ${req.originalUrl} does not exist on this server.`,
-      404,
-    ),
+      404
+    )
   );
 });
 

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Menu, X, Sun, Moon, Monitor } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../theme/theme-provider';
+import { Menu, X, Sun, Moon, Monitor } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { useToast } from '../components/ui/Toast';
 import { slideRight, fadeIn } from '../theme/animations';
+import { useTheme } from '../theme/theme-provider';
 
 export interface SidebarLink {
   label: string;
@@ -136,7 +137,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   return (
     <div className="min-h-screen flex bg-background text-foreground transition-colors duration-300">
       {/* Desktop sidebar */}
-      <div className="hidden lg:block h-screen sticky top-0 flex-shrink-0">{sidebarContent}</div>
+      <div className="hidden lg:block h-screen sticky top-0 flex-shrink-0">
+        {sidebarContent}
+      </div>
 
       {/* Mobile drawer menu */}
       <AnimatePresence>
@@ -184,11 +187,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
           </div>
 
-          {topBarActions && <div className="flex items-center gap-4">{topBarActions}</div>}
+          {topBarActions && (
+            <div className="flex items-center gap-4">{topBarActions}</div>
+          )}
         </header>
 
         {/* Workspace body */}
-        <main className="flex-1 overflow-y-auto focus:outline-none bg-background">{children}</main>
+        <main className="flex-1 overflow-y-auto focus:outline-none bg-background">
+          {children}
+        </main>
       </div>
     </div>
   );

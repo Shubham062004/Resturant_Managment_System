@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { Branch } from '../../../shared/data/branches';
 
 export interface CustomerState {
@@ -55,7 +56,7 @@ export const customerSlice = createSlice({
 
       // Uniquify and limit to 5 searches
       const filtered = state.recentSearches.filter(
-        (s) => s.toLowerCase() !== trimmed.toLowerCase(),
+        (s) => s.toLowerCase() !== trimmed.toLowerCase()
       );
       const updated = [trimmed, ...filtered].slice(0, 5);
       state.recentSearches = updated;
@@ -68,9 +69,8 @@ export const customerSlice = createSlice({
     toggleDietaryFilter: (state, action: PayloadAction<string>) => {
       const filter = action.payload;
       if (state.preferences.dietaryFilters.includes(filter)) {
-        state.preferences.dietaryFilters = state.preferences.dietaryFilters.filter(
-          (f) => f !== filter,
-        );
+        state.preferences.dietaryFilters =
+          state.preferences.dietaryFilters.filter((f) => f !== filter);
       } else {
         state.preferences.dietaryFilters.push(filter);
       }

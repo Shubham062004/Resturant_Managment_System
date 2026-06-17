@@ -1,11 +1,12 @@
+import { ChefHat, Check, Play, CheckCheck, RefreshCw } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
 import { useAppSelector } from '../../../app/store';
 import apiClient from '../../../services/apiClient';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
 import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { ChefHat, Check, Play, CheckCheck, RefreshCw } from 'lucide-react';
 
 interface KitchenTask {
   id: string;
@@ -43,7 +44,9 @@ export default function StaffCategoryOrdersPage() {
       setLoading(true);
       const response = await apiClient.get(`/kitchen/staff/${user.id}/orders`);
       setOrders(response.data.data.orders || []);
-      setAssignedCategory(response.data.data.assignedCategory || 'All Stations');
+      setAssignedCategory(
+        response.data.data.assignedCategory || 'All Stations'
+      );
     } catch (error) {
       console.error('Error fetching staff category orders:', error);
       toast.error('Could not load your station queue orders.');
@@ -58,11 +61,18 @@ export default function StaffCategoryOrdersPage() {
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
-      await apiClient.patch(`/kitchen/orders/${orderId}/status`, { status: newStatus });
-      toast.success(`Ticket status successfully changed to ${newStatus.replace('_', ' ')}.`);
+      await apiClient.patch(`/kitchen/orders/${orderId}/status`, {
+        status: newStatus,
+      });
+      toast.success(
+        `Ticket status successfully changed to ${newStatus.replace('_', ' ')}.`
+      );
       fetchStaffCategoryOrders();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Could not change ticket status.');
+      toast.error(
+        error.response?.data?.error?.message ||
+          'Could not change ticket status.'
+      );
     }
   };
 
@@ -70,7 +80,9 @@ export default function StaffCategoryOrdersPage() {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
         <RefreshCw className="animate-spin text-orange-500 w-10 h-10 mb-3" />
-        <p className="font-display font-medium text-sm">Synchronizing Station Queue...</p>
+        <p className="font-display font-medium text-sm">
+          Synchronizing Station Queue...
+        </p>
       </div>
     );
   }
@@ -92,7 +104,8 @@ export default function StaffCategoryOrdersPage() {
               Kitchen Station Queue
             </h1>
             <p className="text-xs text-slate-400 font-sans mt-0.5">
-              Station category assignment: <span className="text-primary font-bold">{assignedCategory}</span>
+              Station category assignment:{' '}
+              <span className="text-primary font-bold">{assignedCategory}</span>
             </p>
           </div>
         </div>
@@ -110,20 +123,36 @@ export default function StaffCategoryOrdersPage() {
         {/* NEW TICKETS */}
         <Card className="border-border/40 bg-slate-900/30 backdrop-blur-md rounded-2xl p-5 min-h-[500px] flex flex-col">
           <div className="flex justify-between items-center pb-3 border-b border-border/20 mb-4">
-            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">New Tickets</h3>
+            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">
+              New Tickets
+            </h3>
             <Badge className="bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold px-2 py-0.5 text-xs">
               {queuedOrders.length}
             </Badge>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4">
             {queuedOrders.length === 0 ? (
-              <p className="text-slate-600 text-xs text-center italic py-8">No new tickets queued</p>
+              <p className="text-slate-600 text-xs text-center italic py-8">
+                No new tickets queued
+              </p>
             ) : (
               queuedOrders.map((order) => (
-                <div key={order.id} className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3">
+                <div
+                  key={order.id}
+                  className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3"
+                >
                   <div className="flex justify-between">
-                    <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant={order.priority === 'URGENT' || order.priority === 'HIGH' ? 'error' : 'neutral'} className="text-[9px]">
+                    <span className="font-bold text-sm text-slate-200">
+                      Ticket #{order.order.orderNumber}
+                    </span>
+                    <Badge
+                      variant={
+                        order.priority === 'URGENT' || order.priority === 'HIGH'
+                          ? 'error'
+                          : 'neutral'
+                      }
+                      className="text-[9px]"
+                    >
                       {order.priority}
                     </Badge>
                   </div>
@@ -131,7 +160,9 @@ export default function StaffCategoryOrdersPage() {
                     {order.tasks.map((t) => (
                       <div key={t.id} className="flex justify-between">
                         <span>{t.product.name}</span>
-                        <span className="font-bold text-slate-200">x{t.quantity}</span>
+                        <span className="font-bold text-slate-200">
+                          x{t.quantity}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -150,31 +181,46 @@ export default function StaffCategoryOrdersPage() {
         {/* COOKING */}
         <Card className="border-border/40 bg-slate-900/30 backdrop-blur-md rounded-2xl p-5 min-h-[500px] flex flex-col">
           <div className="flex justify-between items-center pb-3 border-b border-border/20 mb-4">
-            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">In Cook Station</h3>
+            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">
+              In Cook Station
+            </h3>
             <Badge className="bg-orange-500/10 text-orange-500 border border-orange-500/20 font-bold px-2 py-0.5 text-xs">
               {cookingOrders.length}
             </Badge>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4">
             {cookingOrders.length === 0 ? (
-              <p className="text-slate-600 text-xs text-center italic py-8">No active cooking tickets</p>
+              <p className="text-slate-600 text-xs text-center italic py-8">
+                No active cooking tickets
+              </p>
             ) : (
               cookingOrders.map((order) => (
-                <div key={order.id} className="p-4 bg-slate-950/70 border border-border/25 rounded-xl space-y-3">
+                <div
+                  key={order.id}
+                  className="p-4 bg-slate-950/70 border border-border/25 rounded-xl space-y-3"
+                >
                   <div className="flex justify-between">
-                    <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant="warning" className="text-[9px]">Cooking</Badge>
+                    <span className="font-bold text-sm text-slate-200">
+                      Ticket #{order.order.orderNumber}
+                    </span>
+                    <Badge variant="warning" className="text-[9px]">
+                      Cooking
+                    </Badge>
                   </div>
                   <div className="space-y-1 text-xs text-slate-400">
                     {order.tasks.map((t) => (
                       <div key={t.id} className="flex justify-between">
                         <span>{t.product.name}</span>
-                        <span className="font-bold text-slate-200">x{t.quantity}</span>
+                        <span className="font-bold text-slate-200">
+                          x{t.quantity}
+                        </span>
                       </div>
                     ))}
                   </div>
                   <Button
-                    onClick={() => handleUpdateStatus(order.id, 'READY_FOR_PACKING')}
+                    onClick={() =>
+                      handleUpdateStatus(order.id, 'READY_FOR_PACKING')
+                    }
                     className="w-full bg-green-600 text-white font-bold text-xs py-2 hover:bg-green-700 mt-2 flex items-center justify-center gap-1.5"
                   >
                     <Check size={12} /> Mark Cooked
@@ -188,26 +234,39 @@ export default function StaffCategoryOrdersPage() {
         {/* COOKED / READY */}
         <Card className="border-border/40 bg-slate-900/30 backdrop-blur-md rounded-2xl p-5 min-h-[500px] flex flex-col">
           <div className="flex justify-between items-center pb-3 border-b border-border/20 mb-4">
-            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">Ready for Packing</h3>
+            <h3 className="font-bold font-display text-sm tracking-widest text-slate-300 uppercase">
+              Ready for Packing
+            </h3>
             <Badge className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-bold px-2 py-0.5 text-xs">
               {readyOrders.length}
             </Badge>
           </div>
           <div className="flex-1 overflow-y-auto space-y-4">
             {readyOrders.length === 0 ? (
-              <p className="text-slate-600 text-xs text-center italic py-8">No ready tickets</p>
+              <p className="text-slate-600 text-xs text-center italic py-8">
+                No ready tickets
+              </p>
             ) : (
               readyOrders.map((order) => (
-                <div key={order.id} className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3">
+                <div
+                  key={order.id}
+                  className="p-4 bg-slate-950/70 border border-border/20 rounded-xl space-y-3"
+                >
                   <div className="flex justify-between">
-                    <span className="font-bold text-sm text-slate-200">Ticket #{order.order.orderNumber}</span>
-                    <Badge variant="success" className="text-[9px]">Ready</Badge>
+                    <span className="font-bold text-sm text-slate-200">
+                      Ticket #{order.order.orderNumber}
+                    </span>
+                    <Badge variant="success" className="text-[9px]">
+                      Ready
+                    </Badge>
                   </div>
                   <div className="space-y-1 text-xs text-slate-400">
                     {order.tasks.map((t) => (
                       <div key={t.id} className="flex justify-between">
                         <span>{t.product.name}</span>
-                        <span className="font-bold text-slate-200">x{t.quantity}</span>
+                        <span className="font-bold text-slate-200">
+                          x{t.quantity}
+                        </span>
                       </div>
                     ))}
                   </div>

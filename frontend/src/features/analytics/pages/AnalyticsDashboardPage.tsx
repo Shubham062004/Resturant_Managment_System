@@ -1,23 +1,5 @@
+import { Calendar, Download, TrendingUp, Briefcase } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import {
-  fetchExecutiveSummary,
-  fetchSalesTrends,
-  fetchCustomerAnalytics,
-  fetchProductAnalytics,
-  fetchDeliveryAnalytics,
-} from '../store/analyticsSlice';
-import { Card } from '../../../shared/components/ui/Card';
-import Tabs from '../../../shared/components/ui/Tabs';
-import { Button } from '../../../shared/components/ui/Button';
-import {
-  Calendar,
-  Download,
-  TrendingUp,
-  Briefcase
-} from 'lucide-react';
-import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
-
 import {
   BarChart,
   Bar,
@@ -26,8 +8,21 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
+import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
+import Tabs from '../../../shared/components/ui/Tabs';
+import {
+  fetchExecutiveSummary,
+  fetchSalesTrends,
+  fetchCustomerAnalytics,
+  fetchProductAnalytics,
+  fetchDeliveryAnalytics,
+} from '../store/analyticsSlice';
 
 export default function AnalyticsDashboardPage() {
   const dispatch = useAppDispatch();
@@ -35,7 +30,9 @@ export default function AnalyticsDashboardPage() {
   const [activeTab, setActiveTab] = useState('executive');
 
   // Filters
-  const [dateFilter, setDateFilter] = useState<'today' | 'yesterday' | '7days' | 'may2026' | 'june2026'>('7days');
+  const [dateFilter, setDateFilter] = useState<
+    'today' | 'yesterday' | '7days' | 'may2026' | 'june2026'
+  >('7days');
 
   useEffect(() => {
     dispatch(fetchExecutiveSummary());
@@ -53,30 +50,123 @@ export default function AnalyticsDashboardPage() {
 
     if (type === 'sales') {
       filename = `sales_report_${dateFilter}.csv`;
-      headers = 'Transaction ID,Date,Branch,Order Type,Payment Method,Subtotal,Tax,Total,Status\n';
+      headers =
+        'Transaction ID,Date,Branch,Order Type,Payment Method,Subtotal,Tax,Total,Status\n';
       rows = [
-        ['TX-1001', '2026-06-01', 'Downtown Hub', 'DINE_IN', 'CARD', '45.00', '2.25', '47.25', 'PAID'],
-        ['TX-1002', '2026-06-02', 'West End Grill', 'WALK_IN', 'UPI', '24.50', '1.23', '25.73', 'PAID'],
-        ['TX-1003', '2026-06-03', 'Uptown Bistro', 'TAKEAWAY', 'CASH', '89.00', '4.45', '93.45', 'PAID'],
-        ['TX-1004', '2026-06-04', 'Airport Food Court', 'DINE_IN', 'CARD', '125.00', '6.25', '131.25', 'PAID'],
-        ['TX-1005', '2026-06-05', 'Suburban Outlet', 'WALK_IN', 'UPI', '65.20', '3.26', '68.46', 'PAID'],
+        [
+          'TX-1001',
+          '2026-06-01',
+          'Downtown Hub',
+          'DINE_IN',
+          'CARD',
+          '45.00',
+          '2.25',
+          '47.25',
+          'PAID',
+        ],
+        [
+          'TX-1002',
+          '2026-06-02',
+          'West End Grill',
+          'WALK_IN',
+          'UPI',
+          '24.50',
+          '1.23',
+          '25.73',
+          'PAID',
+        ],
+        [
+          'TX-1003',
+          '2026-06-03',
+          'Uptown Bistro',
+          'TAKEAWAY',
+          'CASH',
+          '89.00',
+          '4.45',
+          '93.45',
+          'PAID',
+        ],
+        [
+          'TX-1004',
+          '2026-06-04',
+          'Airport Food Court',
+          'DINE_IN',
+          'CARD',
+          '125.00',
+          '6.25',
+          '131.25',
+          'PAID',
+        ],
+        [
+          'TX-1005',
+          '2026-06-05',
+          'Suburban Outlet',
+          'WALK_IN',
+          'UPI',
+          '65.20',
+          '3.26',
+          '68.46',
+          'PAID',
+        ],
       ];
     } else {
       filename = `inventory_waste_${dateFilter}.csv`;
-      headers = 'Ingredient Name,SKU,Branch,Consumed Qty,Wasted Qty,Unit,Estimated Waste Cost\n';
+      headers =
+        'Ingredient Name,SKU,Branch,Consumed Qty,Wasted Qty,Unit,Estimated Waste Cost\n';
       rows = [
-        ['Chicken Breast', 'CH-BRE-102', 'Downtown Hub', '450.0', '12.4', 'kg', '74.40'],
-        ['Mozzarella Cheese', 'CHZ-MOZ-501', 'West End Grill', '320.0', '5.2', 'kg', '41.60'],
-        ['Tomato Paste', 'PST-TOM-302', 'Uptown Bistro', '180.0', '8.0', 'liters', '24.00'],
-        ['Lettuce Leaves', 'VEG-LET-001', 'Airport Food Court', '140.0', '15.5', 'heads', '31.00'],
-        ['Burger Buns', 'BAK-BUN-202', 'Suburban Outlet', '1200', '45', 'pieces', '22.50'],
+        [
+          'Chicken Breast',
+          'CH-BRE-102',
+          'Downtown Hub',
+          '450.0',
+          '12.4',
+          'kg',
+          '74.40',
+        ],
+        [
+          'Mozzarella Cheese',
+          'CHZ-MOZ-501',
+          'West End Grill',
+          '320.0',
+          '5.2',
+          'kg',
+          '41.60',
+        ],
+        [
+          'Tomato Paste',
+          'PST-TOM-302',
+          'Uptown Bistro',
+          '180.0',
+          '8.0',
+          'liters',
+          '24.00',
+        ],
+        [
+          'Lettuce Leaves',
+          'VEG-LET-001',
+          'Airport Food Court',
+          '140.0',
+          '15.5',
+          'heads',
+          '31.00',
+        ],
+        [
+          'Burger Buns',
+          'BAK-BUN-202',
+          'Suburban Outlet',
+          '1200',
+          '45',
+          'pieces',
+          '22.50',
+        ],
       ];
     }
 
-    const csvContent = 'data:text/csv;charset=utf-8,' 
-      + headers 
-      + rows.map(e => e.join(',')).join('\n');
-    
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      headers +
+      rows.map((e) => e.join(',')).join('\n');
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -131,9 +221,14 @@ export default function AnalyticsDashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-between">
               <div>
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">Today&apos;s Total Revenue</p>
+                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">
+                  Today&apos;s Total Revenue
+                </p>
                 <h3 className="text-3xl font-extrabold text-white">
-                  ${executive?.revenueToday ? parseFloat(executive.revenueToday).toLocaleString() : '1,450.00'}
+                  $
+                  {executive?.revenueToday
+                    ? parseFloat(executive.revenueToday).toLocaleString()
+                    : '1,450.00'}
                 </h3>
               </div>
               <div className="text-emerald-450 font-bold text-xs mt-3 flex items-center gap-1 font-mono">
@@ -143,7 +238,9 @@ export default function AnalyticsDashboardPage() {
 
             <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-between">
               <div>
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">Orders Processed Today</p>
+                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">
+                  Orders Processed Today
+                </p>
                 <h3 className="text-3xl font-extrabold text-white">
                   {executive?.totalOrdersToday || 128}
                 </h3>
@@ -155,7 +252,9 @@ export default function AnalyticsDashboardPage() {
 
             <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-between">
               <div>
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">Active Staff Members</p>
+                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">
+                  Active Staff Members
+                </p>
                 <h3 className="text-3xl font-extrabold text-white">
                   {executive?.activeStaffCount || 34}
                 </h3>
@@ -167,8 +266,12 @@ export default function AnalyticsDashboardPage() {
 
             <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-between">
               <div>
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">Active Customers Today</p>
-                <h3 className="text-3xl font-extrabold text-white">{executive?.activeCustomers || 542}</h3>
+                <p className="text-slate-400 font-bold text-xs uppercase tracking-wider mb-2">
+                  Active Customers Today
+                </p>
+                <h3 className="text-3xl font-extrabold text-white">
+                  {executive?.activeCustomers || 542}
+                </h3>
               </div>
               <div className="text-amber-500 font-bold text-xs mt-3 flex items-center gap-1 font-mono font-bold">
                 <span>★</span> Net NPS Rating: 4.8
@@ -179,8 +282,12 @@ export default function AnalyticsDashboardPage() {
           {/* Quick Exports Section */}
           <Card className="bg-slate-900 border-slate-800 p-5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <h3 className="text-white font-bold text-sm">Download Data Sheets</h3>
-              <p className="text-slate-400 text-xs mt-0.5">Generate spreadsheet formatted logs for direct audit inspection.</p>
+              <h3 className="text-white font-bold text-sm">
+                Download Data Sheets
+              </h3>
+              <p className="text-slate-400 text-xs mt-0.5">
+                Generate spreadsheet formatted logs for direct audit inspection.
+              </p>
             </div>
             <div className="flex gap-3">
               <Button
@@ -204,19 +311,50 @@ export default function AnalyticsDashboardPage() {
 
           {/* Multi-Branch Performance Comparison Bar Chart */}
           <Card className="bg-slate-900 border-slate-800 p-6">
-            <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">Multi-Branch Sales Performance (₹)</h3>
+            <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider">
+              Multi-Branch Sales Performance (₹)
+            </h3>
             <div className="h-80 w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={branchComparisonData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                  <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} tickFormatter={(val) => `₹${val / 1000}k`} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#1e293b"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#64748b"
+                    fontSize={11}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    stroke="#64748b"
+                    fontSize={11}
+                    tickLine={false}
+                    tickFormatter={(val) => `₹${val / 1000}k`}
+                  />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }}
+                    contentStyle={{
+                      backgroundColor: '#0f172a',
+                      border: '1px solid #1e293b',
+                      borderRadius: '8px',
+                      color: '#fff',
+                    }}
                   />
                   <Legend />
-                  <Bar dataKey="sales" name="Gross Revenue (₹)" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="orders" name="Order count" fill="#38bdf8" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="sales"
+                    name="Gross Revenue (₹)"
+                    fill="#6366f1"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="orders"
+                    name="Order count"
+                    fill="#38bdf8"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -229,7 +367,9 @@ export default function AnalyticsDashboardPage() {
       label: 'Branch Comparison',
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
-          <h3 className="text-lg font-bold text-white uppercase tracking-wider">Comparative Multi-Branch Audit Grid</h3>
+          <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+            Comparative Multi-Branch Audit Grid
+          </h3>
           <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-950">
             <table className="w-full text-left text-sm text-slate-400">
               <thead className="bg-slate-900 text-white text-xs uppercase font-semibold">
@@ -244,11 +384,19 @@ export default function AnalyticsDashboardPage() {
               <tbody className="divide-y divide-slate-800">
                 {branchComparisonData.map((branch, i) => (
                   <tr key={i} className="hover:bg-slate-900/40">
-                    <td className="px-6 py-4 font-bold text-white">{branch.name}</td>
-                    <td className="px-6 py-4 font-mono text-white">₹{branch.sales.toLocaleString()}</td>
+                    <td className="px-6 py-4 font-bold text-white">
+                      {branch.name}
+                    </td>
+                    <td className="px-6 py-4 font-mono text-white">
+                      ₹{branch.sales.toLocaleString()}
+                    </td>
                     <td className="px-6 py-4 font-mono">{branch.orders}</td>
-                    <td className="px-6 py-4 font-mono">₹{(branch.sales / branch.orders).toFixed(2)}</td>
-                    <td className="px-6 py-4 font-mono text-amber-500 font-bold">★ {branch.rating}</td>
+                    <td className="px-6 py-4 font-mono">
+                      ₹{(branch.sales / branch.orders).toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 font-mono text-amber-500 font-bold">
+                      ★ {branch.rating}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -262,19 +410,45 @@ export default function AnalyticsDashboardPage() {
       label: 'Inventory & Waste',
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
-          <h3 className="text-lg font-bold text-white uppercase tracking-wider">Ingredient Consumption vs Waste Analysis</h3>
+          <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+            Ingredient Consumption vs Waste Analysis
+          </h3>
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={inventoryWasteData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#1e293b"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }}
+                  contentStyle={{
+                    backgroundColor: '#0f172a',
+                    border: '1px solid #1e293b',
+                    borderRadius: '8px',
+                    color: '#fff',
+                  }}
                 />
                 <Legend />
-                <Bar dataKey="consumed" name="Consumed Units (kg)" fill="#10b981" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="waste" name="Wasted Units (kg)" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="consumed"
+                  name="Consumed Units (kg)"
+                  fill="#10b981"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar
+                  dataKey="waste"
+                  name="Wasted Units (kg)"
+                  fill="#ef4444"
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -286,18 +460,45 @@ export default function AnalyticsDashboardPage() {
       label: 'Kitchen Efficiency',
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
-          <h3 className="text-lg font-bold text-white uppercase tracking-wider">Prep Duration logs by Station</h3>
+          <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+            Prep Duration logs by Station
+          </h3>
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={kitchenEfficiencyData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-                <XAxis type="number" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis dataKey="station" type="category" stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#1e293b"
+                  horizontal={false}
+                />
+                <XAxis
+                  type="number"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
+                <YAxis
+                  dataKey="station"
+                  type="category"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }}
+                  contentStyle={{
+                    backgroundColor: '#0f172a',
+                    border: '1px solid #1e293b',
+                    borderRadius: '8px',
+                    color: '#fff',
+                  }}
                 />
                 <Legend />
-                <Bar dataKey="prepTime" name="Avg Prep Speed (minutes)" fill="#f59e0b" radius={[0, 4, 4, 0]} />
+                <Bar
+                  dataKey="prepTime"
+                  name="Avg Prep Speed (minutes)"
+                  fill="#f59e0b"
+                  radius={[0, 4, 4, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -309,18 +510,39 @@ export default function AnalyticsDashboardPage() {
       label: 'Staff Payouts',
       content: (
         <Card className="bg-slate-900 border-slate-800 p-6 space-y-6">
-          <h3 className="text-lg font-bold text-white uppercase tracking-wider">Salary Payout base vs Performance Ratings</h3>
+          <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+            Salary Payout base vs Performance Ratings
+          </h3>
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={staffPayoutData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="role" stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#1e293b"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="role"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px', color: '#fff' }}
+                  contentStyle={{
+                    backgroundColor: '#0f172a',
+                    border: '1px solid #1e293b',
+                    borderRadius: '8px',
+                    color: '#fff',
+                  }}
                 />
                 <Legend />
-                <Bar dataKey="avgSalary" name="Avg Contract Salary (₹)" fill="#ec4899" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="avgSalary"
+                  name="Avg Contract Salary (₹)"
+                  fill="#ec4899"
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -334,8 +556,13 @@ export default function AnalyticsDashboardPage() {
       {/* Date filter & branch action bar */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-5">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Business Intelligence Center</h1>
-          <p className="text-slate-400 mt-1">Multi-branch financial graphs, kitchen prep logs, and payroll analytics.</p>
+          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+            Business Intelligence Center
+          </h1>
+          <p className="text-slate-400 mt-1">
+            Multi-branch financial graphs, kitchen prep logs, and payroll
+            analytics.
+          </p>
         </div>
 
         {/* Date Filters controls */}
@@ -354,7 +581,9 @@ export default function AnalyticsDashboardPage() {
               key={item.id}
               onClick={() => setDateFilter(item.id as any)}
               className={`px-3 py-1.5 rounded transition font-bold uppercase text-[10px] tracking-wider ${
-                dateFilter === item.id ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                dateFilter === item.id
+                  ? 'bg-indigo-600 text-white'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               {item.label}
@@ -364,7 +593,10 @@ export default function AnalyticsDashboardPage() {
       </div>
 
       {/* Coming Soon Banner */}
-      <ComingSoonBanner featureName="Business Intelligence Center" className="mb-2" />
+      <ComingSoonBanner
+        featureName="Business Intelligence Center"
+        className="mb-2"
+      />
 
       {status === 'loading' && !executive ? (
         <div className="flex justify-center items-center py-20 text-slate-500 animate-pulse text-lg">

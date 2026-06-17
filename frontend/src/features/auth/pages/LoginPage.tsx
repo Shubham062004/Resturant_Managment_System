@@ -1,13 +1,14 @@
+import { Lock, LogIn, User } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import Alert from '../../../shared/components/ui/Alert';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import AuthLayout from '../../../shared/layouts/AuthLayout';
 import { login, clearError } from '../store/authSlice';
 import { getDashboardRouteByRole } from '../utils/roleRouting';
-import AuthLayout from '../../../shared/layouts/AuthLayout';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Alert from '../../../shared/components/ui/Alert';
-import { Lock, LogIn, User } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const [identifier, setIdentifier] = useState('');
@@ -52,7 +53,9 @@ export const LoginPage: React.FC = () => {
       // Check if it's a valid 10-digit phone number
       const digitsOnly = identifier.replace(/\D/g, '');
       if (digitsOnly.length !== 10) {
-        setValidationError('Please enter a valid email or a 10-digit phone number.');
+        setValidationError(
+          'Please enter a valid email or a 10-digit phone number.'
+        );
         return;
       }
       payload = { phone: digitsOnly, password };
@@ -75,7 +78,9 @@ export const LoginPage: React.FC = () => {
         });
       } else {
         // Automatically determine redirect path based on user role if 'from' is undefined or root
-        const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
+        const dashboardRoute = getDashboardRouteByRole(
+          result.payload.user?.role
+        );
         const destination = !from || from === '/login' ? dashboardRoute : from;
         navigate(destination, { replace: true });
       }
@@ -147,8 +152,13 @@ export const LoginPage: React.FC = () => {
             />
             <div className="flex items-center justify-between mt-2">
               <label className="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" className="rounded border-input text-primary focus:ring-primary cursor-pointer" />
-                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Remember me</span>
+                <input
+                  type="checkbox"
+                  className="rounded border-input text-primary focus:ring-primary cursor-pointer"
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                  Remember me
+                </span>
               </label>
               <Link
                 to="/forgot-password"
@@ -190,7 +200,7 @@ export const LoginPage: React.FC = () => {
         </Button>
 
         <div className="text-center font-sans text-sm text-muted-foreground pt-6">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link
             to="/register"
             className="text-primary hover:text-primary-hover font-semibold transition-colors duration-150"

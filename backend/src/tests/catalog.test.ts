@@ -1,12 +1,13 @@
-import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+import jwt from 'jsonwebtoken';
 import request from 'supertest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+
 import app from '../app';
 import { prisma } from '../config/db';
-import ProductViewEvent from '../models/ProductViewEvent';
-import SearchAnalytic from '../models/SearchAnalytic';
-import RecommendationEvent from '../models/RecommendationEvent';
-import jwt from 'jsonwebtoken';
 import env from '../config/env';
+import ProductViewEvent from '../models/ProductViewEvent';
+import RecommendationEvent from '../models/RecommendationEvent';
+import SearchAnalytic from '../models/SearchAnalytic';
 
 // Mock DB configs and Prisma client queries
 vi.mock('../config/db', () => ({
@@ -59,10 +60,16 @@ vi.mock('../config/db', () => ({
 }));
 
 // Mock MongoDB Mongoose Models
-vi.spyOn(ProductViewEvent, 'create').mockReturnValue(Promise.resolve({}) as any);
+vi.spyOn(ProductViewEvent, 'create').mockReturnValue(
+  Promise.resolve({}) as any
+);
 vi.spyOn(SearchAnalytic, 'create').mockReturnValue(Promise.resolve({}) as any);
-vi.spyOn(RecommendationEvent, 'create').mockReturnValue(Promise.resolve({}) as any);
-vi.spyOn(RecommendationEvent, 'insertMany').mockReturnValue(Promise.resolve([]) as any);
+vi.spyOn(RecommendationEvent, 'create').mockReturnValue(
+  Promise.resolve({}) as any
+);
+vi.spyOn(RecommendationEvent, 'insertMany').mockReturnValue(
+  Promise.resolve([]) as any
+);
 
 // Valid UUIDs for test fixtures
 const PRODUCT_UUID = '550e8400-e29b-41d4-a716-446655440001';
@@ -80,7 +87,7 @@ describe('Catalog API Integration Tests', () => {
     mockToken = jwt.sign(
       { id: USER_UUID, email: 'customer@test.com', role: 'CUSTOMER' },
       env.JWT_SECRET,
-      { expiresIn: '1h' },
+      { expiresIn: '1h' }
     );
   });
 
@@ -124,7 +131,7 @@ describe('Catalog API Integration Tests', () => {
       });
 
       const response = await request(app).get(
-        '/api/v1/catalog/restaurants/slug/abc-firehouse',
+        '/api/v1/catalog/restaurants/slug/abc-firehouse'
       );
 
       expect(response.status).toBe(200);
@@ -137,7 +144,9 @@ describe('Catalog API Integration Tests', () => {
     it('should throw 404 error if restaurant slug is not active/found', async () => {
       (prisma.restaurantGroup.findUnique as any).mockResolvedValue(null);
 
-      const response = await request(app).get('/api/v1/catalog/restaurants/slug/non-existent');
+      const response = await request(app).get(
+        '/api/v1/catalog/restaurants/slug/non-existent'
+      );
 
       expect(response.status).toBe(404);
       expect(response.body.success).toBe(false);
@@ -181,7 +190,9 @@ describe('Catalog API Integration Tests', () => {
         { id: REVIEW_UUID, name: 'Double Pepperoni' },
       ]);
 
-      const response = await request(app).get('/api/v1/catalog/products/slug/classic-margherita');
+      const response = await request(app).get(
+        '/api/v1/catalog/products/slug/classic-margherita'
+      );
 
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
@@ -210,7 +221,12 @@ describe('Catalog API Integration Tests', () => {
         id: REVIEW_UUID,
         rating: 5,
         comment: 'Great sourdough crust!',
-        user: { id: USER_UUID, firstName: 'Test', lastName: 'User', avatar: null },
+        user: {
+          id: USER_UUID,
+          firstName: 'Test',
+          lastName: 'User',
+          avatar: null,
+        },
       });
       (prisma.review.aggregate as any).mockResolvedValue({
         _avg: { rating: 5.0 },
@@ -225,7 +241,11 @@ describe('Catalog API Integration Tests', () => {
       const response = await request(app)
         .post('/api/v1/catalog/reviews')
         .set('Authorization', `Bearer ${mockToken}`)
-        .send({ productId: PRODUCT_UUID, rating: 5, comment: 'Great sourdough crust!' });
+        .send({
+          productId: PRODUCT_UUID,
+          rating: 5,
+          comment: 'Great sourdough crust!',
+        });
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
@@ -238,8 +258,12 @@ describe('Catalog API Integration Tests', () => {
 
   describe('POST /api/v1/catalog/favorites', () => {
     it('should toggle favorites state from true to false when already favorited', async () => {
-      (prisma.product.findUnique as any).mockResolvedValue({ id: PRODUCT_UUID });
-      (prisma.favorite.findUnique as any).mockResolvedValue({ id: FAVORITE_UUID });
+      (prisma.product.findUnique as any).mockResolvedValue({
+        id: PRODUCT_UUID,
+      });
+      (prisma.favorite.findUnique as any).mockResolvedValue({
+        id: FAVORITE_UUID,
+      });
       (prisma.favorite.delete as any).mockResolvedValue({});
 
       const response = await request(app)

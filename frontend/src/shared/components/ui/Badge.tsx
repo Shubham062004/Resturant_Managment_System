@@ -22,7 +22,10 @@ export const Badge: React.FC<BadgeProps> = ({
   };
 
   return (
-    <span className={`${baseStyles} ${variants[variant]} ${className}`} {...props}>
+    <span
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      {...props}
+    >
       {children}
     </span>
   );

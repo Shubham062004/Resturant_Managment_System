@@ -15,7 +15,11 @@ export class AuditService {
 
   private static getDevice(userAgent: string): string {
     const ua = userAgent.toLowerCase();
-    if (ua.includes('mobi') || ua.includes('iphone') || ua.includes('android')) {
+    if (
+      ua.includes('mobi') ||
+      ua.includes('iphone') ||
+      ua.includes('android')
+    ) {
       return 'Mobile';
     }
     if (ua.includes('ipad') || ua.includes('tablet')) {
@@ -29,10 +33,15 @@ export class AuditService {
    */
   public static async writeLog(
     userId: string,
-    action: 'LOGIN' | 'LOGOUT' | 'PASSWORD_RESET' | 'EMAIL_VERIFICATION' | 'ROLE_CHANGE',
+    action:
+      | 'LOGIN'
+      | 'LOGOUT'
+      | 'PASSWORD_RESET'
+      | 'EMAIL_VERIFICATION'
+      | 'ROLE_CHANGE',
     ipAddress: string,
     userAgent: string,
-    payload?: Record<string, any>,
+    payload?: Record<string, any>
   ): Promise<void> {
     try {
       await AuditLog.create({
@@ -42,9 +51,14 @@ export class AuditService {
         userAgent,
         payload,
       });
-      logger.info(`[Audit Log] Action [${action}] recorded for User [${userId}]`);
+      logger.info(
+        `[Audit Log] Action [${action}] recorded for User [${userId}]`
+      );
     } catch (error) {
-      logger.error(error, '[Audit Service] Failed to write audit log in MongoDB:');
+      logger.error(
+        error,
+        '[Audit Service] Failed to write audit log in MongoDB:'
+      );
     }
   }
 
@@ -55,7 +69,7 @@ export class AuditService {
     userId: string,
     ipAddress: string,
     userAgent: string,
-    tokenHash: string,
+    tokenHash: string
   ): Promise<void> {
     try {
       const browser = this.getBrowser(userAgent);
@@ -68,9 +82,14 @@ export class AuditService {
         ip: ipAddress,
         tokenHash,
       });
-      logger.info(`[Session Service] User [${userId}] session registered (${device} / ${browser})`);
+      logger.info(
+        `[Session Service] User [${userId}] session registered (${device} / ${browser})`
+      );
     } catch (error) {
-      logger.error(error, '[Audit Service] Failed to register session in MongoDB:');
+      logger.error(
+        error,
+        '[Audit Service] Failed to register session in MongoDB:'
+      );
     }
   }
 
@@ -81,13 +100,16 @@ export class AuditService {
     try {
       await UserSession.updateOne(
         { tokenHash, logoutTime: { $exists: false } },
-        { $set: { logoutTime: new Date() } },
+        { $set: { logoutTime: new Date() } }
       );
       logger.info(
-        `[Session Service] Session terminated for token hash starting with ${tokenHash.slice(0, 10)}`,
+        `[Session Service] Session terminated for token hash starting with ${tokenHash.slice(0, 10)}`
       );
     } catch (error) {
-      logger.error(error, '[Audit Service] Failed to terminate session in MongoDB:');
+      logger.error(
+        error,
+        '[Audit Service] Failed to terminate session in MongoDB:'
+      );
     }
   }
 
@@ -98,11 +120,16 @@ export class AuditService {
     try {
       await UserSession.updateMany(
         { userId, logoutTime: { $exists: false } },
-        { $set: { logoutTime: new Date() } },
+        { $set: { logoutTime: new Date() } }
       );
-      logger.info(`[Session Service] All active sessions terminated for User [${userId}]`);
+      logger.info(
+        `[Session Service] All active sessions terminated for User [${userId}]`
+      );
     } catch (error) {
-      logger.error(error, '[Audit Service] Failed to terminate all user sessions in MongoDB:');
+      logger.error(
+        error,
+        '[Audit Service] Failed to terminate all user sessions in MongoDB:'
+      );
     }
   }
 }

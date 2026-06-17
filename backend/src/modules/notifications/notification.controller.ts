@@ -1,10 +1,16 @@
 import { Response, NextFunction } from 'express';
+
 import { prisma } from '../../config/db';
 import { AuthRequest } from '../../types/express';
+
 import { NotificationService } from './notification.service';
 
 export class NotificationController {
-  public static async getNotifications(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async getNotifications(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const notifications = await prisma.notification.findMany({
         where: { userId: req.user!.id, channel: 'IN_APP' },
@@ -13,16 +19,26 @@ export class NotificationController {
       });
 
       const unreadCount = await prisma.notification.count({
-        where: { userId: req.user!.id, channel: 'IN_APP', status: { not: 'READ' } },
+        where: {
+          userId: req.user!.id,
+          channel: 'IN_APP',
+          status: { not: 'READ' },
+        },
       });
 
-      res.status(200).json({ status: 'success', data: { notifications, unreadCount } });
+      res
+        .status(200)
+        .json({ status: 'success', data: { notifications, unreadCount } });
     } catch (error) {
       next(error);
     }
   }
 
-  public static async markAsRead(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async markAsRead(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       await prisma.notification.updateMany({
@@ -35,7 +51,11 @@ export class NotificationController {
     }
   }
 
-  public static async sendTestNotification(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async sendTestNotification(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { title, message, channels } = req.body;
       const sentChannels = await NotificationService.send({

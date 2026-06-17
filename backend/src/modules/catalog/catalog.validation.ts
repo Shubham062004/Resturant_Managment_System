@@ -15,7 +15,10 @@ export const restaurantQuerySchema = z.object({
     .string()
     .transform((val) => val === 'true')
     .optional(),
-  sortBy: z.enum(['popularity', 'rating', 'name']).default('popularity').optional(),
+  sortBy: z
+    .enum(['popularity', 'rating', 'name'])
+    .default('popularity')
+    .optional(),
   sortOrder: z.enum(['asc', 'desc']).default('desc').optional(),
   page: z
     .string()
@@ -67,7 +70,11 @@ export const productQuerySchema = z.object({
 
 export const createReviewSchema = z.object({
   productId: z.string().uuid('Invalid product ID'),
-  rating: z.number().int().min(1, 'Rating must be at least 1').max(5, 'Rating cannot exceed 5'),
+  rating: z
+    .number()
+    .int()
+    .min(1, 'Rating must be at least 1')
+    .max(5, 'Rating cannot exceed 5'),
   comment: z
     .string()
     .min(3, 'Comment must be at least 3 characters long')

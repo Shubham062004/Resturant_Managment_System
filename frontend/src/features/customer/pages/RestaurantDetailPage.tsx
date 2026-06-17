@@ -1,14 +1,27 @@
+import {
+  Star,
+  Clock,
+  MapPin,
+  Phone,
+  Info,
+  ChevronRight,
+  CheckCircle2,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useRestaurantBySlug } from '../store/catalogQueries';
-import { Star, Clock, MapPin, Phone, Info, ChevronRight, CheckCircle2 } from 'lucide-react';
-import FoodCard from '../components/FoodCard';
-import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+
 import { useAppSelector } from '../../../app/store';
+import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
+import FoodCard from '../components/FoodCard';
+import { useRestaurantBySlug } from '../store/catalogQueries';
 
 export const RestaurantDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { data: response, isLoading, isError } = useRestaurantBySlug(slug || '');
+  const {
+    data: response,
+    isLoading,
+    isError,
+  } = useRestaurantBySlug(slug || '');
   const { selectedBranch } = useAppSelector((state) => state.customer);
   const [activeTab, setActiveTab] = useState<'menu' | 'info'>('menu');
 
@@ -31,9 +44,12 @@ export const RestaurantDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#08070F] text-white pt-32 pb-20 px-4 flex items-center justify-center">
         <div className="bg-red-500/[0.02] border border-red-500/10 rounded-2xl p-10 text-center max-w-md w-full">
-          <p className="text-red-400 font-bold text-xl mb-3">Restaurant Not Found</p>
+          <p className="text-red-400 font-bold text-xl mb-3">
+            Restaurant Not Found
+          </p>
           <p className="text-neutral-400 text-sm mb-6">
-            We couldn't find the restaurant you were looking for. It may be currently inactive.
+            We couldn&apos;t find the restaurant you were looking for. It may be
+            currently inactive.
           </p>
           <Link
             to="/restaurants"
@@ -50,17 +66,21 @@ export const RestaurantDetailPage: React.FC = () => {
   const { categories, products, branches } = restaurant;
   const primaryBranch = branches[0];
 
-  const productsByCategory = categories.reduce<Record<string, typeof products>>((acc, cat) => {
-    acc[cat.id] = products.filter((p) => p.categoryId === cat.id);
-    return acc;
-  }, {});
+  const productsByCategory = categories.reduce<Record<string, typeof products>>(
+    (acc, cat) => {
+      acc[cat.id] = products.filter((p) => p.categoryId === cat.id);
+      return acc;
+    },
+    {}
+  );
 
   const handleScrollToCategory = (catId: string) => {
     const element = document.getElementById(`category-${catId}`);
     if (element) {
       const headerOffset = 140;
       const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
 
       window.scrollTo({
         top: offsetPosition,
@@ -74,7 +94,10 @@ export const RestaurantDetailPage: React.FC = () => {
       {/* 1. Hero Cover Banner */}
       <div className="relative h-80 md:h-[480px] overflow-hidden">
         <img
-          src={restaurant.coverImage || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop'}
+          src={
+            restaurant.coverImage ||
+            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&auto=format&fit=crop'
+          }
           alt={restaurant.name}
           className="w-full h-full object-cover"
         />
@@ -86,7 +109,8 @@ export const RestaurantDetailPage: React.FC = () => {
               <div className="flex items-center gap-3">
                 {selectedBranch ? (
                   <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 py-1.5 px-3 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                    <CheckCircle2 size={14} /> Delivering to {selectedBranch.name}
+                    <CheckCircle2 size={14} /> Delivering to{' '}
+                    {selectedBranch.name}
                   </span>
                 ) : (
                   <span className="bg-primary/20 text-primary border border-primary/30 py-1.5 px-3 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -94,7 +118,8 @@ export const RestaurantDetailPage: React.FC = () => {
                   </span>
                 )}
                 <div className="flex items-center gap-1 text-amber-400 font-bold text-sm bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 shadow-lg">
-                  <Star className="h-4 w-4 fill-current" /> {restaurant.rating.toFixed(1)}
+                  <Star className="h-4 w-4 fill-current" />{' '}
+                  {restaurant.rating.toFixed(1)}
                 </div>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight text-white drop-shadow-lg">
@@ -148,7 +173,6 @@ export const RestaurantDetailPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         {activeTab === 'menu' ? (
           <div className="flex flex-col lg:flex-row gap-10 items-start">
-            
             {/* Sticky categories sidebar navigation */}
             <aside className="w-full lg:w-64 shrink-0 rounded-2xl border border-white/5 bg-white/[0.02] sticky top-40 z-20 hidden lg:block p-3">
               <p className="text-xs font-bold text-neutral-500 tracking-wider uppercase mb-3 px-3 pt-2">
@@ -158,15 +182,19 @@ export const RestaurantDetailPage: React.FC = () => {
                 {categories.map((cat) => {
                   const count = (productsByCategory[cat.id] || []).length;
                   if (count === 0) return null;
-                  
+
                   return (
                     <button
                       key={cat.id}
                       onClick={() => handleScrollToCategory(cat.id)}
                       className="w-full text-left py-2.5 px-3 rounded-xl text-sm text-neutral-400 hover:text-white hover:bg-white/[0.04] transition-all flex justify-between items-center group font-medium"
                     >
-                      <span className="group-hover:translate-x-1 transition-transform">{cat.name}</span>
-                      <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full">{count}</span>
+                      <span className="group-hover:translate-x-1 transition-transform">
+                        {cat.name}
+                      </span>
+                      <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full">
+                        {count}
+                      </span>
                     </button>
                   );
                 })}
@@ -180,7 +208,11 @@ export const RestaurantDetailPage: React.FC = () => {
                 if (catProducts.length === 0) return null;
 
                 return (
-                  <section key={cat.id} id={`category-${cat.id}`} className="scroll-mt-40">
+                  <section
+                    key={cat.id}
+                    id={`category-${cat.id}`}
+                    className="scroll-mt-40"
+                  >
                     <div className="mb-6 flex items-baseline gap-3">
                       <h2 className="text-2xl sm:text-3xl font-bold font-display text-white">
                         {cat.name}
@@ -213,9 +245,12 @@ export const RestaurantDetailPage: React.FC = () => {
                     <MapPin className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg">{primaryBranch?.name}</p>
+                    <p className="font-bold text-white text-lg">
+                      {primaryBranch?.name}
+                    </p>
                     <p className="text-neutral-400 text-sm mt-1 leading-relaxed">
-                      {primaryBranch?.address}<br />
+                      {primaryBranch?.address}
+                      <br />
                       {primaryBranch?.city}, {primaryBranch?.state}
                     </p>
                   </div>
@@ -226,9 +261,12 @@ export const RestaurantDetailPage: React.FC = () => {
                     <Clock className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg">Opening Hours</p>
+                    <p className="font-bold text-white text-lg">
+                      Opening Hours
+                    </p>
                     <p className="text-neutral-400 text-sm mt-1">
-                      {primaryBranch?.openingTime} - {primaryBranch?.closingTime}
+                      {primaryBranch?.openingTime} -{' '}
+                      {primaryBranch?.closingTime}
                     </p>
                   </div>
                 </div>
@@ -239,20 +277,27 @@ export const RestaurantDetailPage: React.FC = () => {
                   </div>
                   <div>
                     <p className="font-bold text-white text-lg">Contact</p>
-                    <p className="text-neutral-400 text-sm mt-1">{'+1 (555) 123-4567'}</p>
+                    <p className="text-neutral-400 text-sm mt-1">
+                      {'+1 (555) 123-4567'}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-8">
-              <h2 className="text-2xl font-bold font-display text-white mb-6">Location Map</h2>
+              <h2 className="text-2xl font-bold font-display text-white mb-6">
+                Location Map
+              </h2>
               <div className="aspect-square sm:aspect-video md:aspect-square bg-neutral-900 border border-white/10 rounded-xl overflow-hidden flex flex-col justify-center items-center text-center p-6 relative">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
                 <MapPin className="h-12 w-12 text-primary mb-3 animate-bounce z-10" />
-                <p className="font-bold text-white z-10">{primaryBranch?.name}</p>
+                <p className="font-bold text-white z-10">
+                  {primaryBranch?.name}
+                </p>
                 <p className="text-neutral-500 text-xs mt-2 z-10 max-w-[200px] mx-auto">
-                  Map integration would be displayed here using coordinates ({primaryBranch?.latitude}, {primaryBranch?.longitude}).
+                  Map integration would be displayed here using coordinates (
+                  {primaryBranch?.latitude}, {primaryBranch?.longitude}).
                 </p>
               </div>
             </div>

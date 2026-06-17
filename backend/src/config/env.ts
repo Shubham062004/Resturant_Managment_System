@@ -1,6 +1,8 @@
-import dotenv from 'dotenv';
 import path from 'path';
+
+import dotenv from 'dotenv';
 import { z } from 'zod';
+
 import logger from '../utils/logger';
 
 // Load environmental variables
@@ -11,17 +13,41 @@ const envSchema = z.object({
     .string()
     .transform((v) => parseInt(v, 10))
     .default('5000'),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  DATABASE_URL: z.string({
-    required_error: 'DATABASE_URL relational link is required',
-  }).refine(url => !((process.env.NODE_ENV === 'production' || process.env.RENDER === 'true') && (url.includes('localhost') || url.includes('127.0.0.1'))), {
-    message: 'DATABASE_URL must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
-  }),
-  MONGODB_URI: z.string({
-    required_error: 'MONGODB_URI document database link is required',
-  }).refine(url => !((process.env.NODE_ENV === 'production' || process.env.RENDER === 'true') && (url.includes('localhost') || url.includes('127.0.0.1'))), {
-    message: 'MONGODB_URI must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
-  }),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
+  DATABASE_URL: z
+    .string({
+      required_error: 'DATABASE_URL relational link is required',
+    })
+    .refine(
+      (url) =>
+        !(
+          (process.env.NODE_ENV === 'production' ||
+            process.env.RENDER === 'true') &&
+          (url.includes('localhost') || url.includes('127.0.0.1'))
+        ),
+      {
+        message:
+          'DATABASE_URL must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
+      }
+    ),
+  MONGODB_URI: z
+    .string({
+      required_error: 'MONGODB_URI document database link is required',
+    })
+    .refine(
+      (url) =>
+        !(
+          (process.env.NODE_ENV === 'production' ||
+            process.env.RENDER === 'true') &&
+          (url.includes('localhost') || url.includes('127.0.0.1'))
+        ),
+      {
+        message:
+          'MONGODB_URI must be a remote URL in production or on Render, not localhost. Please update your Render Environment Variables.',
+      }
+    ),
   JWT_SECRET: z
     .string({
       required_error: 'JWT_SECRET signature key is required',
@@ -44,7 +70,9 @@ try {
   parsedEnv = envSchema.parse(process.env);
 } catch (error) {
   if (error instanceof z.ZodError) {
-    const missingFields = error.errors.map((err) => `${err.path.join('.')}: ${err.message}`);
+    const missingFields = error.errors.map(
+      (err) => `${err.path.join('.')}: ${err.message}`
+    );
     logger.error('❌ Invalid or missing environment configuration parameters:');
     missingFields.forEach((field) => logger.error(`   -> ${field}`));
     process.exit(1);

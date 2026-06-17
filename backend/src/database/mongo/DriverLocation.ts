@@ -20,7 +20,6 @@ const DriverLocationSchema: Schema = new Schema({
   timestamp: { type: Date, default: Date.now, index: true },
 });
 
-export const DriverLocation = mongoose.models.DriverLocation || mongoose.model<IDriverLocation>(
-  'DriverLocation',
-  DriverLocationSchema,
-);
+export const DriverLocation =
+  mongoose.models.DriverLocation ||
+  mongoose.model<IDriverLocation>('DriverLocation', DriverLocationSchema);

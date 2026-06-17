@@ -1,22 +1,33 @@
+import {
+  MapPin,
+  Search,
+  Compass,
+  Navigation,
+  Clock,
+  Phone,
+} from 'lucide-react';
 import React, { useState, useEffect, useMemo } from 'react';
+
 import { useAppSelector, useAppDispatch } from '../../../app/store';
-import { selectBranch } from '../store/customerSlice';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
-import { useToast } from '../../../shared/components/ui/Toast';
-import BranchCard from '../components/BranchCard';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
-import { MapPin, Search, Compass, Navigation, Clock, Phone } from 'lucide-react';
+import { useToast } from '../../../shared/components/ui/Toast';
 import { Branch } from '../../../shared/data/branches';
+import BranchCard from '../components/BranchCard';
 import { useBranches } from '../store/catalogQueries';
+import { selectBranch } from '../store/customerSlice';
 
 export const BranchesPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const toast = useToast();
   const { selectedBranch } = useAppSelector((state) => state.customer);
 
-  const { data: branchesResponse, isLoading } = useBranches({ page: 1, limit: 100 });
+  const { data: branchesResponse, isLoading } = useBranches({
+    page: 1,
+    limit: 100,
+  });
   const apiBranches = branchesResponse?.data ?? [];
 
   const mappedBranches: Branch[] = apiBranches.map((b) => ({
@@ -34,17 +45,26 @@ export const BranchesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [cityFilter, setCityFilter] = useState('All');
   const [isDetecting, setIsDetecting] = useState(false);
-  const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(null);
-  const [branchesWithDistance, setBranchesWithDistance] = useState<Branch[]>([]);
+  const [activeBranchDetail, setActiveBranchDetail] = useState<Branch | null>(
+    null
+  );
+  const [branchesWithDistance, setBranchesWithDistance] = useState<Branch[]>(
+    []
+  );
 
-  const cities = ['All', ...Array.from(new Set(mappedBranches.map((b) => b.city)))];
+  const cities = [
+    'All',
+    ...Array.from(new Set(mappedBranches.map((b) => b.city))),
+  ];
 
   useEffect(() => {
     setBranchesWithDistance(mappedBranches);
   }, [apiBranches.length]);
 
   const filteredBranches = useMemo(() => {
-    const source = branchesWithDistance.length ? branchesWithDistance : mappedBranches;
+    const source = branchesWithDistance.length
+      ? branchesWithDistance
+      : mappedBranches;
     return source.filter((branch) => {
       const matchesSearch =
         !searchTerm ||
@@ -61,11 +81,18 @@ export const BranchesPage: React.FC = () => {
     }
   }, [filteredBranches, selectedBranch, activeBranchDetail]);
 
-  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const calculateDistance = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ) => {
     const p = 0.017453292519943295;
     const c = Math.cos;
     const a =
-      0.5 - c((lat2 - lat1) * p) / 2 + (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
+      0.5 -
+      c((lat2 - lat1) * p) / 2 +
+      (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
     const km = 12742 * Math.asin(Math.sqrt(a));
     return km * 0.621371;
   };
@@ -83,7 +110,14 @@ export const BranchesPage: React.FC = () => {
         const updated = mappedBranches
           .map((b) => ({
             ...b,
-            distance: parseFloat(calculateDistance(latitude, longitude, b.coords.lat, b.coords.lng).toFixed(1)),
+            distance: parseFloat(
+              calculateDistance(
+                latitude,
+                longitude,
+                b.coords.lat,
+                b.coords.lng
+              ).toFixed(1)
+            ),
           }))
           .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
@@ -99,8 +133,10 @@ export const BranchesPage: React.FC = () => {
       },
       () => {
         setIsDetecting(false);
-        toast.error('Failed to get location. Please check browser permissions.');
-      },
+        toast.error(
+          'Failed to get location. Please check browser permissions.'
+        );
+      }
     );
   };
 
@@ -109,7 +145,9 @@ export const BranchesPage: React.FC = () => {
     toast.success(`Delivering from: ${branch.name}`);
   };
 
-  const nearestBranch = branchesWithDistance.find((b) => b.distance !== undefined);
+  const nearestBranch = branchesWithDistance.find(
+    (b) => b.distance !== undefined
+  );
 
   return (
     <>
@@ -138,7 +176,10 @@ export const BranchesPage: React.FC = () => {
               onClick={handleDetectLocation}
               className="flex items-center gap-2 shadow-lg shadow-primary/20 font-semibold"
             >
-              <Compass size={16} className={isDetecting ? 'animate-spin' : ''} />
+              <Compass
+                size={16}
+                className={isDetecting ? 'animate-spin' : ''}
+              />
               <span>Detect My Location</span>
             </Button>
           </div>
@@ -151,9 +192,13 @@ export const BranchesPage: React.FC = () => {
                   <Navigation size={18} className="text-primary" />
                 </div>
                 <div>
-                  <p className="text-white font-semibold">{nearestBranch.name}</p>
+                  <p className="text-white font-semibold">
+                    {nearestBranch.name}
+                  </p>
                   <p className="text-neutral-400 text-xs">
-                    {nearestBranch.distance} mi away · ~{Math.max(15, Math.round(nearestBranch.distance * 8))} min delivery
+                    {nearestBranch.distance} mi away · ~
+                    {Math.max(15, Math.round(nearestBranch.distance * 8))} min
+                    delivery
                   </p>
                 </div>
               </div>
@@ -205,8 +250,12 @@ export const BranchesPage: React.FC = () => {
               ) : filteredBranches.length === 0 ? (
                 <div className="text-center py-20 rounded-2xl border border-white/5 bg-white/[0.02]">
                   <MapPin className="mx-auto text-neutral-600 mb-3" size={40} />
-                  <p className="text-white font-semibold mb-1">No branches found</p>
-                  <p className="text-neutral-500 text-sm">Try a different search or city filter</p>
+                  <p className="text-white font-semibold mb-1">
+                    No branches found
+                  </p>
+                  <p className="text-neutral-500 text-sm">
+                    Try a different search or city filter
+                  </p>
                 </div>
               ) : (
                 filteredBranches.map((branch) => (
@@ -227,9 +276,15 @@ export const BranchesPage: React.FC = () => {
               {activeBranchDetail ? (
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl space-y-5">
                   <div>
-                    <span className="text-primary text-[10px] font-bold uppercase tracking-widest">Branch Details</span>
-                    <h2 className="text-xl font-bold text-white mt-1">{activeBranchDetail.name}</h2>
-                    <p className="text-sm text-neutral-400 mt-1">{activeBranchDetail.address}</p>
+                    <span className="text-primary text-[10px] font-bold uppercase tracking-widest">
+                      Branch Details
+                    </span>
+                    <h2 className="text-xl font-bold text-white mt-1">
+                      {activeBranchDetail.name}
+                    </h2>
+                    <p className="text-sm text-neutral-400 mt-1">
+                      {activeBranchDetail.address}
+                    </p>
                   </div>
 
                   <div className="border-t border-white/5 pt-4 space-y-3 text-sm">
@@ -239,14 +294,24 @@ export const BranchesPage: React.FC = () => {
                     </div>
                     {activeBranchDetail.phone && (
                       <div className="flex items-center gap-2 text-neutral-300">
-                        <Phone size={16} className="text-primary flex-shrink-0" />
+                        <Phone
+                          size={16}
+                          className="text-primary flex-shrink-0"
+                        />
                         <span>{activeBranchDetail.phone}</span>
                       </div>
                     )}
                     {activeBranchDetail.distance !== undefined && (
                       <div className="flex items-center gap-2 text-primary font-medium">
                         <Navigation size={16} className="flex-shrink-0" />
-                        <span>{activeBranchDetail.distance} mi away · ~{Math.max(15, Math.round(activeBranchDetail.distance * 8))} min delivery</span>
+                        <span>
+                          {activeBranchDetail.distance} mi away · ~
+                          {Math.max(
+                            15,
+                            Math.round(activeBranchDetail.distance * 8)
+                          )}{' '}
+                          min delivery
+                        </span>
                       </div>
                     )}
                   </div>
@@ -254,10 +319,16 @@ export const BranchesPage: React.FC = () => {
                   {/* Map placeholder */}
                   <div className="aspect-video rounded-xl bg-neutral-900 border border-white/5 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
-                    <MapPin size={28} className="text-primary z-10 animate-bounce" />
-                    <p className="text-xs text-white font-semibold mt-2 z-10">{activeBranchDetail.name}</p>
+                    <MapPin
+                      size={28}
+                      className="text-primary z-10 animate-bounce"
+                    />
+                    <p className="text-xs text-white font-semibold mt-2 z-10">
+                      {activeBranchDetail.name}
+                    </p>
                     <p className="text-[10px] text-neutral-500 z-10 mt-1">
-                      {activeBranchDetail.coords.lat.toFixed(4)}, {activeBranchDetail.coords.lng.toFixed(4)}
+                      {activeBranchDetail.coords.lat.toFixed(4)},{' '}
+                      {activeBranchDetail.coords.lng.toFixed(4)}
                     </p>
                   </div>
 
@@ -266,13 +337,17 @@ export const BranchesPage: React.FC = () => {
                     className="w-full font-semibold shadow-lg shadow-primary/20"
                     onClick={() => handleSelectBranch(activeBranchDetail)}
                   >
-                    {selectedBranch?.id === activeBranchDetail.id ? '✓ Currently Selected' : 'Select This Branch'}
+                    {selectedBranch?.id === activeBranchDetail.id
+                      ? '✓ Currently Selected'
+                      : 'Select This Branch'}
                   </Button>
                 </div>
               ) : (
                 <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-8 text-center">
                   <MapPin className="mx-auto text-neutral-600 mb-3" size={36} />
-                  <p className="text-neutral-400 text-sm">Select a branch to view details</p>
+                  <p className="text-neutral-400 text-sm">
+                    Select a branch to view details
+                  </p>
                 </div>
               )}
             </div>

@@ -1,10 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import apiClient from '../../../services/apiClient';
 
-export const fetchOrganizations = createAsyncThunk('organizations/fetchAll', async () => {
-  const response = await apiClient.get('/super-admin/organizations');
-  return response.data.data;
-});
+export const fetchOrganizations = createAsyncThunk(
+  'organizations/fetchAll',
+  async () => {
+    const response = await apiClient.get('/super-admin/organizations');
+    return response.data.data;
+  }
+);
 
 const organizationSlice = createSlice({
   name: 'organizations',

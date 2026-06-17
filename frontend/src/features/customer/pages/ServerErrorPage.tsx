@@ -1,7 +1,8 @@
+import { ShieldAlert, RefreshCw } from 'lucide-react';
 import React from 'react';
+
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
-import { ShieldAlert, RefreshCw } from 'lucide-react';
 
 export const ServerErrorPage: React.FC = () => {
   const handleReload = () => {
@@ -21,10 +22,12 @@ export const ServerErrorPage: React.FC = () => {
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-display font-extrabold text-white">500 - System Breach</h1>
+          <h1 className="text-3xl font-display font-extrabold text-white">
+            500 - System Breach
+          </h1>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
-            The core server gateway failed to compile our orders catalog. Our team has been
-            notified.
+            The core server gateway failed to compile our orders catalog. Our
+            team has been notified.
           </p>
         </div>
 

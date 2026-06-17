@@ -1,7 +1,12 @@
 import React from 'react';
+
 import { useAppSelector } from '../../../app/store';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
 import Avatar from '../../../shared/components/ui/Avatar';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 
 export default function DeliveryMetrics() {
   const { delivery } = useAppSelector((state) => state.analytics);
@@ -20,19 +25,29 @@ export default function DeliveryMetrics() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <p className="text-muted-foreground mb-1 text-sm">Average Delivery Time</p>
-            <h2 className="text-4xl font-display font-bold text-success">{averageDeliveryTime}</h2>
+            <p className="text-muted-foreground mb-1 text-sm">
+              Average Delivery Time
+            </p>
+            <h2 className="text-4xl font-display font-bold text-success">
+              {averageDeliveryTime}
+            </h2>
           </div>
           <div>
-            <p className="text-muted-foreground mb-1 text-sm">Late Orders This Week</p>
-            <h2 className="text-4xl font-display font-bold text-danger">{lateOrdersCount}</h2>
+            <p className="text-muted-foreground mb-1 text-sm">
+              Late Orders This Week
+            </p>
+            <h2 className="text-4xl font-display font-bold text-danger">
+              {lateOrdersCount}
+            </h2>
           </div>
         </CardContent>
       </Card>
 
       <Card className="bg-surface/50 border-border/50 md:col-span-2">
         <CardHeader>
-          <h3 className="text-lg font-bold text-white">Top Performing Drivers</h3>
+          <h3 className="text-lg font-bold text-white">
+            Top Performing Drivers
+          </h3>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -45,13 +60,19 @@ export default function DeliveryMetrics() {
                   <Avatar name={driver.name} />
                   <div>
                     <h4 className="font-bold text-white">{driver.name}</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5">Fleet Runner</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Fleet Runner
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-8 text-right">
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">Completed</p>
-                    <p className="font-bold text-white">{driver.completed} orders</p>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Completed
+                    </p>
+                    <p className="font-bold text-white">
+                      {driver.completed} orders
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Rating</p>

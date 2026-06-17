@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function walk(dir) {
-  fs.readdirSync(dir, { withFileTypes: true }).forEach(f => {
+  fs.readdirSync(dir, { withFileTypes: true }).forEach((f) => {
     const p = path.join(dir, f.name);
     if (f.isDirectory()) {
       walk(p);
@@ -16,7 +16,11 @@ function walk(dir) {
       let match;
       while ((match = importRegex.exec(c)) !== null) {
         const imp = match[1];
-        if (!imp.startsWith('.') && !imp.startsWith('@/') && imp.toLowerCase() !== imp) {
+        if (
+          !imp.startsWith('.') &&
+          !imp.startsWith('@/') &&
+          imp.toLowerCase() !== imp
+        ) {
           console.log('UPPERCASE IMPORT:', p, imp);
         }
       }

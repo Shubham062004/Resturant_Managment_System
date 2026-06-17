@@ -21,8 +21,10 @@ const AuditLogSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
-export const AuditLog = mongoose.models.AuditLog || mongoose.model<IAuditLog>('AuditLog', AuditLogSchema, 'audit_logs');
+export const AuditLog =
+  mongoose.models.AuditLog ||
+  mongoose.model<IAuditLog>('AuditLog', AuditLogSchema, 'audit_logs');
 export default AuditLog;

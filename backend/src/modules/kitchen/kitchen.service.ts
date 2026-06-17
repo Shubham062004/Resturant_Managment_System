@@ -1,9 +1,10 @@
+import { KitchenOrderStatus, KitchenPriority } from '@prisma/client';
+
 import { prisma } from '../../config/db';
+import { getIO } from '../../config/socket';
 import { KitchenEvent } from '../../database/mongo/KitchenEvent';
 import { KitchenMetric } from '../../database/mongo/KitchenMetric';
 import AppError from '../../utils/appError';
-import { getIO } from '../../config/socket';
-import { KitchenOrderStatus, KitchenPriority } from '@prisma/client';
 import { DeliveryService } from '../delivery/delivery.service';
 import { InventoryService } from '../inventory/inventory.service';
 
@@ -40,25 +41,31 @@ export class KitchenService {
     });
 
     if (assignedCategory) {
-      return orders.map(ko => {
-        if (!ko.order) return null;
-        const matchedItems = ko.order.items.filter(item => {
-          const catSlug = item.product.category.slug.toLowerCase();
-          const catName = item.product.category.name.toLowerCase();
-          const filterSlug = assignedCategory.toLowerCase();
-          return catSlug.includes(filterSlug) || catName.includes(filterSlug) || filterSlug.includes(catSlug);
-        });
+      return orders
+        .map((ko) => {
+          if (!ko.order) return null;
+          const matchedItems = ko.order.items.filter((item) => {
+            const catSlug = item.product.category.slug.toLowerCase();
+            const catName = item.product.category.name.toLowerCase();
+            const filterSlug = assignedCategory.toLowerCase();
+            return (
+              catSlug.includes(filterSlug) ||
+              catName.includes(filterSlug) ||
+              filterSlug.includes(catSlug)
+            );
+          });
 
-        if (matchedItems.length === 0) return null;
+          if (matchedItems.length === 0) return null;
 
-        return {
-          ...ko,
-          order: {
-            ...ko.order,
-            items: matchedItems
-          }
-        };
-      }).filter((o): o is NonNullable<typeof o> => o !== null);
+          return {
+            ...ko,
+            order: {
+              ...ko.order,
+              items: matchedItems,
+            },
+          };
+        })
+        .filter((o): o is NonNullable<typeof o> => o !== null);
     }
 
     return orders;
@@ -69,7 +76,7 @@ export class KitchenService {
    */
   public static async getStaffOrders(userId: string) {
     const user = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
     if (!user) throw new AppError('User not found', 404);
 
@@ -99,25 +106,31 @@ export class KitchenService {
     });
 
     if (assignedCategory) {
-      return orders.map(ko => {
-        if (!ko.order) return null;
-        const matchedItems = ko.order.items.filter(item => {
-          const catSlug = item.product.category.slug.toLowerCase();
-          const catName = item.product.category.name.toLowerCase();
-          const filterSlug = assignedCategory.toLowerCase();
-          return catSlug.includes(filterSlug) || catName.includes(filterSlug) || filterSlug.includes(catSlug);
-        });
+      return orders
+        .map((ko) => {
+          if (!ko.order) return null;
+          const matchedItems = ko.order.items.filter((item) => {
+            const catSlug = item.product.category.slug.toLowerCase();
+            const catName = item.product.category.name.toLowerCase();
+            const filterSlug = assignedCategory.toLowerCase();
+            return (
+              catSlug.includes(filterSlug) ||
+              catName.includes(filterSlug) ||
+              filterSlug.includes(catSlug)
+            );
+          });
 
-        if (matchedItems.length === 0) return null;
+          if (matchedItems.length === 0) return null;
 
-        return {
-          ...ko,
-          order: {
-            ...ko.order,
-            items: matchedItems
-          }
-        };
-      }).filter((o): o is NonNullable<typeof o> => o !== null);
+          return {
+            ...ko,
+            order: {
+              ...ko.order,
+              items: matchedItems,
+            },
+          };
+        })
+        .filter((o): o is NonNullable<typeof o> => o !== null);
     }
 
     return orders;
@@ -144,7 +157,10 @@ export class KitchenService {
   /**
    * Update order status
    */
-  public static async updateOrderStatus(id: string, status: KitchenOrderStatus) {
+  public static async updateOrderStatus(
+    id: string,
+    status: KitchenOrderStatus
+  ) {
     const kOrder = await prisma.kitchenOrder.findUnique({ where: { id } });
     if (!kOrder) throw new AppError('Kitchen order not found', 404);
 
@@ -201,7 +217,7 @@ export class KitchenService {
     id: string,
     stationId?: string,
     assignedTo?: string,
-    priority?: KitchenPriority,
+    priority?: KitchenPriority
   ) {
     const kOrder = await prisma.kitchenOrder.findUnique({ where: { id } });
     if (!kOrder) throw new AppError('Kitchen order not found', 404);

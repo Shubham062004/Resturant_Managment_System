@@ -1,5 +1,8 @@
+import { MapPin, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
@@ -10,8 +13,6 @@ import {
   useUpdateAddress,
   useDeleteAddress,
 } from '../store/cartQueries';
-import { useAppSelector } from '../../../app/store';
-import { MapPin, Trash2 } from 'lucide-react';
 
 const emptyForm = {
   fullName: '',
@@ -80,7 +81,11 @@ export const AddressesPage: React.FC = () => {
             <MapPin className="text-primary" size={22} />
             Saved Addresses
           </h1>
-          <Button variant="primary" size="sm" onClick={() => setShowForm(!showForm)}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setShowForm(!showForm)}
+          >
             {showForm ? 'Cancel' : 'Add Address'}
           </Button>
         </div>
@@ -106,14 +111,18 @@ export const AddressesPage: React.FC = () => {
               label="Address line 1"
               className="sm:col-span-2"
               value={form.addressLine1}
-              onChange={(e) => setForm({ ...form, addressLine1: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, addressLine1: e.target.value })
+              }
               required
             />
             <Input
               label="Address line 2"
               className="sm:col-span-2"
               value={form.addressLine2}
-              onChange={(e) => setForm({ ...form, addressLine2: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, addressLine2: e.target.value })
+              }
             />
             <Input
               label="City"
@@ -137,11 +146,17 @@ export const AddressesPage: React.FC = () => {
               <input
                 type="checkbox"
                 checked={form.isDefault}
-                onChange={(e) => setForm({ ...form, isDefault: e.target.checked })}
+                onChange={(e) =>
+                  setForm({ ...form, isDefault: e.target.checked })
+                }
               />
               Set as default address
             </label>
-            <Button type="submit" variant="primary" isLoading={createAddress.isPending}>
+            <Button
+              type="submit"
+              variant="primary"
+              isLoading={createAddress.isPending}
+            >
               Save Address
             </Button>
           </form>
@@ -161,7 +176,11 @@ export const AddressesPage: React.FC = () => {
                 <div className="text-sm">
                   <p className="font-semibold text-white">
                     {addr.fullName}
-                    {addr.isDefault && <span className="ml-2 text-xs text-primary">(Default)</span>}
+                    {addr.isDefault && (
+                      <span className="ml-2 text-xs text-primary">
+                        (Default)
+                      </span>
+                    )}
                   </p>
                   <p className="text-muted-foreground mt-1">
                     {addr.addressLine1}
@@ -173,7 +192,11 @@ export const AddressesPage: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-2">
                   {!addr.isDefault && (
-                    <Button variant="outline" size="sm" onClick={() => handleSetDefault(addr.id)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleSetDefault(addr.id)}
+                    >
                       Make default
                     </Button>
                   )}

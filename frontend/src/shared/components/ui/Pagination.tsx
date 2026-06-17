@@ -1,5 +1,5 @@
-import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
 
 export interface PaginationProps {
   currentPage: number;
@@ -24,9 +24,24 @@ export const Pagination: React.FC<PaginationProps> = ({
       if (currentPage <= 3) {
         pages.push(1, 2, 3, 4, '...', totalPages);
       } else if (currentPage >= totalPages - 2) {
-        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+        pages.push(
+          1,
+          '...',
+          totalPages - 3,
+          totalPages - 2,
+          totalPages - 1,
+          totalPages
+        );
       } else {
-        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+        pages.push(
+          1,
+          '...',
+          currentPage - 1,
+          currentPage,
+          currentPage + 1,
+          '...',
+          totalPages
+        );
       }
     }
 
@@ -62,7 +77,9 @@ export const Pagination: React.FC<PaginationProps> = ({
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-xs font-medium font-sans text-muted-foreground">
-            Showing Page <span className="font-semibold text-foreground">{currentPage}</span> of{' '}
+            Showing Page{' '}
+            <span className="font-semibold text-foreground">{currentPage}</span>{' '}
+            of{' '}
             <span className="font-semibold text-foreground">{totalPages}</span>
           </p>
         </div>

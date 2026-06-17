@@ -21,10 +21,12 @@ const AdminNotificationSchema: Schema = new Schema(
   {
     collection: 'admin_notifications',
     timestamps: false,
-  },
+  }
 );
 
-export const AdminNotification = mongoose.models.AdminNotification || mongoose.model<IAdminNotification>(
-  'AdminNotification',
-  AdminNotificationSchema,
-);
+export const AdminNotification =
+  mongoose.models.AdminNotification ||
+  mongoose.model<IAdminNotification>(
+    'AdminNotification',
+    AdminNotificationSchema
+  );

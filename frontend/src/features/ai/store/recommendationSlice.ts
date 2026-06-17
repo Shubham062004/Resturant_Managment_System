@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import api from '../../../services/apiClient';
 
 interface RecommendationState {
@@ -17,15 +18,23 @@ const initialState: RecommendationState = {
   error: null,
 };
 
-export const fetchRecommendations = createAsyncThunk('ai/fetchRecommendations', async () => {
-  const response = await api.get('/ai/recommendations');
-  return response.data.data;
-});
+export const fetchRecommendations = createAsyncThunk(
+  'ai/fetchRecommendations',
+  async () => {
+    const response = await api.get('/ai/recommendations');
+    return response.data.data;
+  }
+);
 
-export const fetchCombos = createAsyncThunk('ai/fetchCombos', async (productIds: string[]) => {
-  const response = await api.get(`/ai/combos?productIds=${productIds.join(',')}`);
-  return response.data.data;
-});
+export const fetchCombos = createAsyncThunk(
+  'ai/fetchCombos',
+  async (productIds: string[]) => {
+    const response = await api.get(
+      `/ai/combos?productIds=${productIds.join(',')}`
+    );
+    return response.data.data;
+  }
+);
 
 export const fetchTrending = createAsyncThunk('ai/fetchTrending', async () => {
   const response = await api.get('/ai/trending');

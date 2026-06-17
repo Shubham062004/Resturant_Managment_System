@@ -1,5 +1,6 @@
-import React from 'react';
 import { ClipboardList, Utensils, Users, Search } from 'lucide-react';
+import React from 'react';
+
 import { Button } from './Button';
 
 export type EmptyStateType = 'orders' | 'products' | 'customers' | 'search';
@@ -31,7 +32,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     products: {
       icon: <Utensils size={48} className="text-muted-foreground/60" />,
       title: 'No Products Yet',
-      description: 'Your menu is empty. Start adding delicious dishes to get started.',
+      description:
+        'Your menu is empty. Start adding delicious dishes to get started.',
     },
     customers: {
       icon: <Users size={48} className="text-muted-foreground/60" />,

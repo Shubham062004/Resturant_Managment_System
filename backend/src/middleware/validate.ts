@@ -8,7 +8,11 @@ export interface ValidationSchema {
 }
 
 export const validate = (schema: ValidationSchema) => {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     try {
       if (schema.body) {
         req.body = await schema.body.parseAsync(req.body);

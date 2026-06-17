@@ -1,12 +1,14 @@
 import { Response, NextFunction } from 'express';
+
 import { AuthRequest } from '../../types/express';
+
 import { CatalogService } from './catalog.service';
 
 export class CatalogController {
   public static async getRestaurants(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const filters = req.query as any;
@@ -26,7 +28,7 @@ export class CatalogController {
   public static async getRestaurantById(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { id } = req.params;
@@ -45,7 +47,7 @@ export class CatalogController {
   public static async getRestaurantBySlug(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { slug } = req.params;
@@ -64,7 +66,7 @@ export class CatalogController {
   public static async getBranches(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const filters = req.query as {
@@ -88,7 +90,7 @@ export class CatalogController {
   public static async getCategories(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const filters = req.query as {
@@ -112,12 +114,15 @@ export class CatalogController {
   public static async getCategoryBySlug(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { slug } = req.params;
       const { restaurantId } = req.query as { restaurantId?: string };
-      const category = await CatalogService.getCategoryBySlug(slug, restaurantId);
+      const category = await CatalogService.getCategoryBySlug(
+        slug,
+        restaurantId
+      );
 
       res.status(200).json({
         success: true,
@@ -132,7 +137,7 @@ export class CatalogController {
   public static async getProducts(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const filters = req.query as any;
@@ -153,7 +158,7 @@ export class CatalogController {
   public static async getFeaturedProducts(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const products = await CatalogService.getFeaturedProducts();
@@ -171,7 +176,7 @@ export class CatalogController {
   public static async getProductBySlug(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { slug } = req.params;
@@ -182,7 +187,8 @@ export class CatalogController {
         success: true,
         data: result.product,
         recommendations: result.recommendations,
-        message: 'Product details, reviews, and recommendations retrieved successfully.',
+        message:
+          'Product details, reviews, and recommendations retrieved successfully.',
       });
     } catch (error) {
       next(error);
@@ -192,12 +198,16 @@ export class CatalogController {
   public static async trackRecommendationClick(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { productId, recommendedProductId } = req.body;
       const userId = req.user?.id;
-      await CatalogService.trackRecommendationClick(productId, recommendedProductId, userId);
+      await CatalogService.trackRecommendationClick(
+        productId,
+        recommendedProductId,
+        userId
+      );
 
       res.status(200).json({
         success: true,
@@ -211,7 +221,7 @@ export class CatalogController {
   public static async createReview(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {
@@ -234,7 +244,7 @@ export class CatalogController {
   public static async updateReview(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {
@@ -243,7 +253,11 @@ export class CatalogController {
       }
 
       const { id } = req.params;
-      const review = await CatalogService.updateReview(req.user.id, id, req.body);
+      const review = await CatalogService.updateReview(
+        req.user.id,
+        id,
+        req.body
+      );
 
       res.status(200).json({
         success: true,
@@ -258,7 +272,7 @@ export class CatalogController {
   public static async deleteReview(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {
@@ -282,12 +296,15 @@ export class CatalogController {
   public static async getReviewsByProductId(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { productId } = req.params;
       const filters = req.query as { page?: number; limit?: number };
-      const result = await CatalogService.getReviewsByProductId(productId, filters);
+      const result = await CatalogService.getReviewsByProductId(
+        productId,
+        filters
+      );
 
       res.status(200).json({
         success: true,
@@ -303,7 +320,7 @@ export class CatalogController {
   public static async toggleFavorite(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {
@@ -312,7 +329,10 @@ export class CatalogController {
       }
 
       const { productId } = req.body;
-      const result = await CatalogService.toggleFavorite(req.user.id, productId);
+      const result = await CatalogService.toggleFavorite(
+        req.user.id,
+        productId
+      );
 
       res.status(200).json({
         success: true,
@@ -327,7 +347,7 @@ export class CatalogController {
   public static async getFavorites(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+
 import apiClient from '../../../services/apiClient';
 
 interface Reservation {
@@ -46,7 +47,7 @@ export const fetchBranchReservations = createAsyncThunk(
       `/reservations/branch?branchId=${branchId}`
     );
     return response.data.data;
-  },
+  }
 );
 
 export const fetchWaitlist = createAsyncThunk(
@@ -54,29 +55,34 @@ export const fetchWaitlist = createAsyncThunk(
   async (branchId: string) => {
     const response = await apiClient.get(`/waitlist/branch/${branchId}`);
     return response.data.data;
-  },
+  }
 );
 
 export const updateReservationStatus = createAsyncThunk(
   'reservations/updateStatus',
-  async ({ id, status, tableId }: { id: string; status: string; tableId?: string }) => {
-    const response = await apiClient.patch(
-      `/reservations/${id}`,
-      { status, tableId }
-    );
+  async ({
+    id,
+    status,
+    tableId,
+  }: {
+    id: string;
+    status: string;
+    tableId?: string;
+  }) => {
+    const response = await apiClient.patch(`/reservations/${id}`, {
+      status,
+      tableId,
+    });
     return response.data.data;
-  },
+  }
 );
 
 export const updateWaitlistStatus = createAsyncThunk(
   'reservations/updateWaitlist',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await apiClient.patch(
-      `/waitlist/${id}`,
-      { status }
-    );
+    const response = await apiClient.patch(`/waitlist/${id}`, { status });
     return response.data.data;
-  },
+  }
 );
 
 const reservationSlice = createSlice({
@@ -87,7 +93,9 @@ const reservationSlice = createSlice({
       state.reservations.push(action.payload);
     },
     reservationUpdated: (state, action: PayloadAction<Reservation>) => {
-      const index = state.reservations.findIndex((r) => r.id === action.payload.id);
+      const index = state.reservations.findIndex(
+        (r) => r.id === action.payload.id
+      );
       if (index !== -1) {
         state.reservations[index] = action.payload;
       }
@@ -118,13 +126,17 @@ const reservationSlice = createSlice({
         state.waitlist = action.payload;
       })
       .addCase(updateReservationStatus.fulfilled, (state, action) => {
-        const index = state.reservations.findIndex((r) => r.id === action.payload.id);
+        const index = state.reservations.findIndex(
+          (r) => r.id === action.payload.id
+        );
         if (index !== -1) {
           state.reservations[index] = action.payload;
         }
       })
       .addCase(updateWaitlistStatus.fulfilled, (state, action) => {
-        const index = state.waitlist.findIndex((w) => w.id === action.payload.id);
+        const index = state.waitlist.findIndex(
+          (w) => w.id === action.payload.id
+        );
         if (index !== -1) {
           state.waitlist[index] = action.payload;
         }
@@ -132,5 +144,6 @@ const reservationSlice = createSlice({
   },
 });
 
-export const { reservationCreated, reservationUpdated, waitlistUpdated } = reservationSlice.actions;
+export const { reservationCreated, reservationUpdated, waitlistUpdated } =
+  reservationSlice.actions;
 export default reservationSlice.reducer;

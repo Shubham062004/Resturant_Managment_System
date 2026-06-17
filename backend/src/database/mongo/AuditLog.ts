@@ -19,7 +19,9 @@ const AuditLogSchema: Schema = new Schema(
   {
     collection: 'audit_logs',
     timestamps: false,
-  },
+  }
 );
 
-export const AuditLog = mongoose.models.AuditLog || mongoose.model<IAuditLog>('AuditLog', AuditLogSchema);
+export const AuditLog =
+  mongoose.models.AuditLog ||
+  mongoose.model<IAuditLog>('AuditLog', AuditLogSchema);

@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { toggleAssistant } from '../store/aiSlice';
-import { sendMessage, addUserMessage } from '../store/assistantSlice';
-import { MessageSquare, X, Send, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MessageSquare, X, Send, Bot } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
 import Button from '../../../shared/components/ui/Button';
 import Input from '../../../shared/components/ui/Input';
+import { toggleAssistant } from '../store/aiSlice';
+import { sendMessage, addUserMessage } from '../store/assistantSlice';
 
 export default function AIRestaurantAssistant() {
   const dispatch = useAppDispatch();
-  const { isAssistantOpen } = useAppSelector(state => state.ai);
-  const { messages, status } = useAppSelector(state => state.assistant);
+  const { isAssistantOpen } = useAppSelector((state) => state.ai);
+  const { messages, status } = useAppSelector((state) => state.assistant);
   const [inputText, setInputText] = useState('');
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim() || status === 'loading') return;
-    
+
     dispatch(addUserMessage(inputText));
     const newMessages = [...messages, { role: 'user', content: inputText }];
     setInputText('');
-    
+
     await dispatch(sendMessage(newMessages));
   };
 
@@ -47,17 +48,27 @@ export default function AIRestaurantAssistant() {
                 <Bot className="text-primary" />
                 <h3 className="font-bold text-white">AI Assistant</h3>
               </div>
-              <button onClick={() => dispatch(toggleAssistant())} className="text-muted-foreground hover:text-white">
+              <button
+                onClick={() => dispatch(toggleAssistant())}
+                className="text-muted-foreground hover:text-white"
+              >
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((msg: any, i: number) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`p-3 rounded-xl max-w-[85%] ${
-                    msg.role === 'user' ? 'bg-primary text-white rounded-br-none' : 'bg-secondary/40 text-foreground rounded-bl-none'
-                  }`}>
+                <div
+                  key={i}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`p-3 rounded-xl max-w-[85%] ${
+                      msg.role === 'user'
+                        ? 'bg-primary text-white rounded-br-none'
+                        : 'bg-secondary/40 text-foreground rounded-bl-none'
+                    }`}
+                  >
                     {msg.content}
                   </div>
                 </div>
@@ -71,7 +82,10 @@ export default function AIRestaurantAssistant() {
               )}
             </div>
 
-            <form onSubmit={handleSend} className="p-4 border-t border-border/50 bg-surface flex gap-2">
+            <form
+              onSubmit={handleSend}
+              className="p-4 border-t border-border/50 bg-surface flex gap-2"
+            >
               <Input
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
@@ -79,7 +93,12 @@ export default function AIRestaurantAssistant() {
                 className="flex-1"
                 disabled={status === 'loading'}
               />
-              <Button type="submit" variant="primary" disabled={status === 'loading'} className="px-3">
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={status === 'loading'}
+                className="px-3"
+              >
                 <Send size={18} />
               </Button>
             </form>

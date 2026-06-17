@@ -24,7 +24,6 @@ const NotificationLogSchema: Schema = new Schema({
   createdAt: { type: Date, default: Date.now, expires: '90d' }, // Auto-delete logs after 90 days
 });
 
-export const NotificationLog = mongoose.models.NotificationLog || mongoose.model<INotificationLog>(
-  'NotificationLog',
-  NotificationLogSchema,
-);
+export const NotificationLog =
+  mongoose.models.NotificationLog ||
+  mongoose.model<INotificationLog>('NotificationLog', NotificationLogSchema);

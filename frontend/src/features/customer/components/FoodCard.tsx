@@ -1,11 +1,17 @@
+import { motion } from 'framer-motion';
+import { Star, Clock, Heart, Plus, Minus, Flame, Leaf } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Clock, Heart, Plus, Minus, Flame, Leaf } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import { useAppSelector } from '../../../app/store';
-import { useAddToCart, useUpdateCartItem, useRemoveCartItem, useCart } from '../../cart/store/cartQueries';
-import { useToggleFavorite } from '../store/catalogQueries';
 import { useToast } from '../../../shared/components/ui/Toast';
+import {
+  useAddToCart,
+  useUpdateCartItem,
+  useRemoveCartItem,
+  useCart,
+} from '../../cart/store/cartQueries';
+import { useToggleFavorite } from '../store/catalogQueries';
 import type { Product } from '../store/catalogQueries';
 
 interface FoodCardProps {
@@ -14,11 +20,15 @@ interface FoodCardProps {
   className?: string;
 }
 
-const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, className = '' }) => {
+const FoodCard: React.FC<FoodCardProps> = ({
+  product,
+  showAddToCart = true,
+  className = '',
+}) => {
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { favoriteIds } = useAppSelector((state) => state.favorites);
-  const isFavorite = favoriteIds.includes(product.id);
+  const { favoritedIds } = useAppSelector((state) => state.favorite);
+  const isFavorite = !!favoritedIds[product.id];
 
   const { data: cart } = useCart(isAuthenticated);
   const addToCart = useAddToCart();
@@ -126,7 +136,9 @@ const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, clas
             >
               <Heart
                 size={16}
-                className={isFavorite ? 'text-red-500 fill-red-500' : 'text-white/80'}
+                className={
+                  isFavorite ? 'text-red-500 fill-red-500' : 'text-white/80'
+                }
               />
             </button>
 
@@ -134,12 +146,16 @@ const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, clas
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
               <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
                 <Star size={12} className="text-amber-400 fill-amber-400" />
-                <span className="text-white text-xs font-bold">{product.rating?.toFixed(1) || '4.0'}</span>
+                <span className="text-white text-xs font-bold">
+                  {product.rating?.toFixed(1) || '4.0'}
+                </span>
               </div>
               {product.preparationTime && (
                 <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
                   <Clock size={12} className="text-white/70" />
-                  <span className="text-white text-xs font-medium">{product.preparationTime} min</span>
+                  <span className="text-white text-xs font-medium">
+                    {product.preparationTime} min
+                  </span>
                 </div>
               )}
             </div>
@@ -157,7 +173,9 @@ const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, clas
             )}
 
             <div className="flex items-center justify-between pt-1">
-              <span className="text-primary font-bold text-base">₹{price.toFixed(0)}</span>
+              <span className="text-primary font-bold text-base">
+                ₹{price.toFixed(0)}
+              </span>
 
               {/* Add to Cart / Quantity stepper */}
               {showAddToCart && (

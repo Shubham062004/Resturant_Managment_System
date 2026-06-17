@@ -8,8 +8,21 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 }
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className = '', label, error, success, helperText, disabled, id, ...props }, ref) => {
-    const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
+  (
+    {
+      className = '',
+      label,
+      error,
+      success,
+      helperText,
+      disabled,
+      id,
+      ...props
+    },
+    ref
+  ) => {
+    const textareaId =
+      id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
     const helperId = `${textareaId}-helper`;
 
     const isError = !!error;
@@ -23,7 +36,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     }
 
     return (
-      <div className={`w-full flex flex-col gap-1.5 ${disabled ? 'opacity-50' : ''}`}>
+      <div
+        className={`w-full flex flex-col gap-1.5 ${disabled ? 'opacity-50' : ''}`}
+      >
         {label && (
           <label
             htmlFor={textareaId}
@@ -38,7 +53,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           disabled={disabled}
           aria-invalid={isError ? 'true' : 'false'}
-          aria-describedby={helperText || error || success ? helperId : undefined}
+          aria-describedby={
+            helperText || error || success ? helperId : undefined
+          }
           className={`w-full bg-secondary border px-4 py-3 rounded-lg text-foreground focus:outline-none transition-all duration-200 font-sans text-sm min-h-[100px] resize-y
             ${borderClass}
             ${className}
@@ -60,7 +77,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 Textarea.displayName = 'Textarea';

@@ -1,11 +1,4 @@
-import { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
-import { useAppDispatch, useAppSelector } from '../app/store';
-import { logout } from '../features/auth/store/authSlice';
-import Avatar from '../shared/components/ui/Avatar';
-import AIRestaurantAssistant from '../features/ai/components/AIRestaurantAssistant';
 import {
   LayoutDashboard,
   TableProperties,
@@ -17,6 +10,14 @@ import {
   User as UserIcon,
   BarChart3,
 } from 'lucide-react';
+import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../app/store';
+import AIRestaurantAssistant from '../features/ai/components/AIRestaurantAssistant';
+import { logout } from '../features/auth/store/authSlice';
+import Avatar from '../shared/components/ui/Avatar';
 
 export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -49,10 +50,13 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
     <div className="min-h-screen bg-background flex text-foreground overflow-hidden">
       <Helmet>
         <title>ABC - Restaurant Management System</title>
-        <meta name="description" content="Enterprise-grade Restaurant Management System featuring AI insights, live kitchen displays, and seamless delivery integration." />
+        <meta
+          name="description"
+          content="Enterprise-grade Restaurant Management System featuring AI insights, live kitchen displays, and seamless delivery integration."
+        />
         <html lang="en" />
       </Helmet>
-      
+
       {/* Side Navigation Panel */}
       <AnimatePresence mode="wait">
         {isSidebarOpen && (
@@ -119,7 +123,11 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="p-2 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
             >
-              {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isSidebarOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
             <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold bg-secondary px-3 py-1.5 rounded-md border border-border">
               Station #01 - FOH Desk

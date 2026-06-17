@@ -16,4 +16,6 @@ const KitchenEventSchema = new Schema<IKitchenEvent>({
   timestamp: { type: Date, default: Date.now },
 });
 
-export const KitchenEvent = mongoose.models.KitchenEvent || mongoose.model<IKitchenEvent>('KitchenEvent', KitchenEventSchema);
+export const KitchenEvent =
+  mongoose.models.KitchenEvent ||
+  mongoose.model<IKitchenEvent>('KitchenEvent', KitchenEventSchema);

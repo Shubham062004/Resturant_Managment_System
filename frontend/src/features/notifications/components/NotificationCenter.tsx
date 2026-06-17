@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { fetchNotifications, markNotificationRead, addRealtimeNotification } from '../store/notificationSlice';
 import { Bell, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import {
+  fetchNotifications,
+  markNotificationRead,
+  addRealtimeNotification,
+} from '../store/notificationSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -19,7 +24,10 @@ export default function NotificationCenter() {
   useEffect(() => {
     if (!user) return undefined;
     const token = localStorage.getItem('token');
-    const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
+    const newSocket = io(API_BASE_URL, {
+      auth: { token },
+      withCredentials: true,
+    });
 
     newSocket.on('notification-created', (notification: any) => {
       dispatch(addRealtimeNotification(notification));
@@ -54,14 +62,19 @@ export default function NotificationCenter() {
         <div className="absolute right-0 mt-2 w-80 bg-slate-800 rounded-lg shadow-xl border border-slate-700 z-50 overflow-hidden">
           <div className="flex justify-between items-center p-4 border-b border-slate-700 bg-slate-900">
             <h3 className="font-bold text-white">Notifications</h3>
-            <button onClick={toggleDropdown} className="text-slate-400 hover:text-white">
+            <button
+              onClick={toggleDropdown}
+              className="text-slate-400 hover:text-white"
+            >
               <X size={18} />
             </button>
           </div>
 
           <div className="max-h-96 overflow-y-auto">
-            {(!list || list.length === 0) ? (
-              <div className="p-6 text-center text-slate-500">No recent notifications</div>
+            {!list || list.length === 0 ? (
+              <div className="p-6 text-center text-slate-500">
+                No recent notifications
+              </div>
             ) : (
               list?.map((notif: any) => (
                 <div
@@ -70,12 +83,16 @@ export default function NotificationCenter() {
                   onClick={() => handleMarkRead(notif.id)}
                 >
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm font-semibold text-white">{notif.title}</span>
+                    <span className="text-sm font-semibold text-white">
+                      {notif.title}
+                    </span>
                     {notif.status !== 'READ' && (
                       <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400 line-clamp-2">{notif.message}</p>
+                  <p className="text-xs text-slate-400 line-clamp-2">
+                    {notif.message}
+                  </p>
                 </div>
               ))
             )}

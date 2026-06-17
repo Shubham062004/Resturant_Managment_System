@@ -1,6 +1,8 @@
 import { Router } from 'express';
-import { AIController } from './ai.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
+
+import { AIController } from './ai.controller';
 
 const router = Router();
 
@@ -11,10 +13,30 @@ router.get('/combos', AIController.getCombos);
 router.post('/chat', AIController.postChat);
 
 // Admin and Owner insights & forecasting
-router.use('/predictions', authGuard, restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'));
+router.use(
+  '/predictions',
+  authGuard,
+  restrictTo(
+    'ADMIN',
+    'SUPER_ADMIN',
+    'BRANCH_MANAGER',
+    'ORGANIZATION_OWNER',
+    'FRANCHISE_OWNER'
+  )
+);
 router.get('/predictions', AIController.getPredictions);
 
-router.use('/customer-segment', authGuard, restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'));
+router.use(
+  '/customer-segment',
+  authGuard,
+  restrictTo(
+    'ADMIN',
+    'SUPER_ADMIN',
+    'BRANCH_MANAGER',
+    'ORGANIZATION_OWNER',
+    'FRANCHISE_OWNER'
+  )
+);
 router.get('/customer-segment', AIController.getCustomerSegment);
 
 export default router;

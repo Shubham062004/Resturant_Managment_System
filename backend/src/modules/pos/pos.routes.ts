@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import { POSController } from './pos.controller';
+
 import { authGuard, restrictTo } from '../../middleware/authGuard';
 import validate from '../../middleware/validate';
+
+import { POSController } from './pos.controller';
 import {
   createTerminalSchema,
   startShiftSchema,
@@ -19,12 +21,12 @@ router.post(
   '/terminals',
   restrictTo('ADMIN', 'SUPER_ADMIN'),
   validate(createTerminalSchema),
-  POSController.createTerminal,
+  POSController.createTerminal
 );
 router.get(
   '/terminals/:branchId',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
-  POSController.getTerminals,
+  POSController.getTerminals
 );
 
 // Shift Management
@@ -32,13 +34,13 @@ router.post(
   '/shifts/start',
   restrictTo('CASHIER', 'ADMIN'),
   validate(startShiftSchema),
-  POSController.startShift,
+  POSController.startShift
 );
 router.post(
   '/shifts/end/:drawerId',
   restrictTo('CASHIER', 'ADMIN'),
   validate(endShiftSchema),
-  POSController.endShift,
+  POSController.endShift
 );
 
 // Order Management
@@ -46,24 +48,32 @@ router.post(
   '/orders',
   restrictTo('CASHIER', 'ADMIN'),
   validate(createPOSOrderSchema),
-  POSController.createPOSOrder,
+  POSController.createPOSOrder
 );
-router.get('/orders/:id', restrictTo('CASHIER', 'ADMIN'), POSController.getPOSOrder);
+router.get(
+  '/orders/:id',
+  restrictTo('CASHIER', 'ADMIN'),
+  POSController.getPOSOrder
+);
 
 // Payment & Receipt
 router.post(
   '/payments',
   restrictTo('CASHIER', 'ADMIN'),
   validate(processPaymentSchema),
-  POSController.processPayment,
+  POSController.processPayment
 );
-router.get('/receipts/:posOrderId', restrictTo('CASHIER', 'ADMIN'), POSController.getReceipt);
+router.get(
+  '/receipts/:posOrderId',
+  restrictTo('CASHIER', 'ADMIN'),
+  POSController.getReceipt
+);
 
 // Analytics
 router.get(
   '/analytics/today/:branchId',
   restrictTo('ADMIN', 'SUPER_ADMIN'),
-  POSController.getTodayAnalytics,
+  POSController.getTodayAnalytics
 );
 
 export default router;

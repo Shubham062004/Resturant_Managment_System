@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
+import { io } from 'socket.io-client';
+
 import { useAppDispatch, useAppSelector } from '../../../app/store';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 import {
   fetchBranchReservations,
   fetchWaitlist,
@@ -9,16 +14,14 @@ import {
   reservationUpdated,
   waitlistUpdated,
 } from '../store/reservationSlice';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Badge } from '../../../shared/components/ui/Badge';
-import { io } from 'socket.io-client';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function ReservationsPage() {
   const dispatch = useAppDispatch();
-  const { reservations, waitlist } = useAppSelector((state) => state.reservations);
+  const { reservations, waitlist } = useAppSelector(
+    (state) => state.reservations
+  );
   // Default branch for testing
   const branchId = 'default-branch-id';
 
@@ -29,8 +32,12 @@ export default function ReservationsPage() {
     const socket = io(API_BASE_URL, { withCredentials: true });
     socket.emit('join-branch', branchId);
 
-    socket.on('reservation-created', (data) => dispatch(reservationCreated(data)));
-    socket.on('reservation-confirmed', (data) => dispatch(reservationUpdated(data)));
+    socket.on('reservation-created', (data) =>
+      dispatch(reservationCreated(data))
+    );
+    socket.on('reservation-confirmed', (data) =>
+      dispatch(reservationUpdated(data))
+    );
     socket.on('waitlist-updated', (data) => dispatch(waitlistUpdated(data)));
 
     return () => {
@@ -49,14 +56,21 @@ export default function ReservationsPage() {
   return (
     <div className="p-6 bg-slate-50 min-h-screen">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Reservations & Waitlist</h1>
+        <h1 className="text-2xl font-bold text-slate-800">
+          Reservations & Waitlist
+        </h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <h2 className="text-xl font-semibold text-slate-800">Upcoming Reservations</h2>
+          <h2 className="text-xl font-semibold text-slate-800">
+            Upcoming Reservations
+          </h2>
           {reservations.map((res: any) => (
-            <Card key={res.id} className="p-4 flex items-center justify-between">
+            <Card
+              key={res.id}
+              className="p-4 flex items-center justify-between"
+            >
               <div>
                 <p className="font-semibold text-lg">
                   {res.customer?.firstName} {res.customer?.lastName}
@@ -64,7 +78,9 @@ export default function ReservationsPage() {
                 <p className="text-sm text-slate-500">
                   {res.reservationDate} at {res.reservationTime}
                 </p>
-                <p className="text-sm text-slate-500">Guests: {res.guestCount}</p>
+                <p className="text-sm text-slate-500">
+                  Guests: {res.guestCount}
+                </p>
               </div>
               <div className="text-right">
                 <Badge
@@ -80,7 +96,11 @@ export default function ReservationsPage() {
                   {res.status}
                 </Badge>
                 {res.status === 'CONFIRMED' && (
-                  <Button variant="primary" size="sm" onClick={() => handleCheckIn(res.id)}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handleCheckIn(res.id)}
+                  >
                     Check In
                   </Button>
                 )}
@@ -93,17 +113,25 @@ export default function ReservationsPage() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-slate-800 mb-6">Waitlist Queue</h2>
+          <h2 className="text-xl font-semibold text-slate-800 mb-6">
+            Waitlist Queue
+          </h2>
           {waitlist.map((entry: any) => (
             <Card key={entry.id} className="p-4 mb-4">
               <div className="flex justify-between items-center mb-2">
                 <p className="font-semibold">{entry.customer?.firstName}</p>
-                <Badge variant={entry.status === 'WAITING' ? 'warning' : 'success'}>
+                <Badge
+                  variant={entry.status === 'WAITING' ? 'warning' : 'success'}
+                >
                   {entry.status}
                 </Badge>
               </div>
-              <p className="text-sm text-slate-500">Guests: {entry.guestCount}</p>
-              <p className="text-sm text-slate-500">Est. Wait: {entry.estimatedWaitTime} mins</p>
+              <p className="text-sm text-slate-500">
+                Guests: {entry.guestCount}
+              </p>
+              <p className="text-sm text-slate-500">
+                Est. Wait: {entry.estimatedWaitTime} mins
+              </p>
               {entry.status === 'WAITING' && (
                 <Button
                   variant="outline"
@@ -116,7 +144,9 @@ export default function ReservationsPage() {
               )}
             </Card>
           ))}
-          {waitlist.length === 0 && <p className="text-slate-500 italic">Waitlist is empty.</p>}
+          {waitlist.length === 0 && (
+            <p className="text-slate-500 italic">Waitlist is empty.</p>
+          )}
         </div>
       </div>
     </div>

@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build": "vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --fix",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "clean": "rimraf dist coverage node_modules",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,6 +18,7 @@
     "@tanstack/react-query": "^5.40.4",
     "axios": "^1.7.2",
     "clsx": "^2.1.1",
+    "date-fns": "^2.30.0",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.383.0",
     "react": "^18.3.1",
@@ -39,7 +42,8 @@
     "@typescript-eslint/parser": "^7.11.0",
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.19",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",

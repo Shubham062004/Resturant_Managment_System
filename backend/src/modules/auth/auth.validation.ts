@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { Role, OtpType } from '@prisma/client';
+import { z } from 'zod';
 
 export const registerSchema = z.object({
   email: z.string().email('Invalid email format').toLowerCase(),

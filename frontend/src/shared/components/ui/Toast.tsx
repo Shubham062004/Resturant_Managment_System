@@ -1,7 +1,14 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  X,
+  CheckCircle2,
+  AlertTriangle,
+  AlertOctagon,
+  Info,
+} from 'lucide-react';
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { X, CheckCircle2, AlertTriangle, AlertOctagon, Info } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { fadeUp } from '../../theme/animations';
 
 export type ToastType = 'success' | 'warning' | 'error' | 'info';
@@ -21,7 +28,9 @@ interface ToastContextProps {
 
 const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const removeToast = useCallback((id: string) => {
@@ -39,7 +48,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }, duration);
       }
     },
-    [removeToast],
+    [removeToast]
   );
 
   return (
@@ -57,20 +66,24 @@ export const useToast = () => {
   }
 
   const toast = {
-    success: (msg: string, duration?: number) => context.addToast(msg, 'success', duration),
-    warning: (msg: string, duration?: number) => context.addToast(msg, 'warning', duration),
-    error: (msg: string, duration?: number) => context.addToast(msg, 'error', duration),
-    info: (msg: string, duration?: number) => context.addToast(msg, 'info', duration),
+    success: (msg: string, duration?: number) =>
+      context.addToast(msg, 'success', duration),
+    warning: (msg: string, duration?: number) =>
+      context.addToast(msg, 'warning', duration),
+    error: (msg: string, duration?: number) =>
+      context.addToast(msg, 'error', duration),
+    info: (msg: string, duration?: number) =>
+      context.addToast(msg, 'info', duration),
   };
 
   return toast;
 };
 
 // Internal Toast Container component
-const ToastContainer: React.FC<{ toasts: ToastItem[]; removeToast: (id: string) => void }> = ({
-  toasts,
-  removeToast,
-}) => {
+const ToastContainer: React.FC<{
+  toasts: ToastItem[];
+  removeToast: (id: string) => void;
+}> = ({ toasts, removeToast }) => {
   const icons = {
     success: <CheckCircle2 size={18} className="text-success flex-shrink-0" />,
     warning: <AlertTriangle size={18} className="text-warning flex-shrink-0" />,

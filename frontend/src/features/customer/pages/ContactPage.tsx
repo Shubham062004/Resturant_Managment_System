@@ -1,10 +1,11 @@
+import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react';
 import React, { useState } from 'react';
+
 import SEO from '../../../shared/components/SEO';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import { Textarea } from '../../../shared/components/ui/Textarea';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react';
 
 export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -21,7 +22,7 @@ export const ContactPage: React.FC = () => {
     setTimeout(() => {
       setIsLoading(false);
       toast.success(
-        'Your message has been received! Our support dispatch will respond within 4 hours.',
+        'Your message has been received! Our support dispatch will respond within 4 hours.'
       );
       setName('');
       setEmail('');
@@ -44,8 +45,8 @@ export const ContactPage: React.FC = () => {
             Contact Dispatch
           </h1>
           <p className="text-muted-foreground text-sm font-sans max-w-md mx-auto">
-            Encountering trouble at a dispatch outpost or have a custom catering inquiry? Drop our
-            desk a line.
+            Encountering trouble at a dispatch outpost or have a custom catering
+            inquiry? Drop our desk a line.
           </p>
         </div>
 
@@ -71,7 +72,9 @@ export const ContactPage: React.FC = () => {
               <div className="flex gap-4 p-4 rounded-xl bg-card/45 border border-border/50">
                 <Mail className="text-primary flex-shrink-0" size={18} />
                 <div className="space-y-1 font-sans text-xs">
-                  <h3 className="font-bold text-white">Digital Dispatch Desk</h3>
+                  <h3 className="font-bold text-white">
+                    Digital Dispatch Desk
+                  </h3>
                   <p className="text-muted-foreground">support@abc.com</p>
                   <p className="text-[10px] text-muted-foreground/60">
                     Corporate/API requests: ops@abc.com
@@ -83,8 +86,12 @@ export const ContactPage: React.FC = () => {
                 <MapPin className="text-primary flex-shrink-0" size={18} />
                 <div className="space-y-1 font-sans text-xs">
                   <h3 className="font-bold text-white">Headquarters</h3>
-                  <p className="text-muted-foreground">500 Fashion Ave, Fl 14</p>
-                  <p className="text-[10px] text-muted-foreground/60">New York, NY 10018</p>
+                  <p className="text-muted-foreground">
+                    500 Fashion Ave, Fl 14
+                  </p>
+                  <p className="text-[10px] text-muted-foreground/60">
+                    New York, NY 10018
+                  </p>
                 </div>
               </div>
             </div>

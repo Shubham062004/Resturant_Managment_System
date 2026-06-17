@@ -29,7 +29,9 @@ export const searchSlice = createSlice({
     addHistory: (state, action: PayloadAction<string>) => {
       const trimmed = action.payload.trim();
       if (!trimmed) return;
-      const filtered = state.history.filter((q) => q.toLowerCase() !== trimmed.toLowerCase());
+      const filtered = state.history.filter(
+        (q) => q.toLowerCase() !== trimmed.toLowerCase()
+      );
       state.history = [trimmed, ...filtered].slice(0, 10);
       localStorage.setItem('searchHistory', JSON.stringify(state.history));
     },

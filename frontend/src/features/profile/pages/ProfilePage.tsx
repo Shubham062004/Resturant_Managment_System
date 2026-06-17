@@ -1,12 +1,3 @@
-import React, { useState, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { updateProfile, logoutAllDevices } from '../../auth/store/authSlice';
-import { useToast } from '../../../shared/components/ui/Toast';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import Avatar from '../../../shared/components/ui/Avatar';
-import Badge from '../../../shared/components/ui/Badge';
-import Alert from '../../../shared/components/ui/Alert';
 import {
   User as UserIcon,
   Phone,
@@ -16,6 +7,16 @@ import {
   Camera,
   LogOut,
 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../app/store';
+import Alert from '../../../shared/components/ui/Alert';
+import Avatar from '../../../shared/components/ui/Avatar';
+import Badge from '../../../shared/components/ui/Badge';
+import Button from '../../../shared/components/ui/Button';
+import Input from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
+import { updateProfile, logoutAllDevices } from '../../auth/store/authSlice';
 
 export const ProfilePage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -52,7 +53,9 @@ export const ProfilePage: React.FC = () => {
     // Validate type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      setValidationError('Invalid image format. Allowed formats: JPEG, PNG, WEBP, GIF.');
+      setValidationError(
+        'Invalid image format. Allowed formats: JPEG, PNG, WEBP, GIF.'
+      );
       return;
     }
 
@@ -79,7 +82,9 @@ export const ProfilePage: React.FC = () => {
     }
 
     if (phone && !/^\+?[1-9]\d{1,14}$/.test(phone)) {
-      setValidationError('Invalid phone number format. Use E.164 standard (e.g. +1234567890).');
+      setValidationError(
+        'Invalid phone number format. Use E.164 standard (e.g. +1234567890).'
+      );
       setIsLoading(false);
       return;
     }
@@ -99,10 +104,14 @@ export const ProfilePage: React.FC = () => {
         toast.success('Your profile details have been saved successfully.');
         setAvatarFile(null);
       } else {
-        setValidationError((result.payload as string) || 'Failed to update profile.');
+        setValidationError(
+          (result.payload as string) || 'Failed to update profile.'
+        );
       }
     } catch (err) {
-      setValidationError('An unexpected error occurred while saving your details.');
+      setValidationError(
+        'An unexpected error occurred while saving your details.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +120,7 @@ export const ProfilePage: React.FC = () => {
   const handleLogoutAll = async () => {
     if (
       window.confirm(
-        'Are you sure you want to terminate all active sessions on other devices? You will be signed out from this client.',
+        'Are you sure you want to terminate all active sessions on other devices? You will be signed out from this client.'
       )
     ) {
       await dispatch(logoutAllDevices());
@@ -149,7 +158,10 @@ export const ProfilePage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Avatar & Metadata Info */}
         <div className="glass-panel p-6 rounded-xl flex flex-col items-center text-center space-y-6">
-          <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+          <div
+            className="relative group cursor-pointer"
+            onClick={handleAvatarClick}
+          >
             <Avatar
               src={getAvatarSrc()}
               name={`${user.firstName} ${user.lastName}`}
@@ -170,7 +182,9 @@ export const ProfilePage: React.FC = () => {
 
           <div className="space-y-1">
             <h2 className="text-xl font-bold font-display text-white">{`${user.firstName} ${user.lastName}`}</h2>
-            <p className="text-xs text-muted-foreground font-sans">{user.email}</p>
+            <p className="text-xs text-muted-foreground font-sans">
+              {user.email}
+            </p>
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center">
@@ -178,11 +192,17 @@ export const ProfilePage: React.FC = () => {
               {user.role}
             </Badge>
             {user.isEmailVerified ? (
-              <Badge variant="success" className="text-[10px] py-1 flex items-center gap-1">
+              <Badge
+                variant="success"
+                className="text-[10px] py-1 flex items-center gap-1"
+              >
                 <ShieldCheck size={10} /> Verified
               </Badge>
             ) : (
-              <Badge variant="warning" className="text-[10px] py-1 flex items-center gap-1">
+              <Badge
+                variant="warning"
+                className="text-[10px] py-1 flex items-center gap-1"
+              >
                 <ShieldAlert size={10} /> Unverified Email
               </Badge>
             )}
@@ -210,38 +230,62 @@ export const ProfilePage: React.FC = () => {
             <div className="glass-panel p-8 rounded-xl space-y-6">
               <h2 className="text-xl font-bold font-display text-white border-b border-border/40 pb-4 flex items-center justify-between">
                 <span>Staff Operations Portal</span>
-                <Badge variant="info" className="text-xs">Active Shift Partner</Badge>
+                <Badge variant="info" className="text-xs">
+                  Active Shift Partner
+                </Badge>
               </h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
                 {/* Salary Card */}
                 <div className="bg-slate-950/60 p-5 rounded-2xl border border-border/20 text-center">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Base Salary</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                    Base Salary
+                  </span>
                   <span className="text-2xl font-bold font-display text-slate-200 mt-2 block">
                     ₹{Number(user.salary || 25000).toLocaleString('en-IN')}
                   </span>
-                  <span className="text-[10px] text-slate-500 mt-1 block">Monthly standard pay</span>
+                  <span className="text-[10px] text-slate-500 mt-1 block">
+                    Monthly standard pay
+                  </span>
                 </div>
-                
+
                 {/* Rating Bonus */}
                 <div className="bg-slate-950/60 p-5 rounded-2xl border border-border/20 text-center">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Ratings Bonus</span>
-                  <span className="text-2xl font-bold font-display text-emerald-500 mt-2 block">
-                    ₹{Math.round(((user.attendanceCount || 22) * 12) * ((user.performanceScore || 4.7) / 5.0) * 5).toLocaleString('en-IN')}
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                    Ratings Bonus
                   </span>
-                  <span className="text-[10px] text-slate-500 mt-1 block">₹5 reward per 5★ rating</span>
+                  <span className="text-2xl font-bold font-display text-emerald-500 mt-2 block">
+                    ₹
+                    {Math.round(
+                      (user.attendanceCount || 22) *
+                        12 *
+                        ((user.performanceScore || 4.7) / 5.0) *
+                        5
+                    ).toLocaleString('en-IN')}
+                  </span>
+                  <span className="text-[10px] text-slate-500 mt-1 block">
+                    ₹5 reward per 5★ rating
+                  </span>
                 </div>
 
                 {/* Total Monthly Earnings */}
                 <div className="bg-slate-950/60 p-5 rounded-2xl border border-border/20 text-center bg-gradient-to-b from-primary/10 to-transparent">
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block text-primary">Total Earnings</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block text-primary">
+                    Total Earnings
+                  </span>
                   <span className="text-2xl font-bold font-display text-primary mt-2 block">
-                    ₹{Math.round(
-                      Number(user.salary || 25000) + 
-                      ((user.attendanceCount || 22) * 12) * ((user.performanceScore || 4.7) / 5.0) * 5
+                    ₹
+                    {Math.round(
+                      Number(user.salary || 25000) +
+                        (user.attendanceCount || 22) *
+                          12 *
+                          ((user.performanceScore || 4.7) / 5.0) *
+                          5
                     ).toLocaleString('en-IN')}
                   </span>
-                  <span className="text-[10px] text-slate-500 mt-1 block">Salary + performance bonus</span>
+                  <span className="text-[10px] text-slate-500 mt-1 block">
+                    Salary + performance bonus
+                  </span>
                 </div>
               </div>
 
@@ -249,22 +293,30 @@ export const ProfilePage: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Attendance Shifts:</span>
-                    <span className="font-semibold text-slate-200">{user.attendanceCount || 22} logged shifts</span>
+                    <span className="font-semibold text-slate-200">
+                      {user.attendanceCount || 22} logged shifts
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Performance Rating:</span>
-                    <span className="font-semibold text-amber-400">⭐ {user.performanceScore || 4.7} / 5.0</span>
+                    <span className="font-semibold text-amber-400">
+                      ⭐ {user.performanceScore || 4.7} / 5.0
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-400">Operations Role:</span>
-                    <span className="font-semibold text-slate-200">{user.role.replace('_', ' ')}</span>
+                    <span className="font-semibold text-slate-200">
+                      {user.role.replace('_', ' ')}
+                    </span>
                   </div>
                   {user.assignedCategory && (
                     <div className="flex justify-between">
                       <span className="text-slate-400">Assigned Station:</span>
-                      <span className="font-semibold text-primary uppercase">{user.assignedCategory}</span>
+                      <span className="font-semibold text-primary uppercase">
+                        {user.assignedCategory}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -276,61 +328,61 @@ export const ProfilePage: React.FC = () => {
             <h2 className="text-xl font-bold font-display text-white mb-6 border-b border-border/40 pb-4">
               Personal Details
             </h2>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  type="text"
+                  label="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  prefixIcon={<UserIcon size={16} />}
+                  required
+                />
+                <Input
+                  type="text"
+                  label="Last Name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  prefixIcon={<UserIcon size={16} />}
+                  required
+                />
+              </div>
+
+              <Input
+                type="email"
+                label="Email Address (System ID)"
+                value={user.email}
+                disabled
+                prefixIcon={<UserIcon size={16} />}
+                helperText="Your system email address cannot be edited."
+              />
+
               <Input
                 type="text"
-                label="First Name"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                prefixIcon={<UserIcon size={16} />}
-                required
+                label="Phone Number"
+                placeholder="+1234567890"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                prefixIcon={<Phone size={16} />}
               />
-              <Input
-                type="text"
-                label="Last Name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                prefixIcon={<UserIcon size={16} />}
-                required
-              />
-            </div>
 
-            <Input
-              type="email"
-              label="Email Address (System ID)"
-              value={user.email}
-              disabled
-              prefixIcon={<UserIcon size={16} />}
-              helperText="Your system email address cannot be edited."
-            />
-
-            <Input
-              type="text"
-              label="Phone Number"
-              placeholder="+1234567890"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              prefixIcon={<Phone size={16} />}
-            />
-
-            <div className="flex justify-end pt-4">
-              <Button
-                type="submit"
-                variant="primary"
-                isLoading={isLoading}
-                leftIcon={<Save size={16} />}
-                className="px-6 py-2.5"
-              >
-                Save Profile Changes
-              </Button>
-            </div>
-          </form>
+              <div className="flex justify-end pt-4">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  isLoading={isLoading}
+                  leftIcon={<Save size={16} />}
+                  className="px-6 py-2.5"
+                >
+                  Save Profile Changes
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default ProfilePage;

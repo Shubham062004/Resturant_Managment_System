@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+
 import api from '../../../services/apiClient';
 
 interface InventoryState {
@@ -23,46 +24,79 @@ const initialState: InventoryState = {
   error: null,
 };
 
-export const fetchInventory = createAsyncThunk('inventory/fetchInventory', async () => {
-  const response = await api.get('/inventory');
-  return response.data.data;
-});
+export const fetchInventory = createAsyncThunk(
+  'inventory/fetchInventory',
+  async () => {
+    const response = await api.get('/inventory');
+    return response.data.data;
+  }
+);
 
-export const fetchSuppliers = createAsyncThunk('inventory/fetchSuppliers', async () => {
-  const response = await api.get('/inventory/suppliers');
-  return response.data.data;
-});
+export const fetchSuppliers = createAsyncThunk(
+  'inventory/fetchSuppliers',
+  async () => {
+    const response = await api.get('/inventory/suppliers');
+    return response.data.data;
+  }
+);
 
-export const fetchPurchaseOrders = createAsyncThunk('inventory/fetchPurchaseOrders', async () => {
-  const response = await api.get('/inventory/purchase-orders');
-  return response.data.data;
-});
+export const fetchPurchaseOrders = createAsyncThunk(
+  'inventory/fetchPurchaseOrders',
+  async () => {
+    const response = await api.get('/inventory/purchase-orders');
+    return response.data.data;
+  }
+);
 
-export const fetchAnalytics = createAsyncThunk('inventory/fetchAnalytics', async () => {
-  const response = await api.get('/inventory/analytics');
-  return response.data.data;
-});
+export const fetchAnalytics = createAsyncThunk(
+  'inventory/fetchAnalytics',
+  async () => {
+    const response = await api.get('/inventory/analytics');
+    return response.data.data;
+  }
+);
 
-export const fetchInventoryRequests = createAsyncThunk('inventory/fetchInventoryRequests', async (branchId?: string) => {
-  const url = branchId ? `/inventory/requests?branchId=${branchId}` : '/inventory/requests';
-  const response = await api.get(url);
-  return response.data.data;
-});
+export const fetchInventoryRequests = createAsyncThunk(
+  'inventory/fetchInventoryRequests',
+  async (branchId?: string) => {
+    const url = branchId
+      ? `/inventory/requests?branchId=${branchId}`
+      : '/inventory/requests';
+    const response = await api.get(url);
+    return response.data.data;
+  }
+);
 
-export const createInventoryRequest = createAsyncThunk('inventory/createInventoryRequest', async (data: any) => {
-  const response = await api.post('/inventory/requests', data);
-  return response.data.data;
-});
+export const createInventoryRequest = createAsyncThunk(
+  'inventory/createInventoryRequest',
+  async (data: any) => {
+    const response = await api.post('/inventory/requests', data);
+    return response.data.data;
+  }
+);
 
-export const approveInventoryRequest = createAsyncThunk('inventory/approveInventoryRequest', async ({ id, data }: { id: string; data: any }) => {
-  const response = await api.patch(`/inventory/requests/${id}/approve`, data);
-  return response.data.data;
-});
+export const approveInventoryRequest = createAsyncThunk(
+  'inventory/approveInventoryRequest',
+  async ({ id, data }: { id: string; data: any }) => {
+    const response = await api.patch(`/inventory/requests/${id}/approve`, data);
+    return response.data.data;
+  }
+);
 
 export const updateInventoryRequestStatus = createAsyncThunk(
   'inventory/updateStatus',
-  async ({ id, status, type }: { id: string; status: 'PACKED' | 'DISPATCHED' | 'DELIVERED'; type: 'dispatch' | 'deliver' }) => {
-    const response = await api.patch(`/inventory/requests/${id}/${type}`, { status });
+  async ({
+    id,
+    status,
+    type,
+  }: {
+    id: string;
+    status: 'PACKED' | 'DISPATCHED' | 'DELIVERED';
+    type: 'dispatch' | 'deliver';
+  }) => {
+    const response = await api.patch(`/inventory/requests/${id}/${type}`, {
+      status,
+    });
     return response.data.data;
   }
 );
@@ -80,19 +114,23 @@ const inventorySlice = createSlice({
       }
     },
     socketPurchaseReceived: (state, action: PayloadAction<any>) => {
-      const idx = state.purchaseOrders.findIndex((p) => p.id === action.payload.id);
+      const idx = state.purchaseOrders.findIndex(
+        (p) => p.id === action.payload.id
+      );
       if (idx !== -1) {
         state.purchaseOrders[idx] = action.payload;
       }
     },
     socketInventoryRequestUpdated: (state, action: PayloadAction<any>) => {
-      const idx = state.inventoryRequests.findIndex((r) => r.id === action.payload.id);
+      const idx = state.inventoryRequests.findIndex(
+        (r) => r.id === action.payload.id
+      );
       if (idx !== -1) {
         state.inventoryRequests[idx] = action.payload;
       } else {
         state.inventoryRequests.push(action.payload);
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -119,13 +157,17 @@ const inventorySlice = createSlice({
         state.inventoryRequests.unshift(action.payload);
       })
       .addCase(approveInventoryRequest.fulfilled, (state, action) => {
-        const idx = state.inventoryRequests.findIndex((r) => r.id === action.payload.id);
+        const idx = state.inventoryRequests.findIndex(
+          (r) => r.id === action.payload.id
+        );
         if (idx !== -1) {
           state.inventoryRequests[idx] = action.payload;
         }
       })
       .addCase(updateInventoryRequestStatus.fulfilled, (state, action) => {
-        const idx = state.inventoryRequests.findIndex((r) => r.id === action.payload.id);
+        const idx = state.inventoryRequests.findIndex(
+          (r) => r.id === action.payload.id
+        );
         if (idx !== -1) {
           state.inventoryRequests[idx] = action.payload;
         }
@@ -133,5 +175,9 @@ const inventorySlice = createSlice({
   },
 });
 
-export const { socketInventoryUpdate, socketPurchaseReceived, socketInventoryRequestUpdated } = inventorySlice.actions;
+export const {
+  socketInventoryUpdate,
+  socketPurchaseReceived,
+  socketInventoryRequestUpdated,
+} = inventorySlice.actions;
 export default inventorySlice.reducer;

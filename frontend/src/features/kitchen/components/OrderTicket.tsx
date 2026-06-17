@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { Clock, AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface OrderTicketProps {
   order: any;
   onDragStart: (e: React.DragEvent, orderId: string) => void;
 }
 
-export const OrderTicket: React.FC<OrderTicketProps> = ({ order, onDragStart }) => {
+export const OrderTicket: React.FC<OrderTicketProps> = ({
+  order,
+  onDragStart,
+}) => {
   const [elapsed, setElapsed] = useState('');
 
   useEffect(() => {
@@ -34,7 +37,8 @@ export const OrderTicket: React.FC<OrderTicketProps> = ({ order, onDragStart }) 
       draggable
       onDragStart={(e) => onDragStart(e, order.id)}
       className={`p-4 rounded-xl border bg-card/80 backdrop-blur-sm cursor-grab active:cursor-grabbing shadow-lg hover:shadow-xl transition-all ${
-        priorityColors[order.priority as keyof typeof priorityColors] || priorityColors.MEDIUM
+        priorityColors[order.priority as keyof typeof priorityColors] ||
+        priorityColors.MEDIUM
       }`}
     >
       <div className="flex justify-between items-start mb-3">
@@ -54,9 +58,14 @@ export const OrderTicket: React.FC<OrderTicketProps> = ({ order, onDragStart }) 
 
       <div className="space-y-2 mb-4">
         {order.tasks.map((task: any) => (
-          <div key={task.id} className="flex justify-between text-sm items-start gap-2">
+          <div
+            key={task.id}
+            className="flex justify-between text-sm items-start gap-2"
+          >
             <span className="text-white/90">
-              <span className="font-bold text-white mr-2">{task.quantity}x</span>
+              <span className="font-bold text-white mr-2">
+                {task.quantity}x
+              </span>
               {task.product?.name || 'Item'}
             </span>
             {task.notes && (
@@ -70,7 +79,10 @@ export const OrderTicket: React.FC<OrderTicketProps> = ({ order, onDragStart }) 
 
       {order.order.notes && (
         <div className="mt-3 text-xs bg-black/30 p-2 rounded-md flex items-start gap-2 text-white/80">
-          <AlertCircle size={14} className="flex-shrink-0 text-yellow-400 mt-0.5" />
+          <AlertCircle
+            size={14}
+            className="flex-shrink-0 text-yellow-400 mt-0.5"
+          />
           <p>{order.order.notes}</p>
         </div>
       )}

@@ -1,9 +1,16 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import React from 'react';
+
 import { hoverScalePreset } from '../../theme/animations';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'success' | 'danger';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'outline'
+    | 'ghost'
+    | 'success'
+    | 'danger';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -24,19 +31,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       type = 'button',
       ...props
     },
-    ref,
+    ref
   ) => {
     const baseStyles =
       'inline-flex items-center justify-center font-display font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]';
 
     const variants = {
-      primary: 'bg-primary text-white hover:bg-primary-hover shadow-md hover:shadow-primary/20',
+      primary:
+        'bg-primary text-white hover:bg-primary-hover shadow-md hover:shadow-primary/20',
       secondary:
         'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border/50',
-      outline: 'bg-transparent text-foreground border-2 border-border hover:bg-secondary/40',
+      outline:
+        'bg-transparent text-foreground border-2 border-border hover:bg-secondary/40',
       ghost: 'bg-transparent text-foreground hover:bg-secondary/45',
-      success: 'bg-success text-white hover:bg-success/90 shadow-md hover:shadow-success/20',
-      danger: 'bg-danger text-white hover:bg-danger/90 shadow-md hover:shadow-danger/20',
+      success:
+        'bg-success text-white hover:bg-success/90 shadow-md hover:shadow-success/20',
+      danger:
+        'bg-danger text-white hover:bg-danger/90 shadow-md hover:shadow-danger/20',
     };
 
     const sizes = {
@@ -83,12 +94,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...(props as any)}
       >
         {isLoading && <Spinner />}
-        {!isLoading && leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
+        {!isLoading && leftIcon && (
+          <span className="flex-shrink-0">{leftIcon}</span>
+        )}
         <span>{children}</span>
-        {!isLoading && rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
+        {!isLoading && rightIcon && (
+          <span className="flex-shrink-0">{rightIcon}</span>
+        )}
       </motion.button>
     );
-  },
+  }
 );
 
 Button.displayName = 'Button';

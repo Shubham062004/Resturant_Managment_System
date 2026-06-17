@@ -1,11 +1,11 @@
+import { Role } from '@prisma/client';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import env from '../config/env';
-import AppError from '../utils/appError';
-import { AuthRequest } from '../types/express';
-import { extractAccessToken } from '../utils/extractAccessToken';
 
-import { Role } from '@prisma/client';
+import env from '../config/env';
+import { AuthRequest } from '../types/express';
+import AppError from '../utils/appError';
+import { extractAccessToken } from '../utils/extractAccessToken';
 
 export interface DecodedToken {
   id: string;
@@ -19,13 +19,18 @@ export interface DecodedToken {
 export const authGuard = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const token = extractAccessToken(req);
 
     if (!token) {
-      return next(new AppError('Authentication failed. Access token is missing or invalid.', 401));
+      return next(
+        new AppError(
+          'Authentication failed. Access token is missing or invalid.',
+          401
+        )
+      );
     }
 
     // 2. Decode and Validate token signatures
@@ -42,7 +47,10 @@ export const authGuard = async (
     next();
   } catch {
     return next(
-      new AppError('Authentication failed. Access token signature is expired or compromised.', 401),
+      new AppError(
+        'Authentication failed. Access token signature is expired or compromised.',
+        401
+      )
     );
   }
 };
@@ -54,8 +62,8 @@ export const restrictTo = (...roles: Array<Role>) => {
       return next(
         new AppError(
           'Forbidden. You do not possess the required privilege level for this operation.',
-          403,
-        ),
+          403
+        )
       );
     }
     next();

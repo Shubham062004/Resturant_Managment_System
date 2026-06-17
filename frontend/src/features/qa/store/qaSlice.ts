@@ -31,7 +31,7 @@ const initialState: QAState = {
     failed: 0,
     skipped: 12,
     total: 464,
-  }
+  },
 };
 
 const qaSlice = createSlice({
@@ -40,8 +40,8 @@ const qaSlice = createSlice({
   reducers: {
     updateHealth(state, action) {
       state.systemHealth = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { updateHealth } = qaSlice.actions;

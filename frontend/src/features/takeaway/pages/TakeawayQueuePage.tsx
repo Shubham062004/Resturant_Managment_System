@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Card } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import apiClient from '../../../services/apiClient';
 import { io } from 'socket.io-client';
+
+import apiClient from '../../../services/apiClient';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card } from '../../../shared/components/ui/Card';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -47,10 +48,7 @@ export default function TakeawayQueuePage() {
 
   const updateOrderStatus = async (id: string, status: string) => {
     try {
-      await apiClient.patch(
-        `/orders/${id}/status`,
-        { status }
-      );
+      await apiClient.patch(`/orders/${id}/status`, { status });
       fetchOrders();
     } catch (err) {
       console.error('Failed to update status', err);
@@ -65,18 +63,27 @@ export default function TakeawayQueuePage() {
 
   return (
     <div className="p-6 bg-slate-50 min-h-screen">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Takeaway Pickup Queue</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">
+        Takeaway Pickup Queue
+      </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {columns.map((col) => (
-          <div key={col.status} className="bg-slate-200 rounded-xl p-4 min-h-[500px]">
-            <h2 className="text-lg font-bold text-slate-700 mb-4">{col.title}</h2>
+          <div
+            key={col.status}
+            className="bg-slate-200 rounded-xl p-4 min-h-[500px]"
+          >
+            <h2 className="text-lg font-bold text-slate-700 mb-4">
+              {col.title}
+            </h2>
             {orders
               .filter((o) => o.status === col.status)
               .map((order) => (
                 <Card key={order.id} className="p-4 mb-4">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-lg">#{order.orderNumber.substring(0, 8)}</span>
+                    <span className="font-bold text-lg">
+                      #{order.orderNumber.substring(0, 8)}
+                    </span>
                   </div>
                   <p className="text-sm text-slate-600 mb-4">
                     {order.customer?.firstName} {order.customer?.lastName}
@@ -95,7 +102,9 @@ export default function TakeawayQueuePage() {
                     <Button
                       variant="primary"
                       className="w-full"
-                      onClick={() => updateOrderStatus(order.id, 'READY_FOR_PICKUP')}
+                      onClick={() =>
+                        updateOrderStatus(order.id, 'READY_FOR_PICKUP')
+                      }
                     >
                       Mark Ready
                     </Button>

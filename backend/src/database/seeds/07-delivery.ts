@@ -1,7 +1,11 @@
-import { PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
-export async function seedDelivery(prisma: PrismaClient, deliveryStaffIds: string[]) {
+import { PrismaClient } from '@prisma/client';
+
+export async function seedDelivery(
+  prisma: PrismaClient,
+  deliveryStaffIds: string[]
+) {
   console.log('🌱 Seeding Delivery (Partners, Ratings, Earnings)...');
 
   const partners = [];

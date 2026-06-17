@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import apiClient from '../../../services/apiClient';
-import { Card, CardHeader } from '../../../shared/components/ui/Card';
-import { Button } from '../../../shared/components/ui/Button';
-import { Input } from '../../../shared/components/ui/Input';
-import { useToast } from '../../../shared/components/ui/Toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Building,
   Plus,
@@ -15,9 +10,15 @@ import {
   UserCheck,
   MapPin,
   Clock,
-  Navigation
+  Navigation,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+
+import apiClient from '../../../services/apiClient';
+import { Button } from '../../../shared/components/ui/Button';
+import { Card, CardHeader } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import { useToast } from '../../../shared/components/ui/Toast';
 
 interface Branch {
   id: string;
@@ -78,7 +79,7 @@ export default function BranchManagementPage() {
       setLoading(true);
       const [branchesRes, ingredientsRes] = await Promise.all([
         apiClient.get('/admin/branches'),
-        apiClient.get('/inventory/ingredients')
+        apiClient.get('/inventory/ingredients'),
       ]);
       setBranches(branchesRes.data.data);
       setIngredients(ingredientsRes.data.data.ingredients || []);
@@ -133,7 +134,7 @@ export default function BranchManagementPage() {
         longitude: parseFloat(formLng) || 0,
         openingTime: formOpening,
         closingTime: formClosing,
-        deliveryRadius: parseFloat(formRadius) || 5.0
+        deliveryRadius: parseFloat(formRadius) || 5.0,
       };
 
       if (selectedBranch) {
@@ -146,16 +147,20 @@ export default function BranchManagementPage() {
       setShowAddEditModal(false);
       loadData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Error saving branch details.');
+      toast.error(
+        err.response?.data?.error?.message || 'Error saving branch details.'
+      );
     }
   };
 
   const handleToggleActive = async (branch: Branch) => {
     try {
       await apiClient.patch(`/admin/branches/${branch.id}`, {
-        isActive: !branch.isActive
+        isActive: !branch.isActive,
       });
-      toast.success(`${branch.name} is now ${!branch.isActive ? 'Active' : 'Deactivated'}`);
+      toast.success(
+        `${branch.name} is now ${!branch.isActive ? 'Active' : 'Deactivated'}`
+      );
       loadData();
     } catch (err: any) {
       toast.error('Failed to change branch status.');
@@ -163,7 +168,12 @@ export default function BranchManagementPage() {
   };
 
   const handleDeleteBranch = async (id: string) => {
-    if (!window.confirm('Are you sure you want to permanently delete this branch?')) return;
+    if (
+      !window.confirm(
+        'Are you sure you want to permanently delete this branch?'
+      )
+    )
+      return;
     try {
       await apiClient.delete(`/admin/branches/${id}`);
       toast.success('Branch deleted successfully.');
@@ -175,7 +185,12 @@ export default function BranchManagementPage() {
 
   const handleTransferStock = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!transferSourceId || !transferDestId || !transferIngredientId || !transferQty) {
+    if (
+      !transferSourceId ||
+      !transferDestId ||
+      !transferIngredientId ||
+      !transferQty
+    ) {
       toast.warning('Please fill in all inventory transfer fields.');
       return;
     }
@@ -190,7 +205,7 @@ export default function BranchManagementPage() {
         destinationBranchId: transferDestId,
         ingredientId: transferIngredientId,
         quantity: parseFloat(transferQty),
-        notes: transferNotes
+        notes: transferNotes,
       };
       await apiClient.post('/inventory/transfers', payload);
       toast.success('Inventory transfer completed successfully!');
@@ -198,7 +213,9 @@ export default function BranchManagementPage() {
       setTransferNotes('');
       setTransferQty('');
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Stock transfer failed.');
+      toast.error(
+        err.response?.data?.error?.message || 'Stock transfer failed.'
+      );
     }
   };
 
@@ -210,7 +227,7 @@ export default function BranchManagementPage() {
       await apiClient.post('/admin/staff', {
         email: managerEmail,
         role: 'BRANCH_MANAGER',
-        branchId: managerBranchId
+        branchId: managerBranchId,
       });
       toast.success(`Manager assignment request processed for ${managerEmail}`);
       setShowManagerModal(false);
@@ -224,10 +241,14 @@ export default function BranchManagementPage() {
   };
 
   const totalBranches = branches.length;
-  const activeBranches = branches.filter(b => b.isActive).length;
-  const uniqueCities = new Set(branches.map(b => b.city)).size;
-  const totalCoverage = branches.reduce((sum, b) => sum + (b.isActive ? b.deliveryRadius : 0), 0);
-  const averageRadius = branches.length > 0 ? (totalCoverage / branches.length).toFixed(1) : '0';
+  const activeBranches = branches.filter((b) => b.isActive).length;
+  const uniqueCities = new Set(branches.map((b) => b.city)).size;
+  const totalCoverage = branches.reduce(
+    (sum, b) => sum + (b.isActive ? b.deliveryRadius : 0),
+    0
+  );
+  const averageRadius =
+    branches.length > 0 ? (totalCoverage / branches.length).toFixed(1) : '0';
 
   return (
     <div className="space-y-8 p-6 text-[#F8FAFC] bg-[#0F172A] min-h-screen font-sans">
@@ -238,7 +259,8 @@ export default function BranchManagementPage() {
             Branch Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Configure branches, assign operational manager roles, and coordinate inter-branch stock logistics.
+            Configure branches, assign operational manager roles, and coordinate
+            inter-branch stock logistics.
           </p>
         </div>
         <div className="flex gap-3">
@@ -260,27 +282,51 @@ export default function BranchManagementPage() {
       {/* KPI Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Outlets</p>
-          <p className="text-3xl font-bold font-display mt-2 text-white">{totalBranches}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Registered in franchise group</span>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Total Outlets
+          </p>
+          <p className="text-3xl font-bold font-display mt-2 text-white">
+            {totalBranches}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Registered in franchise group
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Outlets</p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">{activeBranches}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Serving active orders</span>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Active Outlets
+          </p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">
+            {activeBranches}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Serving active orders
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Managed Cities</p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">{uniqueCities}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Operational city groups</span>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Managed Cities
+          </p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">
+            {uniqueCities}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Operational city groups
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Avg Radius Coverage</p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">{averageRadius} Km</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Total dispatch reach</span>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            Avg Radius Coverage
+          </p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">
+            {averageRadius} Km
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Total dispatch reach
+          </span>
         </Card>
       </div>
 
@@ -297,8 +343,11 @@ export default function BranchManagementPage() {
               key={b.id}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className={`p-6 rounded-2xl border bg-[#111827] relative overflow-hidden transition-all duration-200 hover:border-slate-700/60 hover:shadow-xl ${b.isActive ? 'border-slate-800' : 'border-rose-900/40 opacity-75'
-                }`}
+              className={`p-6 rounded-2xl border bg-[#111827] relative overflow-hidden transition-all duration-200 hover:border-slate-700/60 hover:shadow-xl ${
+                b.isActive
+                  ? 'border-slate-800'
+                  : 'border-rose-900/40 opacity-75'
+              }`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3">
@@ -306,7 +355,9 @@ export default function BranchManagementPage() {
                     <Building className="text-indigo-400 w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold font-display text-white">{b.name}</h3>
+                    <h3 className="text-lg font-bold font-display text-white">
+                      {b.name}
+                    </h3>
                     <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
                       <MapPin size={12} /> {b.city}, {b.state}
                     </p>
@@ -314,8 +365,13 @@ export default function BranchManagementPage() {
                 </div>
 
                 <div className="flex items-center space-x-1">
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${b.isActive ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                    }`}>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                      b.isActive
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                        : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                    }`}
+                  >
                     {b.isActive ? 'Active' : 'Disabled'}
                   </span>
                 </div>
@@ -328,7 +384,9 @@ export default function BranchManagementPage() {
                 </p>
                 <p className="flex items-center gap-2">
                   <Clock size={14} className="text-slate-500" />
-                  <span>Operating Hours: {b.openingTime} - {b.closingTime}</span>
+                  <span>
+                    Operating Hours: {b.openingTime} - {b.closingTime}
+                  </span>
                 </p>
                 <p className="flex items-center gap-2">
                   <MapPin size={14} className="text-slate-500" />
@@ -347,7 +405,8 @@ export default function BranchManagementPage() {
                   variant="outline"
                   className="flex-1 bg-slate-950 border-slate-800 text-slate-350 hover:bg-slate-800/60 text-xs py-1.5"
                 >
-                  <UserCheck size={14} className="mr-1.5 text-[#06B6D4]" /> Assign Manager
+                  <UserCheck size={14} className="mr-1.5 text-[#06B6D4]" />{' '}
+                  Assign Manager
                 </Button>
 
                 <div className="flex gap-2">
@@ -361,10 +420,11 @@ export default function BranchManagementPage() {
                   <Button
                     onClick={() => handleToggleActive(b)}
                     size="sm"
-                    className={`p-2 rounded-lg border ${b.isActive
+                    className={`p-2 rounded-lg border ${
+                      b.isActive
                         ? 'bg-rose-950/20 hover:bg-rose-950 text-rose-450 border-rose-500/20'
                         : 'bg-emerald-950/20 hover:bg-emerald-950 text-emerald-450 border-emerald-500/20'
-                      }`}
+                    }`}
                   >
                     <Power size={14} />
                   </Button>
@@ -394,14 +454,26 @@ export default function BranchManagementPage() {
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">
-                  {selectedBranch ? 'Modify Branch Parameters' : 'Register New Branch'}
+                  {selectedBranch
+                    ? 'Modify Branch Parameters'
+                    : 'Register New Branch'}
                 </h2>
-                <button onClick={() => setShowAddEditModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                <button
+                  onClick={() => setShowAddEditModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </div>
 
-              <form onSubmit={handleSaveBranch} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+              <form
+                onSubmit={handleSaveBranch}
+                className="p-6 space-y-4 max-h-[75vh] overflow-y-auto"
+              >
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-400 font-semibold uppercase">Branch Name</label>
+                  <label className="text-xs text-slate-400 font-semibold uppercase">
+                    Branch Name
+                  </label>
                   <Input
                     required
                     value={formName}
@@ -412,7 +484,9 @@ export default function BranchManagementPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-400 font-semibold uppercase">Street Address</label>
+                  <label className="text-xs text-slate-400 font-semibold uppercase">
+                    Street Address
+                  </label>
                   <Input
                     required
                     value={formAddress}
@@ -424,7 +498,9 @@ export default function BranchManagementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">City</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      City
+                    </label>
                     <Input
                       required
                       value={formCity}
@@ -434,7 +510,9 @@ export default function BranchManagementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">State</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      State
+                    </label>
                     <Input
                       required
                       value={formState}
@@ -447,7 +525,9 @@ export default function BranchManagementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Latitude</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Latitude
+                    </label>
                     <Input
                       type="number"
                       step="0.000001"
@@ -458,7 +538,9 @@ export default function BranchManagementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Longitude</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Longitude
+                    </label>
                     <Input
                       type="number"
                       step="0.000001"
@@ -472,7 +554,9 @@ export default function BranchManagementPage() {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Opening</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Opening
+                    </label>
                     <Input
                       type="text"
                       required
@@ -482,7 +566,9 @@ export default function BranchManagementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Closing</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Closing
+                    </label>
                     <Input
                       type="text"
                       required
@@ -492,7 +578,9 @@ export default function BranchManagementPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Radius (Km)</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Radius (Km)
+                    </label>
                     <Input
                       type="number"
                       required
@@ -512,7 +600,10 @@ export default function BranchManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Save Branch
                   </Button>
                 </div>
@@ -533,13 +624,22 @@ export default function BranchManagementPage() {
               className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-                <h2 className="text-lg font-bold font-display">Assign Branch Manager</h2>
-                <button onClick={() => setShowManagerModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                <h2 className="text-lg font-bold font-display">
+                  Assign Branch Manager
+                </h2>
+                <button
+                  onClick={() => setShowManagerModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </div>
 
               <form onSubmit={handleAssignManager} className="p-6 space-y-4">
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-400 font-semibold uppercase">Manager User Email</label>
+                  <label className="text-xs text-slate-400 font-semibold uppercase">
+                    Manager User Email
+                  </label>
                   <Input
                     required
                     type="email"
@@ -559,7 +659,10 @@ export default function BranchManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Assign Role
                   </Button>
                 </div>
@@ -580,14 +683,23 @@ export default function BranchManagementPage() {
               className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-                <h2 className="text-lg font-bold font-display">Inter-Branch Inventory Transfer</h2>
-                <button onClick={() => setShowTransferModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                <h2 className="text-lg font-bold font-display">
+                  Inter-Branch Inventory Transfer
+                </h2>
+                <button
+                  onClick={() => setShowTransferModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
               </div>
 
               <form onSubmit={handleTransferStock} className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Source Branch</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Source Branch
+                    </label>
                     <select
                       required
                       value={transferSourceId}
@@ -595,14 +707,18 @@ export default function BranchManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary"
                     >
                       <option value="">-- Select --</option>
-                      {branches.map(b => (
-                        <option key={b.id} value={b.id}>{b.name}</option>
+                      {branches.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Destination Branch</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Destination Branch
+                    </label>
                     <select
                       required
                       value={transferDestId}
@@ -610,8 +726,10 @@ export default function BranchManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary"
                     >
                       <option value="">-- Select --</option>
-                      {branches.map(b => (
-                        <option key={b.id} value={b.id}>{b.name}</option>
+                      {branches.map((b) => (
+                        <option key={b.id} value={b.id}>
+                          {b.name}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -619,7 +737,9 @@ export default function BranchManagementPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Ingredient SKU</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Ingredient SKU
+                    </label>
                     <select
                       required
                       value={transferIngredientId}
@@ -627,14 +747,18 @@ export default function BranchManagementPage() {
                       className="w-full bg-slate-950 border border-border/30 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-primary"
                     >
                       <option value="">-- Select --</option>
-                      {ingredients.map(ing => (
-                        <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>
+                      {ingredients.map((ing) => (
+                        <option key={ing.id} value={ing.id}>
+                          {ing.name} ({ing.unit})
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Quantity</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Quantity
+                    </label>
                     <Input
                       required
                       type="number"
@@ -648,7 +772,9 @@ export default function BranchManagementPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-400 font-semibold uppercase">Transfer Logs / Notes</label>
+                  <label className="text-xs text-slate-400 font-semibold uppercase">
+                    Transfer Logs / Notes
+                  </label>
                   <textarea
                     value={transferNotes}
                     onChange={(e) => setTransferNotes(e.target.value)}
@@ -666,7 +792,10 @@ export default function BranchManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Execute Transfer
                   </Button>
                 </div>

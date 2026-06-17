@@ -1,4 +1,8 @@
 import { Router } from 'express';
+
+import { authGuard } from '../../middleware/authGuard';
+import { validate } from '../../middleware/validate';
+
 import {
   getCart,
   addItem,
@@ -7,9 +11,11 @@ import {
   clearCart,
   mergeCart,
 } from './cart.controller';
-import { validate } from '../../middleware/validate';
-import { addToCartSchema, updateCartItemSchema, mergeCartSchema } from './cart.validation';
-import { authGuard } from '../../middleware/authGuard';
+import {
+  addToCartSchema,
+  updateCartItemSchema,
+  mergeCartSchema,
+} from './cart.validation';
 
 const router = Router();
 
