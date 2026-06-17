@@ -192,7 +192,9 @@ export const SearchPage: React.FC = () => {
                 {debouncedSearch && (
                   <span>
                     Results for{' '}
-                    <strong className="text-white">"{debouncedSearch}"</strong>
+                    <strong className="text-white">
+                      &quot;{debouncedSearch}&quot;
+                    </strong>
                   </span>
                 )}
               </div>

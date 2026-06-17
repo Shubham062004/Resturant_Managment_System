@@ -52,7 +52,7 @@ export default function StaffDashboardPage() {
           todayTasks: 15,
           completedTasks: 10,
           pendingTasks: activeOrders.length,
-          // @ts-ignore
+          // @ts-expect-error: rating is not defined on User type
           performanceScore: user?.rating || 4.8,
         }));
       } catch (err) {
@@ -113,7 +113,7 @@ export default function StaffDashboardPage() {
             Welcome back, {user?.firstName}! 👋
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Here's what's happening with your shift today.
+            Here&apos;s what&apos;s happening with your shift today.
           </p>
         </div>
         <div className="flex items-center gap-2 bg-slate-900 border border-border/20 rounded-xl px-4 py-2">
@@ -136,7 +136,7 @@ export default function StaffDashboardPage() {
             {metrics.todayTasks}
           </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            Today's Tasks
+            Today&apos;s Tasks
           </p>
         </Card>
 
@@ -212,7 +212,8 @@ export default function StaffDashboardPage() {
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none" />
             <div className="p-5 border-b border-border/10 bg-slate-900/80 relative">
               <h3 className="font-bold text-white flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-emerald-500" /> Today's Earnings
+                <Wallet className="w-4 h-4 text-emerald-500" /> Today&apos;s
+                Earnings
               </h3>
             </div>
             <div className="p-5 grid grid-cols-2 gap-4 relative">

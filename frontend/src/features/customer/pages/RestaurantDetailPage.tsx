@@ -48,7 +48,7 @@ export const RestaurantDetailPage: React.FC = () => {
             Restaurant Not Found
           </p>
           <p className="text-neutral-400 text-sm mb-6">
-            We couldn't find the restaurant you were looking for. It may be
+            We couldn&apos;t find the restaurant you were looking for. It may be
             currently inactive.
           </p>
           <Link

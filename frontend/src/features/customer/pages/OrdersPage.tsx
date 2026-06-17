@@ -228,8 +228,8 @@ export const OrdersPage: React.FC = () => {
               No Past Orders Found
             </h3>
             <p className="text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-              You haven't completed any orders yet. Discover our delicious menu
-              and place your first order today!
+              You haven&apos;t completed any orders yet. Discover our delicious
+              menu and place your first order today!
             </p>
             <button
               onClick={() => navigate('/restaurants')}

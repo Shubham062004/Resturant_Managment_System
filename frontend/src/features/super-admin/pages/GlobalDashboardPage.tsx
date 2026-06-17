@@ -22,25 +22,25 @@ export default function GlobalDashboardPage() {
   const metrics = [
     {
       label: 'Total Revenue',
-      // @ts-ignore
+      // @ts-expect-error: dashboard may not have typed fields
       value: `₹${dashboard.globalRevenue.toLocaleString()}`,
       icon: <DollarSign size={24} className="text-emerald-400" />,
     },
     {
       label: 'Organizations',
-      // @ts-ignore
+      // @ts-expect-error: dashboard may not have typed fields
       value: dashboard.totalOrganizations,
       icon: <Building2 size={24} className="text-blue-400" />,
     },
     {
       label: 'Active Branches',
-      // @ts-ignore
+      // @ts-expect-error: dashboard may not have typed fields
       value: dashboard.totalBranches,
       icon: <Store size={24} className="text-indigo-400" />,
     },
     {
       label: 'Platform Orders',
-      // @ts-ignore
+      // @ts-expect-error: dashboard may not have typed fields
       value: dashboard.totalOrders,
       icon: <Globe size={24} className="text-purple-400" />,
     },

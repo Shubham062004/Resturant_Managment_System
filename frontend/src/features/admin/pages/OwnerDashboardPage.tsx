@@ -291,8 +291,8 @@ const EmptySearchState = ({ onReset }: { onReset: () => void }) => (
         No matching branches found
       </h4>
       <p className="text-xs text-slate-450 mt-1 max-w-sm">
-        We couldn't find any branches matching your search query or selected
-        city filters.
+        We couldn&apos;t find any branches matching your search query or
+        selected city filters.
       </p>
     </div>
     <Button

@@ -200,7 +200,7 @@ export const LoginPage: React.FC = () => {
         </Button>
 
         <div className="text-center font-sans text-sm text-muted-foreground pt-6">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link
             to="/register"
             className="text-primary hover:text-primary-hover font-semibold transition-colors duration-150"

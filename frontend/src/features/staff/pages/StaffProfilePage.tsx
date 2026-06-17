@@ -158,7 +158,7 @@ export default function StaffProfilePage() {
                   Joining Date
                 </p>
                 <p className="font-bold text-slate-200">
-                  {/* @ts-ignore */}
+                  {/* @ts-expect-error: user may not have createdAt property */}
                   {new Date(user?.createdAt || Date.now()).toLocaleDateString()}
                 </p>
               </div>

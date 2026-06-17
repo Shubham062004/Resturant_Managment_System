@@ -232,7 +232,7 @@ export const LandingPage: React.FC = () => {
                     <div className="bg-black/50 backdrop-blur-lg rounded-xl p-3 border border-white/10 flex items-center justify-between">
                       <div>
                         <p className="text-white font-semibold text-sm">
-                          Today's Special
+                          Today&apos;s Special
                         </p>
                         <p className="text-neutral-400 text-xs">
                           Fire-Baked Pepperoni Pizza
@@ -480,7 +480,7 @@ export const LandingPage: React.FC = () => {
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                    Today's Offers
+                    Today&apos;s Offers
                   </h2>
                   <p className="text-neutral-500 text-sm mt-1">
                     Save more with exclusive coupon codes

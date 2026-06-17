@@ -253,7 +253,7 @@ export default function StaffPerformancePage() {
                 ></div>
               </div>
               <p className="text-[10px] text-slate-500 mt-2">
-                "Consistently delivers high quality under pressure."
+                &quot;Consistently delivers high quality under pressure.&quot;
               </p>
             </div>
           </div>

@@ -175,7 +175,7 @@ export const CheckoutPage: React.FC = () => {
                   {addresses.length === 0 ? (
                     <div className="text-center py-8">
                       <p className="text-neutral-400 mb-4">
-                        You don't have any saved addresses yet.
+                        You don&apos;t have any saved addresses yet.
                       </p>
                       <Button
                         variant="outline"

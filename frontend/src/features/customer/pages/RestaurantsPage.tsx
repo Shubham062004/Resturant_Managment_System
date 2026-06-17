@@ -192,7 +192,7 @@ export const RestaurantsPage: React.FC = () => {
               Oops! Something went wrong.
             </p>
             <p className="text-neutral-400 text-sm mb-6">
-              We couldn't load the restaurants near you. Please check your
+              We couldn&apos;t load the restaurants near you. Please check your
               connection.
             </p>
             <button
