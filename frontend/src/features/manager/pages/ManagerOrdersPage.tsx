@@ -17,7 +17,6 @@ import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
 import { useToast } from '../../../shared/components/ui/Toast';
 
-
 // Assuming standard order interfaces
 interface OrderItem {
   id: string;

@@ -227,18 +227,54 @@ export default function AdminLayout() {
           name: 'History',
           icon: <Calendar size={18} />,
           links: [
-            { name: 'Order History', path: '/admin/history/orders', icon: <ClipboardList size={18} /> },
+            {
+              name: 'Order History',
+              path: '/admin/history/orders',
+              icon: <ClipboardList size={18} />,
+            },
             { name: 'Staff History', path: '/admin/history/staff', icon: <Briefcase size={18} /> },
-            { name: 'Inventory History', path: '/admin/history/inventory', icon: <Box size={18} /> },
-            { name: 'Ingredient History', path: '/admin/history/ingredients', icon: <ClipboardList size={18} /> },
-            { name: 'Supplier History', path: '/admin/history/suppliers', icon: <Truck size={18} /> },
+            {
+              name: 'Inventory History',
+              path: '/admin/history/inventory',
+              icon: <Box size={18} />,
+            },
+            {
+              name: 'Ingredient History',
+              path: '/admin/history/ingredients',
+              icon: <ClipboardList size={18} />,
+            },
+            {
+              name: 'Supplier History',
+              path: '/admin/history/suppliers',
+              icon: <Truck size={18} />,
+            },
             { name: 'Branch History', path: '/admin/history/branches', icon: <MapPin size={18} /> },
-            { name: 'Customer Activity History', path: '/admin/history/customers', icon: <Users size={18} /> },
-            { name: 'Finance History', path: '/admin/history/finance', icon: <DollarSign size={18} /> },
-            { name: 'Attendance History', path: '/admin/history/attendance', icon: <Briefcase size={18} /> },
-            { name: 'Salary & Bonus History', path: '/admin/history/salary', icon: <DollarSign size={18} /> },
+            {
+              name: 'Customer Activity History',
+              path: '/admin/history/customers',
+              icon: <Users size={18} />,
+            },
+            {
+              name: 'Finance History',
+              path: '/admin/history/finance',
+              icon: <DollarSign size={18} />,
+            },
+            {
+              name: 'Attendance History',
+              path: '/admin/history/attendance',
+              icon: <Briefcase size={18} />,
+            },
+            {
+              name: 'Salary & Bonus History',
+              path: '/admin/history/salary',
+              icon: <DollarSign size={18} />,
+            },
             { name: 'Audit Logs', path: '/admin/history/audit', icon: <Shield size={18} /> },
-            { name: 'System Activity Logs', path: '/admin/history/system', icon: <Activity size={18} /> },
+            {
+              name: 'System Activity Logs',
+              path: '/admin/history/system',
+              icon: <Activity size={18} />,
+            },
           ],
         },
         {

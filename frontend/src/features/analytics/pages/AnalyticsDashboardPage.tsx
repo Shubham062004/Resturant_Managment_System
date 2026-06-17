@@ -24,7 +24,6 @@ import {
   fetchDeliveryAnalytics,
 } from '../store/analyticsSlice';
 
-
 export default function AnalyticsDashboardPage() {
   const dispatch = useAppDispatch();
   const { executive, status } = useAppSelector((state) => state.analytics);

@@ -12,7 +12,6 @@ import AppError from '../../utils/appError';
 import { UsersController } from './users.controller';
 import { updateProfileSchema } from './users.validation';
 
-
 const router = Router();
 
 // Storage path: backend/uploads/avatars

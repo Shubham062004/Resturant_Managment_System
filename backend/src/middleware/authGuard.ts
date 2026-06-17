@@ -7,7 +7,6 @@ import { AuthRequest } from '../types/express';
 import AppError from '../utils/appError';
 import { extractAccessToken } from '../utils/extractAccessToken';
 
-
 export interface DecodedToken {
   id: string;
   email: string;

@@ -13,7 +13,7 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,
-      'import': require('eslint-plugin-import'),
+      import: require('eslint-plugin-import'),
     },
     rules: {
       ...typescriptEslint.configs.recommended.rules,

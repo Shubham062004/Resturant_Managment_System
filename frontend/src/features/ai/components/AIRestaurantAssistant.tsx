@@ -8,7 +8,6 @@ import Input from '../../../shared/components/ui/Input';
 import { toggleAssistant } from '../store/aiSlice';
 import { sendMessage, addUserMessage } from '../store/assistantSlice';
 
-
 export default function AIRestaurantAssistant() {
   const dispatch = useAppDispatch();
   const { isAssistantOpen } = useAppSelector((state) => state.ai);

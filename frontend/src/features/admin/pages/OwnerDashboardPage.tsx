@@ -614,8 +614,10 @@ export default function OwnerDashboardPage() {
 
   const bonusDistributed = summary?.bonusPaid || 0;
   const wasteCost = Math.round((summary?.lowStockCount || 0) * 450 + 1500);
-  const foodCostPercent = monthlyRevenue > 0 ? parseFloat(((inventoryCost / monthlyRevenue) * 100).toFixed(1)) : 0;
-  const wasteCostPercent = monthlyRevenue > 0 ? parseFloat(((wasteCost / monthlyRevenue) * 100).toFixed(1)) : 0;
+  const foodCostPercent =
+    monthlyRevenue > 0 ? parseFloat(((inventoryCost / monthlyRevenue) * 100).toFixed(1)) : 0;
+  const wasteCostPercent =
+    monthlyRevenue > 0 ? parseFloat(((wasteCost / monthlyRevenue) * 100).toFixed(1)) : 0;
   const aov = totalOrders > 0 ? Math.round(todayRevenue / totalOrders) : 0;
 
   // --- 20 CEO KPI Configuration ---

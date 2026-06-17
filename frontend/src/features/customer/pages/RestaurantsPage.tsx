@@ -15,7 +15,6 @@ import {
   resetFilters,
 } from '../store/restaurantSlice';
 
-
 export const RestaurantsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { filters, sortBy, sortOrder } = useAppSelector((state) => state.restaurant);

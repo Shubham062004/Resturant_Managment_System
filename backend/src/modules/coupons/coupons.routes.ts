@@ -6,7 +6,6 @@ import { validate } from '../../middleware/validate';
 import { validateCoupon, getActiveCoupons } from './coupons.controller';
 import { validateCouponSchema } from './coupons.validation';
 
-
 const router = Router();
 
 // Public route to view active offers

@@ -13,7 +13,6 @@ import {
 } from './cart.controller';
 import { addToCartSchema, updateCartItemSchema, mergeCartSchema } from './cart.validation';
 
-
 const router = Router();
 
 // All cart routes require authentication

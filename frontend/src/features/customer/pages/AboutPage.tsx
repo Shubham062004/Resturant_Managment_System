@@ -4,7 +4,6 @@ import React from 'react';
 
 import SEO from '../../../shared/components/SEO';
 
-
 export const AboutPage: React.FC = () => {
   return (
     <>

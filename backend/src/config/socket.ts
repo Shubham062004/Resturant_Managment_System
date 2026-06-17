@@ -7,7 +7,6 @@ import logger from '../utils/logger';
 
 import env from './env';
 
-
 export interface SocketUser {
   id: string;
   role: string;

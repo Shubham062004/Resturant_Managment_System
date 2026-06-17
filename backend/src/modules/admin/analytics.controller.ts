@@ -272,7 +272,7 @@ export class AnalyticsController {
         (sum: number, order: any) => sum + Number(order.tax || 0),
         0,
       );
-      
+
       const expenses = payrollCost + inventoryCost + refundCost + taxesCost;
       const profit = revenueThisMonth - expenses;
 
@@ -478,7 +478,8 @@ export class AnalyticsController {
         },
       });
 
-      const kitchenLoad = activeKitchenCount > 10 ? 'High' : activeKitchenCount > 5 ? 'Medium' : 'Low';
+      const kitchenLoad =
+        activeKitchenCount > 10 ? 'High' : activeKitchenCount > 5 ? 'Medium' : 'Low';
 
       res.status(200).json({
         status: 'success',

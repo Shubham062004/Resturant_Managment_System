@@ -6,7 +6,6 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
-
 import historyRouter from './api/history/history.routes';
 import errorHandler from './middleware/errorHandler';
 import { apiRateLimiter } from './middleware/rateLimiter';

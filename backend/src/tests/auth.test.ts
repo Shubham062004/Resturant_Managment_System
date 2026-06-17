@@ -6,7 +6,6 @@ import app from '../app';
 import { prisma } from '../config/db';
 import { AuditService } from '../services/audit.service';
 
-
 vi.mock('../config/db', () => ({
   prisma: {
     user: {

@@ -10,7 +10,6 @@ import {
   addressIdParamSchema,
 } from './addresses.validation';
 
-
 const router = Router();
 
 // All address routes require authentication

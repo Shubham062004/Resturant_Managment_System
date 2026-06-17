@@ -335,7 +335,7 @@ export class HistoryService {
 
     const whereClause: any = {};
     if (branchId) whereClause.branchId = branchId;
-    
+
     if (date) {
       const d = new Date(date);
       whereClause.date = {

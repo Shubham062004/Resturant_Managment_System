@@ -13,7 +13,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-slate-300">{row.workAssignments?.[0]?.branch?.name || 'Unassigned'}</td>
       <td className="px-6 py-4 text-slate-400">{new Date(row.createdAt).toLocaleDateString()}</td>
       <td className="px-6 py-4"><Badge className={row.isActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}>{row.isActive ? 'ACTIVE' : 'INACTIVE'}</Badge></td>
-    `
+    `,
   },
   {
     name: 'InventoryHistoryPage',
@@ -27,7 +27,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-slate-400">{row.requestedBy?.firstName}</td>
       <td className="px-6 py-4"><Badge className="bg-emerald-500/20 text-emerald-400">{row.status}</Badge></td>
       <td className="px-6 py-4 text-slate-400">{new Date(row.createdAt).toLocaleDateString()}</td>
-    `
+    `,
   },
   {
     name: 'IngredientHistoryPage',
@@ -41,7 +41,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-slate-300">0.0</td>
       <td className="px-6 py-4 text-emerald-400">{row.stockMovements?.length || 0} movements</td>
       <td className="px-6 py-4 font-bold text-white">0.0</td>
-    `
+    `,
   },
   {
     name: 'SupplierHistoryPage',
@@ -55,7 +55,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-blue-400 font-medium">{row.purchaseOrders?.length || 0}</td>
       <td className="px-6 py-4 text-emerald-400 font-medium">$0.00</td>
       <td className="px-6 py-4 text-amber-400">{row.rating?.toFixed(1) || 'N/A'} ★</td>
-    `
+    `,
   },
   {
     name: 'BranchHistoryPage',
@@ -68,7 +68,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-blue-400">{row._count?.Order || 0}</td>
       <td className="px-6 py-4 text-amber-400">{row._count?.inventoryRequests || 0}</td>
       <td className="px-6 py-4 text-emerald-400">{row._count?.workAssignments || 0}</td>
-    `
+    `,
   },
   {
     name: 'CustomerActivityHistoryPage',
@@ -82,7 +82,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-amber-400">{row._count?.couponUsages || 0}</td>
       <td className="px-6 py-4 text-slate-400">{row.orders?.[0]?.createdAt ? new Date(row.orders[0].createdAt).toLocaleDateString() : 'N/A'}</td>
       <td className="px-6 py-4 text-emerald-400 font-medium">$$$</td>
-    `
+    `,
   },
   {
     name: 'FinanceHistoryPage',
@@ -93,7 +93,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-white font-medium">{row.metric}</td>
       <td className="px-6 py-4 text-emerald-400">{row.amount}</td>
       <td className="px-6 py-4 text-blue-400">{row.trend}</td>
-    `
+    `,
   },
   {
     name: 'AttendanceHistoryPage',
@@ -108,7 +108,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-amber-400">${row.checkOut ? new Date(row.checkOut).toLocaleTimeString() : '-'}</td>
       <td className="px-6 py-4 text-blue-400">${row.workingHours || 0}h</td>
       <td className="px-6 py-4"><Badge className={row.status === 'PRESENT' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}>{row.status}</Badge></td>
-    `
+    `,
   },
   {
     name: 'SalaryBonusHistoryPage',
@@ -123,7 +123,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-rose-400">-$${row.deductions}</td>
       <td className="px-6 py-4 font-bold text-white">$${row.netPaid}</td>
       <td className="px-6 py-4"><Badge className="bg-emerald-500/20 text-emerald-400">{row.status}</Badge></td>
-    `
+    `,
   },
   {
     name: 'AuditLogsPage',
@@ -136,7 +136,7 @@ const pageConfigs = [
       <td className="px-6 py-4 text-slate-300">{row.entity}</td>
       <td className="px-6 py-4 text-slate-400 font-mono text-xs">{row.ipAddress}</td>
       <td className="px-6 py-4 text-slate-500">{new Date(row.timestamp).toLocaleString()}</td>
-    `
+    `,
   },
   {
     name: 'SystemActivityLogsPage',
@@ -148,8 +148,8 @@ const pageConfigs = [
       <td className="px-6 py-4 text-blue-400">{row.action}</td>
       <td className="px-6 py-4 text-slate-400 font-mono text-xs">{row.ipAddress}</td>
       <td className="px-6 py-4 text-slate-500">{new Date(row.timestamp).toLocaleString()}</td>
-    `
-  }
+    `,
+  },
 ];
 
 const dir = path.join(__dirname, 'src/features/history/pages');
@@ -246,7 +246,7 @@ export default function ${config.name}() {
             <table className="w-full text-sm text-left">
               <thead className="text-xs text-slate-400 uppercase bg-slate-900/80 border-b border-border/10">
                 <tr>
-                  ${config.headers.map(h => `<th className="px-6 py-4 font-medium">${h}</th>`).join('\\n                  ')}
+                  ${config.headers.map((h) => `<th className="px-6 py-4 font-medium">${h}</th>`).join('\\n                  ')}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/10">
@@ -272,9 +272,9 @@ export default function ${config.name}() {
   );
 }
 `;
-  if(config.name === 'FinanceHistoryPage') {
+  if (config.name === 'FinanceHistoryPage') {
     // Specifically handle Finance History to not map over 'records' directly since the API returns an object
-     // We will overwrite later or modify the template
+    // We will overwrite later or modify the template
   }
   fs.writeFileSync(path.join(dir, `${config.name}.tsx`), content);
 });

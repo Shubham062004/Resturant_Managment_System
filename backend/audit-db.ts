@@ -4,9 +4,21 @@ const prisma = new PrismaClient();
 
 async function audit() {
   const models = [
-    'order', 'orderItem', 'payment', 'user', 'branch', 'attendanceLog',
-    'inventoryRequest', 'ingredient', 'stockMovement', 'supplier',
-    'purchaseOrder', 'salaryRevision', 'payrollRecord', 'auditLog', 'employeeTimeline'
+    'order',
+    'orderItem',
+    'payment',
+    'user',
+    'branch',
+    'attendanceLog',
+    'inventoryRequest',
+    'ingredient',
+    'stockMovement',
+    'supplier',
+    'purchaseOrder',
+    'salaryRevision',
+    'payrollRecord',
+    'auditLog',
+    'employeeTimeline',
   ];
 
   console.log('--- DATABASE AUDIT REPORT ---');
@@ -23,7 +35,7 @@ async function audit() {
   // Check date ranges for orders
   const firstOrder = await prisma.order.findFirst({ orderBy: { createdAt: 'asc' } });
   const lastOrder = await prisma.order.findFirst({ orderBy: { createdAt: 'desc' } });
-  
+
   console.log('\n--- DATE RANGE (Orders) ---');
   console.log(`First Order: ${firstOrder ? firstOrder.createdAt : 'N/A'}`);
   console.log(`Last Order:  ${lastOrder ? lastOrder.createdAt : 'N/A'}`);

@@ -12,14 +12,24 @@ async function main() {
   const branches = await prisma.branch.findMany();
   const staff = await prisma.user.findMany({
     where: {
-      role: { in: [Role.BRANCH_MANAGER, Role.CASHIER, Role.HEAD_CHEF, Role.KITCHEN_STAFF, Role.DELIVERY_PARTNER] },
+      role: {
+        in: [
+          Role.BRANCH_MANAGER,
+          Role.CASHIER,
+          Role.HEAD_CHEF,
+          Role.KITCHEN_STAFF,
+          Role.DELIVERY_PARTNER,
+        ],
+      },
     },
   });
   const customers = await prisma.user.findMany({ where: { role: Role.CUSTOMER } });
   const ingredients = await prisma.ingredient.findMany();
-  
+
   if (staff.length === 0 || branches.length === 0 || customers.length === 0) {
-    console.error('No staff, customers, or branches found. Please run the foundational seeder first.');
+    console.error(
+      'No staff, customers, or branches found. Please run the foundational seeder first.',
+    );
     return;
   }
 
@@ -37,7 +47,9 @@ async function main() {
     suppliers = await prisma.supplier.findMany();
   }
 
-  console.log(`Found ${staff.length} Staff, ${customers.length} Customers, ${branches.length} Branches.`);
+  console.log(
+    `Found ${staff.length} Staff, ${customers.length} Customers, ${branches.length} Branches.`,
+  );
   console.log('⏳ Simulating 365 days of operations. This will take a moment...');
 
   const attendanceInserts: any[] = [];
@@ -57,24 +69,40 @@ async function main() {
     for (const employee of staff) {
       const branch = faker.helpers.arrayElement(branches);
       const isAbsent = faker.number.int({ min: 1, max: 100 }) <= (isWeekend ? 10 : 3);
-      
+
       if (!isAbsent) {
         const checkIn = new Date(currentDate);
-        checkIn.setHours(faker.number.int({ min: 8, max: 10 }), faker.number.int({ min: 0, max: 59 }));
+        checkIn.setHours(
+          faker.number.int({ min: 8, max: 10 }),
+          faker.number.int({ min: 0, max: 59 }),
+        );
         const checkOut = new Date(currentDate);
-        checkOut.setHours(faker.number.int({ min: 17, max: 20 }), faker.number.int({ min: 0, max: 59 }));
+        checkOut.setHours(
+          faker.number.int({ min: 17, max: 20 }),
+          faker.number.int({ min: 0, max: 59 }),
+        );
         const workingHours = (checkOut.getTime() - checkIn.getTime()) / 3600000;
 
         attendanceInserts.push({
-          userId: employee.id, branchId: branch.id, date: currentDate, checkIn, checkOut,
-          workingHours: parseFloat(workingHours.toFixed(2)), isLate: checkIn.getHours() >= 10,
-          overtime: workingHours > 9 ? parseFloat((workingHours - 9).toFixed(2)) : 0, status: 'PRESENT',
+          userId: employee.id,
+          branchId: branch.id,
+          date: currentDate,
+          checkIn,
+          checkOut,
+          workingHours: parseFloat(workingHours.toFixed(2)),
+          isLate: checkIn.getHours() >= 10,
+          overtime: workingHours > 9 ? parseFloat((workingHours - 9).toFixed(2)) : 0,
+          status: 'PRESENT',
         });
 
         if (faker.number.int({ min: 1, max: 100 }) <= 2) {
           auditInserts.push({
-            userId: employee.id, role: employee.role, action: 'LOGIN',
-            entity: 'System', timestamp: checkIn, ipAddress: faker.internet.ipv4()
+            userId: employee.id,
+            role: employee.role,
+            action: 'LOGIN',
+            entity: 'System',
+            timestamp: checkIn,
+            ipAddress: faker.internet.ipv4(),
           });
         }
       }
@@ -84,13 +112,20 @@ async function main() {
     const ordersToday = faker.number.int({ min: 25, max: 40 });
     for (let i = 0; i < ordersToday; i++) {
       const orderTime = new Date(currentDate);
-      orderTime.setHours(faker.number.int({ min: 10, max: 23 }), faker.number.int({ min: 0, max: 59 }));
-      
+      orderTime.setHours(
+        faker.number.int({ min: 10, max: 23 }),
+        faker.number.int({ min: 0, max: 59 }),
+      );
+
       const subtotal = faker.number.float({ min: 100, max: 2000 });
       orderInserts.push({
         branchId: faker.helpers.arrayElement(branches).id,
         userId: faker.helpers.arrayElement(customers).id,
-        orderType: faker.helpers.arrayElement([OrderType.DINE_IN, OrderType.DELIVERY, OrderType.PICKUP]),
+        orderType: faker.helpers.arrayElement([
+          OrderType.DINE_IN,
+          OrderType.DELIVERY,
+          OrderType.PICKUP,
+        ]),
         status: OrderStatus.DELIVERED,
         subtotal: subtotal,
         tax: subtotal * 0.05,
@@ -104,7 +139,7 @@ async function main() {
     if (faker.number.int({ min: 1, max: 100 }) <= 50) {
       const branch = faker.helpers.arrayElement(branches);
       const supplier = faker.helpers.arrayElement(suppliers);
-      
+
       inventoryRequestInserts.push({
         branchId: branch.id,
         status: 'APPROVED',
@@ -131,13 +166,14 @@ async function main() {
           type: 'PURCHASE',
           quantity: faker.number.float({ min: 10, max: 100 }),
           notes: 'RESTOCK',
-          createdAt: currentDate
+          createdAt: currentDate,
         });
       }
     }
 
     // 4. Payroll (End of Month)
-    if (currentDate.getDate() === 28) { // run payroll near end of month
+    if (currentDate.getDate() === 28) {
+      // run payroll near end of month
       for (const employee of staff) {
         const base = faker.number.float({ min: 2000, max: 5000 });
         payrollInserts.push({
@@ -162,7 +198,10 @@ async function main() {
     console.log(`Inserting ${data.length} ${modelName}...`);
     for (let i = 0; i < data.length; i += chunkSize) {
       // @ts-expect-error: dynamic keys for prisma client access
-      await prisma[modelName].createMany({ data: data.slice(i, i + chunkSize), skipDuplicates: true });
+      await prisma[modelName].createMany({
+        data: data.slice(i, i + chunkSize),
+        skipDuplicates: true,
+      });
       process.stdout.write('.');
     }
     console.log(`\n✅ ${modelName} Complete.`);

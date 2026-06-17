@@ -7,7 +7,6 @@ import { FranchiseController } from './franchise.controller';
 import { OrganizationController } from './organization.controller';
 import { SuperAdminController } from './superadmin.controller';
 
-
 const router = Router();
 
 // Protect routes

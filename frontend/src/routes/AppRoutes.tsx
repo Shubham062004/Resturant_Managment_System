@@ -106,16 +106,30 @@ const SystemHealthPage = React.lazy(() => import('../features/qa/pages/SystemHea
 // History Module Pages
 const OrderHistoryPage = React.lazy(() => import('../features/history/pages/OrderHistoryPage'));
 const StaffHistoryPage = React.lazy(() => import('../features/history/pages/StaffHistoryPage'));
-const InventoryHistoryPage = React.lazy(() => import('../features/history/pages/InventoryHistoryPage'));
-const IngredientHistoryPage = React.lazy(() => import('../features/history/pages/IngredientHistoryPage'));
-const SupplierHistoryPage = React.lazy(() => import('../features/history/pages/SupplierHistoryPage'));
+const InventoryHistoryPage = React.lazy(
+  () => import('../features/history/pages/InventoryHistoryPage'),
+);
+const IngredientHistoryPage = React.lazy(
+  () => import('../features/history/pages/IngredientHistoryPage'),
+);
+const SupplierHistoryPage = React.lazy(
+  () => import('../features/history/pages/SupplierHistoryPage'),
+);
 const BranchHistoryPage = React.lazy(() => import('../features/history/pages/BranchHistoryPage'));
-const CustomerActivityHistoryPage = React.lazy(() => import('../features/history/pages/CustomerActivityHistoryPage'));
+const CustomerActivityHistoryPage = React.lazy(
+  () => import('../features/history/pages/CustomerActivityHistoryPage'),
+);
 const FinanceHistoryPage = React.lazy(() => import('../features/history/pages/FinanceHistoryPage'));
-const AttendanceHistoryPage = React.lazy(() => import('../features/history/pages/AttendanceHistoryPage'));
-const SalaryBonusHistoryPage = React.lazy(() => import('../features/history/pages/SalaryBonusHistoryPage'));
+const AttendanceHistoryPage = React.lazy(
+  () => import('../features/history/pages/AttendanceHistoryPage'),
+);
+const SalaryBonusHistoryPage = React.lazy(
+  () => import('../features/history/pages/SalaryBonusHistoryPage'),
+);
 const AuditLogsPage = React.lazy(() => import('../features/history/pages/AuditLogsPage'));
-const SystemActivityLogsPage = React.lazy(() => import('../features/history/pages/SystemActivityLogsPage'));
+const SystemActivityLogsPage = React.lazy(
+  () => import('../features/history/pages/SystemActivityLogsPage'),
+);
 
 // Super Admin Pages
 const SuperAdminLayout = React.lazy(
@@ -331,7 +345,7 @@ const AppRouter = () => {
               <Route path="finance" element={<FinancePage />} />
               <Route path="audit" element={<AuditLogPage />} />
               <Route path="orders" element={<AdminOrdersPage />} />
-              
+
               {/* History Module */}
               <Route path="history">
                 <Route path="orders" element={<OrderHistoryPage />} />

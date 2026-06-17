@@ -1,4 +1,4 @@
-import { connectDatabases, disconnectDatabases , prisma } from '../config/db';
+import { connectDatabases, disconnectDatabases, prisma } from '../config/db';
 
 import { seedMongoDB } from './seeds/10-mongodb';
 

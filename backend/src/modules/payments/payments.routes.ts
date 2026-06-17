@@ -4,7 +4,6 @@ import { authGuard } from '../../middleware/authGuard';
 
 import { PaymentsController } from './payments.controller';
 
-
 const router = Router();
 
 // Webhook endpoints must bypass JSON parsing and Auth

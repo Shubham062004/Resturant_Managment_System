@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 let isCiModule = false;
 try {
   isCiModule = require('is-ci');
-} catch(e) {
+} catch (e) {
   // If is-ci isn't installed yet, fallback safely
 }
 
@@ -17,7 +17,9 @@ const isCi =
   process.env.NODE_ENV === 'production';
 
 if (isCi) {
-  console.log('[Husky] CI/CD environment detected or HUSKY=0. Skipping Husky installation to prevent build failures.');
+  console.log(
+    '[Husky] CI/CD environment detected or HUSKY=0. Skipping Husky installation to prevent build failures.',
+  );
   process.exit(0);
 }
 
@@ -27,5 +29,7 @@ try {
   execSync('npx husky', { stdio: 'inherit' });
 } catch (error) {
   // Only fail silently if husky itself isn't found, which happens during production installs
-  console.log('[Husky] Failed to install husky. This is expected in production builds where devDependencies are skipped.');
+  console.log(
+    '[Husky] Failed to install husky. This is expected in production builds where devDependencies are skipped.',
+  );
 }

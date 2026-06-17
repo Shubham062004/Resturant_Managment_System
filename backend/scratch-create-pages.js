@@ -31,7 +31,10 @@ export default function ${page}() {
     <div className="flex flex-col space-y-6 h-full">
       <div>
         <h1 className="text-3xl font-bold font-display text-white tracking-tight">
-          ${page.replace('Page', '').replace(/([A-Z])/g, ' $1').trim()}
+          ${page
+            .replace('Page', '')
+            .replace(/([A-Z])/g, ' $1')
+            .trim()}
         </h1>
         <p className="text-sm text-slate-400 mt-1">
           Historical records and advanced data tables for ${page.replace('Page', '')}.
@@ -49,7 +52,10 @@ export default function ${page}() {
           <div className="h-64 flex flex-col items-center justify-center border-2 border-dashed border-border/20 rounded-xl bg-slate-950/50">
             <span className="text-4xl mb-4">📊</span>
             <p className="text-slate-400 font-medium text-center max-w-md">
-              The data grid for ${page.replace('Page', '').replace(/([A-Z])/g, ' $1').trim()} is currently under construction.
+              The data grid for ${page
+                .replace('Page', '')
+                .replace(/([A-Z])/g, ' $1')
+                .trim()} is currently under construction.
               It will feature filtering, sorting, and export capabilities.
             </p>
           </div>

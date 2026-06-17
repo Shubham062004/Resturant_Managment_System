@@ -102,7 +102,9 @@ export default function ManagerDashboardPage() {
     if (!selectedBranchId) return;
     const fetchKpis = async () => {
       try {
-        const res = await apiClient.get(`/admin/analytics/manager-dashboard?branchId=${selectedBranchId}`);
+        const res = await apiClient.get(
+          `/admin/analytics/manager-dashboard?branchId=${selectedBranchId}`,
+        );
         if (res.data?.status === 'success') {
           setKpiData(res.data.data);
         }

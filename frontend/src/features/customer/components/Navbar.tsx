@@ -10,8 +10,6 @@ import { slideLeft } from '../../../shared/theme/animations';
 import { logout } from '../../auth/store/authSlice';
 import { useCart } from '../../cart/store/cartQueries';
 
-
-
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
