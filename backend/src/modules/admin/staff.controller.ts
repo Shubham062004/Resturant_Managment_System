@@ -171,12 +171,10 @@ export class StaffController {
         data: updateData,
       });
 
-      res
-        .status(200)
-        .json({
-          status: 'success',
-          message: `Successfully updated ${ids.length} staff members`,
-        });
+      res.status(200).json({
+        status: 'success',
+        message: `Successfully updated ${ids.length} staff members`,
+      });
     } catch (error) {
       next(error);
     }
