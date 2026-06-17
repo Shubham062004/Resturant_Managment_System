@@ -1,8 +1,9 @@
 node_modules
 dist
 build
-coverage
-.vercel
 .next
-generated
-prisma/generated
+out
+coverage
+.git
+.DS_Store
+package-lock.json
