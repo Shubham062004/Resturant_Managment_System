@@ -7,7 +7,9 @@ import { NotificationLog } from '../database/mongo/NotificationLog';
 export const processSmsJob = async (jobData: any) => {
   const { notificationId, to, message, channel, userId, eventType } = jobData;
   try {
-    console.log(`[SMS WORKER] Sending ${channel || 'SMS'} to ${to} | Message: ${message}`);
+    console.log(
+      `[SMS WORKER] Sending ${channel || 'SMS'} to ${to} | Message: ${message}`
+    );
 
     // Spool SMS/WhatsApp to local file inside backend/uploads/outbox/
     const outboxDir = path.join(__dirname, '../../uploads/outbox');
@@ -18,10 +20,15 @@ export const processSmsJob = async (jobData: any) => {
     fs.writeFileSync(
       path.join(outboxDir, filename),
       JSON.stringify(
-        { to, message, channel: channel || 'SMS', sentAt: new Date().toISOString() },
+        {
+          to,
+          message,
+          channel: channel || 'SMS',
+          sentAt: new Date().toISOString(),
+        },
         null,
-        2,
-      ),
+        2
+      )
     );
 
     await new Promise((res) => setTimeout(res, 500));

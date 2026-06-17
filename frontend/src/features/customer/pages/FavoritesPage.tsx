@@ -30,7 +30,8 @@ export const FavoritesPage: React.FC = () => {
             <span>My Favorites</span>
           </h1>
           <p className="text-sm text-neutral-400 mt-2">
-            Your saved dishes and preferred restaurant items for quick re-ordering.
+            Your saved dishes and preferred restaurant items for quick
+            re-ordering.
           </p>
         </div>
 
@@ -42,8 +43,12 @@ export const FavoritesPage: React.FC = () => {
           </div>
         ) : isError ? (
           <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-8 text-center">
-            <p className="text-red-400 font-semibold mb-2">Could not load favorites</p>
-            <p className="text-neutral-400 text-sm mb-4">Please sign in and try again.</p>
+            <p className="text-red-400 font-semibold mb-2">
+              Could not load favorites
+            </p>
+            <p className="text-neutral-400 text-sm mb-4">
+              Please sign in and try again.
+            </p>
             <button
               onClick={() => navigate('/login')}
               className="px-6 py-2 bg-primary text-white rounded-xl text-sm font-bold"
@@ -54,10 +59,12 @@ export const FavoritesPage: React.FC = () => {
         ) : products.length === 0 ? (
           <div className="py-12 bg-white/[0.02] border border-white/5 rounded-3xl text-center px-6">
             <Heart size={48} className="mx-auto text-neutral-600 mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">Your Favorites List is Empty</h3>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Your Favorites List is Empty
+            </h3>
             <p className="text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-              Browse our menu, discover delicious items, and tap the heart icon on any product to
-              save it here for later.
+              Browse our menu, discover delicious items, and tap the heart icon
+              on any product to save it here for later.
             </p>
             <button
               onClick={() => navigate('/restaurants')}

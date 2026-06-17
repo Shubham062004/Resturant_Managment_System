@@ -1,4 +1,9 @@
-import { CheckCircle2, AlertTriangle, AlertOctagon, Info as InfoIcon } from 'lucide-react';
+import {
+  CheckCircle2,
+  AlertTriangle,
+  AlertOctagon,
+  Info as InfoIcon,
+} from 'lucide-react';
 import React from 'react';
 
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,7 +18,8 @@ export const Alert: React.FC<AlertProps> = ({
   className = '',
   ...props
 }) => {
-  const baseStyles = 'flex gap-3.5 p-4.5 rounded-xl border font-sans text-sm leading-relaxed';
+  const baseStyles =
+    'flex gap-3.5 p-4.5 rounded-xl border font-sans text-sm leading-relaxed';
 
   const variants = {
     success: 'bg-success/10 border-success/30 text-success',
@@ -30,10 +36,16 @@ export const Alert: React.FC<AlertProps> = ({
   };
 
   return (
-    <div role="alert" className={`${baseStyles} ${variants[variant]} ${className}`} {...props}>
+    <div
+      role="alert"
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+      {...props}
+    >
       <div className="mt-0.5">{icons[variant]}</div>
       <div className="flex flex-col gap-1 w-full">
-        {title && <h5 className="font-bold font-display leading-tight">{title}</h5>}
+        {title && (
+          <h5 className="font-bold font-display leading-tight">{title}</h5>
+        )}
         <div className="text-foreground/80">{children}</div>
       </div>
     </div>

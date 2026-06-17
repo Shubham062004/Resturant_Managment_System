@@ -27,7 +27,7 @@ const CartEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
 export const CartEvent =

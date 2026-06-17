@@ -33,15 +33,16 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 export default function InventoryDashboardPage() {
   const dispatch = useAppDispatch();
   const { inventory, analytics, inventoryRequests, status } = useAppSelector(
-    (state) => state.inventory,
+    (state) => state.inventory
   );
   const { user } = useAppSelector((state) => state.auth);
 
   // Local state
   const [activeTab, setActiveTab] = useState<'stock' | 'requests'>('stock');
-  const [alertMsg, setAlertMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null,
-  );
+  const [alertMsg, setAlertMsg] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   // Request creation state
   const [showCreateRequestModal, setShowCreateRequestModal] = useState(false);
@@ -58,7 +59,10 @@ export default function InventoryDashboardPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
+    const newSocket = io(API_BASE_URL, {
+      auth: { token },
+      withCredentials: true,
+    });
 
     newSocket.on('inventory-updated', (updatedInv: any) => {
       dispatch(socketInventoryUpdate(updatedInv));
@@ -82,7 +86,7 @@ export default function InventoryDashboardPage() {
   }, [user, dispatch]);
 
   const lowStockItems = inventory.filter(
-    (inv) => inv.availableQuantity <= (inv.ingredient?.reorderPoint || 0),
+    (inv) => inv.availableQuantity <= (inv.ingredient?.reorderPoint || 0)
   );
 
   const handleCreateRequest = async () => {
@@ -98,7 +102,10 @@ export default function InventoryDashboardPage() {
       // Find branch ID: if user belongs to branch, use that, else default to first inventory item's branch
       const branchId = (user as any)?.branchId || inventory[0]?.branchId;
       if (!branchId) {
-        setAlertMsg({ type: 'error', text: 'No branch reference found for user context.' });
+        setAlertMsg({
+          type: 'error',
+          text: 'No branch reference found for user context.',
+        });
         return;
       }
 
@@ -107,7 +114,7 @@ export default function InventoryDashboardPage() {
           branchId,
           notes: requestNotes,
           items: requestItems,
-        }),
+        })
       ).unwrap();
 
       setAlertMsg({
@@ -126,13 +133,16 @@ export default function InventoryDashboardPage() {
     }
   };
 
-  const handleApproveRequest = async (id: string, approveStatus: 'APPROVED' | 'REJECTED') => {
+  const handleApproveRequest = async (
+    id: string,
+    approveStatus: 'APPROVED' | 'REJECTED'
+  ) => {
     try {
       await dispatch(
         approveInventoryRequest({
           id,
           data: { status: approveStatus },
-        }),
+        })
       ).unwrap();
       setAlertMsg({
         type: 'success',
@@ -150,7 +160,7 @@ export default function InventoryDashboardPage() {
   const handleUpdateStatus = async (
     id: string,
     nextStatus: 'PACKED' | 'DISPATCHED' | 'DELIVERED',
-    type: 'dispatch' | 'deliver',
+    type: 'dispatch' | 'deliver'
   ) => {
     try {
       await dispatch(
@@ -158,9 +168,12 @@ export default function InventoryDashboardPage() {
           id,
           status: nextStatus,
           type,
-        }),
+        })
       ).unwrap();
-      setAlertMsg({ type: 'success', text: `Shipment marked as ${nextStatus.toLowerCase()}.` });
+      setAlertMsg({
+        type: 'success',
+        text: `Shipment marked as ${nextStatus.toLowerCase()}.`,
+      });
       dispatch(fetchInventoryRequests(undefined));
       dispatch(fetchInventory()); // Reload stock levels in case of DELIVERY
     } catch (err: any) {
@@ -173,17 +186,24 @@ export default function InventoryDashboardPage() {
 
   const addItemToRequest = (ingredientId: string) => {
     if (requestItems.some((i) => i.ingredientId === ingredientId)) return;
-    setRequestItems((prev) => [...prev, { ingredientId, requestedQuantity: 10 }]);
+    setRequestItems((prev) => [
+      ...prev,
+      { ingredientId, requestedQuantity: 10 },
+    ]);
   };
 
   const updateItemQty = (ingredientId: string, val: number) => {
     setRequestItems((prev) =>
-      prev.map((i) => (i.ingredientId === ingredientId ? { ...i, requestedQuantity: val } : i)),
+      prev.map((i) =>
+        i.ingredientId === ingredientId ? { ...i, requestedQuantity: val } : i
+      )
     );
   };
 
   const removeItemFromRequest = (ingredientId: string) => {
-    setRequestItems((prev) => prev.filter((i) => i.ingredientId !== ingredientId));
+    setRequestItems((prev) =>
+      prev.filter((i) => i.ingredientId !== ingredientId)
+    );
   };
 
   const getTimelineStep = (statusStr: string) => {
@@ -196,10 +216,12 @@ export default function InventoryDashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Inventory Control Hub</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white">
+            Inventory Control Hub
+          </h1>
           <p className="text-slate-400 mt-1">
-            Real-time stock balancing, central supplier dispatches, and multi-branch replenishment
-            requests.
+            Real-time stock balancing, central supplier dispatches, and
+            multi-branch replenishment requests.
           </p>
         </div>
         <div className="flex gap-3">
@@ -215,7 +237,10 @@ export default function InventoryDashboardPage() {
 
       {alertMsg && (
         <div className="relative mb-4">
-          <Alert variant={alertMsg.type === 'success' ? 'success' : 'error'} className="pr-10">
+          <Alert
+            variant={alertMsg.type === 'success' ? 'success' : 'error'}
+            className="pr-10"
+          >
             {alertMsg.text}
           </Alert>
           <button
@@ -236,7 +261,9 @@ export default function InventoryDashboardPage() {
               Total Stock Items
             </h2>
           </div>
-          <p className="text-4xl font-bold text-white mt-1">{analytics.totalIngredients || 0}</p>
+          <p className="text-4xl font-bold text-white mt-1">
+            {analytics.totalIngredients || 0}
+          </p>
         </Card>
 
         <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-center">
@@ -246,7 +273,9 @@ export default function InventoryDashboardPage() {
               Low Stock alerts
             </h2>
           </div>
-          <p className="text-4xl font-bold text-amber-500 mt-1">{lowStockItems.length}</p>
+          <p className="text-4xl font-bold text-amber-500 mt-1">
+            {lowStockItems.length}
+          </p>
         </Card>
 
         <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-center">
@@ -256,7 +285,9 @@ export default function InventoryDashboardPage() {
               Active POs
             </h2>
           </div>
-          <p className="text-4xl font-bold text-white mt-1">{analytics.activePOs || 0}</p>
+          <p className="text-4xl font-bold text-white mt-1">
+            {analytics.activePOs || 0}
+          </p>
         </Card>
 
         <Card className="bg-slate-900 border-slate-800 p-6 flex flex-col justify-center">
@@ -266,7 +297,9 @@ export default function InventoryDashboardPage() {
               Waste Today (Units)
             </h2>
           </div>
-          <p className="text-4xl font-bold text-rose-500 mt-1">{analytics.wasteToday || 0}</p>
+          <p className="text-4xl font-bold text-rose-500 mt-1">
+            {analytics.wasteToday || 0}
+          </p>
         </Card>
       </div>
 
@@ -300,7 +333,9 @@ export default function InventoryDashboardPage() {
           {/* Main Stock Table */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold text-white">Current Stock Levels</h2>
+              <h2 className="text-xl font-bold text-white">
+                Current Stock Levels
+              </h2>
               {lowStockItems.length > 0 && (
                 <Badge variant="warning" className="animate-pulse">
                   Requires Restock Focus
@@ -309,7 +344,9 @@ export default function InventoryDashboardPage() {
             </div>
 
             {status === 'loading' && inventory.length === 0 ? (
-              <p className="text-slate-400 animate-pulse">Querying stock ledger...</p>
+              <p className="text-slate-400 animate-pulse">
+                Querying stock ledger...
+              </p>
             ) : (
               <Card className="overflow-hidden border border-slate-800 bg-slate-950">
                 <div className="overflow-x-auto">
@@ -318,16 +355,25 @@ export default function InventoryDashboardPage() {
                       <tr>
                         <th className="px-6 py-4 font-semibold">Ingredient</th>
                         <th className="px-6 py-4 font-semibold">SKU / Code</th>
-                        <th className="px-6 py-4 font-semibold">Available Units</th>
-                        <th className="px-6 py-4 font-semibold">Safety threshold</th>
+                        <th className="px-6 py-4 font-semibold">
+                          Available Units
+                        </th>
+                        <th className="px-6 py-4 font-semibold">
+                          Safety threshold
+                        </th>
                         <th className="px-6 py-4 font-semibold">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800">
                       {inventory.map((inv, i) => {
-                        const isLow = inv.availableQuantity <= (inv.ingredient?.reorderPoint || 0);
+                        const isLow =
+                          inv.availableQuantity <=
+                          (inv.ingredient?.reorderPoint || 0);
                         return (
-                          <tr key={inv.id || i} className="hover:bg-slate-900/50 transition-colors">
+                          <tr
+                            key={inv.id || i}
+                            className="hover:bg-slate-900/50 transition-colors"
+                          >
                             <td className="px-6 py-4 font-medium text-white">
                               {inv.ingredient?.name || 'Unknown'}
                             </td>
@@ -335,10 +381,12 @@ export default function InventoryDashboardPage() {
                               {inv.ingredient?.sku || '-'}
                             </td>
                             <td className="px-6 py-4 font-semibold text-white">
-                              {inv.availableQuantity.toFixed(2)} {inv.ingredient?.unit}
+                              {inv.availableQuantity.toFixed(2)}{' '}
+                              {inv.ingredient?.unit}
                             </td>
                             <td className="px-6 py-4 font-mono text-slate-500">
-                              {inv.ingredient?.reorderPoint || 0} {inv.ingredient?.unit}
+                              {inv.ingredient?.reorderPoint || 0}{' '}
+                              {inv.ingredient?.unit}
                             </td>
                             <td className="px-6 py-4">
                               {isLow ? (
@@ -362,7 +410,10 @@ export default function InventoryDashboardPage() {
                       })}
                       {inventory.length === 0 && (
                         <tr>
-                          <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                          <td
+                            colSpan={5}
+                            className="px-6 py-12 text-center text-slate-500"
+                          >
                             No inventory records loaded.
                           </td>
                         </tr>
@@ -383,9 +434,12 @@ export default function InventoryDashboardPage() {
                   <ShoppingCart className="text-indigo-400 w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">Configure Purchase Orders</h3>
+                  <h3 className="text-white font-semibold">
+                    Configure Purchase Orders
+                  </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    Procure raw stock elements directly from configured suppliers.
+                    Procure raw stock elements directly from configured
+                    suppliers.
                   </p>
                 </div>
               </Card>
@@ -395,7 +449,9 @@ export default function InventoryDashboardPage() {
                   <ArrowRightLeft className="text-amber-400 w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">Inter-Branch Stock Transfers</h3>
+                  <h3 className="text-white font-semibold">
+                    Inter-Branch Stock Transfers
+                  </h3>
                   <p className="text-xs text-slate-400 mt-0.5">
                     Shift units from overflowing branches to low stocks.
                   </p>
@@ -420,7 +476,9 @@ export default function InventoryDashboardPage() {
         /* Replenishment Requests pipeline tab */
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-white">Replenishment Request Pipeline</h2>
+            <h2 className="text-xl font-bold text-white">
+              Replenishment Request Pipeline
+            </h2>
             <span className="text-xs font-semibold text-slate-400">
               Total requests: {inventoryRequests.length} active
             </span>
@@ -430,7 +488,10 @@ export default function InventoryDashboardPage() {
             {inventoryRequests.map((req: any) => {
               const currentStep = getTimelineStep(req.status);
               return (
-                <Card key={req.id} className="bg-slate-900 border-slate-800 p-6 space-y-4">
+                <Card
+                  key={req.id}
+                  className="bg-slate-900 border-slate-800 p-6 space-y-4"
+                >
                   {/* Top bar header */}
                   <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
                     <div className="space-y-1">
@@ -444,11 +505,13 @@ export default function InventoryDashboardPage() {
                       </div>
                       <div className="text-xs text-slate-400 flex items-center gap-3">
                         <span>
-                          Requested By: {req.requestedBy?.firstName || 'Staff'} (
-                          {req.requestedBy?.email || 'System'})
+                          Requested By: {req.requestedBy?.firstName || 'Staff'}{' '}
+                          ({req.requestedBy?.email || 'System'})
                         </span>
                         <span>•</span>
-                        <span>Date: {new Date(req.createdAt).toLocaleString()}</span>
+                        <span>
+                          Date: {new Date(req.createdAt).toLocaleString()}
+                        </span>
                       </div>
                     </div>
 
@@ -463,7 +526,9 @@ export default function InventoryDashboardPage() {
                             <Button
                               variant="primary"
                               size="sm"
-                              onClick={() => handleApproveRequest(req.id, 'APPROVED')}
+                              onClick={() =>
+                                handleApproveRequest(req.id, 'APPROVED')
+                              }
                             >
                               Approve
                             </Button>
@@ -471,7 +536,9 @@ export default function InventoryDashboardPage() {
                               variant="outline"
                               className="border-slate-700 text-slate-300 hover:bg-slate-800"
                               size="sm"
-                              onClick={() => handleApproveRequest(req.id, 'REJECTED')}
+                              onClick={() =>
+                                handleApproveRequest(req.id, 'REJECTED')
+                              }
                             >
                               Reject
                             </Button>
@@ -486,7 +553,9 @@ export default function InventoryDashboardPage() {
                           <Button
                             variant="primary"
                             size="sm"
-                            onClick={() => handleUpdateStatus(req.id, 'PACKED', 'dispatch')}
+                            onClick={() =>
+                              handleUpdateStatus(req.id, 'PACKED', 'dispatch')
+                            }
                           >
                             Mark Packed
                           </Button>
@@ -498,7 +567,13 @@ export default function InventoryDashboardPage() {
                           <Button
                             variant="primary"
                             size="sm"
-                            onClick={() => handleUpdateStatus(req.id, 'DISPATCHED', 'dispatch')}
+                            onClick={() =>
+                              handleUpdateStatus(
+                                req.id,
+                                'DISPATCHED',
+                                'dispatch'
+                              )
+                            }
                           >
                             Dispatch Cargo
                           </Button>
@@ -512,7 +587,9 @@ export default function InventoryDashboardPage() {
                           <Button
                             variant="success"
                             size="sm"
-                            onClick={() => handleUpdateStatus(req.id, 'DELIVERED', 'deliver')}
+                            onClick={() =>
+                              handleUpdateStatus(req.id, 'DELIVERED', 'deliver')
+                            }
                           >
                             Confirm Delivery Receipt
                           </Button>
@@ -548,10 +625,26 @@ export default function InventoryDashboardPage() {
                         {/* Status items */}
                         {[
                           { label: 'Created', value: 'PENDING', icon: Clock },
-                          { label: 'Authorized', value: 'APPROVED', icon: CheckCircle },
-                          { label: 'Items Packed', value: 'PACKED', icon: Package },
-                          { label: 'Dispatched', value: 'DISPATCHED', icon: Truck },
-                          { label: 'Delivered', value: 'DELIVERED', icon: CheckCircle },
+                          {
+                            label: 'Authorized',
+                            value: 'APPROVED',
+                            icon: CheckCircle,
+                          },
+                          {
+                            label: 'Items Packed',
+                            value: 'PACKED',
+                            icon: Package,
+                          },
+                          {
+                            label: 'Dispatched',
+                            value: 'DISPATCHED',
+                            icon: Truck,
+                          },
+                          {
+                            label: 'Delivered',
+                            value: 'DELIVERED',
+                            icon: CheckCircle,
+                          },
                         ].map((step, idx) => {
                           const StepIcon = step.icon;
                           const isCompleted = currentStep >= idx;
@@ -603,7 +696,9 @@ export default function InventoryDashboardPage() {
                     </div>
                     {req.notes && (
                       <div className="mt-3 text-xs text-slate-500 border-t border-slate-800/80 pt-3">
-                        <span className="font-semibold text-slate-400">Restock Notes:</span>{' '}
+                        <span className="font-semibold text-slate-400">
+                          Restock Notes:
+                        </span>{' '}
                         {req.notes}
                       </div>
                     )}
@@ -615,10 +710,12 @@ export default function InventoryDashboardPage() {
             {inventoryRequests.length === 0 && (
               <div className="p-12 text-center border-2 border-dashed border-slate-800 rounded-lg text-slate-500 flex flex-col items-center justify-center">
                 <span className="text-4xl">📦</span>
-                <h3 className="font-bold text-slate-400 mt-3">No Restock Pipelines Active</h3>
+                <h3 className="font-bold text-slate-400 mt-3">
+                  No Restock Pipelines Active
+                </h3>
                 <p className="text-xs text-slate-500 mt-1 max-w-sm">
-                  Create a replenishment request using the button above to request stock transfers
-                  from the central warehouse supply.
+                  Create a replenishment request using the button above to
+                  request stock transfers from the central warehouse supply.
                 </p>
               </div>
             )}
@@ -656,10 +753,12 @@ export default function InventoryDashboardPage() {
               {/* Selected items with qty inputs */}
               {requestItems.length > 0 && (
                 <div className="space-y-2 max-h-[180px] overflow-y-auto">
-                  <span className="text-xs font-bold text-slate-400">Request Items List:</span>
+                  <span className="text-xs font-bold text-slate-400">
+                    Request Items List:
+                  </span>
                   {requestItems.map((item) => {
                     const ing = inventory.find(
-                      (i) => i.ingredientId === item.ingredientId,
+                      (i) => i.ingredientId === item.ingredientId
                     )?.ingredient;
                     return (
                       <div
@@ -675,13 +774,20 @@ export default function InventoryDashboardPage() {
                             type="number"
                             value={item.requestedQuantity}
                             onChange={(e) =>
-                              updateItemQty(item.ingredientId, parseFloat(e.target.value) || 0)
+                              updateItemQty(
+                                item.ingredientId,
+                                parseFloat(e.target.value) || 0
+                              )
                             }
                             className="w-16 h-8 text-xs bg-slate-900 border-slate-800 text-center font-bold"
                           />
-                          <span className="text-xs text-slate-500">{ing?.unit}</span>
+                          <span className="text-xs text-slate-500">
+                            {ing?.unit}
+                          </span>
                           <button
-                            onClick={() => removeItemFromRequest(item.ingredientId)}
+                            onClick={() =>
+                              removeItemFromRequest(item.ingredientId)
+                            }
                             className="text-rose-500 hover:text-rose-400 text-xs px-1"
                           >
                             ✕

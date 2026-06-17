@@ -20,15 +20,19 @@ export const initSocket = (server: HttpServer) => {
       origin: [
         'http://localhost:5173',
         'http://localhost:5174',
-        process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app',
-        process.env.CLIENT_URL || 'https://resturant-managment-system-frontend.vercel.app',
+        process.env.FRONTEND_URL ||
+          'https://resturant-managment-system-frontend.vercel.app',
+        process.env.CLIENT_URL ||
+          'https://resturant-managment-system-frontend.vercel.app',
       ],
       methods: ['GET', 'POST'],
       credentials: true,
     },
   });
 
-  const parseCookies = (cookieHeader: string | undefined): Record<string, string> => {
+  const parseCookies = (
+    cookieHeader: string | undefined
+  ): Record<string, string> => {
     const list: Record<string, string> = {};
     if (!cookieHeader) return list;
     cookieHeader.split(';').forEach((cookie) => {
@@ -70,7 +74,13 @@ export const initSocket = (server: HttpServer) => {
 
     // Allow staff/admin to join restaurant-specific rooms
     if (
-      ['ADMIN', 'SUPER_ADMIN', 'KITCHEN_STAFF', 'CASHIER', 'DELIVERY_MANAGER'].includes(user.role)
+      [
+        'ADMIN',
+        'SUPER_ADMIN',
+        'KITCHEN_STAFF',
+        'CASHIER',
+        'DELIVERY_MANAGER',
+      ].includes(user.role)
     ) {
       socket.join('staff_room');
     }

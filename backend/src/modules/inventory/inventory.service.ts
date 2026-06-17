@@ -15,8 +15,11 @@ export class InventoryService {
   }
 
   static async createIngredient(data: any) {
-    const existing = await prisma.ingredient.findUnique({ where: { sku: data.sku } });
-    if (existing) throw new AppError('Ingredient with this SKU already exists', 400);
+    const existing = await prisma.ingredient.findUnique({
+      where: { sku: data.sku },
+    });
+    if (existing)
+      throw new AppError('Ingredient with this SKU already exists', 400);
     return prisma.ingredient.create({ data });
   }
 
@@ -56,11 +59,15 @@ export class InventoryService {
     });
   }
 
-  static async createPurchaseOrder(data: { supplierId: string; branchId: string; items: any[] }) {
+  static async createPurchaseOrder(data: {
+    supplierId: string;
+    branchId: string;
+    items: any[];
+  }) {
     // Calculate total
     const totalAmount = data.items.reduce(
       (sum: number, item: any) => sum + item.quantity * item.costPrice,
-      0,
+      0
     );
 
     const po = await prisma.purchaseOrder.create({
@@ -82,13 +89,18 @@ export class InventoryService {
     return po;
   }
 
-  static async updatePurchaseOrderStatus(id: string, status: any, _userId: string) {
+  static async updatePurchaseOrderStatus(
+    id: string,
+    status: any,
+    _userId: string
+  ) {
     const po = await prisma.purchaseOrder.findUnique({
       where: { id },
       include: { items: true },
     });
     if (!po) throw new AppError('PO not found', 404);
-    if (po.status === 'RECEIVED') throw new AppError('PO already received', 400);
+    if (po.status === 'RECEIVED')
+      throw new AppError('PO already received', 400);
 
     const data: any = { status };
     if (status === 'RECEIVED') {
@@ -140,7 +152,8 @@ export class InventoryService {
     referenceId?: string;
     type: 'PURCHASE' | 'CONSUMPTION' | 'WASTE' | 'TRANSFER' | 'ADJUSTMENT';
   }) {
-    const { ingredientId, branchId, quantity, reason, referenceId, type } = params;
+    const { ingredientId, branchId, quantity, reason, referenceId, type } =
+      params;
 
     // Get or create inventory record
     let inv = await prisma.inventory.findUnique({
@@ -167,7 +180,7 @@ export class InventoryService {
       // For some scenarios we might allow negative stock, but usually it's bad.
       // We will just log a warning but allow it for auto-deduction sync issues.
       console.warn(
-        `Inventory dropped below zero for ingredient ${ingredientId} in branch ${branchId}`,
+        `Inventory dropped below zero for ingredient ${ingredientId} in branch ${branchId}`
       );
     }
 
@@ -365,7 +378,9 @@ export class InventoryService {
 
     // Could aggregate total inventory value by summing (inventory.quantity * averageCostPrice)
     // For MVP, just returning basic counts
-    const totalIngredients = await prisma.ingredient.count({ where: { active: true } });
+    const totalIngredients = await prisma.ingredient.count({
+      where: { active: true },
+    });
 
     return {
       wasteToday: waste._sum.quantity || 0,
@@ -432,8 +447,12 @@ export class InventoryService {
     data: {
       status: 'APPROVED' | 'REJECTED';
       notes?: string;
-      items?: Array<{ id?: string; ingredientId?: string; approvedQuantity: number }>;
-    },
+      items?: Array<{
+        id?: string;
+        ingredientId?: string;
+        approvedQuantity: number;
+      }>;
+    }
   ) {
     const request = await prisma.inventoryRequest.findUnique({
       where: { id },
@@ -498,7 +517,7 @@ export class InventoryService {
 
   static async updateInventoryRequestStatus(
     id: string,
-    status: 'PACKED' | 'DISPATCHED' | 'DELIVERED',
+    status: 'PACKED' | 'DISPATCHED' | 'DELIVERED'
   ) {
     const request = await prisma.inventoryRequest.findUnique({
       where: { id },
@@ -529,7 +548,10 @@ export class InventoryService {
     // If delivered, we adjust local branch stock levels!
     if (status === 'DELIVERED') {
       for (const item of updatedRequest.items) {
-        const qty = item.approvedQuantity !== null ? item.approvedQuantity : item.requestedQuantity;
+        const qty =
+          item.approvedQuantity !== null
+            ? item.approvedQuantity
+            : item.requestedQuantity;
         await this.adjustInventory({
           ingredientId: item.ingredientId,
           branchId: updatedRequest.branchId,
@@ -542,7 +564,10 @@ export class InventoryService {
     }
 
     const io = getIO();
-    io.to('staff_room').emit('inventory-request-status-updated', updatedRequest);
+    io.to('staff_room').emit(
+      'inventory-request-status-updated',
+      updatedRequest
+    );
     return updatedRequest;
   }
 }

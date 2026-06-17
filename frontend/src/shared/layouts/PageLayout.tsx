@@ -25,9 +25,15 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
             <h1 className="text-3xl font-extrabold font-display tracking-tight text-foreground">
               {title}
             </h1>
-            {subtitle && <p className="text-sm font-sans text-muted-foreground">{subtitle}</p>}
+            {subtitle && (
+              <p className="text-sm font-sans text-muted-foreground">
+                {subtitle}
+              </p>
+            )}
           </div>
-          {headerActions && <div className="flex items-center gap-3">{headerActions}</div>}
+          {headerActions && (
+            <div className="flex items-center gap-3">{headerActions}</div>
+          )}
         </header>
       </Container>
       <main className="w-full flex-1">

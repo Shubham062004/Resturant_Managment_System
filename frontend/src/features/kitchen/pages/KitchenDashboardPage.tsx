@@ -69,7 +69,9 @@ export default function KitchenDashboardPage() {
     if (draggedOrderId) {
       const order = orders.find((o: any) => o.id === draggedOrderId);
       if (order && order.status !== targetStatus) {
-        await dispatch(updateOrderStatus({ id: draggedOrderId, status: targetStatus }));
+        await dispatch(
+          updateOrderStatus({ id: draggedOrderId, status: targetStatus })
+        );
       }
     }
     setDraggedOrderId(null);
@@ -92,12 +94,16 @@ export default function KitchenDashboardPage() {
             <Flame className="text-orange-500 w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white font-display">Kitchen Display System</h1>
+            <h1 className="text-2xl font-bold text-white font-display">
+              Kitchen Display System
+            </h1>
             <div className="flex items-center gap-2 text-sm">
               <span className="flex items-center gap-1.5 text-muted-foreground">
                 <Activity
                   size={14}
-                  className={socketConnected ? 'text-green-500' : 'text-red-500'}
+                  className={
+                    socketConnected ? 'text-green-500' : 'text-red-500'
+                  }
                 />
                 {socketConnected ? 'Live Sync Active' : 'Offline'}
               </span>
@@ -124,7 +130,9 @@ export default function KitchenDashboardPage() {
             onDrop={(e) => handleDrop(e, col.id)}
           >
             <div className="p-4 border-b border-border/50 bg-card/50 flex justify-between items-center shrink-0">
-              <h2 className="font-bold text-white tracking-wide">{col.title}</h2>
+              <h2 className="font-bold text-white tracking-wide">
+                {col.title}
+              </h2>
               <span className="bg-secondary px-2.5 py-1 rounded-full text-xs font-bold text-muted-foreground">
                 {orders.filter((o: any) => o.status === col.id).length}
               </span>
@@ -133,7 +141,11 @@ export default function KitchenDashboardPage() {
               {orders
                 .filter((o: any) => o.status === col.id)
                 .map((order: any) => (
-                  <OrderTicket key={order.id} order={order} onDragStart={handleDragStart} />
+                  <OrderTicket
+                    key={order.id}
+                    order={order}
+                    onDragStart={handleDragStart}
+                  />
                 ))}
             </div>
           </div>

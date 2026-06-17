@@ -24,7 +24,11 @@ export const OrdersPage: React.FC = () => {
     date: 'Today, 07:15 PM',
     amount: 34.5,
     items: [
-      { name: 'Firebrick Pepperoni Pizza', qty: 1, modifiers: ['Extra Cheese', 'Thick Crust'] },
+      {
+        name: 'Firebrick Pepperoni Pizza',
+        qty: 1,
+        modifiers: ['Extra Cheese', 'Thick Crust'],
+      },
       { name: 'Classic Craft Cheeseburger', qty: 1, modifiers: ['No Pickles'] },
     ],
     status: 'baking', // received, preparing, baking, packed, dispatched
@@ -32,7 +36,12 @@ export const OrdersPage: React.FC = () => {
       { key: 'received', label: 'Order Confirmed', done: true, current: false },
       { key: 'preparing', label: 'Preparing', done: true, current: false },
       { key: 'baking', label: 'In the Oven', done: true, current: true },
-      { key: 'dispatched', label: 'Out for Delivery', done: false, current: false },
+      {
+        key: 'dispatched',
+        label: 'Out for Delivery',
+        done: false,
+        current: false,
+      },
     ],
   };
 
@@ -144,10 +153,17 @@ export const OrdersPage: React.FC = () => {
                                   : 'bg-neutral-900 border border-white/10 text-neutral-600'
                             }`}
                           >
-                            {step.key === 'received' && <PackageCheck size={18} />}
-                            {step.key === 'preparing' && <CheckCircle2 size={18} />}
+                            {step.key === 'received' && (
+                              <PackageCheck size={18} />
+                            )}
+                            {step.key === 'preparing' && (
+                              <CheckCircle2 size={18} />
+                            )}
                             {step.key === 'baking' && (
-                              <Flame size={18} className={step.current ? 'animate-bounce' : ''} />
+                              <Flame
+                                size={18}
+                                className={step.current ? 'animate-bounce' : ''}
+                              />
                             )}
                             {step.key === 'dispatched' && <Truck size={18} />}
                           </div>
@@ -181,7 +197,9 @@ export const OrdersPage: React.FC = () => {
                       >
                         <div>
                           <p className="font-bold text-white">
-                            <span className="text-primary mr-2">{item.qty}x</span>
+                            <span className="text-primary mr-2">
+                              {item.qty}x
+                            </span>
                             {item.name}
                           </p>
                           {item.modifiers.length > 0 && (
@@ -198,18 +216,20 @@ export const OrdersPage: React.FC = () => {
             </div>
 
             <div className="text-center py-4 text-sm text-neutral-500 bg-primary/5 rounded-xl border border-primary/10">
-              <span className="text-primary font-semibold">Tip:</span> You will receive a
-              notification when your order is out for delivery.
+              <span className="text-primary font-semibold">Tip:</span> You will
+              receive a notification when your order is out for delivery.
             </div>
           </div>
         ) : (
           /* Past orders (empty state) */
           <div className="py-16 bg-white/[0.02] border border-white/5 rounded-3xl text-center px-6">
             <History size={48} className="mx-auto text-neutral-600 mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">No Past Orders Found</h3>
+            <h3 className="text-xl font-bold text-white mb-2">
+              No Past Orders Found
+            </h3>
             <p className="text-neutral-400 text-sm mb-6 max-w-md mx-auto">
-              You haven't completed any orders yet. Discover our delicious menu and place your first
-              order today!
+              You haven't completed any orders yet. Discover our delicious menu
+              and place your first order today!
             </p>
             <button
               onClick={() => navigate('/restaurants')}

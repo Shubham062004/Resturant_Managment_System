@@ -4,7 +4,11 @@ import { AuthRequest } from '../../types/express';
 
 import { DeliveryService } from './delivery.service';
 
-export const getAssignedOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getAssignedOrders = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.user!.id;
     const orders = await DeliveryService.getAssignedOrders(userId);
@@ -14,7 +18,11 @@ export const getAssignedOrders = async (req: AuthRequest, res: Response, next: N
   }
 };
 
-export const acceptOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const acceptOrder = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.user!.id;
     const { id } = req.params;
@@ -25,7 +33,11 @@ export const acceptOrder = async (req: AuthRequest, res: Response, next: NextFun
   }
 };
 
-export const pickupOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const pickupOrder = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.user!.id;
     const { id } = req.params;
@@ -36,7 +48,11 @@ export const pickupOrder = async (req: AuthRequest, res: Response, next: NextFun
   }
 };
 
-export const deliverOrder = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const deliverOrder = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.user!.id;
     const { id } = req.params;
@@ -48,7 +64,11 @@ export const deliverOrder = async (req: AuthRequest, res: Response, next: NextFu
   }
 };
 
-export const updateLocation = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const updateLocation = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.user!.id;
     const locationData = req.body;
@@ -59,7 +79,11 @@ export const updateLocation = async (req: AuthRequest, res: Response, next: Next
   }
 };
 
-export const getEarnings = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getEarnings = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userId = req.user!.id;
     const earnings = await DeliveryService.getEarnings(userId);

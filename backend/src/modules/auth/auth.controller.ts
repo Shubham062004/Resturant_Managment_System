@@ -21,7 +21,11 @@ import logger from '../../utils/logger';
 import { AuthService } from './auth.service';
 
 export class AuthController {
-  public static async register(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async register(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       // Force customer role for public registration
       req.body.role = Role.CUSTOMER;
@@ -29,25 +33,30 @@ export class AuthController {
       const user = await AuthService.registerUser(
         req.body,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || '',
+        req.headers['user-agent'] || ''
       );
 
       res.status(201).json({
         success: true,
         data: { user },
-        message: 'Registration successful. A verification link has been sent to your email.',
+        message:
+          'Registration successful. A verification link has been sent to your email.',
       });
     } catch (error) {
       next(error);
     }
   }
 
-  public static async login(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async login(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const result = await AuthService.loginUser(
         req.body,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || '',
+        req.headers['user-agent'] || ''
       );
 
       if (result.requireOtp) {
@@ -59,7 +68,11 @@ export class AuthController {
         return;
       }
 
-      res.cookie('refreshToken', result.refreshToken, refreshTokenCookieOptions);
+      res.cookie(
+        'refreshToken',
+        result.refreshToken,
+        refreshTokenCookieOptions
+      );
       res.cookie('accessToken', result.accessToken, accessTokenCookieOptions);
 
       res.status(200).json({
@@ -75,14 +88,15 @@ export class AuthController {
   public static async verifyLoginOtp(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
-      const { accessToken, refreshToken, user } = await AuthService.verifyLoginOtpUser(
-        req.body,
-        req.ip || '127.0.0.1',
-        req.headers['user-agent'] || '',
-      );
+      const { accessToken, refreshToken, user } =
+        await AuthService.verifyLoginOtpUser(
+          req.body,
+          req.ip || '127.0.0.1',
+          req.headers['user-agent'] || ''
+        );
 
       res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
       res.cookie('accessToken', accessToken, accessTokenCookieOptions);
@@ -97,18 +111,27 @@ export class AuthController {
     }
   }
 
-  public static async refresh(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async refresh(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const rawRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
       if (!rawRefreshToken) {
-        return next(new AppError('Access token refresh failed. Refresh token is missing.', 401));
+        return next(
+          new AppError(
+            'Access token refresh failed. Refresh token is missing.',
+            401
+          )
+        );
       }
 
       const { accessToken, refreshToken } = await AuthService.rotateTokens(
         rawRefreshToken,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || '',
+        req.headers['user-agent'] || ''
       );
 
       res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
@@ -124,7 +147,11 @@ export class AuthController {
     }
   }
 
-  public static async logout(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async logout(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const rawRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
@@ -132,7 +159,7 @@ export class AuthController {
         await AuthService.logoutUser(
           rawRefreshToken,
           req.ip || '127.0.0.1',
-          req.headers['user-agent'] || '',
+          req.headers['user-agent'] || ''
         );
       }
 
@@ -152,7 +179,7 @@ export class AuthController {
   public static async logoutAll(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       if (!req.user) {
@@ -162,7 +189,7 @@ export class AuthController {
       await AuthService.logoutAllDevices(
         req.user.id,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || '',
+        req.headers['user-agent'] || ''
       );
 
       res.clearCookie('refreshToken', { ...clearAuthCookieOptions, maxAge: 0 });
@@ -181,7 +208,7 @@ export class AuthController {
   public static async forgotPassword(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { email } = req.body;
@@ -190,7 +217,9 @@ export class AuthController {
 
       if (user) {
         // 1. Invalidate previous tokens
-        await prisma.passwordResetToken.deleteMany({ where: { userId: user.id } });
+        await prisma.passwordResetToken.deleteMany({
+          where: { userId: user.id },
+        });
 
         // 2. Generate secure token
         const resetToken = crypto.randomBytes(32).toString('hex');
@@ -213,7 +242,7 @@ export class AuthController {
           req.headers['user-agent'] || '',
           {
             message: 'Password reset link requested.',
-          },
+          }
         );
       }
 
@@ -221,7 +250,8 @@ export class AuthController {
       res.status(200).json({
         success: true,
         data: null,
-        message: 'If a user matches this email address, a password reset link has been dispatched.',
+        message:
+          'If a user matches this email address, a password reset link has been dispatched.',
       });
     } catch (error) {
       next(error);
@@ -231,7 +261,7 @@ export class AuthController {
   public static async resetPassword(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { token, password } = req.body;
@@ -242,11 +272,15 @@ export class AuthController {
       });
 
       if (!storedToken) {
-        return next(new AppError('Password reset link is invalid or has expired.', 400));
+        return next(
+          new AppError('Password reset link is invalid or has expired.', 400)
+        );
       }
 
       if (new Date() > storedToken.expiresAt) {
-        await prisma.passwordResetToken.delete({ where: { id: storedToken.id } });
+        await prisma.passwordResetToken.delete({
+          where: { id: storedToken.id },
+        });
         return next(new AppError('Password reset link has expired.', 400));
       }
 
@@ -266,13 +300,14 @@ export class AuthController {
       await AuthService.logoutAllDevices(
         user.id,
         req.ip || '127.0.0.1',
-        req.headers['user-agent'] || '',
+        req.headers['user-agent'] || ''
       );
 
       res.status(200).json({
         success: true,
         data: null,
-        message: 'Password has been updated successfully. Please log in with your new credentials.',
+        message:
+          'Password has been updated successfully. Please log in with your new credentials.',
       });
     } catch (error) {
       next(error);
@@ -282,7 +317,7 @@ export class AuthController {
   public static async verifyEmail(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { token } = req.body;
@@ -293,16 +328,23 @@ export class AuthController {
       });
 
       if (!storedToken) {
-        return next(new AppError('Email verification token is invalid or has expired.', 400));
+        return next(
+          new AppError(
+            'Email verification token is invalid or has expired.',
+            400
+          )
+        );
       }
 
       if (new Date() > storedToken.expiresAt) {
-        await prisma.emailVerificationToken.delete({ where: { id: storedToken.id } });
+        await prisma.emailVerificationToken.delete({
+          where: { id: storedToken.id },
+        });
         return next(
           new AppError(
             'Email verification token has expired. Please request a new verification email.',
-            400,
-          ),
+            400
+          )
         );
       }
 
@@ -313,7 +355,9 @@ export class AuthController {
         data: { isEmailVerified: true },
       });
 
-      await prisma.emailVerificationToken.delete({ where: { id: storedToken.id } });
+      await prisma.emailVerificationToken.delete({
+        where: { id: storedToken.id },
+      });
 
       await AuditService.writeLog(
         user.id,
@@ -322,7 +366,7 @@ export class AuthController {
         req.headers['user-agent'] || '',
         {
           message: 'Email address verified.',
-        },
+        }
       );
 
       res.status(200).json({
@@ -338,7 +382,7 @@ export class AuthController {
   public static async resendVerification(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { email } = req.body;
@@ -359,7 +403,9 @@ export class AuthController {
       }
 
       // Delete old verification tokens
-      await prisma.emailVerificationToken.deleteMany({ where: { userId: user.id } });
+      await prisma.emailVerificationToken.deleteMany({
+        where: { userId: user.id },
+      });
 
       // Generate new token
       const verificationToken = crypto.randomBytes(32).toString('hex');
@@ -385,7 +431,11 @@ export class AuthController {
     }
   }
 
-  public static async sendOtp(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async sendOtp(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const { email, phone, _type } = req.body;
 
@@ -424,7 +474,7 @@ export class AuthController {
   public static async verifyOtp(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { email, phone, code, type } = req.body;
@@ -475,7 +525,7 @@ export class AuthController {
   public static async googleAuth(
     req: AuthRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> {
     try {
       const { token } = req.body;
@@ -506,14 +556,18 @@ export class AuthController {
           req.ip || '127.0.0.1',
           req.headers['user-agent'] || '',
           {
-            message: 'Account registered and email auto-verified via Google OAuth login callback.',
-          },
+            message:
+              'Account registered and email auto-verified via Google OAuth login callback.',
+          }
         );
       }
 
       if (!user.isActive) {
         return next(
-          new AppError('Your account has been deactivated. Please contact support.', 403),
+          new AppError(
+            'Your account has been deactivated. Please contact support.',
+            403
+          )
         );
       }
 
@@ -525,14 +579,17 @@ export class AuthController {
         assignedCategory: user.assignedCategory,
       });
       const refreshToken = await AuthService.generateRefreshToken(user.id);
-      const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+      const tokenHash = crypto
+        .createHash('sha256')
+        .update(refreshToken)
+        .digest('hex');
 
       // Record session
       await AuditService.registerSession(
         user.id,
         req.ip || '127.0.0.1',
         req.headers['user-agent'] || '',
-        tokenHash,
+        tokenHash
       );
       await AuditService.writeLog(
         user.id,
@@ -541,7 +598,7 @@ export class AuthController {
         req.headers['user-agent'] || '',
         {
           provider: 'google',
-        },
+        }
       );
 
       res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
@@ -566,7 +623,11 @@ export class AuthController {
     }
   }
 
-  public static async getMe(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  public static async getMe(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       if (!req.user) {
         return next(new AppError('Unauthenticated.', 401));

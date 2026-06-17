@@ -4,7 +4,11 @@ import { prisma } from '../../config/db';
 import { AuditLog } from '../../database/mongo/AuditLog';
 
 export class AdminController {
-  public static async getDashboardOverview(req: Request, res: Response, next: NextFunction) {
+  public static async getDashboardOverview(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const branchId = req.query.branchId as string;
       const today = new Date();
@@ -23,7 +27,7 @@ export class AdminController {
       });
       const revenueToday = todaysOrders.reduce(
         (sum: number, order: any) => sum + Number(order.totalAmount),
-        0,
+        0
       );
 
       // 2. Orders Count Today
@@ -65,7 +69,11 @@ export class AdminController {
     }
   }
 
-  public static async getBranches(req: Request, res: Response, next: NextFunction) {
+  public static async getBranches(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const branches = await prisma.branch.findMany({
         orderBy: { name: 'asc' },
@@ -83,7 +91,11 @@ export class AdminController {
     }
   }
 
-  public static async createBranch(req: Request, res: Response, next: NextFunction) {
+  public static async createBranch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const {
         name,
@@ -131,7 +143,11 @@ export class AdminController {
     }
   }
 
-  public static async updateBranch(req: Request, res: Response, next: NextFunction) {
+  public static async updateBranch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       const {
@@ -155,10 +171,14 @@ export class AdminController {
           city,
           state,
           latitude: latitude !== undefined ? parseFloat(latitude) : undefined,
-          longitude: longitude !== undefined ? parseFloat(longitude) : undefined,
+          longitude:
+            longitude !== undefined ? parseFloat(longitude) : undefined,
           openingTime,
           closingTime,
-          deliveryRadius: deliveryRadius !== undefined ? parseFloat(deliveryRadius) : undefined,
+          deliveryRadius:
+            deliveryRadius !== undefined
+              ? parseFloat(deliveryRadius)
+              : undefined,
           isActive,
         },
       });
@@ -172,7 +192,11 @@ export class AdminController {
     }
   }
 
-  public static async deleteBranch(req: Request, res: Response, next: NextFunction) {
+  public static async deleteBranch(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       await prisma.branch.delete({
@@ -188,7 +212,11 @@ export class AdminController {
     }
   }
 
-  public static async getProducts(req: Request, res: Response, next: NextFunction) {
+  public static async getProducts(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const products = await prisma.product.findMany({
         orderBy: { name: 'asc' },
@@ -207,9 +235,21 @@ export class AdminController {
     }
   }
 
-  public static async createProduct(req: Request, res: Response, next: NextFunction) {
+  public static async createProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { name, categoryId, basePrice, isVeg, description, isAvailable, featured } = req.body;
+      const {
+        name,
+        categoryId,
+        basePrice,
+        isVeg,
+        description,
+        isAvailable,
+        featured,
+      } = req.body;
       const slug = name
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
@@ -217,7 +257,9 @@ export class AdminController {
 
       const restaurant = await prisma.restaurantGroup.findFirst();
       if (!restaurant) {
-        return res.status(400).json({ status: 'fail', message: 'No restaurant group found.' });
+        return res
+          .status(400)
+          .json({ status: 'fail', message: 'No restaurant group found.' });
       }
 
       const product = await prisma.product.create({
@@ -243,10 +285,22 @@ export class AdminController {
     }
   }
 
-  public static async updateProduct(req: Request, res: Response, next: NextFunction) {
+  public static async updateProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
-      const { name, categoryId, basePrice, isVeg, description, isAvailable, featured } = req.body;
+      const {
+        name,
+        categoryId,
+        basePrice,
+        isVeg,
+        description,
+        isAvailable,
+        featured,
+      } = req.body;
 
       const updateData: any = {};
       if (name !== undefined) {
@@ -277,7 +331,11 @@ export class AdminController {
     }
   }
 
-  public static async deleteProduct(req: Request, res: Response, next: NextFunction) {
+  public static async deleteProduct(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       await prisma.product.delete({
@@ -293,13 +351,20 @@ export class AdminController {
     }
   }
 
-  public static async getAuditLogs(req: Request, res: Response, next: NextFunction) {
+  public static async getAuditLogs(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       let logs = [];
       try {
         logs = await AuditLog.find().sort({ createdAt: -1 }).limit(100);
       } catch (mongoErr) {
-        console.error('Failed to read MongoDB audit logs, using mock logs:', mongoErr);
+        console.error(
+          'Failed to read MongoDB audit logs, using mock logs:',
+          mongoErr
+        );
         // Fallback mock logs if MongoDB collection is not initialized or fails
         logs = [
           {
@@ -338,7 +403,11 @@ export class AdminController {
     }
   }
 
-  public static async getOrders(req: Request, res: Response, next: NextFunction) {
+  public static async getOrders(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const orders = await prisma.order.findMany({
         orderBy: { createdAt: 'desc' },

@@ -3,7 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../../config/db';
 
 export class SuperAdminController {
-  public static async getGlobalDashboard(req: Request, res: Response, next: NextFunction) {
+  public static async getGlobalDashboard(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const totalOrganizations = await prisma.organization.count();
       const totalBranches = await prisma.branch.count();
@@ -20,7 +24,9 @@ export class SuperAdminController {
           totalOrganizations,
           totalBranches,
           totalOrders,
-          globalRevenue: revenueAggr._sum.totalAmount ? Number(revenueAggr._sum.totalAmount) : 0,
+          globalRevenue: revenueAggr._sum.totalAmount
+            ? Number(revenueAggr._sum.totalAmount)
+            : 0,
         },
       });
     } catch (error) {
@@ -28,7 +34,11 @@ export class SuperAdminController {
     }
   }
 
-  public static async getPlatformHealth(req: Request, res: Response, next: NextFunction) {
+  public static async getPlatformHealth(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       // Mock health data
       res.status(200).json({

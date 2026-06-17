@@ -19,7 +19,11 @@ const sanitizeValue = (value: any): any => {
   return value;
 };
 
-export const sanitizeInput = (req: Request, res: Response, next: NextFunction): void => {
+export const sanitizeInput = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (req.body) req.body = sanitizeValue(req.body);
   if (req.query) req.query = sanitizeValue(req.query);
   if (req.params) req.params = sanitizeValue(req.params);

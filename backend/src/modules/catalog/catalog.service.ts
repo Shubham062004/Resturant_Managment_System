@@ -148,7 +148,10 @@ export class CatalogService {
       where: { id },
       include: {
         branches: { where: { isActive: true } },
-        categories: { where: { isActive: true }, orderBy: { sortOrder: 'asc' } },
+        categories: {
+          where: { isActive: true },
+          orderBy: { sortOrder: 'asc' },
+        },
         products: { where: { isAvailable: true }, include: { variants: true } },
       },
     });
@@ -252,7 +255,9 @@ export class CatalogService {
     const limit = filters.limit || 20;
     const skip = (page - 1) * limit;
 
-    const where: { isActive: boolean; restaurantId?: string } = { isActive: true };
+    const where: { isActive: boolean; restaurantId?: string } = {
+      isActive: true,
+    };
     if (filters.restaurantId) {
       where.restaurantId = filters.restaurantId;
     }
@@ -307,7 +312,9 @@ export class CatalogService {
     const limit = filters.limit || 20;
     const skip = (page - 1) * limit;
 
-    const where: { isActive: boolean; restaurantId?: string } = { isActive: true };
+    const where: { isActive: boolean; restaurantId?: string } = {
+      isActive: true,
+    };
     if (filters.restaurantId) {
       where.restaurantId = filters.restaurantId;
     }
@@ -387,7 +394,7 @@ export class CatalogService {
       page?: number;
       limit?: number;
     },
-    userId?: string,
+    userId?: string
   ) {
     const page = filters.page || 1;
     const limit = filters.limit || 20;
@@ -460,7 +467,9 @@ export class CatalogService {
         userId: userId || null,
         resultsCount: total,
         timestamp: new Date(),
-      }).catch((err) => logger.error('MongoDB search analytics logging failed:', err));
+      }).catch((err) =>
+        logger.error('MongoDB search analytics logging failed:', err)
+      );
     }
 
     const totalPages = Math.ceil(total / limit);
@@ -529,7 +538,9 @@ export class CatalogService {
       productId: product.id,
       restaurantId: product.restaurantId,
       timestamp: new Date(),
-    }).catch((err) => logger.error('MongoDB product view event logging failed:', err));
+    }).catch((err) =>
+      logger.error('MongoDB product view event logging failed:', err)
+    );
 
     // Get Recommendations: items in same category, up to 5 items (excluding current item)
     const recommendations = await prisma.product.findMany({
@@ -556,7 +567,7 @@ export class CatalogService {
       }));
 
       RecommendationEvent.insertMany(records).catch((err) =>
-        logger.error('MongoDB recommendation events logging failed:', err),
+        logger.error('MongoDB recommendation events logging failed:', err)
       );
     }
 
@@ -572,7 +583,7 @@ export class CatalogService {
   public static async trackRecommendationClick(
     productId: string,
     recommendedProductId: string,
-    userId?: string,
+    userId?: string
   ) {
     await RecommendationEvent.create({
       userId: userId || null,
@@ -580,7 +591,9 @@ export class CatalogService {
       recommendedProductId,
       eventType: 'CLICK',
       timestamp: new Date(),
-    }).catch((err) => logger.error('MongoDB recommendation click logging failed:', err));
+    }).catch((err) =>
+      logger.error('MongoDB recommendation click logging failed:', err)
+    );
 
     return { success: true };
   }
@@ -594,7 +607,7 @@ export class CatalogService {
       productId: string;
       rating: number;
       comment: string;
-    },
+    }
   ) {
     // Verify product exists
     const product = await prisma.product.findUnique({
@@ -614,7 +627,10 @@ export class CatalogService {
     });
 
     if (existingReview) {
-      throw new AppError('You have already submitted a review for this product.', 400);
+      throw new AppError(
+        'You have already submitted a review for this product.',
+        400
+      );
     }
 
     const review = await prisma.review.create({
@@ -651,7 +667,7 @@ export class CatalogService {
     data: {
       rating?: number;
       comment?: string;
-    },
+    }
   ) {
     const review = await prisma.review.findUnique({
       where: { id: reviewId },
@@ -663,7 +679,10 @@ export class CatalogService {
     }
 
     if (review.userId !== userId) {
-      throw new AppError('Unauthorized. You can only modify your own reviews.', 403);
+      throw new AppError(
+        'Unauthorized. You can only modify your own reviews.',
+        403
+      );
     }
 
     const updatedReview = await prisma.review.update({
@@ -685,7 +704,10 @@ export class CatalogService {
     });
 
     // Recalculate rating averages
-    await this.updateRatingAverages(review.productId, review.product.restaurantId);
+    await this.updateRatingAverages(
+      review.productId,
+      review.product.restaurantId
+    );
 
     return updatedReview;
   }
@@ -704,7 +726,10 @@ export class CatalogService {
     }
 
     if (review.userId !== userId) {
-      throw new AppError('Unauthorized. You can only delete your own reviews.', 403);
+      throw new AppError(
+        'Unauthorized. You can only delete your own reviews.',
+        403
+      );
     }
 
     await prisma.review.delete({
@@ -712,7 +737,10 @@ export class CatalogService {
     });
 
     // Recalculate rating averages
-    await this.updateRatingAverages(review.productId, review.product.restaurantId);
+    await this.updateRatingAverages(
+      review.productId,
+      review.product.restaurantId
+    );
 
     return { success: true };
   }
@@ -722,7 +750,7 @@ export class CatalogService {
    */
   public static async getReviewsByProductId(
     productId: string,
-    filters: { page?: number; limit?: number } = {},
+    filters: { page?: number; limit?: number } = {}
   ) {
     const page = filters.page || 1;
     const limit = filters.limit || 20;
@@ -810,7 +838,7 @@ export class CatalogService {
    */
   public static async getFavorites(
     userId: string,
-    filters: { page?: number; limit?: number } = {},
+    filters: { page?: number; limit?: number } = {}
   ) {
     const page = filters.page || 1;
     const limit = filters.limit || 20;
@@ -872,7 +900,10 @@ export class CatalogService {
   /**
    * Recalculate product rating average & restaurant rating average
    */
-  private static async updateRatingAverages(productId: string, restaurantId: string) {
+  private static async updateRatingAverages(
+    productId: string,
+    restaurantId: string
+  ) {
     try {
       // 1. Recalculate Product average rating
       const productReviews = await prisma.review.aggregate({
@@ -905,7 +936,10 @@ export class CatalogService {
         },
       });
     } catch (err) {
-      logger.error(err, 'Failed to update rating averages for product/restaurant:');
+      logger.error(
+        err,
+        'Failed to update rating averages for product/restaurant:'
+      );
     }
   }
 }

@@ -28,10 +28,14 @@ export const fetchStations = createAsyncThunk(
       const response = await apiClient.get('/kitchen/stations');
       return response.data.data.stations;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch stations');
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to fetch stations'
+      );
     }
-  },
+  }
 );
 
 const stationSlice = createSlice({

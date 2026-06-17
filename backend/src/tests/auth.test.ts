@@ -128,7 +128,9 @@ describe('Auth API Integration Tests', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data.user).toBeDefined();
       expect(response.headers['set-cookie']).toBeDefined();
-      const cookies = [response.headers['set-cookie']].flat().filter(Boolean) as string[];
+      const cookies = [response.headers['set-cookie']]
+        .flat()
+        .filter(Boolean) as string[];
       expect(cookies.some((c) => c.includes('refreshToken='))).toBe(true);
       expect(cookies.some((c) => c.includes('accessToken='))).toBe(true);
       expect(AuditService.registerSession).toHaveBeenCalled();
@@ -166,8 +168,12 @@ describe('Auth API Integration Tests', () => {
         },
       });
 
-      (prisma.refreshToken.update as any).mockResolvedValue({ id: 'token-uuid' });
-      (prisma.refreshToken.create as any).mockResolvedValue({ id: 'new-token-uuid' });
+      (prisma.refreshToken.update as any).mockResolvedValue({
+        id: 'token-uuid',
+      });
+      (prisma.refreshToken.create as any).mockResolvedValue({
+        id: 'new-token-uuid',
+      });
 
       const response = await request(app)
         .post('/api/v1/auth/refresh')
@@ -177,12 +183,14 @@ describe('Auth API Integration Tests', () => {
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.success).toBe(true);
-      const cookies = [response.headers['set-cookie']].flat().filter(Boolean) as string[];
+      const cookies = [response.headers['set-cookie']]
+        .flat()
+        .filter(Boolean) as string[];
       expect(cookies.some((c) => c.includes('accessToken='))).toBe(true);
       expect(prisma.refreshToken.update).toHaveBeenCalledWith(
         expect.objectContaining({
           data: { revoked: true },
-        }),
+        })
       );
       expect(AuditService.terminateSession).toHaveBeenCalled();
     });
@@ -207,7 +215,9 @@ describe('Auth API Integration Tests', () => {
         where: { userId: 'user-uuid' },
         data: { revoked: true },
       });
-      expect(AuditService.terminateAllSessions).toHaveBeenCalledWith('user-uuid');
+      expect(AuditService.terminateAllSessions).toHaveBeenCalledWith(
+        'user-uuid'
+      );
     });
   });
 });

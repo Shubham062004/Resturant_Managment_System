@@ -7,7 +7,8 @@ import env from './env';
 
 const prismaClientSingleton = () => {
   return new PrismaClient({
-    log: env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    log:
+      env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   });
 };
 
@@ -32,7 +33,10 @@ export const connectDatabases = async (): Promise<void> => {
     await mongoose.connect(env.MONGODB_URI);
     logger.info('✅ MongoDB database connected successfully.');
   } catch (error) {
-    logger.error(error, '❌ Failed to establish dual-database connection sessions:');
+    logger.error(
+      error,
+      '❌ Failed to establish dual-database connection sessions:'
+    );
     process.exit(1);
   }
 };

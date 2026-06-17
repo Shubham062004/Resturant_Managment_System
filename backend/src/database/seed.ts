@@ -34,7 +34,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log(
-    '🚀 Starting Batch-Optimized Unified Seeding for ABC Restaurant Management System...',
+    '🚀 Starting Batch-Optimized Unified Seeding for ABC Restaurant Management System...'
   );
 
   // 1. Establish MongoDB connection if URI is available
@@ -270,7 +270,7 @@ async function main() {
 
   // 5. Seed Users matching exact role counts
   console.log(
-    '🌱 Seeding User Accounts (exactly 1 Org Owner, 1 System Admin, 5 Managers, 10 Kitchen, 5 Inventory, 10 Drivers, 20 Customers)...',
+    '🌱 Seeding User Accounts (exactly 1 Org Owner, 1 System Admin, 5 Managers, 10 Kitchen, 5 Inventory, 10 Drivers, 20 Customers)...'
   );
   const salt = bcrypt.genSaltSync(10);
   const userPasswordHash = bcrypt.hashSync('Admin@123', salt);
@@ -468,24 +468,64 @@ async function main() {
   const productData = [
     { name: 'Veg Maharaja Burger', price: 299.0, cat: 'Burger', isVeg: true },
     { name: 'Spicy Paneer Burger', price: 249.0, cat: 'Burger', isVeg: true },
-    { name: 'Classic Margherita Pizza', price: 399.0, cat: 'Pizza', isVeg: true },
+    {
+      name: 'Classic Margherita Pizza',
+      price: 399.0,
+      cat: 'Pizza',
+      isVeg: true,
+    },
     { name: 'Tandoori Paneer Pizza', price: 499.0, cat: 'Pizza', isVeg: true },
     { name: 'Veg Masala Noodles', price: 199.0, cat: 'Noodles', isVeg: true },
-    { name: 'Schezwan Chilli Noodles', price: 219.0, cat: 'Noodles', isVeg: true },
+    {
+      name: 'Schezwan Chilli Noodles',
+      price: 219.0,
+      cat: 'Noodles',
+      isVeg: true,
+    },
     { name: 'Kadhai Paneer Thali', price: 349.0, cat: 'Paneer', isVeg: true },
     { name: 'Shahi Paneer Masala', price: 379.0, cat: 'Paneer', isVeg: true },
-    { name: 'Gulab Jamun Cup (2 Pcs)', price: 119.0, cat: 'Dessert', isVeg: true },
+    {
+      name: 'Gulab Jamun Cup (2 Pcs)',
+      price: 119.0,
+      cat: 'Dessert',
+      isVeg: true,
+    },
     { name: 'Sizzling Hot Brownie', price: 249.0, cat: 'Dessert', isVeg: true },
     { name: 'Kesar Mango Lassi', price: 129.0, cat: 'Drinks', isVeg: true },
     { name: 'Iced Cold Coffee', price: 159.0, cat: 'Drinks', isVeg: true },
     { name: 'Paneer Tikka Biryani', price: 389.0, cat: 'Rice', isVeg: true },
     { name: 'Jeera Butter Rice', price: 199.0, cat: 'Rice', isVeg: true },
-    { name: 'Cheese Garlic Roll Wrap', price: 189.0, cat: 'Wraps', isVeg: true },
+    {
+      name: 'Cheese Garlic Roll Wrap',
+      price: 189.0,
+      cat: 'Wraps',
+      isVeg: true,
+    },
     { name: 'Spicy Veg Wrap', price: 169.0, cat: 'Wraps', isVeg: true },
-    { name: 'Family Combo Pack Large', price: 2499.0, cat: 'Combos', isVeg: true },
-    { name: 'Executive Lunch Thali Box', price: 499.0, cat: 'Combos', isVeg: true },
-    { name: 'Chef Special Supreme Pizza', price: 699.0, cat: 'Specials', isVeg: true },
-    { name: 'Premium Butter Paneer Combo', price: 549.0, cat: 'Specials', isVeg: true },
+    {
+      name: 'Family Combo Pack Large',
+      price: 2499.0,
+      cat: 'Combos',
+      isVeg: true,
+    },
+    {
+      name: 'Executive Lunch Thali Box',
+      price: 499.0,
+      cat: 'Combos',
+      isVeg: true,
+    },
+    {
+      name: 'Chef Special Supreme Pizza',
+      price: 699.0,
+      cat: 'Specials',
+      isVeg: true,
+    },
+    {
+      name: 'Premium Butter Paneer Combo',
+      price: 549.0,
+      cat: 'Specials',
+      isVeg: true,
+    },
   ];
 
   const products = [];
@@ -622,7 +662,9 @@ async function main() {
         name,
         sku: `ING-RAW-${String(i + 1).padStart(2, '0')}`,
         category: ingCategories[i],
-        unit: ['Dairy', 'Produce', 'Bakery', 'Grocery', 'Spices'].includes(ingCategories[i])
+        unit: ['Dairy', 'Produce', 'Bakery', 'Grocery', 'Spices'].includes(
+          ingCategories[i]
+        )
           ? 'KG'
           : 'Liters',
         minimumStock: 15.0,
@@ -690,7 +732,9 @@ async function main() {
   await prisma.inventory.createMany({ data: inventoriesToCreate });
 
   // 12. Seeding 300 Completed Orders (May 1 2026 → May 31 2026, Target Revenue: ₹15–20 Lakh total)
-  console.log('🌱 Batch Generating 300 Completed Orders (Target Revenue: ₹15–20 Lakh)...');
+  console.log(
+    '🌱 Batch Generating 300 Completed Orders (Target Revenue: ₹15–20 Lakh)...'
+  );
   const numOrders = 300;
 
   const ordersToCreate = [];
@@ -737,7 +781,8 @@ async function main() {
 
     const taxVal = Math.round(subtotalVal * 0.05 * 100) / 100;
     const deliveryFeeVal = i < 100 ? 40.0 : 0.0;
-    const discountVal = i % 5 === 0 ? Math.round(subtotalVal * 0.1 * 100) / 100 : 0.0;
+    const discountVal =
+      i % 5 === 0 ? Math.round(subtotalVal * 0.1 * 100) / 100 : 0.0;
     const totalAmountVal = subtotalVal + taxVal + deliveryFeeVal - discountVal;
 
     const isDelivery = i < 100;
@@ -830,7 +875,7 @@ async function main() {
   await prisma.receipt.createMany({ data: receiptsToCreate });
 
   console.log(
-    `✅ Bulk Seeded 300 Orders. Total Cumulative Revenue: ₹${cumulativeRevenue.toFixed(2)} INR`,
+    `✅ Bulk Seeded 300 Orders. Total Cumulative Revenue: ₹${cumulativeRevenue.toFixed(2)} INR`
   );
 
   // 13. Seed Kitchen Stations and KDS Orders
@@ -875,7 +920,9 @@ async function main() {
       updatedAt: order.createdAt,
     });
 
-    const items = orderItemsToCreate.filter((item) => item.orderId === order.id);
+    const items = orderItemsToCreate.filter(
+      (item) => item.orderId === order.id
+    );
     for (const item of items) {
       kitchenTasksToCreate.push({
         kitchenOrderId: kOrderId,
@@ -933,7 +980,9 @@ async function main() {
       createdAt: order.createdAt,
     });
   }
-  await prisma.deliveryAssignment.createMany({ data: deliveryAssignmentsToCreate });
+  await prisma.deliveryAssignment.createMany({
+    data: deliveryAssignmentsToCreate,
+  });
   await prisma.deliveryProof.createMany({ data: deliveryProofsToCreate });
   await prisma.driverEarnings.createMany({ data: driverEarningsToCreate });
 
@@ -998,7 +1047,8 @@ async function main() {
       userId: adminId, // Send system notifications to Admin user
       type: i % 2 === 0 ? 'SYSTEM_ALERT' : 'ORDER_STATUS',
       channel: 'IN_APP',
-      title: i % 2 === 0 ? `Stock Alert: Item raw ingredient` : `New Order Received`,
+      title:
+        i % 2 === 0 ? `Stock Alert: Item raw ingredient` : `New Order Received`,
       message:
         i % 2 === 0
           ? `Ingredient item level fell below minimal threshold.`
@@ -1104,8 +1154,10 @@ async function main() {
     include: { driver: { include: { user: true } } },
   });
 
-  const driverStats: Record<string, { name: string; trips: number; base: number; bonus: number }> =
-    {};
+  const driverStats: Record<
+    string,
+    { name: string; trips: number; base: number; bonus: number }
+  > = {};
   for (const dec of driverCommissions) {
     const dId = dec.driverId;
     const name = `${dec.driver.user.firstName} ${dec.driver.user.lastName}`;
@@ -1130,47 +1182,55 @@ async function main() {
   });
 
   console.log(
-    '\n==========================================================================================',
+    '\n=========================================================================================='
   );
   console.log(
-    '                                  ABC RESTAURANT OPERATIONS REPORT                        ',
+    '                                  ABC RESTAURANT OPERATIONS REPORT                        '
   );
   console.log(
-    '==========================================================================================',
-  );
-  console.log(`👤 Active Users Created: ${1 + 1 + 5 + 10 + 5 + 10 + 20} accounts`);
-  console.log(`📦 May 2026 Orders Created: ${ordersToCreate.length} completed transactions`);
-  console.log(
-    `💰 Cumulative Seed Revenue: ₹${cumulativeRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })} INR`,
+    '=========================================================================================='
   );
   console.log(
-    '------------------------------------------------------------------------------------------',
+    `👤 Active Users Created: ${1 + 1 + 5 + 10 + 5 + 10 + 20} accounts`
+  );
+  console.log(
+    `📦 May 2026 Orders Created: ${ordersToCreate.length} completed transactions`
+  );
+  console.log(
+    `💰 Cumulative Seed Revenue: ₹${cumulativeRevenue.toLocaleString('en-IN', { maximumFractionDigits: 2 })} INR`
+  );
+  console.log(
+    '------------------------------------------------------------------------------------------'
   );
   console.log('CHEF PERFORMANCE BONUSES:');
-  console.log('Name                  | Score | Tasks Cooked | Performance Bonus');
   console.log(
-    '------------------------------------------------------------------------------------------',
+    'Name                  | Score | Tasks Cooked | Performance Bonus'
+  );
+  console.log(
+    '------------------------------------------------------------------------------------------'
   );
   chefStats.forEach((chef) => {
     console.log(
-      `${chef.name.padEnd(21)} | ${chef.score.toString().padEnd(5)} | ${chef.tasks.toString().padEnd(12)} | ₹${chef.bonus}`,
+      `${chef.name.padEnd(21)} | ${chef.score.toString().padEnd(5)} | ${chef.tasks.toString().padEnd(12)} | ₹${chef.bonus}`
     );
   });
   console.log(
-    '------------------------------------------------------------------------------------------',
+    '------------------------------------------------------------------------------------------'
   );
   console.log('DRIVER LOGISTICS & COMMISSION EARNINGS:');
-  console.log('Name                  | Trips | Delivery Commission | Driver Bonus');
   console.log(
-    '------------------------------------------------------------------------------------------',
+    'Name                  | Trips | Delivery Commission | Driver Bonus'
+  );
+  console.log(
+    '------------------------------------------------------------------------------------------'
   );
   Object.values(driverStats).forEach((ds) => {
     console.log(
-      `${ds.name.padEnd(21)} | ${ds.trips.toString().padEnd(5)} | ₹${ds.base.toFixed(2).padEnd(18)} | ₹${ds.bonus.toFixed(2)}`,
+      `${ds.name.padEnd(21)} | ${ds.trips.toString().padEnd(5)} | ₹${ds.base.toFixed(2).padEnd(18)} | ₹${ds.bonus.toFixed(2)}`
     );
   });
   console.log(
-    '==========================================================================================\n',
+    '==========================================================================================\n'
   );
 }
 

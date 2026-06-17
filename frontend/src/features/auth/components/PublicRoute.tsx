@@ -11,10 +11,12 @@ export interface PublicRouteProps {
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const location = useLocation();
-  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/';
+  const from =
+    (location.state as { from?: { pathname?: string } })?.from?.pathname || '/';
 
   if (isAuthenticated) {
-    const destination = from === '/' ? getDashboardRouteByRole(user?.role) : from;
+    const destination =
+      from === '/' ? getDashboardRouteByRole(user?.role) : from;
     return <Navigate to={destination} replace />;
   }
 

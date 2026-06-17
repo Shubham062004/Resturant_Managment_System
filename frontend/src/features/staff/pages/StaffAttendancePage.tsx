@@ -20,12 +20,16 @@ export default function StaffAttendancePage() {
   const toast = useToast();
 
   // Simulated state for today's attendance
-  const [status, setStatus] = useState<'OFF_DUTY' | 'ON_DUTY' | 'ON_BREAK'>('OFF_DUTY');
+  const [status, setStatus] = useState<'OFF_DUTY' | 'ON_DUTY' | 'ON_BREAK'>(
+    'OFF_DUTY'
+  );
   const [clockInTime, setClockInTime] = useState<string | null>(null);
 
   const handleClockIn = () => {
     setStatus('ON_DUTY');
-    setClockInTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    setClockInTime(
+      new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    );
     toast.success('Successfully clocked in for your shift.');
   };
 
@@ -67,7 +71,13 @@ export default function StaffAttendancePage() {
       status: 'Present',
       late: true,
     },
-    { date: '3 days ago', checkIn: '--:--', checkOut: '--:--', status: 'Leave', late: false },
+    {
+      date: '3 days ago',
+      checkIn: '--:--',
+      checkOut: '--:--',
+      status: 'Leave',
+      late: false,
+    },
     {
       date: '4 days ago',
       checkIn: '08:55 AM',
@@ -148,7 +158,8 @@ export default function StaffAttendancePage() {
 
             {status !== 'OFF_DUTY' && (
               <p className="text-xs text-slate-500 mt-4">
-                Clocked in at <span className="font-bold text-slate-300">{clockInTime}</span>
+                Clocked in at{' '}
+                <span className="font-bold text-slate-300">{clockInTime}</span>
               </p>
             )}
           </Card>
@@ -161,21 +172,27 @@ export default function StaffAttendancePage() {
               <div className="flex justify-between items-center p-3 bg-slate-950/50 rounded-xl border border-border/10">
                 <div className="flex items-center gap-3">
                   <CheckCircle size={16} className="text-emerald-500" />
-                  <span className="text-sm text-slate-300 font-semibold">Days Present</span>
+                  <span className="text-sm text-slate-300 font-semibold">
+                    Days Present
+                  </span>
                 </div>
                 <span className="font-mono font-bold text-emerald-400">22</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-slate-950/50 rounded-xl border border-border/10">
                 <div className="flex items-center gap-3">
                   <AlertTriangle size={16} className="text-amber-500" />
-                  <span className="text-sm text-slate-300 font-semibold">Late Marks</span>
+                  <span className="text-sm text-slate-300 font-semibold">
+                    Late Marks
+                  </span>
                 </div>
                 <span className="font-mono font-bold text-amber-400">2</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-slate-950/50 rounded-xl border border-border/10">
                 <div className="flex items-center gap-3">
                   <FileX size={16} className="text-rose-500" />
-                  <span className="text-sm text-slate-300 font-semibold">Leaves Taken</span>
+                  <span className="text-sm text-slate-300 font-semibold">
+                    Leaves Taken
+                  </span>
                 </div>
                 <span className="font-mono font-bold text-rose-400">1 / 2</span>
               </div>
@@ -215,9 +232,15 @@ export default function StaffAttendancePage() {
                     key={i}
                     className="border-b border-border/5 hover:bg-slate-800/30 transition-colors"
                   >
-                    <td className="p-4 font-semibold text-slate-200">{record.date}</td>
-                    <td className="p-4 font-mono text-slate-400">{record.checkIn}</td>
-                    <td className="p-4 font-mono text-slate-400">{record.checkOut}</td>
+                    <td className="p-4 font-semibold text-slate-200">
+                      {record.date}
+                    </td>
+                    <td className="p-4 font-mono text-slate-400">
+                      {record.checkIn}
+                    </td>
+                    <td className="p-4 font-mono text-slate-400">
+                      {record.checkOut}
+                    </td>
                     <td className="p-4">
                       {record.status === 'Present' ? (
                         <Badge className="bg-emerald-500/10 text-emerald-400 border-none px-2 py-0.5 text-[10px]">

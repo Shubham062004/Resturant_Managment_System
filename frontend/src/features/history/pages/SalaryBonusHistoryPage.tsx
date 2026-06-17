@@ -1,5 +1,13 @@
 import { format } from 'date-fns';
-import { Download, Search, DollarSign, Wallet, Eye, EyeOff, FileText } from 'lucide-react';
+import {
+  Download,
+  Search,
+  DollarSign,
+  Wallet,
+  Eye,
+  EyeOff,
+  FileText,
+} from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import {
   BarChart,
@@ -14,7 +22,11 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 import { formatCurrency } from '../../../shared/utils/currency';
 
@@ -22,12 +34,15 @@ export default function SalaryBonusHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSalary, setShowSalary] = useState(false);
 
-  const { data: response, isLoading } = useHistoryQuery('salary', { limit: 500 });
+  const { data: response, isLoading } = useHistoryQuery('salary', {
+    limit: 500,
+  });
   const records = useMemo(() => response?.data || [], [response]);
 
   // Derived KPIs
   const stats = useMemo(() => {
-    if (!records.length) return { totalPaid: 0, totalBonuses: 0, totalDeductions: 0, slips: 0 };
+    if (!records.length)
+      return { totalPaid: 0, totalBonuses: 0, totalDeductions: 0, slips: 0 };
 
     let totalPaid = 0;
     let totalBonuses = 0;
@@ -66,7 +81,7 @@ export default function SalaryBonusHistoryPage() {
     return records.filter(
       (r: any) =>
         r.user?.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.user?.lastName?.toLowerCase().includes(searchTerm.toLowerCase()),
+        r.user?.lastName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [records, searchTerm]);
 
@@ -130,7 +145,9 @@ export default function SalaryBonusHistoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         <Card className="bg-slate-900/40 border-border/20">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Monthly Payroll Breakdown</h3>
+            <h3 className="font-bold text-white text-sm">
+              Monthly Payroll Breakdown
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -141,7 +158,11 @@ export default function SalaryBonusHistoryPage() {
                   data={chartData.monthlyPayroll}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="month"
                     stroke="#94a3b8"
@@ -154,7 +175,9 @@ export default function SalaryBonusHistoryPage() {
                     fontSize={10}
                     tickLine={false}
                     axisLine={false}
-                    tickFormatter={(val) => (showSalary ? `₹${val / 1000}k` : '***')}
+                    tickFormatter={(val) =>
+                      showSalary ? `₹${val / 1000}k` : '***'
+                    }
                   />
                   <RechartsTooltip
                     cursor={{ fill: '#1e293b' }}
@@ -226,13 +249,19 @@ export default function SalaryBonusHistoryPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No payroll records found.
                     </td>
                   </tr>
                 ) : (
                   filteredRecords.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
                       <td className="px-6 py-4 font-medium text-white">
                         {row.user?.firstName} {row.user?.lastName}
                       </td>
@@ -243,10 +272,14 @@ export default function SalaryBonusHistoryPage() {
                         {showSalary ? formatCurrency(row.baseSalary) : '******'}
                       </td>
                       <td className="px-6 py-4 text-emerald-400">
-                        {showSalary ? `+${formatCurrency(row.bonusPaid)}` : '******'}
+                        {showSalary
+                          ? `+${formatCurrency(row.bonusPaid)}`
+                          : '******'}
                       </td>
                       <td className="px-6 py-4 text-rose-400">
-                        {showSalary ? `-${formatCurrency(row.deductions)}` : '******'}
+                        {showSalary
+                          ? `-${formatCurrency(row.deductions)}`
+                          : '******'}
                       </td>
                       <td className="px-6 py-4 font-bold text-white">
                         {showSalary ? formatCurrency(row.netPaid) : '******'}

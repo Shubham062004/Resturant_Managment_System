@@ -11,7 +11,11 @@ import {
   clearCart,
   mergeCart,
 } from './cart.controller';
-import { addToCartSchema, updateCartItemSchema, mergeCartSchema } from './cart.validation';
+import {
+  addToCartSchema,
+  updateCartItemSchema,
+  mergeCartSchema,
+} from './cart.validation';
 
 const router = Router();
 

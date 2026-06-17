@@ -8,7 +8,11 @@ import { Card } from '../../../shared/components/ui/Card';
 import { Checkbox } from '../../../shared/components/ui/Checkbox';
 import { Input } from '../../../shared/components/ui/Input';
 import { Select } from '../../../shared/components/ui/Select';
-import { fetchAllStaff, updateStaffProfile, bulkUpdateStaff } from '../store/staffSlice';
+import {
+  fetchAllStaff,
+  updateStaffProfile,
+  bulkUpdateStaff,
+} from '../store/staffSlice';
 
 const STAFF_ROLES = [
   { value: 'CASHIER', label: 'Cashier' },
@@ -55,9 +59,10 @@ export default function StaffManagementPage() {
   const [bulkActive, setBulkActive] = useState<string>('');
 
   // Info alerts
-  const [alertMsg, setAlertMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null,
-  );
+  const [alertMsg, setAlertMsg] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   useEffect(() => {
     dispatch(fetchAllStaff());
@@ -69,11 +74,15 @@ export default function StaffManagementPage() {
       setEditSalary(activeStaff.salary ? activeStaff.salary.toString() : '0');
       setEditAttendance(activeStaff.attendanceCount || 0);
       setEditPerformance(
-        activeStaff.performanceScore !== undefined ? activeStaff.performanceScore : 5.0,
+        activeStaff.performanceScore !== undefined
+          ? activeStaff.performanceScore
+          : 5.0
       );
       setEditCategory(activeStaff.assignedCategory || '');
       setEditRole(activeStaff.role || '');
-      setEditIsActive(activeStaff.isActive !== undefined ? activeStaff.isActive : true);
+      setEditIsActive(
+        activeStaff.isActive !== undefined ? activeStaff.isActive : true
+      );
     }
   }, [activeStaff]);
 
@@ -107,12 +116,18 @@ export default function StaffManagementPage() {
             role: editRole,
             isActive: editIsActive,
           },
-        }),
+        })
       ).unwrap();
-      setAlertMsg({ type: 'success', text: 'Staff profile updated successfully.' });
+      setAlertMsg({
+        type: 'success',
+        text: 'Staff profile updated successfully.',
+      });
       dispatch(fetchAllStaff());
     } catch (err: any) {
-      setAlertMsg({ type: 'error', text: err.message || 'Failed to update staff profile' });
+      setAlertMsg({
+        type: 'error',
+        text: err.message || 'Failed to update staff profile',
+      });
     }
   };
 
@@ -133,7 +148,10 @@ export default function StaffManagementPage() {
       setBulkActive('');
       dispatch(fetchAllStaff());
     } catch (err: any) {
-      setAlertMsg({ type: 'error', text: err.message || 'Failed to perform bulk update' });
+      setAlertMsg({
+        type: 'error',
+        text: err.message || 'Failed to perform bulk update',
+      });
     }
   };
 
@@ -150,20 +168,24 @@ export default function StaffManagementPage() {
   const headcount = staffList.length;
   const totalPayroll = staffList.reduce(
     (sum: number, s: any) => sum + (parseFloat(s.salary) || 0),
-    0,
+    0
   );
   const avgPerformance =
     staffList.length > 0
       ? (
-          staffList.reduce((sum: number, s: any) => sum + (s.performanceScore || 5.0), 0) /
-          staffList.length
+          staffList.reduce(
+            (sum: number, s: any) => sum + (s.performanceScore || 5.0),
+            0
+          ) / staffList.length
         ).toFixed(1)
       : '5.0';
 
   if (status === 'loading' && staffList.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[400px] bg-[#0F172A] text-white">
-        <div className="text-lg text-slate-400 animate-pulse">Loading staff directories...</div>
+        <div className="text-lg text-slate-400 animate-pulse">
+          Loading staff directories...
+        </div>
       </div>
     );
   }
@@ -177,8 +199,8 @@ export default function StaffManagementPage() {
             Staff Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Configure compensation matrices, monitor shift logs, and manage organizational category
-            roles.
+            Configure compensation matrices, monitor shift logs, and manage
+            organizational category roles.
           </p>
         </div>
         <Button className="bg-[#2563EB] hover:bg-[#2563EB]/95 text-white shadow-lg">
@@ -192,8 +214,12 @@ export default function StaffManagementPage() {
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Active Headcount
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-white">{headcount}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Registered operators</span>
+          <p className="text-3xl font-bold font-display mt-2 text-white">
+            {headcount}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Registered operators
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
@@ -203,15 +229,21 @@ export default function StaffManagementPage() {
           <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">
             ₹{totalPayroll.toLocaleString()} /mo
           </p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Est. gross monthly payroll</span>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Est. gross monthly payroll
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Avg Efficiency Score
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">★ {avgPerformance}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Performance rating average</span>
+          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">
+            ★ {avgPerformance}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Performance rating average
+          </span>
         </Card>
       </div>
 
@@ -296,14 +328,19 @@ export default function StaffManagementPage() {
                     <th className="p-4 w-12 text-center">
                       <Checkbox
                         id="select-all-staff"
-                        checked={selectedIds.length === staffList.length && staffList.length > 0}
+                        checked={
+                          selectedIds.length === staffList.length &&
+                          staffList.length > 0
+                        }
                         onChange={(checked) => handleSelectAll(checked)}
                       />
                     </th>
                     <th className="p-4 font-semibold">Staff Identity</th>
                     <th className="p-4 font-semibold">Role</th>
                     <th className="p-4 font-semibold">Compensation Base</th>
-                    <th className="p-4 font-semibold text-center">Efficiency Score</th>
+                    <th className="p-4 font-semibold text-center">
+                      Efficiency Score
+                    </th>
                     <th className="p-4 font-semibold">Status</th>
                   </tr>
                 </thead>
@@ -317,11 +354,16 @@ export default function StaffManagementPage() {
                         onClick={() => setActiveStaffId(staff.id)}
                         className={`hover:bg-slate-800/20 cursor-pointer transition ${isActiveRow ? 'bg-slate-900/60 font-medium border-l-4 border-l-[#2563EB]' : ''}`}
                       >
-                        <td className="p-4 text-center" onClick={(e) => e.stopPropagation()}>
+                        <td
+                          className="p-4 text-center"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <Checkbox
                             id={`select-staff-${staff.id}`}
                             checked={isSelected}
-                            onChange={(checked) => handleSelectOne(staff.id, checked)}
+                            onChange={(checked) =>
+                              handleSelectOne(staff.id, checked)
+                            }
                           />
                         </td>
                         <td className="p-4">
@@ -329,7 +371,9 @@ export default function StaffManagementPage() {
                             <div className="text-white font-semibold">
                               {staff.firstName} {staff.lastName}
                             </div>
-                            <div className="text-slate-500 text-xs mt-0.5">{staff.email}</div>
+                            <div className="text-slate-500 text-xs mt-0.5">
+                              {staff.email}
+                            </div>
                           </div>
                         </td>
                         <td className="p-4">
@@ -349,7 +393,11 @@ export default function StaffManagementPage() {
                           </div>
                         </td>
                         <td className="p-4 text-slate-300 font-mono">
-                          ₹{staff.salary ? parseFloat(staff.salary).toLocaleString() : '0'} /mo
+                          ₹
+                          {staff.salary
+                            ? parseFloat(staff.salary).toLocaleString()
+                            : '0'}{' '}
+                          /mo
                         </td>
                         <td className="p-4 text-center">
                           <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
@@ -389,11 +437,15 @@ export default function StaffManagementPage() {
               {/* Profile details & Assignment panel */}
               <Card className="p-5 border border-slate-800 bg-[#111827] shadow-lg space-y-4 text-white">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <h3 className="text-lg font-bold text-white">Configure Staff Profile</h3>
+                  <h3 className="text-lg font-bold text-white">
+                    Configure Staff Profile
+                  </h3>
                   <Badge
                     variant={editIsActive ? 'success' : 'error'}
                     className={
-                      editIsActive ? 'bg-[#16A34A]/10 text-[#16A34A]' : 'bg-red-500/10 text-red-400'
+                      editIsActive
+                        ? 'bg-[#16A34A]/10 text-[#16A34A]'
+                        : 'bg-red-500/10 text-red-400'
                     }
                   >
                     {editIsActive ? 'ACTIVE' : 'INACTIVE'}
@@ -446,7 +498,8 @@ export default function StaffManagementPage() {
                       ))}
                     </select>
                     <p className="text-[11px] text-slate-500 mt-1">
-                      Limits kitchen queues and display monitor view to specified category foods.
+                      Limits kitchen queues and display monitor view to
+                      specified category foods.
                     </p>
                   </div>
 
@@ -469,7 +522,9 @@ export default function StaffManagementPage() {
               {/* Attendance Ledger Panel */}
               <Card className="p-5 border border-slate-800 bg-[#111827] shadow-lg space-y-4 text-white">
                 <div className="border-b border-slate-800 pb-3 flex justify-between items-center">
-                  <h3 className="text-base font-bold text-white">Attendance Shift Logs</h3>
+                  <h3 className="text-base font-bold text-white">
+                    Attendance Shift Logs
+                  </h3>
                   <span className="text-xs font-mono font-bold bg-slate-950 text-slate-400 border border-slate-800 px-2 py-0.5 rounded">
                     {editAttendance} shifts logged
                   </span>
@@ -481,7 +536,9 @@ export default function StaffManagementPage() {
                       variant="outline"
                       size="sm"
                       className="bg-slate-900 border-slate-800 text-slate-350 hover:bg-slate-800"
-                      onClick={() => setEditAttendance(Math.max(0, editAttendance - 1))}
+                      onClick={() =>
+                        setEditAttendance(Math.max(0, editAttendance - 1))
+                      }
                     >
                       - Deduct Shift
                     </Button>
@@ -503,7 +560,9 @@ export default function StaffManagementPage() {
                       id="edit-staff-attendance"
                       type="number"
                       value={editAttendance}
-                      onChange={(e) => setEditAttendance(parseInt(e.target.value) || 0)}
+                      onChange={(e) =>
+                        setEditAttendance(parseInt(e.target.value) || 0)
+                      }
                       className="w-full bg-slate-950 border-slate-800 text-white"
                     />
                   </div>
@@ -565,7 +624,9 @@ export default function StaffManagementPage() {
                       max="5.0"
                       step="0.1"
                       value={editPerformance}
-                      onChange={(e) => setEditPerformance(parseFloat(e.target.value) || 5.0)}
+                      onChange={(e) =>
+                        setEditPerformance(parseFloat(e.target.value) || 5.0)
+                      }
                       className="w-full accent-amber-500 h-2 bg-slate-850 rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
@@ -603,10 +664,12 @@ export default function StaffManagementPage() {
           ) : (
             <Card className="p-8 text-center text-slate-500 border-2 border-dashed border-slate-800 bg-[#111827] flex flex-col items-center justify-center min-h-[350px]">
               <span className="text-4xl">📇</span>
-              <h3 className="text-base font-bold text-slate-400 mt-3">Select Staff Member</h3>
+              <h3 className="text-base font-bold text-slate-400 mt-3">
+                Select Staff Member
+              </h3>
               <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-                Click on any staff record in the directory to audit attendance ledgers, configure
-                bonuses, and alter active categories.
+                Click on any staff record in the directory to audit attendance
+                ledgers, configure bonuses, and alter active categories.
               </p>
             </Card>
           )}

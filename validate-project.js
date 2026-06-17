@@ -5,7 +5,11 @@ const path = require('path');
 function runCommand(command, cwd = process.cwd()) {
   try {
     console.log(`\n🏃 Running: "${command}" in ${cwd}...`);
-    const stdout = execSync(command, { cwd, encoding: 'utf-8', stdio: 'inherit' });
+    const stdout = execSync(command, {
+      cwd,
+      encoding: 'utf-8',
+      stdio: 'inherit',
+    });
     return true;
   } catch (error) {
     console.error(`\n❌ Command failed: "${command}"`);
@@ -22,10 +26,12 @@ function checkLocalhostInProduction() {
   if (fs.existsSync(backendEnvPath)) {
     const content = fs.readFileSync(backendEnvPath, 'utf8');
     if (content.includes('localhost') && content.includes('refine')) {
-      console.log('   ✓ Backend env.ts correctly guards against localhost URLs in production.');
+      console.log(
+        '   ✓ Backend env.ts correctly guards against localhost URLs in production.'
+      );
     } else {
       console.warn(
-        '   ⚠️ Backend env.ts is missing validation to block localhost links in production.',
+        '   ⚠️ Backend env.ts is missing validation to block localhost links in production.'
       );
     }
   }
@@ -49,7 +55,7 @@ function checkLocalhostInProduction() {
           !file.includes('setupTests')
         ) {
           console.warn(
-            `   ⚠️ Warning: Active localhost reference found in ${path.relative(__dirname, file)}`,
+            `   ⚠️ Warning: Active localhost reference found in ${path.relative(__dirname, file)}`
           );
           hasError = true;
         }
@@ -58,7 +64,9 @@ function checkLocalhostInProduction() {
   }
 
   if (!hasError) {
-    console.log('   ✓ No active localhost references found in production source files.');
+    console.log(
+      '   ✓ No active localhost references found in production source files.'
+    );
   }
   return !hasError;
 }
@@ -100,7 +108,9 @@ function runAudit() {
   console.log('==================================================');
   console.log(`Linting Status:        ${lintOk ? '🟢 PASS' : '🔴 FAIL'}`);
   console.log(`Build Status:          ${buildOk ? '🟢 PASS' : '🔴 FAIL'}`);
-  console.log(`Configuration Status:  ${configOk ? '🟢 PASS' : '🟡 WARNINGS FOUND'}`);
+  console.log(
+    `Configuration Status:  ${configOk ? '🟢 PASS' : '🟡 WARNINGS FOUND'}`
+  );
   console.log('==================================================');
 
   if (!lintOk || !buildOk) {

@@ -12,9 +12,15 @@ export interface BreadcrumbProps {
   className?: string;
 }
 
-export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className = '' }) => {
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({
+  items,
+  className = '',
+}) => {
   return (
-    <nav aria-label="Breadcrumb" className={`flex font-sans text-sm font-medium ${className}`}>
+    <nav
+      aria-label="Breadcrumb"
+      className={`flex font-sans text-sm font-medium ${className}`}
+    >
       <ol className="flex items-center gap-1.5 flex-wrap">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
@@ -22,11 +28,17 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className = '' })
           return (
             <li key={index} className="flex items-center gap-1.5">
               {index > 0 && (
-                <ChevronRight size={14} className="text-muted-foreground/60 flex-shrink-0" />
+                <ChevronRight
+                  size={14}
+                  className="text-muted-foreground/60 flex-shrink-0"
+                />
               )}
 
               {isLast ? (
-                <span className="text-foreground font-semibold" aria-current="page">
+                <span
+                  className="text-foreground font-semibold"
+                  aria-current="page"
+                >
                   {item.label}
                 </span>
               ) : item.href ? (

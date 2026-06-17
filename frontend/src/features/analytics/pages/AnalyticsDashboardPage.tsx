@@ -50,7 +50,8 @@ export default function AnalyticsDashboardPage() {
 
     if (type === 'sales') {
       filename = `sales_report_${dateFilter}.csv`;
-      headers = 'Transaction ID,Date,Branch,Order Type,Payment Method,Subtotal,Tax,Total,Status\n';
+      headers =
+        'Transaction ID,Date,Branch,Order Type,Payment Method,Subtotal,Tax,Total,Status\n';
       rows = [
         [
           'TX-1001',
@@ -110,18 +111,61 @@ export default function AnalyticsDashboardPage() {
       ];
     } else {
       filename = `inventory_waste_${dateFilter}.csv`;
-      headers = 'Ingredient Name,SKU,Branch,Consumed Qty,Wasted Qty,Unit,Estimated Waste Cost\n';
+      headers =
+        'Ingredient Name,SKU,Branch,Consumed Qty,Wasted Qty,Unit,Estimated Waste Cost\n';
       rows = [
-        ['Chicken Breast', 'CH-BRE-102', 'Downtown Hub', '450.0', '12.4', 'kg', '74.40'],
-        ['Mozzarella Cheese', 'CHZ-MOZ-501', 'West End Grill', '320.0', '5.2', 'kg', '41.60'],
-        ['Tomato Paste', 'PST-TOM-302', 'Uptown Bistro', '180.0', '8.0', 'liters', '24.00'],
-        ['Lettuce Leaves', 'VEG-LET-001', 'Airport Food Court', '140.0', '15.5', 'heads', '31.00'],
-        ['Burger Buns', 'BAK-BUN-202', 'Suburban Outlet', '1200', '45', 'pieces', '22.50'],
+        [
+          'Chicken Breast',
+          'CH-BRE-102',
+          'Downtown Hub',
+          '450.0',
+          '12.4',
+          'kg',
+          '74.40',
+        ],
+        [
+          'Mozzarella Cheese',
+          'CHZ-MOZ-501',
+          'West End Grill',
+          '320.0',
+          '5.2',
+          'kg',
+          '41.60',
+        ],
+        [
+          'Tomato Paste',
+          'PST-TOM-302',
+          'Uptown Bistro',
+          '180.0',
+          '8.0',
+          'liters',
+          '24.00',
+        ],
+        [
+          'Lettuce Leaves',
+          'VEG-LET-001',
+          'Airport Food Court',
+          '140.0',
+          '15.5',
+          'heads',
+          '31.00',
+        ],
+        [
+          'Burger Buns',
+          'BAK-BUN-202',
+          'Suburban Outlet',
+          '1200',
+          '45',
+          'pieces',
+          '22.50',
+        ],
       ];
     }
 
     const csvContent =
-      'data:text/csv;charset=utf-8,' + headers + rows.map((e) => e.join(',')).join('\n');
+      'data:text/csv;charset=utf-8,' +
+      headers +
+      rows.map((e) => e.join(',')).join('\n');
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
@@ -238,7 +282,9 @@ export default function AnalyticsDashboardPage() {
           {/* Quick Exports Section */}
           <Card className="bg-slate-900 border-slate-800 p-5 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <h3 className="text-white font-bold text-sm">Download Data Sheets</h3>
+              <h3 className="text-white font-bold text-sm">
+                Download Data Sheets
+              </h3>
               <p className="text-slate-400 text-xs mt-0.5">
                 Generate spreadsheet formatted logs for direct audit inspection.
               </p>
@@ -271,8 +317,17 @@ export default function AnalyticsDashboardPage() {
             <div className="h-80 w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={branchComparisonData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                  <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#1e293b"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#64748b"
+                    fontSize={11}
+                    tickLine={false}
+                  />
                   <YAxis
                     stroke="#64748b"
                     fontSize={11}
@@ -294,7 +349,12 @@ export default function AnalyticsDashboardPage() {
                     fill="#6366f1"
                     radius={[4, 4, 0, 0]}
                   />
-                  <Bar dataKey="orders" name="Order count" fill="#38bdf8" radius={[4, 4, 0, 0]} />
+                  <Bar
+                    dataKey="orders"
+                    name="Order count"
+                    fill="#38bdf8"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -324,7 +384,9 @@ export default function AnalyticsDashboardPage() {
               <tbody className="divide-y divide-slate-800">
                 {branchComparisonData.map((branch, i) => (
                   <tr key={i} className="hover:bg-slate-900/40">
-                    <td className="px-6 py-4 font-bold text-white">{branch.name}</td>
+                    <td className="px-6 py-4 font-bold text-white">
+                      {branch.name}
+                    </td>
                     <td className="px-6 py-4 font-mono text-white">
                       ₹{branch.sales.toLocaleString()}
                     </td>
@@ -354,8 +416,17 @@ export default function AnalyticsDashboardPage() {
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={inventoryWasteData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#1e293b"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
@@ -395,8 +466,17 @@ export default function AnalyticsDashboardPage() {
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={kitchenEfficiencyData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-                <XAxis type="number" stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#1e293b"
+                  horizontal={false}
+                />
+                <XAxis
+                  type="number"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <YAxis
                   dataKey="station"
                   type="category"
@@ -436,8 +516,17 @@ export default function AnalyticsDashboardPage() {
           <div className="h-80 w-full relative">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={staffPayoutData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="role" stroke="#64748b" fontSize={11} tickLine={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#1e293b"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="role"
+                  stroke="#64748b"
+                  fontSize={11}
+                  tickLine={false}
+                />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
@@ -471,7 +560,8 @@ export default function AnalyticsDashboardPage() {
             Business Intelligence Center
           </h1>
           <p className="text-slate-400 mt-1">
-            Multi-branch financial graphs, kitchen prep logs, and payroll analytics.
+            Multi-branch financial graphs, kitchen prep logs, and payroll
+            analytics.
           </p>
         </div>
 
@@ -503,7 +593,10 @@ export default function AnalyticsDashboardPage() {
       </div>
 
       {/* Coming Soon Banner */}
-      <ComingSoonBanner featureName="Business Intelligence Center" className="mb-2" />
+      <ComingSoonBanner
+        featureName="Business Intelligence Center"
+        className="mb-2"
+      />
 
       {status === 'loading' && !executive ? (
         <div className="flex justify-center items-center py-20 text-slate-500 animate-pulse text-lg">

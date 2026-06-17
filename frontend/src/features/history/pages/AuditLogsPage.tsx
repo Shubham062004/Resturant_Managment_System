@@ -1,22 +1,36 @@
 import { format } from 'date-fns';
-import { Download, Search, Shield, ShieldAlert, Key, ActivitySquare } from 'lucide-react';
+import {
+  Download,
+  Search,
+  Shield,
+  ShieldAlert,
+  Key,
+  ActivitySquare,
+} from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 
 export default function AuditLogsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [actionFilter, setActionFilter] = useState('');
 
-  const { data: response, isLoading } = useHistoryQuery('audit', { limit: 1000 });
+  const { data: response, isLoading } = useHistoryQuery('audit', {
+    limit: 1000,
+  });
   const records = useMemo(() => response?.data || [], [response]);
 
   // Derived KPIs
   const stats = useMemo(() => {
-    if (!records.length) return { total: 0, logins: 0, modifications: 0, securityEvents: 0 };
+    if (!records.length)
+      return { total: 0, logins: 0, modifications: 0, securityEvents: 0 };
 
     let logins = 0;
     let modifications = 0;
@@ -25,7 +39,8 @@ export default function AuditLogsPage() {
     records.forEach((r: any) => {
       const act = r.action || '';
       if (act === 'LOGIN' || act === 'LOGOUT') logins++;
-      if (act === 'UPDATE' || act === 'DELETE' || act === 'CREATE') modifications++;
+      if (act === 'UPDATE' || act === 'DELETE' || act === 'CREATE')
+        modifications++;
       if (act === 'REJECT' || act.includes('FAILED')) securityEvents++;
     });
 
@@ -75,7 +90,8 @@ export default function AuditLogsPage() {
             Audit & Security Logs
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Immutable ledger of user actions, modifications, and authentications.
+            Immutable ledger of user actions, modifications, and
+            authentications.
           </p>
         </div>
         <button className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm transition-colors border border-slate-700">
@@ -167,26 +183,39 @@ export default function AuditLogsPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No audit logs found.
                     </td>
                   </tr>
                 ) : (
                   filteredRecords.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors font-mono">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors font-mono"
+                    >
                       <td className="px-6 py-4 text-slate-400 text-xs">
-                        {format(new Date(row.timestamp), 'dd MMM yyyy, HH:mm:ss')}
+                        {format(
+                          new Date(row.timestamp),
+                          'dd MMM yyyy, HH:mm:ss'
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <div className="font-medium text-white font-sans">
-                          {row.user ? `${row.user.firstName} ${row.user.lastName}` : 'System'}
+                          {row.user
+                            ? `${row.user.firstName} ${row.user.lastName}`
+                            : 'System'}
                         </div>
                         <div className="text-xs text-slate-500 font-sans">
                           {row.user?.role || 'SYSTEM_DAEMON'}
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <Badge className={getActionColor(row.action)}>{row.action}</Badge>
+                        <Badge className={getActionColor(row.action)}>
+                          {row.action}
+                        </Badge>
                       </td>
                       <td className="px-6 py-4 text-slate-300 font-sans">
                         {row.entity}{' '}
@@ -194,7 +223,9 @@ export default function AuditLogsPage() {
                           ({row.entityId?.substring(0, 8)})
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-slate-400 text-xs">{row.ipAddress}</td>
+                      <td className="px-6 py-4 text-slate-400 text-xs">
+                        {row.ipAddress}
+                      </td>
                     </tr>
                   ))
                 )}

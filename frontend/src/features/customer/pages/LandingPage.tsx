@@ -48,12 +48,14 @@ export const LandingPage: React.FC = () => {
   const { selectedBranch } = useAppSelector((state) => state.customer);
 
   // API data
-  const { data: featuredRes, isLoading: featuredLoading } = useFeaturedProducts();
+  const { data: featuredRes, isLoading: featuredLoading } =
+    useFeaturedProducts();
   const featuredProducts = featuredRes?.data ?? [];
-  const { data: restaurantsRes, isLoading: restaurantsLoading } = useRestaurants({
-    page: 1,
-    limit: 6,
-  });
+  const { data: restaurantsRes, isLoading: restaurantsLoading } =
+    useRestaurants({
+      page: 1,
+      limit: 6,
+    });
   const restaurants = restaurantsRes?.data ?? [];
   const { data: coupons = [] } = useActiveCoupons();
 
@@ -147,8 +149,8 @@ export const LandingPage: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-neutral-400 text-base sm:text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed"
               >
-                From fire-baked pizzas to gourmet burgers — browse our menu, customize your order,
-                and track it live to your doorstep.
+                From fire-baked pizzas to gourmet burgers — browse our menu,
+                customize your order, and track it live to your doorstep.
               </motion.p>
 
               {/* Search bar */}
@@ -229,10 +231,16 @@ export const LandingPage: React.FC = () => {
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="bg-black/50 backdrop-blur-lg rounded-xl p-3 border border-white/10 flex items-center justify-between">
                       <div>
-                        <p className="text-white font-semibold text-sm">Today's Special</p>
-                        <p className="text-neutral-400 text-xs">Fire-Baked Pepperoni Pizza</p>
+                        <p className="text-white font-semibold text-sm">
+                          Today's Special
+                        </p>
+                        <p className="text-neutral-400 text-xs">
+                          Fire-Baked Pepperoni Pizza
+                        </p>
                       </div>
-                      <span className="text-primary font-bold text-lg">₹299</span>
+                      <span className="text-primary font-bold text-lg">
+                        ₹299
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -248,8 +256,12 @@ export const LandingPage: React.FC = () => {
                     <ShieldCheck size={16} className="text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-white text-xs font-semibold">Fresh Ingredients</p>
-                    <p className="text-neutral-500 text-[10px]">100% Quality Checked</p>
+                    <p className="text-white text-xs font-semibold">
+                      Fresh Ingredients
+                    </p>
+                    <p className="text-neutral-500 text-[10px]">
+                      100% Quality Checked
+                    </p>
                   </div>
                 </motion.div>
 
@@ -263,8 +275,12 @@ export const LandingPage: React.FC = () => {
                     <Star size={16} className="text-amber-400 fill-amber-400" />
                   </div>
                   <div>
-                    <p className="text-white text-xs font-semibold">4.8 Rating</p>
-                    <p className="text-neutral-500 text-[10px]">10,000+ Happy Customers</p>
+                    <p className="text-white text-xs font-semibold">
+                      4.8 Rating
+                    </p>
+                    <p className="text-neutral-500 text-[10px]">
+                      10,000+ Happy Customers
+                    </p>
                   </div>
                 </motion.div>
               </motion.div>
@@ -302,12 +318,19 @@ export const LandingPage: React.FC = () => {
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
               What are you craving?
             </h2>
-            <p className="text-neutral-500 text-sm">Explore our most popular food categories</p>
+            <p className="text-neutral-500 text-sm">
+              Explore our most popular food categories
+            </p>
           </div>
 
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide justify-center flex-wrap">
             {mockCategories.map((cat) => (
-              <CategoryPill key={cat.id} name={cat.name} slug={cat.slug} image={cat.image} />
+              <CategoryPill
+                key={cat.id}
+                name={cat.name}
+                slug={cat.slug}
+                image={cat.image}
+              />
             ))}
           </div>
         </section>
@@ -322,8 +345,12 @@ export const LandingPage: React.FC = () => {
                   Trending
                 </span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">Popular Right Now</h2>
-              <p className="text-neutral-500 text-sm mt-1">Our most ordered dishes this week</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                Popular Right Now
+              </h2>
+              <p className="text-neutral-500 text-sm mt-1">
+                Our most ordered dishes this week
+              </p>
             </div>
             <Link to="/restaurants">
               <Button
@@ -355,7 +382,9 @@ export const LandingPage: React.FC = () => {
         <section className="py-16 px-6 max-w-7xl mx-auto w-full">
           <div className="flex justify-between items-end mb-10">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">Top Restaurants</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                Top Restaurants
+              </h2>
               <p className="text-neutral-500 text-sm mt-1">
                 Hand-picked restaurants with top ratings
               </p>
@@ -402,9 +431,14 @@ export const LandingPage: React.FC = () => {
                           </span>
                         )}
                         <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
-                          <Star size={12} className="text-amber-400 fill-amber-400" />
+                          <Star
+                            size={12}
+                            className="text-amber-400 fill-amber-400"
+                          />
                           <span className="text-white text-xs font-bold">
-                            {typeof res.rating === 'number' ? res.rating.toFixed(1) : res.rating}
+                            {typeof res.rating === 'number'
+                              ? res.rating.toFixed(1)
+                              : res.rating}
                           </span>
                         </div>
                       </div>
@@ -413,11 +447,13 @@ export const LandingPage: React.FC = () => {
                           {res.name}
                         </h3>
                         <p className="text-xs text-neutral-400 line-clamp-2">
-                          {res.description || (res.categories ? res.categories.join(' • ') : '')}
+                          {res.description ||
+                            (res.categories ? res.categories.join(' • ') : '')}
                         </p>
                         <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-neutral-500">
                           <span className="flex items-center gap-1">
-                            <Clock size={12} className="text-primary" /> 30-45 min
+                            <Clock size={12} className="text-primary" /> 30-45
+                            min
                           </span>
                           <span className="text-primary font-semibold flex items-center gap-1">
                             View Menu <ArrowRight size={12} />
@@ -443,7 +479,9 @@ export const LandingPage: React.FC = () => {
                       Deals
                     </span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white">Today's Offers</h2>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                    Today's Offers
+                  </h2>
                   <p className="text-neutral-500 text-sm mt-1">
                     Save more with exclusive coupon codes
                   </p>
@@ -475,9 +513,13 @@ export const LandingPage: React.FC = () => {
                               ? `₹${parseFloat(coupon.discountValue).toFixed(0)} OFF`
                               : 'FREE DELIVERY'}
                         </span>
-                        <h3 className="text-white font-bold text-xl mt-1">{coupon.code}</h3>
+                        <h3 className="text-white font-bold text-xl mt-1">
+                          {coupon.code}
+                        </h3>
                         {coupon.description && (
-                          <p className="text-neutral-400 text-xs mt-1">{coupon.description}</p>
+                          <p className="text-neutral-400 text-xs mt-1">
+                            {coupon.description}
+                          </p>
                         )}
                       </div>
                       <button
@@ -490,7 +532,8 @@ export const LandingPage: React.FC = () => {
                     </div>
                     {parseFloat(coupon.minimumAmount) > 0 && (
                       <p className="text-neutral-500 text-xs">
-                        Min order: ₹{parseFloat(coupon.minimumAmount).toFixed(0)}
+                        Min order: ₹
+                        {parseFloat(coupon.minimumAmount).toFixed(0)}
                       </p>
                     )}
                   </div>
@@ -503,8 +546,12 @@ export const LandingPage: React.FC = () => {
         {/* ═══════════════════════ HOW IT WORKS ═══════════════════════ */}
         <section className="py-20 px-6 max-w-6xl mx-auto w-full">
           <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">How It Works</h2>
-            <p className="text-neutral-500 text-sm">Get your favorite meal in 3 simple steps</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              How It Works
+            </h2>
+            <p className="text-neutral-500 text-sm">
+              Get your favorite meal in 3 simple steps
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -561,7 +608,9 @@ export const LandingPage: React.FC = () => {
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                 What Our Customers Say
               </h2>
-              <p className="text-neutral-500 text-sm">Loved by thousands of food enthusiasts</p>
+              <p className="text-neutral-500 text-sm">
+                Loved by thousands of food enthusiasts
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -593,7 +642,9 @@ export const LandingPage: React.FC = () => {
                       className="w-10 h-10 rounded-full object-cover border border-white/10"
                     />
                     <div>
-                      <p className="text-sm font-semibold text-white">{t.name}</p>
+                      <p className="text-sm font-semibold text-white">
+                        {t.name}
+                      </p>
                       <p className="text-[10px] text-neutral-500">{t.role}</p>
                     </div>
                   </div>
@@ -609,11 +660,12 @@ export const LandingPage: React.FC = () => {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,_var(--tw-gradient-stops))] from-primary/10 to-transparent pointer-events-none" />
             <div className="space-y-5 max-w-lg text-center md:text-left z-10">
               <h2 className="text-3xl font-bold text-white">
-                Order Faster on the <span className="text-primary">ABC App</span>
+                Order Faster on the{' '}
+                <span className="text-primary">ABC App</span>
               </h2>
               <p className="text-neutral-400 text-sm leading-relaxed">
-                Get exclusive app-only deals, save your favorite addresses, reorder with one tap,
-                and track your delivery live.
+                Get exclusive app-only deals, save your favorite addresses,
+                reorder with one tap, and track your delivery live.
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                 <Button
@@ -639,7 +691,9 @@ export const LandingPage: React.FC = () => {
                 <p className="text-[10px] font-bold text-white uppercase tracking-wider">
                   ABC Restaurant
                 </p>
-                <p className="text-[8px] text-neutral-500 mt-1">Order • Track • Enjoy</p>
+                <p className="text-[8px] text-neutral-500 mt-1">
+                  Order • Track • Enjoy
+                </p>
               </div>
             </div>
           </div>
@@ -653,7 +707,8 @@ export const LandingPage: React.FC = () => {
             </div>
             <h2 className="text-xl font-bold text-white">Stay Updated</h2>
             <p className="text-xs text-neutral-500 leading-relaxed">
-              Get weekly deals, new menu launches, and exclusive offers straight to your inbox.
+              Get weekly deals, new menu launches, and exclusive offers straight
+              to your inbox.
             </p>
           </div>
           <form onSubmit={handleNewsletterSubmit} className="flex gap-2 w-full">

@@ -17,7 +17,14 @@ export const updateTableSchema = {
     x: z.number().optional(),
     y: z.number().optional(),
     status: z
-      .enum(['AVAILABLE', 'RESERVED', 'OCCUPIED', 'BILLING', 'CLEANING', 'OUT_OF_SERVICE'])
+      .enum([
+        'AVAILABLE',
+        'RESERVED',
+        'OCCUPIED',
+        'BILLING',
+        'CLEANING',
+        'OUT_OF_SERVICE',
+      ])
       .optional(),
     active: z.boolean().optional(),
   }),

@@ -17,7 +17,7 @@ const END_DATE = new Date('2026-06-30T23:59:59.000Z');
 async function main() {
   console.log('🚀 Starting Massive Dummy History Generation...');
   console.log(
-    `Period: ${START_DATE.toISOString().split('T')[0]} to ${END_DATE.toISOString().split('T')[0]}`,
+    `Period: ${START_DATE.toISOString().split('T')[0]} to ${END_DATE.toISOString().split('T')[0]}`
   );
 
   // PHASE 1: ORGANIZATION & FRANCHISE
@@ -86,8 +86,8 @@ async function main() {
           closingTime: '23:00',
           deliveryRadius: 10.0,
         },
-      }),
-    ),
+      })
+    )
   );
   console.log(`✅ Created ${branches.length} Branches.`);
 
@@ -110,7 +110,11 @@ async function main() {
     isActive: true,
     salary: faker.number.int({ min: 15000, max: 85000 }),
     attendanceCount: faker.number.int({ min: 200, max: 300 }),
-    performanceScore: faker.number.float({ min: 3.5, max: 5.0, fractionDigits: 1 }),
+    performanceScore: faker.number.float({
+      min: 3.5,
+      max: 5.0,
+      fractionDigits: 1,
+    }),
   }));
   await prisma.user.createMany({ data: staffData, skipDuplicates: true });
   console.log(`✅ Created ${NUM_STAFF} Staff Members.`);
@@ -127,7 +131,10 @@ async function main() {
   }));
   // Chunk inserting customers due to size
   for (let i = 0; i < customerData.length; i += 1000) {
-    await prisma.user.createMany({ data: customerData.slice(i, i + 1000), skipDuplicates: true });
+    await prisma.user.createMany({
+      data: customerData.slice(i, i + 1000),
+      skipDuplicates: true,
+    });
   }
   const allCustomers = await prisma.user.findMany({
     where: { role: Role.CUSTOMER },
@@ -147,15 +154,17 @@ async function main() {
   console.log(`✅ Created ${NUM_SUPPLIERS} Suppliers.`);
 
   const units = ['KG', 'LITER', 'PIECE', 'PACK'];
-  const ingredientData = Array.from({ length: NUM_INGREDIENTS }).map((_, i) => ({
-    name: `Ingredient ${faker.commerce.productMaterial()} ${i}`,
-    sku: `SKU-${faker.string.alphanumeric(8).toUpperCase()}`,
-    category: faker.commerce.department(),
-    unit: faker.helpers.arrayElement(units),
-    minimumStock: faker.number.float({ min: 10, max: 50 }),
-    reorderPoint: faker.number.float({ min: 50, max: 100 }),
-    costPrice: faker.number.float({ min: 10, max: 500 }),
-  }));
+  const ingredientData = Array.from({ length: NUM_INGREDIENTS }).map(
+    (_, i) => ({
+      name: `Ingredient ${faker.commerce.productMaterial()} ${i}`,
+      sku: `SKU-${faker.string.alphanumeric(8).toUpperCase()}`,
+      category: faker.commerce.department(),
+      unit: faker.helpers.arrayElement(units),
+      minimumStock: faker.number.float({ min: 10, max: 50 }),
+      reorderPoint: faker.number.float({ min: 50, max: 100 }),
+      costPrice: faker.number.float({ min: 10, max: 500 }),
+    })
+  );
   await prisma.ingredient.createMany({ data: ingredientData });
   const allIngredients = await prisma.ingredient.findMany();
   console.log(`✅ Created ${allIngredients.length} Ingredients.`);
@@ -174,12 +183,21 @@ async function main() {
   }
   // chunk insert inventory
   for (let i = 0; i < inventoryData.length; i += 2000) {
-    await prisma.inventory.createMany({ data: inventoryData.slice(i, i + 2000) });
+    await prisma.inventory.createMany({
+      data: inventoryData.slice(i, i + 2000),
+    });
   }
   console.log(`✅ Created Branch Inventory.`);
 
   // PHASE 6: CATEGORIES & MENU ITEMS
-  const categories = ['Pizza', 'Burger', 'Chinese', 'Beverages', 'Desserts', 'Combos'];
+  const categories = [
+    'Pizza',
+    'Burger',
+    'Chinese',
+    'Beverages',
+    'Desserts',
+    'Combos',
+  ];
   await prisma.category.createMany({
     data: categories.map((c) => ({
       restaurantId: restGroup.id,
@@ -194,7 +212,9 @@ async function main() {
     restaurantId: restGroup.id,
     categoryId: faker.helpers.arrayElement(dbCategories).id,
     name: `${faker.commerce.productAdjective()} ${faker.commerce.productName()} ${i}`,
-    slug: faker.helpers.slugify(`${faker.commerce.productName()}-${i}`).toLowerCase(),
+    slug: faker.helpers
+      .slugify(`${faker.commerce.productName()}-${i}`)
+      .toLowerCase(),
     basePrice: faker.number.float({ min: 99, max: 1299 }),
     rating: faker.number.float({ min: 3.5, max: 5.0, fractionDigits: 1 }),
     preparationTime: faker.number.int({ min: 10, max: 45 }),
@@ -209,7 +229,9 @@ async function main() {
   // with heavy volume instead of 365 days, or sparse records across 365 days.
   // We will do sparse 365 days (e.g. 5 orders per branch per day = 50 orders/day = ~18,000 orders total)
 
-  console.log('⏳ Starting 365-Day Time-Series Simulation... This may take a few minutes.');
+  console.log(
+    '⏳ Starting 365-Day Time-Series Simulation... This may take a few minutes.'
+  );
 
   let currentDate = new Date(START_DATE);
   let totalOrdersGenerated = 0;
@@ -230,7 +252,7 @@ async function main() {
         const orderTime = new Date(currentDate);
         orderTime.setHours(
           faker.number.int({ min: 11, max: 22 }),
-          faker.number.int({ min: 0, max: 59 }),
+          faker.number.int({ min: 0, max: 59 })
         );
 
         const customer = faker.helpers.arrayElement(allCustomers);

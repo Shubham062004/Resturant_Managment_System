@@ -7,7 +7,9 @@ import { fetchRecommendations } from '../store/recommendationSlice';
 
 export default function PersonalizedRecommendations() {
   const dispatch = useAppDispatch();
-  const { recommendations, status } = useAppSelector((state) => state.recommendation);
+  const { recommendations, status } = useAppSelector(
+    (state) => state.recommendation
+  );
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
@@ -20,7 +22,9 @@ export default function PersonalizedRecommendations() {
     <div className="my-8">
       <div className="flex items-center gap-2 mb-4">
         <Sparkles className="text-primary animate-pulse" />
-        <h2 className="text-2xl font-display font-bold text-white">Recommended For You</h2>
+        <h2 className="text-2xl font-display font-bold text-white">
+          Recommended For You
+        </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {recommendations.map((rec: any, idx: number) => (
@@ -42,9 +46,15 @@ export default function PersonalizedRecommendations() {
                 {rec.matchScore}% Match
               </div>
             </div>
-            <h3 className="font-bold text-white mb-1 truncate">{rec.product.name}</h3>
-            <p className="text-primary font-bold text-sm">₹{rec.product.basePrice}</p>
-            <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{rec.reason}</p>
+            <h3 className="font-bold text-white mb-1 truncate">
+              {rec.product.name}
+            </h3>
+            <p className="text-primary font-bold text-sm">
+              ₹{rec.product.basePrice}
+            </p>
+            <p className="text-xs text-muted-foreground mt-2 line-clamp-2">
+              {rec.reason}
+            </p>
           </Card>
         ))}
       </div>

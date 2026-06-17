@@ -17,7 +17,12 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     circle: 'rounded-full aspect-square',
   };
 
-  return <div className={`${baseClass} ${variants[variant]} ${className}`} {...props} />;
+  return (
+    <div
+      className={`${baseClass} ${variants[variant]} ${className}`}
+      {...props}
+    />
+  );
 };
 
 // Specialized skeleton presets
@@ -25,7 +30,10 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 export const ProductSkeleton: React.FC = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
     {Array.from({ length: 4 }).map((_, i) => (
-      <div key={i} className="bg-card border border-border/80 rounded-2xl p-4 flex flex-col gap-4">
+      <div
+        key={i}
+        className="bg-card border border-border/80 rounded-2xl p-4 flex flex-col gap-4"
+      >
         <Skeleton variant="rect" className="w-full aspect-[4/3] rounded-xl" />
         <div className="flex flex-col gap-2">
           <Skeleton variant="text" className="w-2/3 h-5" />

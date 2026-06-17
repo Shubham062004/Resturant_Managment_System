@@ -8,7 +8,10 @@ import AppError from '../../utils/appError';
 import { InventoryService } from '../inventory/inventory.service';
 
 export class POSService {
-  public static async createTerminal(data: { branchId: string; terminalName: string }) {
+  public static async createTerminal(data: {
+    branchId: string;
+    terminalName: string;
+  }) {
     return prisma.pOSTerminal.create({ data });
   }
 
@@ -16,7 +19,11 @@ export class POSService {
     return prisma.pOSTerminal.findMany({ where: { branchId } });
   }
 
-  public static async startShift(cashierId: string, terminalId: string, openingAmount: number) {
+  public static async startShift(
+    cashierId: string,
+    terminalId: string,
+    openingAmount: number
+  ) {
     const activeDrawer = await prisma.cashDrawer.findFirst({
       where: { terminalId, status: 'OPEN' },
     });
@@ -35,13 +42,18 @@ export class POSService {
     });
   }
 
-  public static async endShift(drawerId: string, closingAmount: number, notes?: string) {
+  public static async endShift(
+    drawerId: string,
+    closingAmount: number,
+    notes?: string
+  ) {
     const drawer = await prisma.cashDrawer.findUnique({
       where: { id: drawerId },
       include: { terminal: true },
     });
     if (!drawer) throw new AppError('Drawer not found.', 404);
-    if (drawer.status === 'CLOSED') throw new AppError('Shift already closed.', 400);
+    if (drawer.status === 'CLOSED')
+      throw new AppError('Shift already closed.', 400);
 
     const updated = await prisma.cashDrawer.update({
       where: { id: drawerId },
@@ -69,7 +81,9 @@ export class POSService {
   }
 
   public static async createPOSOrder(cashierId: string, data: any) {
-    const terminal = await prisma.pOSTerminal.findUnique({ where: { id: data.terminalId } });
+    const terminal = await prisma.pOSTerminal.findUnique({
+      where: { id: data.terminalId },
+    });
     if (!terminal) throw new AppError('Terminal not found', 404);
 
     // Calculate totals
@@ -118,7 +132,9 @@ export class POSService {
         totalAmount,
         status: OrderStatus.PLACED,
         items: { create: orderItemsForCreate },
-        statusHistory: { create: { newStatus: OrderStatus.PLACED, changedBy: cashierId } },
+        statusHistory: {
+          create: { newStatus: OrderStatus.PLACED, changedBy: cashierId },
+        },
         kitchenOrder: {
           create: {
             priority: 'MEDIUM',
@@ -140,7 +156,9 @@ export class POSService {
       include: { order: { include: { items: true, kitchenOrder: true } } },
     });
 
-    getIO().to(`branch_${terminal.branchId}`).emit('pos-order-created', posOrder);
+    getIO()
+      .to(`branch_${terminal.branchId}`)
+      .emit('pos-order-created', posOrder);
 
     return posOrder;
   }
@@ -149,7 +167,9 @@ export class POSService {
     return prisma.pOSOrder.findUnique({
       where: { id: posOrderId },
       include: {
-        order: { include: { items: { include: { product: true } }, table: true } },
+        order: {
+          include: { items: { include: { product: true } }, table: true },
+        },
         payments: true,
         receipt: true,
         terminal: true,
@@ -157,21 +177,33 @@ export class POSService {
     });
   }
 
-  public static async processPayment(cashierId: string, posOrderId: string, payments: any[]) {
+  public static async processPayment(
+    cashierId: string,
+    posOrderId: string,
+    payments: any[]
+  ) {
     const posOrder = await prisma.pOSOrder.findUnique({
       where: { id: posOrderId },
-      include: { order: { include: { kitchenOrder: true } }, terminal: true, payments: true },
+      include: {
+        order: { include: { kitchenOrder: true } },
+        terminal: true,
+        payments: true,
+      },
     });
 
     if (!posOrder) throw new AppError('POS Order not found', 404);
-    if (posOrder.status === 'PAID') throw new AppError('Order is already paid', 400);
+    if (posOrder.status === 'PAID')
+      throw new AppError('Order is already paid', 400);
 
     const requiredTotal = Number(posOrder.order.totalAmount);
     const existingPaymentsTotal = posOrder.payments.reduce(
       (sum: number, p: any) => sum + Number(p.amount),
-      0,
+      0
     );
-    const incomingTotal = payments.reduce((sum: number, p: any) => sum + Number(p.amount), 0);
+    const incomingTotal = payments.reduce(
+      (sum: number, p: any) => sum + Number(p.amount),
+      0
+    );
 
     if (existingPaymentsTotal + incomingTotal < requiredTotal) {
       // It's a partial payment
@@ -184,8 +216,8 @@ export class POSService {
               amount: p.amount,
               transactionReference: p.transactionReference,
             },
-          }),
-        ),
+          })
+        )
       );
 
       // Update cash drawer for cash payments
@@ -215,12 +247,15 @@ export class POSService {
               amount: p.amount,
               transactionReference: p.transactionReference,
             },
-          }),
-        ),
+          })
+        )
       );
 
       // Mark POS Order as Paid
-      await tx.pOSOrder.update({ where: { id: posOrderId }, data: { status: 'PAID' } });
+      await tx.pOSOrder.update({
+        where: { id: posOrderId },
+        data: { status: 'PAID' },
+      });
 
       // Mark Core Order as ACCEPTED/PREPARING
       await tx.order.update({
@@ -292,13 +327,17 @@ export class POSService {
     today.setHours(0, 0, 0, 0);
 
     const posOrders = await prisma.pOSOrder.findMany({
-      where: { terminal: { branchId }, createdAt: { gte: today }, status: 'PAID' },
+      where: {
+        terminal: { branchId },
+        createdAt: { gte: today },
+        status: 'PAID',
+      },
       include: { order: true, payments: true },
     });
 
     const totalSales = posOrders.reduce(
       (sum: number, o: any) => sum + Number(o.order.totalAmount),
-      0,
+      0
     );
     const orderCount = posOrders.length;
 

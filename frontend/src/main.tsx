@@ -21,5 +21,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </QueryClientProvider>
       </Provider>
     </HelmetProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

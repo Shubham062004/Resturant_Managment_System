@@ -14,7 +14,11 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '../../../shared/components/ui/Button';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import ComingSoonBanner from '../../../shared/components/ui/ComingSoonBanner';
 import { useToast } from '../../../shared/components/ui/Toast';
 
@@ -40,7 +44,7 @@ export default function SystemMonitoringPage() {
     for (let i = 0; i < 5; i++) {
       const randomAction = actions[Math.floor(Math.random() * actions.length)];
       newLogs.push(
-        `[${new Date(Date.now() - i * 60000).toLocaleTimeString()}] System: ${randomAction}`,
+        `[${new Date(Date.now() - i * 60000).toLocaleTimeString()}] System: ${randomAction}`
       );
     }
     setLogs(newLogs);
@@ -84,8 +88,8 @@ export default function SystemMonitoringPage() {
             </h1>
           </div>
           <p className="text-slate-400 text-sm mt-1 ml-9">
-            NOC environment monitoring, database query latencies, CPU core loads, and real-time
-            execution log streams.
+            NOC environment monitoring, database query latencies, CPU core
+            loads, and real-time execution log streams.
           </p>
         </div>
         <Button
@@ -94,7 +98,8 @@ export default function SystemMonitoringPage() {
           disabled={loading}
           className="flex items-center gap-2 border-slate-800 bg-[#111827] text-slate-100 hover:bg-slate-800 text-xs px-4 py-2"
         >
-          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Synchronize Telemetry
+          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />{' '}
+          Synchronize Telemetry
         </Button>
       </div>
 
@@ -117,12 +122,20 @@ export default function SystemMonitoringPage() {
             </p>
             <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <div>
-                <span className="text-[10px] text-slate-500 block">Gateway Latency</span>
-                <span className="font-bold text-slate-200 mt-0.5 block">{health?.latency}</span>
+                <span className="text-[10px] text-slate-500 block">
+                  Gateway Latency
+                </span>
+                <span className="font-bold text-slate-200 mt-0.5 block">
+                  {health?.latency}
+                </span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 block">Service Uptime</span>
-                <span className="font-bold text-slate-200 mt-0.5 block">{health?.uptime}</span>
+                <span className="text-[10px] text-slate-500 block">
+                  Service Uptime
+                </span>
+                <span className="font-bold text-slate-200 mt-0.5 block">
+                  {health?.uptime}
+                </span>
               </div>
             </div>
           </CardContent>
@@ -142,14 +155,20 @@ export default function SystemMonitoringPage() {
             </p>
             <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <div>
-                <span className="text-[10px] text-slate-500 block">Active Pools</span>
+                <span className="text-[10px] text-slate-500 block">
+                  Active Pools
+                </span>
                 <span className="font-bold text-slate-200 mt-0.5 block">
                   {health?.activeConnections} Sessions
                 </span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 block">Read/Write Uptime</span>
-                <span className="font-bold text-slate-200 mt-0.5 block">100% Operational</span>
+                <span className="text-[10px] text-slate-500 block">
+                  Read/Write Uptime
+                </span>
+                <span className="font-bold text-slate-200 mt-0.5 block">
+                  100% Operational
+                </span>
               </div>
             </div>
           </CardContent>
@@ -169,12 +188,20 @@ export default function SystemMonitoringPage() {
             </p>
             <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400">
               <div>
-                <span className="text-[10px] text-slate-500 block">Websocket Pipeline</span>
-                <span className="font-bold text-slate-200 mt-0.5 block">Active Hook</span>
+                <span className="text-[10px] text-slate-500 block">
+                  Websocket Pipeline
+                </span>
+                <span className="font-bold text-slate-200 mt-0.5 block">
+                  Active Hook
+                </span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 block">Queue Capacity</span>
-                <span className="font-bold text-slate-200 mt-0.5 block">0 Pending Tasks</span>
+                <span className="text-[10px] text-slate-500 block">
+                  Queue Capacity
+                </span>
+                <span className="font-bold text-slate-200 mt-0.5 block">
+                  0 Pending Tasks
+                </span>
               </div>
             </div>
           </CardContent>
@@ -195,10 +222,15 @@ export default function SystemMonitoringPage() {
                   <span className="flex items-center gap-1.5">
                     <Cpu size={13} /> CPU Load Allocation
                   </span>
-                  <span className="font-bold text-white">{health?.cpuUsage}</span>
+                  <span className="font-bold text-white">
+                    {health?.cpuUsage}
+                  </span>
                 </div>
                 <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: '14.2%' }} />
+                  <div
+                    className="h-full bg-blue-500 rounded-full"
+                    style={{ width: '14.2%' }}
+                  />
                 </div>
               </div>
 
@@ -207,10 +239,15 @@ export default function SystemMonitoringPage() {
                   <span className="flex items-center gap-1.5">
                     <HardDrive size={13} /> RAM Usage
                   </span>
-                  <span className="font-bold text-white">{health?.memoryUsage}</span>
+                  <span className="font-bold text-white">
+                    {health?.memoryUsage}
+                  </span>
                 </div>
                 <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                  <div className="h-full bg-indigo-500 rounded-full" style={{ width: '33.4%' }} />
+                  <div
+                    className="h-full bg-indigo-500 rounded-full"
+                    style={{ width: '33.4%' }}
+                  />
                 </div>
               </div>
 
@@ -261,7 +298,9 @@ export default function SystemMonitoringPage() {
               <div className="flex items-center justify-between pb-4 border-b border-slate-800">
                 <div className="flex items-center gap-2">
                   <Terminal size={16} className="text-[#2563EB]" />
-                  <h3 className="text-base font-bold font-display text-white">Event Log Stream</h3>
+                  <h3 className="text-base font-bold font-display text-white">
+                    Event Log Stream
+                  </h3>
                 </div>
                 <span className="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold bg-slate-950 px-2 py-0.5 rounded-full border border-slate-850">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-ping" />

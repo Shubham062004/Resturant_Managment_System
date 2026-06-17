@@ -4,7 +4,11 @@ import { prisma } from '../../config/db';
 import { AuthRequest } from '../../types/express';
 
 export class PreferenceController {
-  public static async getPreferences(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async getPreferences(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       let prefs = await prisma.notificationPreference.findUnique({
         where: { userId: req.user!.id },
@@ -22,7 +26,11 @@ export class PreferenceController {
     }
   }
 
-  public static async updatePreferences(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async updatePreferences(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const prefs = await prisma.notificationPreference.upsert({
         where: { userId: req.user!.id },

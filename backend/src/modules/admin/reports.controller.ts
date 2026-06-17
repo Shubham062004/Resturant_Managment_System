@@ -3,7 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../../config/db';
 
 export class ReportsController {
-  public static async getDailyReport(req: Request, res: Response, next: NextFunction) {
+  public static async getDailyReport(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const branchId = req.query.branchId as string;
       const today = new Date();

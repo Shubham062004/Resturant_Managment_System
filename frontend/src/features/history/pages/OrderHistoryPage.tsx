@@ -24,7 +24,11 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 import { formatCurrency } from '../../../shared/utils/currency';
 
@@ -33,14 +37,19 @@ export default function OrderHistoryPage() {
   const [statusFilter, setStatusFilter] = useState('');
 
   // Fetch 500 records to have enough data for charts, standard pagination limits apply
-  const { data: response, isLoading } = useHistoryQuery('orders', { limit: 500 });
+  const { data: response, isLoading } = useHistoryQuery('orders', {
+    limit: 500,
+  });
 
   const records = useMemo(() => response?.data || [], [response]);
 
   // Derived Statistics
   const stats = useMemo(() => {
     if (!records.length) return { revenue: 0, count: 0, avg: 0, refunded: 0 };
-    const rev = records.reduce((acc: number, r: any) => acc + Number(r.totalAmount || 0), 0);
+    const rev = records.reduce(
+      (acc: number, r: any) => acc + Number(r.totalAmount || 0),
+      0
+    );
     const ref = records.filter((r: any) => r.status === 'REFUNDED').length;
     return {
       revenue: rev,
@@ -57,7 +66,9 @@ export default function OrderHistoryPage() {
 
     records.forEach((r: any) => {
       // Daily Revenue
-      const dateStr = r.createdAt ? format(parseISO(r.createdAt), 'MMM dd') : 'Unknown';
+      const dateStr = r.createdAt
+        ? format(parseISO(r.createdAt), 'MMM dd')
+        : 'Unknown';
       dailyMap[dateStr] = (dailyMap[dateStr] || 0) + Number(r.totalAmount || 0);
 
       // Status Distribution
@@ -91,11 +102,12 @@ export default function OrderHistoryPage() {
   }, [records, searchTerm, statusFilter]);
 
   const exportCSV = () => {
-    const headers = 'Order ID,Customer,Branch,Date,Amount,Status,Payment Method\\n';
+    const headers =
+      'Order ID,Customer,Branch,Date,Amount,Status,Payment Method\\n';
     const rows = filteredRecords
       .map(
         (o: any) =>
-          `${o.id},${o.customer?.firstName || 'Guest'} ${o.customer?.lastName || ''},${o.branch?.name || 'Main'},${new Date(o.createdAt).toLocaleDateString()},${o.totalAmount},${o.status},${o.paymentMethod || 'CARD'}`,
+          `${o.id},${o.customer?.firstName || 'Guest'} ${o.customer?.lastName || ''},${o.branch?.name || 'Main'},${new Date(o.createdAt).toLocaleDateString()},${o.totalAmount},${o.status},${o.paymentMethod || 'CARD'}`
       )
       .join('\\n');
 
@@ -165,7 +177,9 @@ export default function OrderHistoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="bg-slate-900/40 border-border/20 lg:col-span-2">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Revenue Trend (Last 14 Days)</h3>
+            <h3 className="font-bold text-white text-sm">
+              Revenue Trend (Last 14 Days)
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -179,7 +193,11 @@ export default function OrderHistoryPage() {
                       <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="date"
                     stroke="#94a3b8"
@@ -218,7 +236,9 @@ export default function OrderHistoryPage() {
 
         <Card className="bg-slate-900/40 border-border/20">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Order Status Breakdown</h3>
+            <h3 className="font-bold text-white text-sm">
+              Order Status Breakdown
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -254,7 +274,12 @@ export default function OrderHistoryPage() {
                     }}
                     cursor={{ fill: '#1e293b' }}
                   />
-                  <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20} />
+                  <Bar
+                    dataKey="count"
+                    fill="#3b82f6"
+                    radius={[0, 4, 4, 0]}
+                    barSize={20}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -302,7 +327,9 @@ export default function OrderHistoryPage() {
           {isLoading ? (
             <div className="h-64 flex flex-col items-center justify-center space-y-4">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary"></div>
-              <p className="text-slate-500 text-sm">Loading enterprise data...</p>
+              <p className="text-slate-500 text-sm">
+                Loading enterprise data...
+              </p>
             </div>
           ) : (
             <table className="w-full text-sm text-left">
@@ -325,7 +352,9 @@ export default function OrderHistoryPage() {
                         <div className="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center mb-4">
                           <Search className="text-slate-500" size={24} />
                         </div>
-                        <p className="text-slate-300 font-medium text-lg">No orders found</p>
+                        <p className="text-slate-300 font-medium text-lg">
+                          No orders found
+                        </p>
                         <p className="text-slate-500 mt-1">
                           Try adjusting your filters or search term.
                         </p>
@@ -333,48 +362,56 @@ export default function OrderHistoryPage() {
                     </td>
                   </tr>
                 ) : (
-                  filteredRecords.slice(0, 50).map((order: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors group">
-                      <td className="px-6 py-4 font-mono text-slate-400 text-xs group-hover:text-primary transition-colors cursor-pointer">
-                        {order.id.substring(0, 8)}...
-                      </td>
-                      <td className="px-6 py-4 text-slate-200 font-medium">
-                        {order.customer
-                          ? `${order.customer.firstName} ${order.customer.lastName}`
-                          : 'Guest User'}
-                      </td>
-                      <td className="px-6 py-4 text-slate-400">
-                        {order.branch?.name || 'Main Branch'}
-                      </td>
-                      <td className="px-6 py-4 text-slate-400 whitespace-nowrap">
-                        {format(new Date(order.createdAt), 'dd MMM yyyy, HH:mm')}
-                      </td>
-                      <td className="px-6 py-4 font-bold text-emerald-400">
-                        {formatCurrency(order.totalAmount)}
-                      </td>
-                      <td className="px-6 py-4 text-slate-300">
-                        <div className="flex items-center space-x-2">
-                          <div
-                            className={`w-2 h-2 rounded-full ${order.paymentMethod === 'CARD' ? 'bg-blue-500' : 'bg-purple-500'}`}
-                          ></div>
-                          <span>{order.paymentMethod || 'CARD'}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <Badge
-                          className={
-                            order.status === 'DELIVERED'
-                              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                              : order.status === 'REFUNDED'
-                                ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                                : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                          }
-                        >
-                          {order.status}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))
+                  filteredRecords
+                    .slice(0, 50)
+                    .map((order: any, idx: number) => (
+                      <tr
+                        key={idx}
+                        className="hover:bg-slate-800/30 transition-colors group"
+                      >
+                        <td className="px-6 py-4 font-mono text-slate-400 text-xs group-hover:text-primary transition-colors cursor-pointer">
+                          {order.id.substring(0, 8)}...
+                        </td>
+                        <td className="px-6 py-4 text-slate-200 font-medium">
+                          {order.customer
+                            ? `${order.customer.firstName} ${order.customer.lastName}`
+                            : 'Guest User'}
+                        </td>
+                        <td className="px-6 py-4 text-slate-400">
+                          {order.branch?.name || 'Main Branch'}
+                        </td>
+                        <td className="px-6 py-4 text-slate-400 whitespace-nowrap">
+                          {format(
+                            new Date(order.createdAt),
+                            'dd MMM yyyy, HH:mm'
+                          )}
+                        </td>
+                        <td className="px-6 py-4 font-bold text-emerald-400">
+                          {formatCurrency(order.totalAmount)}
+                        </td>
+                        <td className="px-6 py-4 text-slate-300">
+                          <div className="flex items-center space-x-2">
+                            <div
+                              className={`w-2 h-2 rounded-full ${order.paymentMethod === 'CARD' ? 'bg-blue-500' : 'bg-purple-500'}`}
+                            ></div>
+                            <span>{order.paymentMethod || 'CARD'}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <Badge
+                            className={
+                              order.status === 'DELIVERED'
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                : order.status === 'REFUNDED'
+                                  ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                                  : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                            }
+                          >
+                            {order.status}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))
                 )}
               </tbody>
             </table>

@@ -12,8 +12,12 @@ export interface CheckboxProps extends Omit<
 }
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className = '', label, checked, onChange, error, disabled, id, ...props }, ref) => {
-    const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+  (
+    { className = '', label, checked, onChange, error, disabled, id, ...props },
+    ref
+  ) => {
+    const checkboxId =
+      id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
     return (
       <div className={`flex flex-col gap-1 ${className}`}>
@@ -56,7 +60,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
 Checkbox.displayName = 'Checkbox';

@@ -17,7 +17,11 @@ export const processEmailJob = async (jobData: any) => {
     const filename = `email_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.json`;
     fs.writeFileSync(
       path.join(outboxDir, filename),
-      JSON.stringify({ to, subject, body, sentAt: new Date().toISOString() }, null, 2),
+      JSON.stringify(
+        { to, subject, body, sentAt: new Date().toISOString() },
+        null,
+        2
+      )
     );
 
     await new Promise((res) => setTimeout(res, 500));

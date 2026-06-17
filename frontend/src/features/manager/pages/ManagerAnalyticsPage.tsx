@@ -20,8 +20,9 @@ export default function ManagerAnalyticsPage() {
           Analytics Coming Soon
         </h1>
         <p className="text-slate-400 max-w-lg mx-auto">
-          We are currently upgrading the Branch Manager Analytics module to provide you with deeper
-          insights and better reporting capabilities. Please check back later.
+          We are currently upgrading the Branch Manager Analytics module to
+          provide you with deeper insights and better reporting capabilities.
+          Please check back later.
         </p>
       </Card>
     </div>

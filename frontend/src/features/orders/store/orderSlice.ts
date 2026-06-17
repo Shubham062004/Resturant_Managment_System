@@ -48,10 +48,14 @@ export const fetchMyOrders = createAsyncThunk(
       const response = await apiClient.get('/orders');
       return response.data.data.orders;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Failed to fetch orders');
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to fetch orders'
+      );
     }
-  },
+  }
 );
 
 export const fetchOrderById = createAsyncThunk(
@@ -61,12 +65,14 @@ export const fetchOrderById = createAsyncThunk(
       const response = await apiClient.get(`/orders/${id}`);
       return response.data.data.order;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
       return rejectWithValue(
-        error.response?.data?.error?.message || 'Failed to fetch order details',
+        error.response?.data?.error?.message || 'Failed to fetch order details'
       );
     }
-  },
+  }
 );
 
 export const cancelOrder = createAsyncThunk(
@@ -76,10 +82,14 @@ export const cancelOrder = createAsyncThunk(
       const response = await apiClient.post(`/orders/${id}/cancel`);
       return response.data.data.order;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Failed to cancel order');
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Failed to cancel order'
+      );
     }
-  },
+  }
 );
 
 const orderSlice = createSlice({

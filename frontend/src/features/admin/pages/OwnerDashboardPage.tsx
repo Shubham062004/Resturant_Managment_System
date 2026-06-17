@@ -57,7 +57,11 @@ import {
 import { useAppSelector } from '../../../app/store';
 import apiClient from '../../../services/apiClient';
 import { Button } from '../../../shared/components/ui/Button';
-import { Card, CardHeader, CardContent } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+} from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { formatCurrency } from '../../../shared/utils/currency';
@@ -137,7 +141,15 @@ interface TopProduct {
   revenue: number;
 }
 
-const COLORS = ['#2563EB', '#16A34A', '#F59E0B', '#DC2626', '#8B5CF6', '#06B6D4', '#A855F7'];
+const COLORS = [
+  '#2563EB',
+  '#16A34A',
+  '#F59E0B',
+  '#DC2626',
+  '#8B5CF6',
+  '#06B6D4',
+  '#A855F7',
+];
 
 // --- Premium Inline Sparkline Component ---
 const Sparkline = ({ points, color }: { points: number[]; color: string }) => {
@@ -150,7 +162,7 @@ const Sparkline = ({ points, color }: { points: number[]; color: string }) => {
   const step = width / (points.length - 1);
   const pathPoints = points.map(
     (p, i) =>
-      `${i * step},${height - ((p - min) / range) * (height - strokeWidth * 2) - strokeWidth}`,
+      `${i * step},${height - ((p - min) / range) * (height - strokeWidth * 2) - strokeWidth}`
   );
   return (
     <svg
@@ -175,7 +187,14 @@ const ConcentricRadialGauge = () => (
   <div className="relative flex items-center justify-center w-40 h-40">
     <svg width="150" height="150" className="transform -rotate-90">
       {/* Outer Circle: Revenue (95%) */}
-      <circle cx="75" cy="75" r="64" stroke="#1E293B" strokeWidth="5" fill="transparent" />
+      <circle
+        cx="75"
+        cy="75"
+        r="64"
+        stroke="#1E293B"
+        strokeWidth="5"
+        fill="transparent"
+      />
       <circle
         cx="75"
         cy="75"
@@ -189,7 +208,14 @@ const ConcentricRadialGauge = () => (
       />
 
       {/* Middle Circle 1: Profit (90%) */}
-      <circle cx="75" cy="75" r="52" stroke="#1E293B" strokeWidth="5" fill="transparent" />
+      <circle
+        cx="75"
+        cy="75"
+        r="52"
+        stroke="#1E293B"
+        strokeWidth="5"
+        fill="transparent"
+      />
       <circle
         cx="75"
         cy="75"
@@ -203,7 +229,14 @@ const ConcentricRadialGauge = () => (
       />
 
       {/* Middle Circle 2: Satisfaction (96%) */}
-      <circle cx="75" cy="75" r="40" stroke="#1E293B" strokeWidth="5" fill="transparent" />
+      <circle
+        cx="75"
+        cy="75"
+        r="40"
+        stroke="#1E293B"
+        strokeWidth="5"
+        fill="transparent"
+      />
       <circle
         cx="75"
         cy="75"
@@ -217,7 +250,14 @@ const ConcentricRadialGauge = () => (
       />
 
       {/* Inner Circle: Inventory (88%) */}
-      <circle cx="75" cy="75" r="28" stroke="#1E293B" strokeWidth="5" fill="transparent" />
+      <circle
+        cx="75"
+        cy="75"
+        r="28"
+        stroke="#1E293B"
+        strokeWidth="5"
+        fill="transparent"
+      />
       <circle
         cx="75"
         cy="75"
@@ -233,7 +273,9 @@ const ConcentricRadialGauge = () => (
     {/* Center Text */}
     <div className="absolute flex flex-col items-center">
       <span className="text-xl font-bold font-display text-white">92</span>
-      <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Health</span>
+      <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold">
+        Health
+      </span>
     </div>
   </div>
 );
@@ -245,12 +287,19 @@ const EmptySearchState = ({ onReset }: { onReset: () => void }) => (
       <Search size={32} />
     </div>
     <div>
-      <h4 className="text-sm font-bold text-slate-200">No matching branches found</h4>
+      <h4 className="text-sm font-bold text-slate-200">
+        No matching branches found
+      </h4>
       <p className="text-xs text-slate-450 mt-1 max-w-sm">
-        We couldn't find any branches matching your search query or selected city filters.
+        We couldn't find any branches matching your search query or selected
+        city filters.
       </p>
     </div>
-    <Button size="sm" onClick={onReset} className="bg-[#2563EB] hover:bg-[#2563EB]/95 text-white">
+    <Button
+      size="sm"
+      onClick={onReset}
+      className="bg-[#2563EB] hover:bg-[#2563EB]/95 text-white"
+    >
       Clear Filters
     </Button>
   </div>
@@ -271,7 +320,10 @@ const DashboardSkeleton = () => (
     {/* Metric Cards Skeleton */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="h-28 bg-[#111827] border border-slate-800/60 rounded-2xl" />
+        <div
+          key={i}
+          className="h-28 bg-[#111827] border border-slate-800/60 rounded-2xl"
+        />
       ))}
     </div>
 
@@ -314,9 +366,15 @@ export default function OwnerDashboardPage() {
   >('overview');
 
   // Inventory Approval States
-  const [inventoryRequests, setInventoryRequests] = useState<InventoryRequest[]>([]);
-  const [activeRequest, setActiveRequest] = useState<InventoryRequest | null>(null);
-  const [approvalItems, setApprovalItems] = useState<InventoryRequestItem[]>([]);
+  const [inventoryRequests, setInventoryRequests] = useState<
+    InventoryRequest[]
+  >([]);
+  const [activeRequest, setActiveRequest] = useState<InventoryRequest | null>(
+    null
+  );
+  const [approvalItems, setApprovalItems] = useState<InventoryRequestItem[]>(
+    []
+  );
   const [approvalNotes, setApprovalNotes] = useState<string>('');
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [selectedIngredientId, setSelectedIngredientId] = useState<string>('');
@@ -353,17 +411,21 @@ export default function OwnerDashboardPage() {
         ...rows.map((e) =>
           e
             .map((val) => {
-              if (typeof val === 'string') return `"${val.replace(/"/g, '""')}"`;
+              if (typeof val === 'string')
+                return `"${val.replace(/"/g, '""')}"`;
               return val;
             })
-            .join(','),
+            .join(',')
         ),
       ].join('\n');
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `${filename}_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute(
+      'download',
+      `${filename}_${new Date().toISOString().slice(0, 10)}.csv`
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -429,8 +491,22 @@ export default function OwnerDashboardPage() {
       'Bonus Paid (INR)',
     ];
     const rows = [
-      ['Arjun Mehta', 'Branch Manager', 'Indiranagar Outlet', '4.9/5.0', payrollCost * 0.05, 1250],
-      ['Karan Singh', 'Head Pizza Chef', 'Koramangala Outlet', '4.8/5.0', payrollCost * 0.04, 950],
+      [
+        'Arjun Mehta',
+        'Branch Manager',
+        'Indiranagar Outlet',
+        '4.9/5.0',
+        payrollCost * 0.05,
+        1250,
+      ],
+      [
+        'Karan Singh',
+        'Head Pizza Chef',
+        'Koramangala Outlet',
+        '4.8/5.0',
+        payrollCost * 0.04,
+        950,
+      ],
       [
         'Rider Ramesh',
         'Delivery Partner',
@@ -439,8 +515,22 @@ export default function OwnerDashboardPage() {
         payrollCost * 0.03,
         800,
       ],
-      ['Siddharth Sen', 'Kitchen Chef', 'Whitefield Outlet', '4.6/5.0', payrollCost * 0.035, 600],
-      ['Neha Sharma', 'Cashier', 'Indiranagar Outlet', '4.7/5.0', payrollCost * 0.03, 500],
+      [
+        'Siddharth Sen',
+        'Kitchen Chef',
+        'Whitefield Outlet',
+        '4.6/5.0',
+        payrollCost * 0.035,
+        600,
+      ],
+      [
+        'Neha Sharma',
+        'Cashier',
+        'Indiranagar Outlet',
+        '4.7/5.0',
+        payrollCost * 0.03,
+        500,
+      ],
     ];
     downloadCSV(headers, rows, 'payroll_bonus_ledger');
   };
@@ -461,7 +551,9 @@ export default function OwnerDashboardPage() {
       setTopProducts(data.topProducts || []);
 
       const allRequests = requestRes.data.data.requests || [];
-      const pendingReqs = allRequests.filter((r: any) => r.status === 'PENDING');
+      const pendingReqs = allRequests.filter(
+        (r: any) => r.status === 'PENDING'
+      );
       setInventoryRequests(pendingReqs);
 
       const ings = ingredientRes.data.data.ingredients || [];
@@ -512,7 +604,7 @@ export default function OwnerDashboardPage() {
         ingredientName: item.ingredient.name,
         requestedQuantity: item.requestedQuantity,
         approvedQuantity: item.requestedQuantity,
-      })),
+      }))
     );
   };
 
@@ -544,9 +636,14 @@ export default function OwnerDashboardPage() {
         }));
       }
 
-      await apiClient.patch(`/inventory/requests/${activeRequest.id}/approve`, payload);
+      await apiClient.patch(
+        `/inventory/requests/${activeRequest.id}/approve`,
+        payload
+      );
       toast.success(
-        status === 'APPROVED' ? `Replenishment request approved` : `Replenishment request rejected`,
+        status === 'APPROVED'
+          ? `Replenishment request approved`
+          : `Replenishment request rejected`
       );
 
       setActiveRequest(null);
@@ -615,9 +712,13 @@ export default function OwnerDashboardPage() {
   const bonusDistributed = summary?.bonusPaid || 0;
   const wasteCost = Math.round((summary?.lowStockCount || 0) * 450 + 1500);
   const foodCostPercent =
-    monthlyRevenue > 0 ? parseFloat(((inventoryCost / monthlyRevenue) * 100).toFixed(1)) : 0;
+    monthlyRevenue > 0
+      ? parseFloat(((inventoryCost / monthlyRevenue) * 100).toFixed(1))
+      : 0;
   const wasteCostPercent =
-    monthlyRevenue > 0 ? parseFloat(((wasteCost / monthlyRevenue) * 100).toFixed(1)) : 0;
+    monthlyRevenue > 0
+      ? parseFloat(((wasteCost / monthlyRevenue) * 100).toFixed(1))
+      : 0;
   const aov = totalOrders > 0 ? Math.round(todayRevenue / totalOrders) : 0;
 
   // --- 20 CEO KPI Configuration ---
@@ -853,7 +954,9 @@ export default function OwnerDashboardPage() {
       const valA = a[sortField];
       const valB = b[sortField];
       if (typeof valA === 'string' && typeof valB === 'string') {
-        return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        return sortDirection === 'asc'
+          ? valA.localeCompare(valB)
+          : valB.localeCompare(valA);
       }
       if (typeof valA === 'number' && typeof valB === 'number') {
         return sortDirection === 'asc' ? valA - valB : valB - valA;
@@ -960,7 +1063,9 @@ export default function OwnerDashboardPage() {
             Good Morning, {greetingName}
           </h1>
           <div className="flex flex-wrap items-center gap-2 mt-2 text-xs text-slate-400">
-            <span className="font-bold text-slate-300">ABC Restaurant Group</span>
+            <span className="font-bold text-slate-300">
+              ABC Restaurant Group
+            </span>
             <span>•</span>
             <span className="text-[#16A34A] font-bold flex items-center gap-0.5">
               <ArrowUpRight size={14} /> Revenue Up 12% This Month
@@ -981,8 +1086,16 @@ export default function OwnerDashboardPage() {
               val: `₹${netProfit.toLocaleString('en-IN')}`,
               color: 'text-[#06B6D4]',
             },
-            { label: 'Active Branches', val: branches.length, color: 'text-indigo-400' },
-            { label: "Today's Orders", val: totalOrders, color: 'text-amber-500' },
+            {
+              label: 'Active Branches',
+              val: branches.length,
+              color: 'text-indigo-400',
+            },
+            {
+              label: "Today's Orders",
+              val: totalOrders,
+              color: 'text-amber-500',
+            },
           ].map((card, idx) => (
             <div
               key={idx}
@@ -991,7 +1104,9 @@ export default function OwnerDashboardPage() {
               <span className="text-[9px] uppercase font-bold text-slate-500 block">
                 {card.label}
               </span>
-              <span className={`text-base font-extrabold font-display block mt-1.5 ${card.color}`}>
+              <span
+                className={`text-base font-extrabold font-display block mt-1.5 ${card.color}`}
+              >
                 {card.val}
               </span>
             </div>
@@ -1002,16 +1117,44 @@ export default function OwnerDashboardPage() {
       {/* Tabs Menu Navigation */}
       <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-2">
         {[
-          { id: 'overview', label: 'CEO Overview', icon: <Activity size={15} /> },
-          { id: 'finance', label: 'Financials', icon: <DollarSign size={15} /> },
+          {
+            id: 'overview',
+            label: 'CEO Overview',
+            icon: <Activity size={15} />,
+          },
+          {
+            id: 'finance',
+            label: 'Financials',
+            icon: <DollarSign size={15} />,
+          },
           { id: 'pandl', label: 'P&L Audit', icon: <Percent size={15} /> },
-          { id: 'branches', label: 'Branches Performance', icon: <Building size={15} /> },
+          {
+            id: 'branches',
+            label: 'Branches Performance',
+            icon: <Building size={15} />,
+          },
           { id: 'staff', label: 'Staff logs', icon: <Users size={15} /> },
           { id: 'bonuses', label: 'Bonus Rules', icon: <Award size={15} /> },
-          { id: 'inventory', label: 'Inventory Management', icon: <Box size={15} /> },
-          { id: 'sales', label: 'Sales analytics', icon: <TrendingUp size={15} /> },
-          { id: 'customers', label: 'Customer Insights', icon: <Users size={15} /> },
-          { id: 'operations', label: 'Operations Command', icon: <Clock size={15} /> },
+          {
+            id: 'inventory',
+            label: 'Inventory Management',
+            icon: <Box size={15} />,
+          },
+          {
+            id: 'sales',
+            label: 'Sales analytics',
+            icon: <TrendingUp size={15} />,
+          },
+          {
+            id: 'customers',
+            label: 'Customer Insights',
+            icon: <Users size={15} />,
+          },
+          {
+            id: 'operations',
+            label: 'Operations Command',
+            icon: <Clock size={15} />,
+          },
           { id: 'ai', label: 'AI predictions', icon: <Brain size={15} /> },
         ].map((tab) => (
           <button
@@ -1033,7 +1176,11 @@ export default function OwnerDashboardPage() {
       <div className="space-y-8">
         {/* TAB 1: CEO OVERVIEW (PREMIUM SAAS DESIGN) */}
         {activeTab === 'overview' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8 pb-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-8 pb-12"
+          >
             {/* SECTION 1: EXECUTIVE KPI STRIP */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               {[
@@ -1094,8 +1241,13 @@ export default function OwnerDashboardPage() {
                     </span>
                   </div>
                   <div className="flex items-end justify-between">
-                    <h3 className="text-3xl font-extrabold font-display text-white">{kpi.value}</h3>
-                    <Sparkline points={kpi.points} color={kpi.isGrow ? '#34d399' : '#fb7185'} />
+                    <h3 className="text-3xl font-extrabold font-display text-white">
+                      {kpi.value}
+                    </h3>
+                    <Sparkline
+                      points={kpi.points}
+                      color={kpi.isGrow ? '#34d399' : '#fb7185'}
+                    />
                   </div>
                 </div>
               ))}
@@ -1107,7 +1259,9 @@ export default function OwnerDashboardPage() {
               <Card className="xl:col-span-2 border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 relative overflow-hidden">
                 <CardHeader className="border-none p-0 mb-6 flex flex-row justify-between items-start">
                   <div>
-                    <h3 className="text-lg font-bold font-display text-white">Financial Health</h3>
+                    <h3 className="text-lg font-bold font-display text-white">
+                      Financial Health
+                    </h3>
                     <p className="text-xs text-slate-400 mt-1">
                       Revenue vs Expenses trend over time
                     </p>
@@ -1131,7 +1285,9 @@ export default function OwnerDashboardPage() {
                     <p className="text-xl font-bold text-white">
                       ₹{monthlyRevenue.toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[10px] text-emerald-400 mt-0.5">▲ 11.8% vs last month</p>
+                    <p className="text-[10px] text-emerald-400 mt-0.5">
+                      ▲ 11.8% vs last month
+                    </p>
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
@@ -1140,7 +1296,9 @@ export default function OwnerDashboardPage() {
                     <p className="text-xl font-bold text-white">
                       ₹{operatingExpenses.toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[10px] text-rose-400 mt-0.5">▲ 4.5% vs last month</p>
+                    <p className="text-[10px] text-rose-400 mt-0.5">
+                      ▲ 4.5% vs last month
+                    </p>
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
@@ -1149,7 +1307,9 @@ export default function OwnerDashboardPage() {
                     <p className="text-xl font-bold text-white">
                       ₹{grossProfit.toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[10px] text-emerald-400 mt-0.5">▲ 10.2% vs last month</p>
+                    <p className="text-[10px] text-emerald-400 mt-0.5">
+                      ▲ 10.2% vs last month
+                    </p>
                   </div>
                   <div>
                     <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
@@ -1158,19 +1318,39 @@ export default function OwnerDashboardPage() {
                     <p className="text-xl font-bold text-white">
                       ₹{netProfit.toLocaleString('en-IN')}
                     </p>
-                    <p className="text-[10px] text-emerald-400 mt-0.5">▲ 12.7% vs last month</p>
+                    <p className="text-[10px] text-emerald-400 mt-0.5">
+                      ▲ 12.7% vs last month
+                    </p>
                   </div>
                 </div>
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={financeTrend}>
                       <defs>
-                        <linearGradient id="colorRev2" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#2563EB" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
+                        <linearGradient
+                          id="colorRev2"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#2563EB"
+                            stopOpacity={0.3}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#2563EB"
+                            stopOpacity={0}
+                          />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="#1E293B"
+                        vertical={false}
+                      />
                       <XAxis
                         dataKey="name"
                         stroke="#64748B"
@@ -1226,7 +1406,9 @@ export default function OwnerDashboardPage() {
               {/* Branch Performance Leaderboard */}
               <Card className="xl:col-span-1 border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6 flex flex-col">
                 <CardHeader className="border-none p-0 mb-6 flex justify-between items-center">
-                  <h3 className="text-lg font-bold font-display text-white">Branch Leaderboard</h3>
+                  <h3 className="text-lg font-bold font-display text-white">
+                    Branch Leaderboard
+                  </h3>
                   <Button
                     variant="ghost"
                     size="xs"
@@ -1254,27 +1436,40 @@ export default function OwnerDashboardPage() {
                             #{idx + 1}
                           </div>
                           <div>
-                            <h4 className="text-sm font-bold text-white">{branch.name}</h4>
-                            <p className="text-[10px] text-slate-400">{branch.city}</p>
+                            <h4 className="text-sm font-bold text-white">
+                              {branch.name}
+                            </h4>
+                            <p className="text-[10px] text-slate-400">
+                              {branch.city}
+                            </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <p className="text-sm font-bold text-emerald-400">
                             ₹{branch.revenue.toLocaleString('en-IN')}
                           </p>
-                          <p className="text-[10px] text-slate-400">{branch.orders} orders</p>
+                          <p className="text-[10px] text-slate-400">
+                            {branch.orders} orders
+                          </p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/50">
                         <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 font-semibold">Rating</span>
+                          <span className="text-slate-500 font-semibold">
+                            Rating
+                          </span>
                           <span className="text-white flex items-center gap-1">
-                            <Star size={10} className="text-amber-400 fill-amber-400" />{' '}
+                            <Star
+                              size={10}
+                              className="text-amber-400 fill-amber-400"
+                            />{' '}
                             {branch.customerRating.toFixed(1)}
                           </span>
                         </div>
                         <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-500 font-semibold">Profit</span>
+                          <span className="text-slate-500 font-semibold">
+                            Profit
+                          </span>
                           <span className="text-emerald-400 font-semibold">
                             {(branch.revenue * 0.28).toLocaleString('en-IN')}
                           </span>
@@ -1293,12 +1488,18 @@ export default function OwnerDashboardPage() {
                           !
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-white">Marathahalli</h4>
-                          <p className="text-[10px] text-slate-400">Bangalore</p>
+                          <h4 className="text-sm font-bold text-white">
+                            Marathahalli
+                          </h4>
+                          <p className="text-[10px] text-slate-400">
+                            Bangalore
+                          </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold text-rose-400">₹42,500</p>
+                        <p className="text-sm font-bold text-rose-400">
+                          ₹42,500
+                        </p>
                         <p className="text-[10px] text-slate-400">120 orders</p>
                       </div>
                     </div>
@@ -1348,8 +1549,12 @@ export default function OwnerDashboardPage() {
                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-2">
                         {item.label}
                       </p>
-                      <p className={`text-xl font-bold ${item.color}`}>{item.val}</p>
-                      <p className="text-[9px] text-slate-400 mt-1">{item.trend}</p>
+                      <p className={`text-xl font-bold ${item.color}`}>
+                        {item.val}
+                      </p>
+                      <p className="text-[9px] text-slate-400 mt-1">
+                        {item.trend}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -1394,8 +1599,12 @@ export default function OwnerDashboardPage() {
                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-2">
                         {item.label}
                       </p>
-                      <p className={`text-xl font-bold ${item.color}`}>{item.val}</p>
-                      <p className="text-[9px] text-slate-400 mt-1">{item.trend}</p>
+                      <p className={`text-xl font-bold ${item.color}`}>
+                        {item.val}
+                      </p>
+                      <p className="text-[9px] text-slate-400 mt-1">
+                        {item.trend}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -1408,8 +1617,18 @@ export default function OwnerDashboardPage() {
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: 'New Customers', val: '450', trend: '▲ 12%', color: 'text-white' },
-                    { label: 'Returning', val: '1,200', trend: '▲ 5%', color: 'text-white' },
+                    {
+                      label: 'New Customers',
+                      val: '450',
+                      trend: '▲ 12%',
+                      color: 'text-white',
+                    },
+                    {
+                      label: 'Returning',
+                      val: '1,200',
+                      trend: '▲ 5%',
+                      color: 'text-white',
+                    },
                     {
                       label: 'Satisfaction',
                       val: '4.8/5',
@@ -1430,8 +1649,12 @@ export default function OwnerDashboardPage() {
                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-2">
                         {item.label}
                       </p>
-                      <p className={`text-xl font-bold ${item.color}`}>{item.val}</p>
-                      <p className="text-[9px] text-slate-400 mt-1">{item.trend}</p>
+                      <p className={`text-xl font-bold ${item.color}`}>
+                        {item.val}
+                      </p>
+                      <p className="text-[9px] text-slate-400 mt-1">
+                        {item.trend}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -1450,8 +1673,12 @@ export default function OwnerDashboardPage() {
                     <Brain size={20} className="text-indigo-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold font-display text-white">AI Predictions</h3>
-                    <p className="text-xs text-indigo-200/60">Powered by System ML</p>
+                    <h3 className="text-lg font-bold font-display text-white">
+                      AI Predictions
+                    </h3>
+                    <p className="text-xs text-indigo-200/60">
+                      Powered by System ML
+                    </p>
                   </div>
                 </CardHeader>
 
@@ -1462,8 +1689,8 @@ export default function OwnerDashboardPage() {
                     </p>
                     <p className="text-2xl font-bold text-white">₹38.5L</p>
                     <div className="flex items-center gap-1.5 mt-2 text-[10px] text-indigo-200">
-                      <TrendingUp size={12} className="text-emerald-400" /> Expected +15% surge due
-                      to weekend holidays
+                      <TrendingUp size={12} className="text-emerald-400" />{' '}
+                      Expected +15% surge due to weekend holidays
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -1471,7 +1698,9 @@ export default function OwnerDashboardPage() {
                       <p className="text-[9px] text-indigo-300 font-bold uppercase tracking-wider mb-1">
                         Peak Hour
                       </p>
-                      <p className="text-base font-bold text-white">19:00 - 21:00</p>
+                      <p className="text-base font-bold text-white">
+                        19:00 - 21:00
+                      </p>
                     </div>
                     <div className="bg-black/20 border border-indigo-500/20 p-3 rounded-xl backdrop-blur-sm">
                       <p className="text-[9px] text-indigo-300 font-bold uppercase tracking-wider mb-1">
@@ -1485,7 +1714,9 @@ export default function OwnerDashboardPage() {
                       <p className="text-[9px] text-indigo-300 font-bold uppercase tracking-wider mb-0.5">
                         Inventory Risk
                       </p>
-                      <p className="text-sm font-bold text-white">Poultry shortage predicted</p>
+                      <p className="text-sm font-bold text-white">
+                        Poultry shortage predicted
+                      </p>
                     </div>
                     <AlertTriangle size={16} className="text-amber-400" />
                   </div>
@@ -1495,7 +1726,9 @@ export default function OwnerDashboardPage() {
               {/* Order Trend Chart */}
               <Card className="xl:col-span-2 border-slate-800/80 bg-slate-900/40 backdrop-blur-md p-6">
                 <CardHeader className="border-none p-0 mb-6 flex justify-between items-center">
-                  <h3 className="text-lg font-bold font-display text-white">Orders Trend Today</h3>
+                  <h3 className="text-lg font-bold font-display text-white">
+                    Orders Trend Today
+                  </h3>
                   <Button
                     variant="ghost"
                     size="xs"
@@ -1510,7 +1743,11 @@ export default function OwnerDashboardPage() {
                       data={salesByHour}
                       margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" vertical={false} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        stroke="#1E293B"
+                        vertical={false}
+                      />
                       <XAxis
                         dataKey="hour"
                         stroke="#64748B"
@@ -1518,7 +1755,12 @@ export default function OwnerDashboardPage() {
                         axisLine={false}
                         tickLine={false}
                       />
-                      <YAxis stroke="#64748B" fontSize={10} axisLine={false} tickLine={false} />
+                      <YAxis
+                        stroke="#64748B"
+                        fontSize={10}
+                        axisLine={false}
+                        tickLine={false}
+                      />
                       <Tooltip
                         cursor={{ fill: '#1e293b', opacity: 0.4 }}
                         contentStyle={{
@@ -1528,7 +1770,12 @@ export default function OwnerDashboardPage() {
                           boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5)',
                         }}
                       />
-                      <Bar dataKey="orders" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={40}>
+                      <Bar
+                        dataKey="orders"
+                        fill="#2563EB"
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={40}
+                      >
                         {salesByHour.map((entry, index) => (
                           <Cell
                             key={`cell-${index}`}
@@ -1546,7 +1793,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 2: FINANCIAL DASHBOARD */}
         {activeTab === 'finance' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
               {[
                 {
@@ -1617,7 +1868,9 @@ export default function OwnerDashboardPage() {
                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                     {card.title}
                   </span>
-                  <h3 className={`text-xl font-bold font-display mt-2 ${card.color}`}>
+                  <h3
+                    className={`text-xl font-bold font-display mt-2 ${card.color}`}
+                  >
                     {card.val}
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">{card.desc}</p>
@@ -1628,9 +1881,15 @@ export default function OwnerDashboardPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="border-slate-800/80 bg-[#111827] p-6">
                 <CardHeader className="border-none p-0 mb-4 flex justify-between items-center">
-                  <h3 className="text-base font-bold font-display">Financial Trends</h3>
+                  <h3 className="text-base font-bold font-display">
+                    Financial Trends
+                  </h3>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="xs" onClick={exportProfitLossCSV}>
+                    <Button
+                      variant="outline"
+                      size="xs"
+                      onClick={exportProfitLossCSV}
+                    >
                       Export CSV
                     </Button>
                   </div>
@@ -1642,7 +1901,10 @@ export default function OwnerDashboardPage() {
                       <XAxis dataKey="name" stroke="#64748B" fontSize={11} />
                       <YAxis stroke="#64748B" fontSize={11} />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }}
+                        contentStyle={{
+                          backgroundColor: '#0F172A',
+                          borderColor: '#334155',
+                        }}
                       />
                       <Legend verticalAlign="top" height={36} />
                       <Line
@@ -1684,7 +1946,10 @@ export default function OwnerDashboardPage() {
                       <XAxis dataKey="name" stroke="#64748B" fontSize={11} />
                       <YAxis stroke="#64748B" fontSize={11} />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }}
+                        contentStyle={{
+                          backgroundColor: '#0F172A',
+                          borderColor: '#334155',
+                        }}
                       />
                       <Legend verticalAlign="top" height={36} />
                       <Bar
@@ -1721,9 +1986,15 @@ export default function OwnerDashboardPage() {
                   <h3 className="text-base font-bold font-display text-white">
                     Income Statement (P&L Audit)
                   </h3>
-                  <p className="text-[11px] text-slate-500">Consolidated accounts statement</p>
+                  <p className="text-[11px] text-slate-500">
+                    Consolidated accounts statement
+                  </p>
                 </div>
-                <Button size="xs" variant="outline" onClick={exportProfitLossCSV}>
+                <Button
+                  size="xs"
+                  variant="outline"
+                  onClick={exportProfitLossCSV}
+                >
                   <Download size={12} className="mr-1" /> Export CSV Report
                 </Button>
               </CardHeader>
@@ -1777,8 +2048,12 @@ export default function OwnerDashboardPage() {
             {/* Operating Margins progress sliders */}
             <Card className="lg:col-span-1 border-slate-800/80 bg-[#111827] p-6 space-y-6">
               <div>
-                <h3 className="text-base font-bold font-display">Target Business Margins</h3>
-                <p className="text-[11px] text-slate-500">Margin benchmarks verification</p>
+                <h3 className="text-base font-bold font-display">
+                  Target Business Margins
+                </h3>
+                <p className="text-[11px] text-slate-500">
+                  Margin benchmarks verification
+                </p>
               </div>
 
               <div className="space-y-4">
@@ -1813,7 +2088,9 @@ export default function OwnerDashboardPage() {
                       <span className="text-slate-300">{margin.name}</span>
                       <span className="text-slate-400">
                         {margin.val}%{' '}
-                        <span className="text-[9px] text-slate-500">({margin.target})</span>
+                        <span className="text-[9px] text-slate-500">
+                          ({margin.target})
+                        </span>
                       </span>
                     </div>
                     <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden">
@@ -1831,7 +2108,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 4: BRANCH PERFORMANCE */}
         {activeTab === 'branches' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             {/* Top Branch Rankings podium */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end py-6">
               {bestBranches[1] && (
@@ -1840,7 +2121,9 @@ export default function OwnerDashboardPage() {
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-800 text-slate-350 font-bold text-xs px-2.5 py-0.5 rounded-full border border-slate-700">
                       #2 RUNNER-UP
                     </span>
-                    <h4 className="font-bold text-slate-200 mt-2">{bestBranches[1].name}</h4>
+                    <h4 className="font-bold text-slate-200 mt-2">
+                      {bestBranches[1].name}
+                    </h4>
                     <p className="text-[#16A34A] font-bold text-sm mt-1">
                       ₹{bestBranches[1].revenue.toLocaleString('en-IN')}
                     </p>
@@ -1849,7 +2132,9 @@ export default function OwnerDashboardPage() {
                     </p>
                   </div>
                   <div className="w-16 h-12 bg-slate-800 border-x border-t border-slate-700 flex items-center justify-center mt-3">
-                    <span className="font-display font-black text-slate-500">2nd</span>
+                    <span className="font-display font-black text-slate-500">
+                      2nd
+                    </span>
                   </div>
                 </div>
               )}
@@ -1871,7 +2156,9 @@ export default function OwnerDashboardPage() {
                     </p>
                   </div>
                   <div className="w-20 h-20 bg-indigo-900/40 border-x border-t border-indigo-500/20 flex items-center justify-center mt-3">
-                    <span className="font-display font-black text-indigo-400 text-xl">1st</span>
+                    <span className="font-display font-black text-indigo-400 text-xl">
+                      1st
+                    </span>
                   </div>
                 </div>
               )}
@@ -1882,7 +2169,9 @@ export default function OwnerDashboardPage() {
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-800 text-slate-400 font-bold text-xs px-2.5 py-0.5 rounded-full border border-slate-700">
                       #3 THIRD
                     </span>
-                    <h4 className="font-bold text-slate-200 mt-2">{bestBranches[2].name}</h4>
+                    <h4 className="font-bold text-slate-200 mt-2">
+                      {bestBranches[2].name}
+                    </h4>
                     <p className="text-[#16A34A] font-bold text-sm mt-1">
                       ₹{bestBranches[2].revenue.toLocaleString('en-IN')}
                     </p>
@@ -1891,7 +2180,9 @@ export default function OwnerDashboardPage() {
                     </p>
                   </div>
                   <div className="w-16 h-8 bg-slate-850 border-x border-t border-slate-800 flex items-center justify-center mt-3">
-                    <span className="font-display font-black text-slate-600">3rd</span>
+                    <span className="font-display font-black text-slate-600">
+                      3rd
+                    </span>
                   </div>
                 </div>
               )}
@@ -1905,7 +2196,8 @@ export default function OwnerDashboardPage() {
                     Outlets Comparison Matrix
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Perform real-time comparison across all reporting restaurants
+                    Perform real-time comparison across all reporting
+                    restaurants
                   </p>
                 </div>
 
@@ -1996,13 +2288,19 @@ export default function OwnerDashboardPage() {
                       {filteredBranches.map((b) => {
                         const estProfit = Math.round(b.revenue * 0.28);
                         const inventoryCostEst = Math.round(b.revenue * 0.3);
-                        const kitchenEff = Math.max(85, Math.min(100, 98 - b.kitchenQueue * 2));
+                        const kitchenEff = Math.max(
+                          85,
+                          Math.min(100, 98 - b.kitchenQueue * 2)
+                        );
                         const deliveryEff = Math.max(
                           85,
-                          Math.min(100, 96 - b.pendingDeliveries * 3),
+                          Math.min(100, 96 - b.pendingDeliveries * 3)
                         );
                         return (
-                          <tr key={b.branchId} className="hover:bg-slate-900/10">
+                          <tr
+                            key={b.branchId}
+                            className="hover:bg-slate-900/10"
+                          >
                             <td className="py-3.5 font-semibold text-slate-200">
                               {b.name}
                               <span className="block text-[10px] text-slate-500 font-normal">
@@ -2042,7 +2340,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 5: STAFF Performance */}
         {activeTab === 'staff' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
               {[
                 {
@@ -2076,11 +2378,16 @@ export default function OwnerDashboardPage() {
                   color: 'text-purple-400',
                 },
               ].map((card, idx) => (
-                <div key={idx} className="bg-[#111827] border border-slate-800 p-4.5 rounded-2xl">
+                <div
+                  key={idx}
+                  className="bg-[#111827] border border-slate-800 p-4.5 rounded-2xl"
+                >
                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                     {card.title}
                   </span>
-                  <h3 className={`text-xl font-bold font-display mt-2 ${card.color}`}>
+                  <h3
+                    className={`text-xl font-bold font-display mt-2 ${card.color}`}
+                  >
                     {card.val}
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">{card.desc}</p>
@@ -2092,7 +2399,9 @@ export default function OwnerDashboardPage() {
               {/* Leaderboard profile cards */}
               <Card className="border-slate-800/80 bg-[#111827] p-6">
                 <CardHeader className="border-none p-0 mb-4">
-                  <h3 className="text-base font-bold font-display">Executive Crew Profiles</h3>
+                  <h3 className="text-base font-bold font-display">
+                    Executive Crew Profiles
+                  </h3>
                   <p className="text-[11px] text-slate-500">
                     Top operational leaders based on SLA records
                   </p>
@@ -2127,18 +2436,24 @@ export default function OwnerDashboardPage() {
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <h4 className="font-bold text-sm text-slate-200">{leader.name}</h4>
+                          <h4 className="font-bold text-sm text-slate-200">
+                            {leader.name}
+                          </h4>
                           <span className="text-[9px] font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full uppercase">
                             {leader.title}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-450 mt-1">{leader.desc}</p>
+                        <p className="text-xs text-slate-450 mt-1">
+                          {leader.desc}
+                        </p>
                         <span className="text-[10px] text-slate-550 block mt-1">
                           Branch: {leader.outlet}
                         </span>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-xs font-bold text-[#16A34A]">{leader.eff}</span>
+                        <span className="text-xs font-bold text-[#16A34A]">
+                          {leader.eff}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -2149,21 +2464,31 @@ export default function OwnerDashboardPage() {
               <Card className="border-slate-800/80 bg-[#111827] p-6 flex flex-col justify-between">
                 <div>
                   <CardHeader className="border-none p-0 mb-4 flex justify-between items-center">
-                    <h3 className="text-base font-bold font-display">Salary & Bonuses Audit</h3>
-                    <Button variant="outline" size="xs" onClick={exportPayrollCSV}>
-                      <Download size={12} className="mr-1" /> Export Staff Ledger
+                    <h3 className="text-base font-bold font-display">
+                      Salary & Bonuses Audit
+                    </h3>
+                    <Button
+                      variant="outline"
+                      size="xs"
+                      onClick={exportPayrollCSV}
+                    >
+                      <Download size={12} className="mr-1" /> Export Staff
+                      Ledger
                     </Button>
                   </CardHeader>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    ABC Restaurant management automatically computes attendance, ratings bonuses,
-                    and chef preparation velocities. The payout list is processed on the 1st of
-                    every month via the bank gateway.
+                    ABC Restaurant management automatically computes attendance,
+                    ratings bonuses, and chef preparation velocities. The payout
+                    list is processed on the 1st of every month via the bank
+                    gateway.
                   </p>
                 </div>
                 <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-850 mt-6 text-xs text-[#F8FAFC]">
                   <div className="flex justify-between border-b border-slate-800 pb-2">
                     <span>Active Shift Overtime Rate</span>
-                    <span className="font-mono text-emerald-450">₹120 / hour</span>
+                    <span className="font-mono text-emerald-450">
+                      ₹120 / hour
+                    </span>
                   </div>
                   <div className="flex justify-between pt-2">
                     <span>Standard Crew PF Match</span>
@@ -2177,13 +2502,21 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 6: BONUS MANAGEMENT */}
         {activeTab === 'bonuses' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Rules and payouts */}
               <Card className="border-slate-800/80 bg-[#111827] p-6 space-y-4">
                 <div>
-                  <h3 className="text-base font-bold font-display">Incentives Rules</h3>
-                  <p className="text-[11px] text-slate-500">Automated micro-incentive parameters</p>
+                  <h3 className="text-base font-bold font-display">
+                    Incentives Rules
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Automated micro-incentive parameters
+                  </p>
                 </div>
 
                 <div className="space-y-3 text-xs">
@@ -2211,14 +2544,22 @@ export default function OwnerDashboardPage() {
               {/* Branch Wise Distribution */}
               <Card className="border-slate-800/80 bg-[#111827] p-6 space-y-4">
                 <div>
-                  <h3 className="text-base font-bold font-display">Branch Payout Share</h3>
-                  <p className="text-[11px] text-slate-500">Total incentives parsed per branch</p>
+                  <h3 className="text-base font-bold font-display">
+                    Branch Payout Share
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Total incentives parsed per branch
+                  </p>
                 </div>
 
                 <div className="space-y-3.5">
                   {branches.slice(0, 4).map((b, idx) => {
-                    const share = Math.round(bonusDistributed * (0.35 - idx * 0.08));
-                    const percentage = Math.round((share / bonusDistributed) * 100);
+                    const share = Math.round(
+                      bonusDistributed * (0.35 - idx * 0.08)
+                    );
+                    const percentage = Math.round(
+                      (share / bonusDistributed) * 100
+                    );
                     return (
                       <div key={idx} className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
@@ -2242,7 +2583,9 @@ export default function OwnerDashboardPage() {
               {/* Role wise breakdown */}
               <Card className="border-slate-800/80 bg-[#111827] p-6 space-y-4">
                 <div>
-                  <h3 className="text-base font-bold font-display">Role Wise Distribution</h3>
+                  <h3 className="text-base font-bold font-display">
+                    Role Wise Distribution
+                  </h3>
                   <p className="text-[11px] text-slate-500">
                     Incentives split by job classification
                   </p>
@@ -2250,9 +2593,21 @@ export default function OwnerDashboardPage() {
 
                 <div className="space-y-3.5">
                   {[
-                    { name: 'Kitchen Staff & Chefs', share: 45, color: 'bg-[#2563EB]' },
-                    { name: 'Riders & Dispatch Team', share: 35, color: 'bg-[#16A34A]' },
-                    { name: 'Branch Managers', share: 20, color: 'bg-purple-500' },
+                    {
+                      name: 'Kitchen Staff & Chefs',
+                      share: 45,
+                      color: 'bg-[#2563EB]',
+                    },
+                    {
+                      name: 'Riders & Dispatch Team',
+                      share: 35,
+                      color: 'bg-[#16A34A]',
+                    },
+                    {
+                      name: 'Branch Managers',
+                      share: 20,
+                      color: 'bg-purple-500',
+                    },
                   ].map((role, idx) => (
                     <div key={idx} className="space-y-1">
                       <div className="flex justify-between text-xs font-semibold">
@@ -2275,7 +2630,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 7: INVENTORY MANAGEMENT */}
         {activeTab === 'inventory' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             {/* Inventory valuation KPIs */}
             <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
               {[
@@ -2289,7 +2648,11 @@ export default function OwnerDashboardPage() {
                   val: `₹${inventoryCost.toLocaleString('en-IN')}`,
                   color: 'text-slate-200',
                 },
-                { title: 'Low Stock Items', val: lowStockAlerts.length, color: 'text-rose-455' },
+                {
+                  title: 'Low Stock Items',
+                  val: lowStockAlerts.length,
+                  color: 'text-rose-455',
+                },
                 {
                   title: 'Expired Val.',
                   val: `₹${Math.round(wasteCost * 0.4).toLocaleString('en-IN')}`,
@@ -2300,7 +2663,11 @@ export default function OwnerDashboardPage() {
                   val: `₹${wasteCost.toLocaleString('en-IN')}`,
                   color: 'text-[#DC2626]',
                 },
-                { title: 'Ingredient Cost', val: '28.4%', color: 'text-[#16A34A]' },
+                {
+                  title: 'Ingredient Cost',
+                  val: '28.4%',
+                  color: 'text-[#16A34A]',
+                },
                 {
                   title: 'Purchase Cost',
                   val: `₹${(inventoryCost * 0.9).toLocaleString('en-IN')}`,
@@ -2319,7 +2686,9 @@ export default function OwnerDashboardPage() {
                   <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">
                     {card.title}
                   </span>
-                  <h3 className={`text-sm font-bold font-display mt-1.5 ${card.color}`}>
+                  <h3
+                    className={`text-sm font-bold font-display mt-1.5 ${card.color}`}
+                  >
                     {card.val}
                   </h3>
                 </div>
@@ -2330,7 +2699,9 @@ export default function OwnerDashboardPage() {
               {/* Ingredient analytics */}
               <Card className="lg:col-span-1 border-slate-800/80 bg-[#111827] p-6 space-y-4">
                 <CardHeader className="border-none p-0 mb-2">
-                  <h3 className="text-base font-bold font-display">Ingredient Profiles</h3>
+                  <h3 className="text-base font-bold font-display">
+                    Ingredient Profiles
+                  </h3>
                   <p className="text-[11px] text-slate-550 font-sans">
                     High consumption and wastage metrics
                   </p>
@@ -2383,7 +2754,11 @@ export default function OwnerDashboardPage() {
                       Authorize ingredients requests from outlet managers
                     </p>
                   </div>
-                  <Button variant="outline" size="xs" onClick={exportInventoryCSV}>
+                  <Button
+                    variant="outline"
+                    size="xs"
+                    onClick={exportInventoryCSV}
+                  >
                     Export Master Valuation
                   </Button>
                 </CardHeader>
@@ -2450,14 +2825,19 @@ export default function OwnerDashboardPage() {
                               key={idx}
                               className="flex justify-between items-center p-2.5 bg-slate-950/60 border border-slate-855 rounded-xl text-xs"
                             >
-                              <span className="font-semibold">{item.ingredientName}</span>
+                              <span className="font-semibold">
+                                {item.ingredientName}
+                              </span>
                               <div className="flex items-center gap-2">
                                 <span className="text-slate-550">Qty:</span>
                                 <input
                                   type="number"
                                   value={item.approvedQuantity}
                                   onChange={(e) =>
-                                    handleUpdateItemQuantity(idx, parseFloat(e.target.value) || 0)
+                                    handleUpdateItemQuantity(
+                                      idx,
+                                      parseFloat(e.target.value) || 0
+                                    )
                                   }
                                   className="w-16 bg-slate-900 border border-slate-800 text-white rounded text-center font-bold py-0.5 text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                                 />
@@ -2474,8 +2854,8 @@ export default function OwnerDashboardPage() {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center h-48 text-slate-550 text-xs font-sans">
-                        Select a replenishment request from the left list to authorize and edit
-                        approved quantities.
+                        Select a replenishment request from the left list to
+                        authorize and edit approved quantities.
                       </div>
                     )}
                   </div>
@@ -2487,7 +2867,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 8: SALES ANALYTICS */}
         {activeTab === 'sales' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[
                 {
@@ -2517,11 +2901,16 @@ export default function OwnerDashboardPage() {
                   color: 'text-[#DC2626]',
                 },
               ].map((card, idx) => (
-                <div key={idx} className="bg-[#111827] border border-slate-800 p-4.5 rounded-2xl">
+                <div
+                  key={idx}
+                  className="bg-[#111827] border border-slate-800 p-4.5 rounded-2xl"
+                >
                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                     {card.title}
                   </span>
-                  <h3 className={`text-xl font-bold font-display mt-2 ${card.color}`}>
+                  <h3
+                    className={`text-xl font-bold font-display mt-2 ${card.color}`}
+                  >
                     {card.val}
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">{card.desc}</p>
@@ -2533,7 +2922,9 @@ export default function OwnerDashboardPage() {
               {/* Sales by product list */}
               <Card className="lg:col-span-1 border-slate-800/80 bg-[#111827] p-6 space-y-4">
                 <div>
-                  <h3 className="text-base font-bold font-display">Sales By Product Class</h3>
+                  <h3 className="text-base font-bold font-display">
+                    Sales By Product Class
+                  </h3>
                   <p className="text-[11px] text-slate-500 font-sans">
                     Individual items order distributions
                   </p>
@@ -2544,7 +2935,9 @@ export default function OwnerDashboardPage() {
                       key={idx}
                       className="p-3 bg-slate-950/60 border border-slate-855 rounded-xl flex justify-between items-center text-xs"
                     >
-                      <span className="font-semibold text-slate-350">{p.name}</span>
+                      <span className="font-semibold text-slate-350">
+                        {p.name}
+                      </span>
                       <div className="text-right">
                         <span className="text-emerald-450 block font-bold">
                           ₹{p.revenue.toLocaleString('en-IN')}
@@ -2577,7 +2970,10 @@ export default function OwnerDashboardPage() {
                         <XAxis dataKey="hour" stroke="#64748B" fontSize={10} />
                         <YAxis stroke="#64748B" fontSize={10} />
                         <Tooltip
-                          contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }}
+                          contentStyle={{
+                            backgroundColor: '#0F172A',
+                            borderColor: '#334155',
+                          }}
                         />
                         <Line
                           type="monotone"
@@ -2600,9 +2996,16 @@ export default function OwnerDashboardPage() {
                         <XAxis dataKey="name" stroke="#64748B" fontSize={10} />
                         <YAxis stroke="#64748B" fontSize={10} />
                         <Tooltip
-                          contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }}
+                          contentStyle={{
+                            backgroundColor: '#0F172A',
+                            borderColor: '#334155',
+                          }}
                         />
-                        <Bar dataKey="sales" fill="#2563EB" radius={[3, 3, 0, 0]} />
+                        <Bar
+                          dataKey="sales"
+                          fill="#2563EB"
+                          radius={[3, 3, 0, 0]}
+                        />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -2614,7 +3017,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 9: CUSTOMER INSIGHTS */}
         {activeTab === 'customers' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-7 gap-4">
               {[
                 {
@@ -2667,7 +3074,9 @@ export default function OwnerDashboardPage() {
                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                     {card.title}
                   </span>
-                  <h3 className={`text-xl font-bold font-display mt-2 ${card.color}`}>
+                  <h3
+                    className={`text-xl font-bold font-display mt-2 ${card.color}`}
+                  >
                     {card.val}
                   </h3>
                   <p className="text-[9px] text-slate-400 mt-1">{card.desc}</p>
@@ -2695,9 +3104,16 @@ export default function OwnerDashboardPage() {
                     >
                       <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
                       <XAxis dataKey="name" stroke="#64748B" fontSize={11} />
-                      <YAxis stroke="#64748B" fontSize={11} domain={[4.0, 5.0]} />
+                      <YAxis
+                        stroke="#64748B"
+                        fontSize={11}
+                        domain={[4.0, 5.0]}
+                      />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }}
+                        contentStyle={{
+                          backgroundColor: '#0F172A',
+                          borderColor: '#334155',
+                        }}
                       />
                       <Line
                         name="CSAT Index"
@@ -2716,38 +3132,57 @@ export default function OwnerDashboardPage() {
               <Card className="lg:col-span-1 border-slate-800/80 bg-[#111827] p-6 flex flex-col justify-between">
                 <div>
                   <CardHeader className="border-none p-0 mb-4">
-                    <h3 className="text-base font-bold font-display">Feedback Sentiment</h3>
-                    <p className="text-[11px] text-slate-500">Real-time reviews classification</p>
+                    <h3 className="text-base font-bold font-display">
+                      Feedback Sentiment
+                    </h3>
+                    <p className="text-[11px] text-slate-500">
+                      Real-time reviews classification
+                    </p>
                   </CardHeader>
 
                   <div className="space-y-4 font-sans text-xs">
                     <div>
                       <div className="flex justify-between font-semibold mb-1">
-                        <span className="text-[#16A34A]">Positive Sentiment</span>
+                        <span className="text-[#16A34A]">
+                          Positive Sentiment
+                        </span>
                         <span>88%</span>
                       </div>
                       <div className="w-full h-2 bg-slate-950 rounded-full">
-                        <div className="h-full bg-emerald-500" style={{ width: '88%' }} />
+                        <div
+                          className="h-full bg-emerald-500"
+                          style={{ width: '88%' }}
+                        />
                       </div>
                     </div>
 
                     <div>
                       <div className="flex justify-between font-semibold mb-1">
-                        <span className="text-amber-500">Neutral Sentiment</span>
+                        <span className="text-amber-500">
+                          Neutral Sentiment
+                        </span>
                         <span>8%</span>
                       </div>
                       <div className="w-full h-2 bg-slate-950 rounded-full">
-                        <div className="h-full bg-[#F59E0B]" style={{ width: '8%' }} />
+                        <div
+                          className="h-full bg-[#F59E0B]"
+                          style={{ width: '8%' }}
+                        />
                       </div>
                     </div>
 
                     <div>
                       <div className="flex justify-between font-semibold mb-1">
-                        <span className="text-[#DC2626]">Negative Sentiment</span>
+                        <span className="text-[#DC2626]">
+                          Negative Sentiment
+                        </span>
                         <span>4%</span>
                       </div>
                       <div className="w-full h-2 bg-slate-950 rounded-full">
-                        <div className="h-full bg-rose-500" style={{ width: '4%' }} />
+                        <div
+                          className="h-full bg-rose-500"
+                          style={{ width: '4%' }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -2774,23 +3209,34 @@ export default function OwnerDashboardPage() {
                 <h3 className="text-base font-bold font-display text-white">
                   Kitchen Operations Command
                 </h3>
-                <p className="text-[11px] text-slate-500">Prep time and kitchen load tracking</p>
+                <p className="text-[11px] text-slate-500">
+                  Prep time and kitchen load tracking
+                </p>
               </CardHeader>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {[
                   { label: 'Orders Prepared', val: '420 orders' },
                   { label: 'Avg Prep Time', val: '8.4 minutes' },
-                  { label: 'Kitchen Load', val: `${summary?.kitchenLoad || 0} orders` },
+                  {
+                    label: 'Kitchen Load',
+                    val: `${summary?.kitchenLoad || 0} orders`,
+                  },
                   { label: 'Kitchen Eff. %', val: '96.5%' },
-                  { label: 'Delayed Orders', val: '3 orders', color: 'text-rose-450' },
+                  {
+                    label: 'Delayed Orders',
+                    val: '3 orders',
+                    color: 'text-rose-450',
+                  },
                   { label: 'Completed Orders', val: '417 orders' },
                 ].map((stat, idx) => (
                   <div
                     key={idx}
                     className="p-3 bg-slate-955/60 border border-slate-850 rounded-xl text-center"
                   >
-                    <span className="text-[9px] text-slate-500 block uppercase">{stat.label}</span>
+                    <span className="text-[9px] text-slate-500 block uppercase">
+                      {stat.label}
+                    </span>
                     <span
                       className={`text-xs font-bold mt-1.5 block ${stat.color || 'text-slate-200'}`}
                     >
@@ -2805,9 +3251,21 @@ export default function OwnerDashboardPage() {
                   Station Efficiency benchmarking
                 </span>
                 {[
-                  { name: 'Pizza Station (Karan Singh Leader)', val: 98, time: '6.5 mins average' },
-                  { name: 'Burgers & Grills Station', val: 94, time: '5.2 mins average' },
-                  { name: 'Desserts & Beverages Station', val: 99, time: '3.8 mins average' },
+                  {
+                    name: 'Pizza Station (Karan Singh Leader)',
+                    val: 98,
+                    time: '6.5 mins average',
+                  },
+                  {
+                    name: 'Burgers & Grills Station',
+                    val: 94,
+                    time: '5.2 mins average',
+                  },
+                  {
+                    name: 'Desserts & Beverages Station',
+                    val: 99,
+                    time: '3.8 mins average',
+                  },
                 ].map((station, idx) => (
                   <div key={idx} className="space-y-1">
                     <div className="flex justify-between font-semibold">
@@ -2817,7 +3275,10 @@ export default function OwnerDashboardPage() {
                       </span>
                     </div>
                     <div className="w-full h-1.5 bg-slate-950 rounded-full">
-                      <div className="h-full bg-indigo-500" style={{ width: `${station.val}%` }} />
+                      <div
+                        className="h-full bg-indigo-500"
+                        style={{ width: `${station.val}%` }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -2830,23 +3291,34 @@ export default function OwnerDashboardPage() {
                 <h3 className="text-base font-bold font-display text-white">
                   Logistics & Delivery Fleet Command
                 </h3>
-                <p className="text-[11px] text-slate-500">Real-time driver dispatch tracking</p>
+                <p className="text-[11px] text-slate-500">
+                  Real-time driver dispatch tracking
+                </p>
               </CardHeader>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {[
                   { label: 'Deliveries Today', val: '185 orders' },
                   { label: 'Avg Transit Time', val: '18.5 minutes' },
-                  { label: 'Failed Deliveries', val: '2 orders', color: 'text-[#DC2626]' },
+                  {
+                    label: 'Failed Deliveries',
+                    val: '2 orders',
+                    color: 'text-[#DC2626]',
+                  },
                   { label: 'Successful Del.', val: '183 orders' },
                   { label: 'Driver Earnings', val: '₹8,400' },
-                  { label: 'Driver Bonuses', val: `₹${Math.round(bonusDistributed * 0.35)}` },
+                  {
+                    label: 'Driver Bonuses',
+                    val: `₹${Math.round(bonusDistributed * 0.35)}`,
+                  },
                 ].map((stat, idx) => (
                   <div
                     key={idx}
                     className="p-3 bg-slate-955/60 border border-slate-850 rounded-xl text-center"
                   >
-                    <span className="text-[9px] text-slate-500 block uppercase">{stat.label}</span>
+                    <span className="text-[9px] text-slate-500 block uppercase">
+                      {stat.label}
+                    </span>
                     <span
                       className={`text-xs font-bold mt-1.5 block ${stat.color || 'text-slate-200'}`}
                     >
@@ -2873,7 +3345,10 @@ export default function OwnerDashboardPage() {
                       </span>
                     </div>
                     <div className="w-full h-1.5 bg-slate-950 rounded-full">
-                      <div className="h-full bg-emerald-500" style={{ width: `${driver.val}%` }} />
+                      <div
+                        className="h-full bg-emerald-500"
+                        style={{ width: `${driver.val}%` }}
+                      />
                     </div>
                   </div>
                 ))}
@@ -2884,7 +3359,11 @@ export default function OwnerDashboardPage() {
 
         {/* TAB 11: AI PREDICTIVE */}
         {activeTab === 'ai' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-6"
+          >
             {/* Branch Selection Bar */}
             <div className="bg-[#111827] border border-slate-800 p-4.5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
@@ -2892,7 +3371,8 @@ export default function OwnerDashboardPage() {
                   Load AI Predictive Analytics
                 </h3>
                 <p className="text-[11px] text-slate-500 mt-0.5 font-sans">
-                  Select outlet to load demand forecast and raw ingredients stockout risks models
+                  Select outlet to load demand forecast and raw ingredients
+                  stockout risks models
                 </p>
               </div>
               <div className="flex items-center gap-3 w-full md:w-auto">
@@ -2908,7 +3388,11 @@ export default function OwnerDashboardPage() {
                   className="bg-slate-950/60 text-white text-xs font-semibold rounded-xl border border-slate-800 focus:outline-none p-2 cursor-pointer w-full md:w-60"
                 >
                   {branches.map((b) => (
-                    <option key={b.branchId} value={b.branchId} className="bg-slate-900">
+                    <option
+                      key={b.branchId}
+                      value={b.branchId}
+                      className="bg-slate-900"
+                    >
                       {b.name} ({b.city})
                     </option>
                   ))}
@@ -2997,11 +3481,21 @@ export default function OwnerDashboardPage() {
                             },
                           ]}
                         >
-                          <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
-                          <XAxis dataKey="name" stroke="#64748B" fontSize={11} />
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="#1E293B"
+                          />
+                          <XAxis
+                            dataKey="name"
+                            stroke="#64748B"
+                            fontSize={11}
+                          />
                           <YAxis stroke="#64748B" fontSize={11} />
                           <Tooltip
-                            contentStyle={{ backgroundColor: '#0F172A', borderColor: '#334155' }}
+                            contentStyle={{
+                              backgroundColor: '#0F172A',
+                              borderColor: '#334155',
+                            }}
                           />
                           <Legend verticalAlign="top" height={36} />
                           <Line
@@ -3038,7 +3532,11 @@ export default function OwnerDashboardPage() {
                               daysLeft: 1.2,
                               suggestedRestockQty: 50,
                             },
-                            { ingredient: 'Pizza Dough', daysLeft: 0.5, suggestedRestockQty: 100 },
+                            {
+                              ingredient: 'Pizza Dough',
+                              daysLeft: 0.5,
+                              suggestedRestockQty: 100,
+                            },
                           ]
                         ).map((risk: any, idx: number) => (
                           <div
@@ -3067,15 +3565,25 @@ export default function OwnerDashboardPage() {
                       </span>
                       <div className="space-y-2.5">
                         <div className="flex justify-between border-b border-slate-805 pb-2">
-                          <span className="text-slate-450">Demand Increase Trend</span>
-                          <span className="font-semibold text-emerald-450">+12.4% MoM</span>
+                          <span className="text-slate-450">
+                            Demand Increase Trend
+                          </span>
+                          <span className="font-semibold text-emerald-450">
+                            +12.4% MoM
+                          </span>
                         </div>
                         <div className="flex justify-between border-b border-slate-805 pb-2">
-                          <span className="text-slate-450">Best Seller Prediction</span>
-                          <span className="font-semibold text-indigo-400">Double Cheese Pizza</span>
+                          <span className="text-slate-450">
+                            Best Seller Prediction
+                          </span>
+                          <span className="font-semibold text-indigo-400">
+                            Double Cheese Pizza
+                          </span>
                         </div>
                         <div className="flex justify-between pt-1">
-                          <span className="text-slate-450">Highest Branch Growth Forecast</span>
+                          <span className="text-slate-450">
+                            Highest Branch Growth Forecast
+                          </span>
                           <span className="font-semibold text-emerald-450">
                             Indiranagar (+15.2%)
                           </span>
@@ -3098,7 +3606,8 @@ export default function OwnerDashboardPage() {
               Unified Reports & Data Exporters
             </h3>
             <p className="text-xs text-slate-500 font-sans">
-              Download corporate performance and audit logs directly in CSV formats
+              Download corporate performance and audit logs directly in CSV
+              formats
             </p>
           </div>
           <span className="text-[10px] font-bold uppercase tracking-wider bg-indigo-500/10 text-[#2563EB] border border-[#2563EB]/25 px-2 py-0.5 rounded-full">
@@ -3109,9 +3618,12 @@ export default function OwnerDashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
           <div className="p-4 bg-slate-950/60 border border-slate-850 rounded-xl flex flex-col justify-between hover:border-slate-750 transition-all">
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase">Profit & Loss</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase">
+                Profit & Loss
+              </span>
               <p className="text-[11px] text-slate-400 mt-1.5 leading-normal">
-                Download detailed income statement including raw food, staff, and delivery costs.
+                Download detailed income statement including raw food, staff,
+                and delivery costs.
               </p>
             </div>
             <Button
@@ -3130,7 +3642,8 @@ export default function OwnerDashboardPage() {
                 Payroll & Bonuses
               </span>
               <p className="text-[11px] text-slate-400 mt-1.5 leading-normal">
-                Export staff logs including attendance ratios, base salary, and rated bonuses.
+                Export staff logs including attendance ratios, base salary, and
+                rated bonuses.
               </p>
             </div>
             <Button
@@ -3145,7 +3658,9 @@ export default function OwnerDashboardPage() {
 
           <div className="p-4 bg-slate-950/60 border border-slate-855 rounded-xl flex flex-col justify-between hover:border-slate-750 transition-all">
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase">Inventory Val.</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase">
+                Inventory Val.
+              </span>
               <p className="text-[11px] text-slate-400 mt-1.5 leading-normal">
                 Download master ingredient stock, units, and valuation logs.
               </p>
@@ -3166,7 +3681,8 @@ export default function OwnerDashboardPage() {
                 Branch Benchmarks
               </span>
               <p className="text-[11px] text-slate-400 mt-1.5 leading-normal">
-                Download city ratings, revenues, and active dispatches comparisons.
+                Download city ratings, revenues, and active dispatches
+                comparisons.
               </p>
             </div>
             <Button
@@ -3185,7 +3701,8 @@ export default function OwnerDashboardPage() {
                 PDF Audit Statement
               </span>
               <p className="text-[11px] text-slate-400 mt-1.5 leading-normal">
-                Generate a formatted PDF presentation containing executive summaries.
+                Generate a formatted PDF presentation containing executive
+                summaries.
               </p>
             </div>
             <Button
@@ -3193,7 +3710,9 @@ export default function OwnerDashboardPage() {
               variant="outline"
               className="mt-4 w-full flex items-center justify-center gap-1.5"
               onClick={() =>
-                toast.success('Formatted Executive PDF Report compiled and queued for print!')
+                toast.success(
+                  'Formatted Executive PDF Report compiled and queued for print!'
+                )
               }
             >
               <FileText size={12} /> Compile PDF

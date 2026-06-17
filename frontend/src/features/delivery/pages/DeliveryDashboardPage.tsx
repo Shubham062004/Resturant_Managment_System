@@ -32,15 +32,20 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function DeliveryDashboardPage() {
   const dispatch = useAppDispatch();
-  const { assignments, earnings, status } = useAppSelector((state) => state.delivery);
+  const { assignments, earnings, status } = useAppSelector(
+    (state) => state.delivery
+  );
   const { user } = useAppSelector((state) => state.auth);
 
   // Local statuses
-  const [driverStatus, setDriverStatus] = useState<'ONLINE' | 'BUSY' | 'OFFLINE'>('ONLINE');
+  const [driverStatus, setDriverStatus] = useState<
+    'ONLINE' | 'BUSY' | 'OFFLINE'
+  >('ONLINE');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const [alertMsg, setAlertMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(
-    null,
-  );
+  const [alertMsg, setAlertMsg] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   // Simulated GPS Coordinates
   const [gpsPercent, setGpsPercent] = useState<number>(0);
@@ -66,7 +71,10 @@ export default function DeliveryDashboardPage() {
     if (!user) return undefined;
 
     const token = localStorage.getItem('token');
-    const newSocket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
+    const newSocket = io(API_BASE_URL, {
+      auth: { token },
+      withCredentials: true,
+    });
 
     newSocket.on('new_assignment', (assignment: DeliveryAssignment) => {
       dispatch(socketAssignmentUpdate(assignment));
@@ -107,12 +115,15 @@ export default function DeliveryDashboardPage() {
               longitude: currentLng,
               heading: 45,
               speed: 35,
-            }),
+            })
           );
 
           if (next >= 100) {
             setGpsActive(false);
-            setAlertMsg({ type: 'success', text: 'You have arrived at the customer location!' });
+            setAlertMsg({
+              type: 'success',
+              text: 'You have arrived at the customer location!',
+            });
             return 100;
           }
           return next;
@@ -128,11 +139,20 @@ export default function DeliveryDashboardPage() {
     try {
       if (assignment.status === 'ASSIGNED') {
         await dispatch(acceptOrder(assignment.orderId)).unwrap();
-        setAlertMsg({ type: 'success', text: 'Order assignment accepted. Proceed to restaurant.' });
+        setAlertMsg({
+          type: 'success',
+          text: 'Order assignment accepted. Proceed to restaurant.',
+        });
         setSelectedOrderId(assignment.orderId);
-      } else if (assignment.status === 'ACCEPTED' || assignment.status === 'AT_RESTAURANT') {
+      } else if (
+        assignment.status === 'ACCEPTED' ||
+        assignment.status === 'AT_RESTAURANT'
+      ) {
         await dispatch(pickupOrder(assignment.orderId)).unwrap();
-        setAlertMsg({ type: 'success', text: 'Order picked up. Starting live GPS navigation.' });
+        setAlertMsg({
+          type: 'success',
+          text: 'Order picked up. Starting live GPS navigation.',
+        });
         setGpsPercent(0);
         setGpsActive(true);
       }
@@ -141,7 +161,9 @@ export default function DeliveryDashboardPage() {
     }
   };
 
-  const handlePhotoUploadSimulation = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUploadSimulation = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (!e.target.files || e.target.files.length === 0) return;
     setIsUploading(true);
     setUploadProgress(0);
@@ -152,7 +174,9 @@ export default function DeliveryDashboardPage() {
         if (p >= 100) {
           clearInterval(interval);
           setIsUploading(false);
-          setPhotoFile('https://images.unsplash.com/photo-1540189549336-e6e99c3679fe'); // valid url format for zod validator
+          setPhotoFile(
+            'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe'
+          ); // valid url format for zod validator
           return 100;
         }
         return p + 20;
@@ -162,7 +186,7 @@ export default function DeliveryDashboardPage() {
 
   // Canvas Drawing Methods
   const startDrawing = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>,
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
   ) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -175,14 +199,18 @@ export default function DeliveryDashboardPage() {
     ctx.beginPath();
 
     const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+    const x =
+      'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+    const y =
+      'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
 
     ctx.moveTo(x, y);
     setIsDrawing(true);
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  const draw = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -190,8 +218,10 @@ export default function DeliveryDashboardPage() {
     if (!ctx) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = 'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
-    const y = 'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
+    const x =
+      'touches' in e ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
+    const y =
+      'touches' in e ? e.touches[0].clientY - rect.top : e.clientY - rect.top;
 
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -214,12 +244,17 @@ export default function DeliveryDashboardPage() {
     try {
       // Send mock valid HTTP URLs for signature & image to bypass Zod validator constraints
       const proof = {
-        imageUrl: photoFile || 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe',
-        signatureUrl: 'https://res.cloudinary.com/demo/image/upload/signature.png',
+        imageUrl:
+          photoFile ||
+          'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe',
+        signatureUrl:
+          'https://res.cloudinary.com/demo/image/upload/signature.png',
         notes: podNotes || 'Delivered safely.',
       };
 
-      await dispatch(deliverOrder({ orderId: selectedOrderId, proof })).unwrap();
+      await dispatch(
+        deliverOrder({ orderId: selectedOrderId, proof })
+      ).unwrap();
       setAlertMsg({
         type: 'success',
         text: 'Delivery recorded successfully! Earnings balance updated.',
@@ -237,19 +272,34 @@ export default function DeliveryDashboardPage() {
       dispatch(fetchAssignedOrders());
       dispatch(fetchEarnings());
     } catch (err: any) {
-      setAlertMsg({ type: 'error', text: err.message || 'Failed to submit proof of delivery.' });
+      setAlertMsg({
+        type: 'error',
+        text: err.message || 'Failed to submit proof of delivery.',
+      });
     }
   };
 
   const getButtonProps = (status: string) => {
     switch (status) {
       case 'ASSIGNED':
-        return { label: 'Accept Order', icon: CheckCircle2, variant: 'primary' as const };
+        return {
+          label: 'Accept Order',
+          icon: CheckCircle2,
+          variant: 'primary' as const,
+        };
       case 'ACCEPTED':
       case 'AT_RESTAURANT':
-        return { label: 'Pick Up order', icon: Package, variant: 'outline' as const };
+        return {
+          label: 'Pick Up order',
+          icon: Package,
+          variant: 'outline' as const,
+        };
       default:
-        return { label: 'Active Delivery', icon: Navigation, variant: 'secondary' as const };
+        return {
+          label: 'Active Delivery',
+          icon: Navigation,
+          variant: 'secondary' as const,
+        };
     }
   };
 
@@ -273,7 +323,8 @@ export default function DeliveryDashboardPage() {
             Delivery Command Console
           </h1>
           <p className="text-slate-400 mt-1">
-            Accept dispatches, track target destinations, and upload proof-of-delivery receipts.
+            Accept dispatches, track target destinations, and upload
+            proof-of-delivery receipts.
           </p>
         </div>
 
@@ -304,7 +355,10 @@ export default function DeliveryDashboardPage() {
 
       {alertMsg && (
         <div className="relative">
-          <Alert variant={alertMsg.type === 'success' ? 'success' : 'error'} className="mb-2 pr-10">
+          <Alert
+            variant={alertMsg.type === 'success' ? 'success' : 'error'}
+            className="mb-2 pr-10"
+          >
             {alertMsg.text}
           </Alert>
           <button
@@ -351,7 +405,9 @@ export default function DeliveryDashboardPage() {
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Ratings Bonus Meter
             </span>
-            <p className="text-3xl font-extrabold text-white mt-1.5">+₹15.00 Base</p>
+            <p className="text-3xl font-extrabold text-white mt-1.5">
+              +₹15.00 Base
+            </p>
           </div>
           <div className="bg-amber-500/10 p-3 rounded-full border border-amber-500/20 text-amber-400">
             <Award className="w-6 h-6" />
@@ -369,11 +425,15 @@ export default function DeliveryDashboardPage() {
             </h2>
 
             {status === 'loading' && assignments.length === 0 ? (
-              <p className="text-slate-400 animate-pulse">Loading cargo dispatches...</p>
+              <p className="text-slate-400 animate-pulse">
+                Loading cargo dispatches...
+              </p>
             ) : assignments.length === 0 ? (
               <Card className="bg-slate-950/40 border-slate-800 p-12 text-center border-dashed flex flex-col items-center justify-center">
                 <Package className="w-12 h-12 text-slate-600 mb-3" />
-                <h3 className="text-base font-bold text-white">All Clear! No Active Dispatches</h3>
+                <h3 className="text-base font-bold text-white">
+                  All Clear! No Active Dispatches
+                </h3>
                 <p className="text-xs text-slate-400 mt-1">
                   Waiting for dispatcher auto-assignment...
                 </p>
@@ -410,11 +470,16 @@ export default function DeliveryDashboardPage() {
                             </Badge>
                           </div>
                           <p className="text-xs text-slate-400 leading-relaxed">
-                            <span className="font-semibold text-slate-300">Hub:</span>{' '}
-                            {assignment.order?.restaurant?.name || 'ABC Kitchen'}
+                            <span className="font-semibold text-slate-300">
+                              Hub:
+                            </span>{' '}
+                            {assignment.order?.restaurant?.name ||
+                              'ABC Kitchen'}
                           </p>
                           <p className="text-xs text-slate-400 leading-relaxed">
-                            <span className="font-semibold text-slate-300">Dropoff Address:</span>{' '}
+                            <span className="font-semibold text-slate-300">
+                              Dropoff Address:
+                            </span>{' '}
                             {assignment.order?.address?.addressLine1},{' '}
                             {assignment.order?.address?.city}
                           </p>
@@ -434,7 +499,10 @@ export default function DeliveryDashboardPage() {
                             {btnProps.label}
                           </Button>
                         ) : (
-                          <Badge variant="success" className="text-xs font-extrabold uppercase">
+                          <Badge
+                            variant="success"
+                            className="text-xs font-extrabold uppercase"
+                          >
                             Out For Delivery (Arriving...)
                           </Badge>
                         )}
@@ -492,13 +560,17 @@ export default function DeliveryDashboardPage() {
                 driverLocation={
                   gpsPercent > 0
                     ? {
-                        latitude: 12.9716 + (12.9816 - 12.9716) * (gpsPercent / 100),
-                        longitude: 77.5946 + (77.6046 - 77.5946) * (gpsPercent / 100),
+                        latitude:
+                          12.9716 + (12.9816 - 12.9716) * (gpsPercent / 100),
+                        longitude:
+                          77.5946 + (77.6046 - 77.5946) * (gpsPercent / 100),
                       }
                     : undefined
                 }
                 destination={
-                  selectedOrderId ? { latitude: 12.9816, longitude: 77.6046 } : undefined
+                  selectedOrderId
+                    ? { latitude: 12.9816, longitude: 77.6046 }
+                    : undefined
                 }
               />
               {gpsActive && (
@@ -506,7 +578,9 @@ export default function DeliveryDashboardPage() {
                   <span className="font-semibold text-slate-300 font-mono animate-pulse">
                     Navigating: {gpsPercent}% completed
                   </span>
-                  <span className="text-indigo-400 font-bold font-mono">ETA: 4 mins</span>
+                  <span className="text-indigo-400 font-bold font-mono">
+                    ETA: 4 mins
+                  </span>
                 </div>
               )}
             </div>
@@ -514,7 +588,8 @@ export default function DeliveryDashboardPage() {
 
           {/* Proof Of Delivery Panel */}
           {selectedOrderId &&
-            (assignments.find((a) => a.orderId === selectedOrderId)?.status === 'PICKED_UP' ||
+            (assignments.find((a) => a.orderId === selectedOrderId)?.status ===
+              'PICKED_UP' ||
               assignments.find((a) => a.orderId === selectedOrderId)?.status ===
                 'OUT_FOR_DELIVERY') && (
               <Card className="bg-slate-900 border-slate-850 p-5 space-y-4 shadow-xl">
@@ -538,7 +613,9 @@ export default function DeliveryDashboardPage() {
                           disabled={isUploading}
                         />
                         <Camera className="w-4 h-4 mr-2 text-indigo-400" />
-                        {photoFile ? 'Photo Captured ✓' : 'Click to Upload photo'}
+                        {photoFile
+                          ? 'Photo Captured ✓'
+                          : 'Click to Upload photo'}
                       </label>
                     </div>
                     {isUploading && (

@@ -1,4 +1,10 @@
-import { Search as SearchIcon, Clock, Trash2, X, TrendingUp } from 'lucide-react';
+import {
+  Search as SearchIcon,
+  Clock,
+  Trash2,
+  X,
+  TrendingUp,
+} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -25,7 +31,13 @@ export const SearchPage: React.FC = () => {
   const [inputVal, setInputVal] = useState(queryParam || categoryParam);
   const debouncedSearch = useDebounce(inputVal, 400);
 
-  const popularSearches = ['Pizza', 'Burgers', 'Biryani', 'Desserts', 'Cold Drinks'];
+  const popularSearches = [
+    'Pizza',
+    'Burgers',
+    'Biryani',
+    'Desserts',
+    'Cold Drinks',
+  ];
 
   useEffect(() => {
     setInputVal(queryParam || categoryParam);
@@ -74,7 +86,8 @@ export const SearchPage: React.FC = () => {
               What are you craving?
             </h1>
             <p className="text-neutral-400 text-sm md:text-base max-w-lg">
-              Search for dishes, cuisines, or even specific restaurants near you.
+              Search for dishes, cuisines, or even specific restaurants near
+              you.
             </p>
           </div>
 
@@ -86,7 +99,9 @@ export const SearchPage: React.FC = () => {
                 placeholder="Search for pizza, burgers, biryani..."
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                prefixIcon={<SearchIcon size={18} className="text-neutral-400" />}
+                prefixIcon={
+                  <SearchIcon size={18} className="text-neutral-400" />
+                }
                 className="bg-white/[0.04] border-white/10 text-white placeholder-neutral-500 h-14 text-sm focus:border-primary/50 shadow-xl"
               />
               {inputVal && (
@@ -170,11 +185,14 @@ export const SearchPage: React.FC = () => {
             <div className="lg:col-span-8">
               <div className="flex justify-between items-center text-xs text-neutral-400 mb-6">
                 <span>
-                  {isSearchLoading ? 'Searching...' : `Showing ${searchProducts.length} results`}
+                  {isSearchLoading
+                    ? 'Searching...'
+                    : `Showing ${searchProducts.length} results`}
                 </span>
                 {debouncedSearch && (
                   <span>
-                    Results for <strong className="text-white">"{debouncedSearch}"</strong>
+                    Results for{' '}
+                    <strong className="text-white">"{debouncedSearch}"</strong>
                   </span>
                 )}
               </div>

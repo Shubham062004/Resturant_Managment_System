@@ -3,7 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../../config/db';
 
 export class CustomersController {
-  public static async getAllCustomers(req: Request, res: Response, next: NextFunction) {
+  public static async getAllCustomers(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const customers = await prisma.user.findMany({
         where: { role: 'CUSTOMER' },
@@ -26,7 +30,11 @@ export class CustomersController {
     }
   }
 
-  public static async getCustomerDetails(req: Request, res: Response, next: NextFunction) {
+  public static async getCustomerDetails(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const customer = await prisma.user.findUnique({
         where: { id: req.params.id, role: 'CUSTOMER' },

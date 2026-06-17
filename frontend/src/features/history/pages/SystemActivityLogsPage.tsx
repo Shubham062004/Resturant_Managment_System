@@ -1,17 +1,30 @@
 import { format } from 'date-fns';
-import { Download, Search, Server, Activity, Database, TerminalSquare } from 'lucide-react';
+import {
+  Download,
+  Search,
+  Server,
+  Activity,
+  Database,
+  TerminalSquare,
+} from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 
 export default function SystemActivityLogsPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Reuse the audit endpoint but we'll mock some system metrics for the dashboard
-  const { data: response, isLoading } = useHistoryQuery('audit', { limit: 100 });
+  const { data: response, isLoading } = useHistoryQuery('audit', {
+    limit: 100,
+  });
   const records = useMemo(() => response?.data || [], [response]);
 
   return (
@@ -100,13 +113,19 @@ export default function SystemActivityLogsPage() {
               <tbody className="divide-y divide-border/10">
                 {records.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No system events recorded.
                     </td>
                   </tr>
                 ) : (
                   records.slice(0, 50).map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors font-mono">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors font-mono"
+                    >
                       <td className="px-6 py-4 text-slate-400 text-xs">
                         {format(new Date(row.timestamp), 'HH:mm:ss.SSS')}
                       </td>
@@ -117,7 +136,8 @@ export default function SystemActivityLogsPage() {
                       </td>
                       <td className="px-6 py-4 text-slate-300">api-gateway</td>
                       <td className="px-6 py-4 text-slate-400 text-xs">
-                        {row.action} event dispatched for {row.entity} successfully.
+                        {row.action} event dispatched for {row.entity}{' '}
+                        successfully.
                       </td>
                       <td className="px-6 py-4 text-emerald-400 text-xs">
                         {Math.floor(Math.random() * 100) + 10}ms

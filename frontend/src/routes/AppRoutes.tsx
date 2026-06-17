@@ -21,159 +21,259 @@ import ErrorBoundary from '../shared/components/ErrorBoundary';
 import { ToastProvider } from '../shared/components/ui/Toast';
 
 // Lazy Load Pages for Bundle Optimization
-const LandingPage = React.lazy(() => import('../features/customer/pages/LandingPage'));
-const AboutPage = React.lazy(() => import('../features/customer/pages/AboutPage'));
-const ContactPage = React.lazy(() => import('../features/customer/pages/ContactPage'));
-const BranchesPage = React.lazy(() => import('../features/customer/pages/BranchesPage'));
-const SearchPage = React.lazy(() => import('../features/customer/pages/SearchPage'));
-const OffersPage = React.lazy(() => import('../features/customer/pages/OffersPage'));
-const FavoritesPage = React.lazy(() => import('../features/customer/pages/FavoritesPage'));
-const OrderListPage = React.lazy(() => import('../features/orders/pages/OrderListPage'));
-const OrderTrackingPage = React.lazy(() => import('../features/orders/pages/OrderTrackingPage'));
+const LandingPage = React.lazy(
+  () => import('../features/customer/pages/LandingPage')
+);
+const AboutPage = React.lazy(
+  () => import('../features/customer/pages/AboutPage')
+);
+const ContactPage = React.lazy(
+  () => import('../features/customer/pages/ContactPage')
+);
+const BranchesPage = React.lazy(
+  () => import('../features/customer/pages/BranchesPage')
+);
+const SearchPage = React.lazy(
+  () => import('../features/customer/pages/SearchPage')
+);
+const OffersPage = React.lazy(
+  () => import('../features/customer/pages/OffersPage')
+);
+const FavoritesPage = React.lazy(
+  () => import('../features/customer/pages/FavoritesPage')
+);
+const OrderListPage = React.lazy(
+  () => import('../features/orders/pages/OrderListPage')
+);
+const OrderTrackingPage = React.lazy(
+  () => import('../features/orders/pages/OrderTrackingPage')
+);
 const DeliveryDashboardPage = React.lazy(
-  () => import('../features/delivery/pages/DeliveryDashboardPage'),
+  () => import('../features/delivery/pages/DeliveryDashboardPage')
 );
 const EarningsDashboardPage = React.lazy(
-  () => import('../features/delivery/pages/EarningsDashboardPage'),
+  () => import('../features/delivery/pages/EarningsDashboardPage')
 );
 const InventoryDashboardPage = React.lazy(
-  () => import('../features/inventory/pages/InventoryDashboardPage'),
+  () => import('../features/inventory/pages/InventoryDashboardPage')
 );
-const POSDashboardPage = React.lazy(() => import('../features/pos/pages/POSDashboardPage'));
-const OwnerDashboardPage = React.lazy(() => import('../features/admin/pages/OwnerDashboardPage'));
+const POSDashboardPage = React.lazy(
+  () => import('../features/pos/pages/POSDashboardPage')
+);
+const OwnerDashboardPage = React.lazy(
+  () => import('../features/admin/pages/OwnerDashboardPage')
+);
 // Branch Manager Module (Rebuilt)
 const BranchManagerLayout = React.lazy(
-  () => import('../features/manager/components/BranchManagerLayout'),
+  () => import('../features/manager/components/BranchManagerLayout')
 );
 const ManagerDashboardPage = React.lazy(
-  () => import('../features/manager/pages/ManagerDashboardPage'),
+  () => import('../features/manager/pages/ManagerDashboardPage')
 );
-const ManagerOrdersPage = React.lazy(() => import('../features/manager/pages/ManagerOrdersPage'));
-const ManagerPOSPage = React.lazy(() => import('../features/manager/pages/ManagerPOSPage'));
-const ManagerTablesPage = React.lazy(() => import('../features/manager/pages/ManagerTablesPage'));
+const ManagerOrdersPage = React.lazy(
+  () => import('../features/manager/pages/ManagerOrdersPage')
+);
+const ManagerPOSPage = React.lazy(
+  () => import('../features/manager/pages/ManagerPOSPage')
+);
+const ManagerTablesPage = React.lazy(
+  () => import('../features/manager/pages/ManagerTablesPage')
+);
 const ManagerReservationsPage = React.lazy(
-  () => import('../features/manager/pages/ManagerReservationsPage'),
+  () => import('../features/manager/pages/ManagerReservationsPage')
 );
-const ManagerStaffPage = React.lazy(() => import('../features/manager/pages/ManagerStaffPage'));
-const ManagerKitchenPage = React.lazy(() => import('../features/manager/pages/ManagerKitchenPage'));
+const ManagerStaffPage = React.lazy(
+  () => import('../features/manager/pages/ManagerStaffPage')
+);
+const ManagerKitchenPage = React.lazy(
+  () => import('../features/manager/pages/ManagerKitchenPage')
+);
 const ManagerInventoryPage = React.lazy(
-  () => import('../features/manager/pages/ManagerInventoryPage'),
+  () => import('../features/manager/pages/ManagerInventoryPage')
 );
 const ManagerCustomersPage = React.lazy(
-  () => import('../features/manager/pages/ManagerCustomersPage'),
+  () => import('../features/manager/pages/ManagerCustomersPage')
 );
 const ManagerAnalyticsPage = React.lazy(
-  () => import('../features/manager/pages/ManagerAnalyticsPage'),
+  () => import('../features/manager/pages/ManagerAnalyticsPage')
 );
 // Staff Portal
-const StaffLayout = React.lazy(() => import('../features/staff/components/StaffLayout'));
-const StaffDashboardPage = React.lazy(() => import('../features/staff/pages/StaffDashboardPage'));
-const StaffProfilePage = React.lazy(() => import('../features/staff/pages/StaffProfilePage'));
-const StaffWorkQueuePage = React.lazy(() => import('../features/staff/pages/StaffWorkQueuePage'));
-const StaffAttendancePage = React.lazy(() => import('../features/staff/pages/StaffAttendancePage'));
+const StaffLayout = React.lazy(
+  () => import('../features/staff/components/StaffLayout')
+);
+const StaffDashboardPage = React.lazy(
+  () => import('../features/staff/pages/StaffDashboardPage')
+);
+const StaffProfilePage = React.lazy(
+  () => import('../features/staff/pages/StaffProfilePage')
+);
+const StaffWorkQueuePage = React.lazy(
+  () => import('../features/staff/pages/StaffWorkQueuePage')
+);
+const StaffAttendancePage = React.lazy(
+  () => import('../features/staff/pages/StaffAttendancePage')
+);
 const StaffPerformancePage = React.lazy(
-  () => import('../features/staff/pages/StaffPerformancePage'),
+  () => import('../features/staff/pages/StaffPerformancePage')
 );
 const ReservationsPage = React.lazy(
-  () => import('../features/reservations/pages/ReservationsPage'),
+  () => import('../features/reservations/pages/ReservationsPage')
 );
-const FloorPlanPage = React.lazy(() => import('../features/floor-plan/pages/FloorPlanPage'));
-const TakeawayQueuePage = React.lazy(() => import('../features/takeaway/pages/TakeawayQueuePage'));
-const AdminLayout = React.lazy(() => import('../features/admin/components/AdminLayout'));
-const StaffManagementPage = React.lazy(() => import('../features/admin/pages/StaffManagementPage'));
+const FloorPlanPage = React.lazy(
+  () => import('../features/floor-plan/pages/FloorPlanPage')
+);
+const TakeawayQueuePage = React.lazy(
+  () => import('../features/takeaway/pages/TakeawayQueuePage')
+);
+const AdminLayout = React.lazy(
+  () => import('../features/admin/components/AdminLayout')
+);
+const StaffManagementPage = React.lazy(
+  () => import('../features/admin/pages/StaffManagementPage')
+);
 const BranchManagementPage = React.lazy(
-  () => import('../features/admin/pages/BranchManagementPage'),
+  () => import('../features/admin/pages/BranchManagementPage')
 );
 const IngredientManagementPage = React.lazy(
-  () => import('../features/admin/pages/IngredientManagementPage'),
+  () => import('../features/admin/pages/IngredientManagementPage')
 );
 const SupplierManagementPage = React.lazy(
-  () => import('../features/admin/pages/SupplierManagementPage'),
+  () => import('../features/admin/pages/SupplierManagementPage')
 );
-const MenuManagementPage = React.lazy(() => import('../features/admin/pages/MenuManagementPage'));
+const MenuManagementPage = React.lazy(
+  () => import('../features/admin/pages/MenuManagementPage')
+);
 const InventoryRequestsPage = React.lazy(
-  () => import('../features/admin/pages/InventoryRequestsPage'),
+  () => import('../features/admin/pages/InventoryRequestsPage')
 );
-const FinancePage = React.lazy(() => import('../features/admin/pages/FinancePage'));
-const AuditLogPage = React.lazy(() => import('../features/admin/pages/AuditLogPage'));
-const AdminOrdersPage = React.lazy(() => import('../features/admin/pages/AdminOrdersPage'));
+const FinancePage = React.lazy(
+  () => import('../features/admin/pages/FinancePage')
+);
+const AuditLogPage = React.lazy(
+  () => import('../features/admin/pages/AuditLogPage')
+);
+const AdminOrdersPage = React.lazy(
+  () => import('../features/admin/pages/AdminOrdersPage')
+);
 const AnalyticsDashboardPage = React.lazy(
-  () => import('../features/analytics/pages/AnalyticsDashboardPage'),
+  () => import('../features/analytics/pages/AnalyticsDashboardPage')
 );
-const AdminAIInsightsPage = React.lazy(() => import('../features/ai/pages/AdminAIInsightsPage'));
-const SystemHealthPage = React.lazy(() => import('../features/qa/pages/SystemHealthPage'));
+const AdminAIInsightsPage = React.lazy(
+  () => import('../features/ai/pages/AdminAIInsightsPage')
+);
+const SystemHealthPage = React.lazy(
+  () => import('../features/qa/pages/SystemHealthPage')
+);
 
 // History Module Pages
-const OrderHistoryPage = React.lazy(() => import('../features/history/pages/OrderHistoryPage'));
-const StaffHistoryPage = React.lazy(() => import('../features/history/pages/StaffHistoryPage'));
+const OrderHistoryPage = React.lazy(
+  () => import('../features/history/pages/OrderHistoryPage')
+);
+const StaffHistoryPage = React.lazy(
+  () => import('../features/history/pages/StaffHistoryPage')
+);
 const InventoryHistoryPage = React.lazy(
-  () => import('../features/history/pages/InventoryHistoryPage'),
+  () => import('../features/history/pages/InventoryHistoryPage')
 );
 const IngredientHistoryPage = React.lazy(
-  () => import('../features/history/pages/IngredientHistoryPage'),
+  () => import('../features/history/pages/IngredientHistoryPage')
 );
 const SupplierHistoryPage = React.lazy(
-  () => import('../features/history/pages/SupplierHistoryPage'),
+  () => import('../features/history/pages/SupplierHistoryPage')
 );
-const BranchHistoryPage = React.lazy(() => import('../features/history/pages/BranchHistoryPage'));
+const BranchHistoryPage = React.lazy(
+  () => import('../features/history/pages/BranchHistoryPage')
+);
 const CustomerActivityHistoryPage = React.lazy(
-  () => import('../features/history/pages/CustomerActivityHistoryPage'),
+  () => import('../features/history/pages/CustomerActivityHistoryPage')
 );
-const FinanceHistoryPage = React.lazy(() => import('../features/history/pages/FinanceHistoryPage'));
+const FinanceHistoryPage = React.lazy(
+  () => import('../features/history/pages/FinanceHistoryPage')
+);
 const AttendanceHistoryPage = React.lazy(
-  () => import('../features/history/pages/AttendanceHistoryPage'),
+  () => import('../features/history/pages/AttendanceHistoryPage')
 );
 const SalaryBonusHistoryPage = React.lazy(
-  () => import('../features/history/pages/SalaryBonusHistoryPage'),
+  () => import('../features/history/pages/SalaryBonusHistoryPage')
 );
-const AuditLogsPage = React.lazy(() => import('../features/history/pages/AuditLogsPage'));
+const AuditLogsPage = React.lazy(
+  () => import('../features/history/pages/AuditLogsPage')
+);
 const SystemActivityLogsPage = React.lazy(
-  () => import('../features/history/pages/SystemActivityLogsPage'),
+  () => import('../features/history/pages/SystemActivityLogsPage')
 );
 
 // Super Admin Pages
 const SuperAdminLayout = React.lazy(
-  () => import('../features/super-admin/components/SuperAdminLayout'),
+  () => import('../features/super-admin/components/SuperAdminLayout')
 );
 const GlobalDashboardPage = React.lazy(
-  () => import('../features/super-admin/pages/GlobalDashboardPage'),
+  () => import('../features/super-admin/pages/GlobalDashboardPage')
 );
 const OrganizationManagementPage = React.lazy(
-  () => import('../features/super-admin/pages/OrganizationManagementPage'),
+  () => import('../features/super-admin/pages/OrganizationManagementPage')
 );
 
 // Menu Catalog Pages
-const RestaurantsPage = React.lazy(() => import('../features/customer/pages/RestaurantsPage'));
-const RestaurantDetailPage = React.lazy(
-  () => import('../features/customer/pages/RestaurantDetailPage'),
+const RestaurantsPage = React.lazy(
+  () => import('../features/customer/pages/RestaurantsPage')
 );
-const ProductDetailPage = React.lazy(() => import('../features/customer/pages/ProductDetailPage'));
+const RestaurantDetailPage = React.lazy(
+  () => import('../features/customer/pages/RestaurantDetailPage')
+);
+const ProductDetailPage = React.lazy(
+  () => import('../features/customer/pages/ProductDetailPage')
+);
 const CategoryDetailPage = React.lazy(
-  () => import('../features/customer/pages/CategoryDetailPage'),
+  () => import('../features/customer/pages/CategoryDetailPage')
 );
 const AdminPlaceholderPage = React.lazy(
-  () => import('../features/customer/pages/AdminPlaceholderPage'),
+  () => import('../features/customer/pages/AdminPlaceholderPage')
 );
 
 // Cart & Checkout
 const CartPage = React.lazy(() => import('../features/cart/pages/CartPage'));
-const CheckoutPage = React.lazy(() => import('../features/cart/pages/CheckoutPage'));
-const AddressesPage = React.lazy(() => import('../features/cart/pages/AddressesPage'));
+const CheckoutPage = React.lazy(
+  () => import('../features/cart/pages/CheckoutPage')
+);
+const AddressesPage = React.lazy(
+  () => import('../features/cart/pages/AddressesPage')
+);
 
 // Auth Pages (Lazy)
 const LoginPage = React.lazy(() => import('../features/auth/pages/LoginPage'));
-const VerifyOtpPage = React.lazy(() => import('../features/auth/pages/VerifyOtpPage'));
-const RegisterPage = React.lazy(() => import('../features/auth/pages/RegisterPage'));
-const ForgotPasswordPage = React.lazy(() => import('../features/auth/pages/ForgotPasswordPage'));
-const ResetPasswordPage = React.lazy(() => import('../features/auth/pages/ResetPasswordPage'));
-const VerifyEmailPage = React.lazy(() => import('../features/auth/pages/VerifyEmailPage'));
-const GoogleCallbackPage = React.lazy(() => import('../features/auth/pages/GoogleCallbackPage'));
-const ProfilePage = React.lazy(() => import('../features/profile/pages/ProfilePage'));
+const VerifyOtpPage = React.lazy(
+  () => import('../features/auth/pages/VerifyOtpPage')
+);
+const RegisterPage = React.lazy(
+  () => import('../features/auth/pages/RegisterPage')
+);
+const ForgotPasswordPage = React.lazy(
+  () => import('../features/auth/pages/ForgotPasswordPage')
+);
+const ResetPasswordPage = React.lazy(
+  () => import('../features/auth/pages/ResetPasswordPage')
+);
+const VerifyEmailPage = React.lazy(
+  () => import('../features/auth/pages/VerifyEmailPage')
+);
+const GoogleCallbackPage = React.lazy(
+  () => import('../features/auth/pages/GoogleCallbackPage')
+);
+const ProfilePage = React.lazy(
+  () => import('../features/profile/pages/ProfilePage')
+);
 
 // Error/Fallback Pages (Lazy)
-const NotFoundPage = React.lazy(() => import('../features/customer/pages/NotFoundPage'));
-const ServerErrorPage = React.lazy(() => import('../features/customer/pages/ServerErrorPage'));
-const OfflinePage = React.lazy(() => import('../features/customer/pages/OfflinePage'));
+const NotFoundPage = React.lazy(
+  () => import('../features/customer/pages/NotFoundPage')
+);
+const ServerErrorPage = React.lazy(
+  () => import('../features/customer/pages/ServerErrorPage')
+);
+const OfflinePage = React.lazy(
+  () => import('../features/customer/pages/OfflinePage')
+);
 
 // Removed Kitchen Views
 // Loader component for Suspense Fallbacks
@@ -196,7 +296,7 @@ const AppRouter = () => {
       .then(() =>
         dispatch(fetchProfile()).catch(() => {
           /* Profile fetch failed but session is still valid — user stays authenticated */
-        }),
+        })
       )
       .catch(() => {
         /* no active session — public routes remain available */
@@ -278,15 +378,27 @@ const AppRouter = () => {
               {/* Menu Catalog Routes */}
               <Route path="/menu" element={<RestaurantsPage />} />
               <Route path="/restaurants" element={<RestaurantsPage />} />
-              <Route path="/restaurants/:slug" element={<RestaurantDetailPage />} />
+              <Route
+                path="/restaurants/:slug"
+                element={<RestaurantDetailPage />}
+              />
               <Route path="/product/:slug" element={<ProductDetailPage />} />
               <Route path="/products/:slug" element={<ProductDetailPage />} />
-              <Route path="/categories/:slug" element={<CategoryDetailPage />} />
+              <Route
+                path="/categories/:slug"
+                element={<CategoryDetailPage />}
+              />
 
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/checkout/address" element={<Navigate to="/checkout" replace />} />
-              <Route path="/checkout/payment" element={<Navigate to="/checkout" replace />} />
+              <Route
+                path="/checkout/address"
+                element={<Navigate to="/checkout" replace />}
+              />
+              <Route
+                path="/checkout/payment"
+                element={<Navigate to="/checkout" replace />}
+              />
 
               {/* Protected Customer Account Pages */}
               <Route
@@ -338,7 +450,10 @@ const AppRouter = () => {
               <Route path="settings" element={<div>Settings Page</div>} />
               <Route path="staff" element={<StaffManagementPage />} />
               <Route path="branches" element={<BranchManagementPage />} />
-              <Route path="ingredients" element={<IngredientManagementPage />} />
+              <Route
+                path="ingredients"
+                element={<IngredientManagementPage />}
+              />
               <Route path="inventory" element={<InventoryRequestsPage />} />
               <Route path="suppliers" element={<SupplierManagementPage />} />
               <Route path="menu" element={<MenuManagementPage />} />
@@ -354,7 +469,10 @@ const AppRouter = () => {
                 <Route path="ingredients" element={<IngredientHistoryPage />} />
                 <Route path="suppliers" element={<SupplierHistoryPage />} />
                 <Route path="branches" element={<BranchHistoryPage />} />
-                <Route path="customers" element={<CustomerActivityHistoryPage />} />
+                <Route
+                  path="customers"
+                  element={<CustomerActivityHistoryPage />}
+                />
                 <Route path="finance" element={<FinanceHistoryPage />} />
                 <Route path="attendance" element={<AttendanceHistoryPage />} />
                 <Route path="salary" element={<SalaryBonusHistoryPage />} />
@@ -363,7 +481,12 @@ const AppRouter = () => {
                 <Route index element={<OrderHistoryPage />} />
               </Route>
 
-              <Route path="*" element={<div className="p-6">Page not found in Admin Panel</div>} />
+              <Route
+                path="*"
+                element={
+                  <div className="p-6">Page not found in Admin Panel</div>
+                }
+              />
             </Route>
 
             {/* Branch Manager Operations Console */}
@@ -379,7 +502,10 @@ const AppRouter = () => {
               <Route path="orders" element={<ManagerOrdersPage />} />
               <Route path="pos" element={<ManagerPOSPage />} />
               <Route path="tables" element={<ManagerTablesPage />} />
-              <Route path="reservations" element={<ManagerReservationsPage />} />
+              <Route
+                path="reservations"
+                element={<ManagerReservationsPage />}
+              />
               <Route path="staff" element={<ManagerStaffPage />} />
               <Route path="kitchen" element={<ManagerKitchenPage />} />
               <Route path="inventory" element={<ManagerInventoryPage />} />
@@ -392,7 +518,12 @@ const AppRouter = () => {
               path="/staff"
               element={
                 <ProtectedRoute
-                  allowedRoles={['KITCHEN_STAFF', 'HEAD_CHEF', 'CHEF', 'KITCHEN_MANAGER']}
+                  allowedRoles={[
+                    'KITCHEN_STAFF',
+                    'HEAD_CHEF',
+                    'CHEF',
+                    'KITCHEN_MANAGER',
+                  ]}
                 >
                   <StaffLayout />
                 </ProtectedRoute>
@@ -408,7 +539,9 @@ const AppRouter = () => {
             <Route
               path="/inventory"
               element={
-                <ProtectedRoute allowedRoles={['INVENTORY_MANAGER', 'OPERATIONS_MANAGER']}>
+                <ProtectedRoute
+                  allowedRoles={['INVENTORY_MANAGER', 'OPERATIONS_MANAGER']}
+                >
                   <InventoryDashboardPage />
                 </ProtectedRoute>
               }
@@ -418,7 +551,9 @@ const AppRouter = () => {
             <Route
               path="/delivery"
               element={
-                <ProtectedRoute allowedRoles={['DELIVERY_PARTNER', 'DELIVERY_MANAGER']}>
+                <ProtectedRoute
+                  allowedRoles={['DELIVERY_PARTNER', 'DELIVERY_MANAGER']}
+                >
                   <DeliveryDashboardPage />
                 </ProtectedRoute>
               }
@@ -426,7 +561,9 @@ const AppRouter = () => {
             <Route
               path="/delivery/earnings"
               element={
-                <ProtectedRoute allowedRoles={['DELIVERY_PARTNER', 'DELIVERY_MANAGER']}>
+                <ProtectedRoute
+                  allowedRoles={['DELIVERY_PARTNER', 'DELIVERY_MANAGER']}
+                >
                   <EarningsDashboardPage />
                 </ProtectedRoute>
               }
@@ -446,17 +583,24 @@ const AppRouter = () => {
             <Route
               path="/super-admin"
               element={
-                <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}>
+                <ProtectedRoute
+                  allowedRoles={['SUPER_ADMIN', 'PLATFORM_ADMIN']}
+                >
                   <SuperAdminLayout />
                 </ProtectedRoute>
               }
             >
               <Route index element={<GlobalDashboardPage />} />
-              <Route path="organizations" element={<OrganizationManagementPage />} />
+              <Route
+                path="organizations"
+                element={<OrganizationManagementPage />}
+              />
               <Route
                 path="*"
                 element={
-                  <div className="p-6 text-slate-100">Page not found in Super Admin Panel</div>
+                  <div className="p-6 text-slate-100">
+                    Page not found in Super Admin Panel
+                  </div>
                 }
               />
             </Route>

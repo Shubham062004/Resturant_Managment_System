@@ -4,7 +4,11 @@ import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
 
 export class StaffController {
-  public static async getAllStaff(req: Request, res: Response, next: NextFunction) {
+  public static async getAllStaff(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const staff = await prisma.user.findMany({
         where: {
@@ -32,9 +36,19 @@ export class StaffController {
     }
   }
 
-  public static async createStaff(req: Request, res: Response, next: NextFunction) {
+  public static async createStaff(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { email, firstName, lastName, role, password: _password } = req.body;
+      const {
+        email,
+        firstName,
+        lastName,
+        role,
+        password: _password,
+      } = req.body;
 
       const exists = await prisma.user.findUnique({ where: { email } });
       if (exists) throw new AppError('User already exists', 400);
@@ -57,7 +71,11 @@ export class StaffController {
     }
   }
 
-  public static async updateStaffRole(req: Request, res: Response, next: NextFunction) {
+  public static async updateStaffRole(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { role } = req.body;
       const staff = await prisma.user.update({
@@ -71,7 +89,11 @@ export class StaffController {
     }
   }
 
-  public static async updateStaffProfile(req: Request, res: Response, next: NextFunction) {
+  public static async updateStaffProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { id } = req.params;
       const {
@@ -87,12 +109,15 @@ export class StaffController {
 
       const updateData: any = {};
       if (salary !== undefined) updateData.salary = salary;
-      if (attendanceCount !== undefined) updateData.attendanceCount = parseInt(attendanceCount);
+      if (attendanceCount !== undefined)
+        updateData.attendanceCount = parseInt(attendanceCount);
       if (performanceScore !== undefined)
         updateData.performanceScore = parseFloat(performanceScore);
-      if (assignedCategory !== undefined) updateData.assignedCategory = assignedCategory;
+      if (assignedCategory !== undefined)
+        updateData.assignedCategory = assignedCategory;
       if (role !== undefined) updateData.role = role;
-      if (organizationId !== undefined) updateData.organizationId = organizationId;
+      if (organizationId !== undefined)
+        updateData.organizationId = organizationId;
       if (franchiseId !== undefined) updateData.franchiseId = franchiseId;
       if (isActive !== undefined) updateData.isActive = isActive;
 
@@ -122,7 +147,11 @@ export class StaffController {
     }
   }
 
-  public static async bulkUpdateStaff(req: Request, res: Response, next: NextFunction) {
+  public static async bulkUpdateStaff(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { ids, role, organizationId, franchiseId, isActive } = req.body;
 
@@ -132,7 +161,8 @@ export class StaffController {
 
       const updateData: any = {};
       if (role !== undefined) updateData.role = role;
-      if (organizationId !== undefined) updateData.organizationId = organizationId;
+      if (organizationId !== undefined)
+        updateData.organizationId = organizationId;
       if (franchiseId !== undefined) updateData.franchiseId = franchiseId;
       if (isActive !== undefined) updateData.isActive = isActive;
 
@@ -143,7 +173,10 @@ export class StaffController {
 
       res
         .status(200)
-        .json({ status: 'success', message: `Successfully updated ${ids.length} staff members` });
+        .json({
+          status: 'success',
+          message: `Successfully updated ${ids.length} staff members`,
+        });
     } catch (error) {
       next(error);
     }

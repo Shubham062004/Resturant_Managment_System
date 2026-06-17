@@ -9,8 +9,13 @@ export interface ProtectedRouteProps {
   allowedRoles?: string[];
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
-  const { isAuthenticated, authStatus, user } = useAppSelector((state) => state.auth);
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  allowedRoles,
+}) => {
+  const { isAuthenticated, authStatus, user } = useAppSelector(
+    (state) => state.auth
+  );
   const location = useLocation();
 
   if (authStatus === 'loading') {

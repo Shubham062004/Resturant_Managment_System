@@ -69,7 +69,10 @@ export default function StaffLayout() {
               </p>
             </div>
           </div>
-          <button className="lg:hidden text-slate-400 hover:text-white" onClick={closeSidebar}>
+          <button
+            className="lg:hidden text-slate-400 hover:text-white"
+            onClick={closeSidebar}
+          >
             <X size={20} />
           </button>
         </div>
@@ -101,7 +104,9 @@ export default function StaffLayout() {
                   <Icon
                     size={18}
                     className={
-                      isActive ? 'text-orange-500' : 'text-slate-500 group-hover:text-slate-300'
+                      isActive
+                        ? 'text-orange-500'
+                        : 'text-slate-500 group-hover:text-slate-300'
                     }
                   />
                   <span className="text-sm">{link.label}</span>
@@ -109,7 +114,9 @@ export default function StaffLayout() {
                 {link.badge && (
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      isActive ? 'bg-orange-500 text-white' : 'bg-slate-800 text-slate-300'
+                      isActive
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-slate-800 text-slate-300'
                     }`}
                   >
                     {link.badge}
@@ -125,7 +132,11 @@ export default function StaffLayout() {
           <div className="flex items-center gap-3 px-2 mb-4">
             <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden">
               {user?.avatar ? (
-                <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                <img
+                  src={user.avatar}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <span className="text-sm font-bold text-slate-300">
                   {user?.firstName?.[0] || 'S'}
@@ -162,7 +173,9 @@ export default function StaffLayout() {
             </button>
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-slate-300">Active Shift</span>
+              <span className="text-xs font-semibold text-slate-300">
+                Active Shift
+              </span>
             </div>
           </div>
 

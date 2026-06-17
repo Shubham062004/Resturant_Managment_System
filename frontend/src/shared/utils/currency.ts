@@ -1,5 +1,6 @@
 export const formatCurrency = (amount: number | string): string => {
-  const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+  const numericAmount =
+    typeof amount === 'string' ? parseFloat(amount) : amount;
   if (isNaN(numericAmount)) return '₹ 0';
 
   const isInteger = numericAmount % 1 === 0;

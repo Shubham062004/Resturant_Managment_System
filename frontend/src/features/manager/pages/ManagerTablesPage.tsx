@@ -1,5 +1,12 @@
 import { motion } from 'framer-motion';
-import { LayoutGrid, Users, Clock, Coffee, AlertTriangle, Filter } from 'lucide-react';
+import {
+  LayoutGrid,
+  Users,
+  Clock,
+  Coffee,
+  AlertTriangle,
+  Filter,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
@@ -9,7 +16,11 @@ import { Badge } from '../../../shared/components/ui/Badge';
 import { Button } from '../../../shared/components/ui/Button';
 import { Card } from '../../../shared/components/ui/Card';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { fetchTables, updateTablePosition, tableUpdated } from '../../floor-plan/store/tableSlice';
+import {
+  fetchTables,
+  updateTablePosition,
+  tableUpdated,
+} from '../../floor-plan/store/tableSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
@@ -96,7 +107,9 @@ export default function ManagerTablesPage() {
   };
 
   const filteredTables =
-    activeFilter === 'ALL' ? tables : tables.filter((t) => t.status === activeFilter);
+    activeFilter === 'ALL'
+      ? tables
+      : tables.filter((t) => t.status === activeFilter);
 
   return (
     <div className="flex flex-col h-full space-y-6">
@@ -120,7 +133,11 @@ export default function ManagerTablesPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -148,28 +165,36 @@ export default function ManagerTablesPage() {
                 <div
                   className={`w-3 h-3 rounded-full ${activeFilter === 'ALL' ? 'bg-primary' : 'bg-slate-600'}`}
                 />
-                <span className="text-xs font-semibold text-slate-300">All</span>
+                <span className="text-xs font-semibold text-slate-300">
+                  All
+                </span>
               </div>
               <div
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={() => setActiveFilter('AVAILABLE')}
               >
                 <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                <span className="text-xs font-semibold text-slate-300">Available</span>
+                <span className="text-xs font-semibold text-slate-300">
+                  Available
+                </span>
               </div>
               <div
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={() => setActiveFilter('OCCUPIED')}
               >
                 <div className="w-3 h-3 rounded-full bg-rose-500" />
-                <span className="text-xs font-semibold text-slate-300">Occupied</span>
+                <span className="text-xs font-semibold text-slate-300">
+                  Occupied
+                </span>
               </div>
               <div
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={() => setActiveFilter('RESERVED')}
               >
                 <div className="w-3 h-3 rounded-full bg-amber-500" />
-                <span className="text-xs font-semibold text-slate-300">Reserved</span>
+                <span className="text-xs font-semibold text-slate-300">
+                  Reserved
+                </span>
               </div>
             </div>
 
@@ -226,7 +251,9 @@ export default function ManagerTablesPage() {
         {/* Sidebar Status List */}
         <div className="xl:col-span-1 bg-slate-900/40 rounded-2xl border border-border/20 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-border/20 bg-slate-900/80 backdrop-blur-md shrink-0">
-            <h3 className="font-bold text-white tracking-wide text-sm">Table List & Actions</h3>
+            <h3 className="font-bold text-white tracking-wide text-sm">
+              Table List & Actions
+            </h3>
           </div>
 
           <div className="flex-1 p-4 overflow-y-auto space-y-3 custom-scrollbar">
@@ -238,7 +265,9 @@ export default function ManagerTablesPage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="font-bold text-slate-200">{table.number}</h4>
-                    <p className="text-[10px] text-slate-500">Capacity: {table.capacity} Persons</p>
+                    <p className="text-[10px] text-slate-500">
+                      Capacity: {table.capacity} Persons
+                    </p>
                   </div>
                   <Badge
                     variant={

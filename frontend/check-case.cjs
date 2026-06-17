@@ -24,10 +24,15 @@ function checkDir(d) {
               i === base + '.js' ||
               i === base + '.css' ||
               i === base + '/index.ts' ||
-              i === base + '/index.tsx',
+              i === base + '/index.tsx'
           );
           if (!found) {
-            console.log('Case Sensitivity or Missing File Error in', p, '->', imp);
+            console.log(
+              'Case Sensitivity or Missing File Error in',
+              p,
+              '->',
+              imp
+            );
           }
         } else {
           console.log('Dir missing for', p, '->', imp);

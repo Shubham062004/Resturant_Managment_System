@@ -30,7 +30,8 @@ export default function StaffProfilePage() {
     bonus: 1250,
     incentives: 450,
   };
-  const totalEarnings = earnings.monthlySalary + earnings.bonus + earnings.incentives;
+  const totalEarnings =
+    earnings.monthlySalary + earnings.bonus + earnings.incentives;
 
   const toggleEarnings = () => setShowEarnings(!showEarnings);
 
@@ -42,7 +43,9 @@ export default function StaffProfilePage() {
     <div className="flex flex-col space-y-6 max-w-5xl mx-auto h-full overflow-y-auto custom-scrollbar pb-10">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold font-display text-white tracking-tight">My Profile</h1>
+        <h1 className="text-3xl font-bold font-display text-white tracking-tight">
+          My Profile
+        </h1>
         <p className="text-sm text-slate-400 mt-1">
           Manage your personal information and view earnings.
         </p>
@@ -54,7 +57,11 @@ export default function StaffProfilePage() {
           <Card className="p-6 bg-slate-900/60 border-border/20 text-center flex flex-col items-center">
             <div className="w-24 h-24 rounded-full bg-slate-800 border-4 border-slate-900 shadow-xl flex items-center justify-center overflow-hidden mb-4 relative group">
               {user?.avatar ? (
-                <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                <img
+                  src={user.avatar}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <span className="text-3xl font-bold text-slate-400">
                   {user?.firstName?.[0] || 'S'}
@@ -116,7 +123,9 @@ export default function StaffProfilePage() {
                   <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
                     Email Address
                   </p>
-                  <p className="text-sm text-slate-300 font-medium truncate w-48">{user?.email}</p>
+                  <p className="text-sm text-slate-300 font-medium truncate w-48">
+                    {user?.email}
+                  </p>
                 </div>
               </div>
             </div>
@@ -128,7 +137,8 @@ export default function StaffProfilePage() {
           {/* Employment Information */}
           <Card className="p-6 bg-slate-900/40 border-border/20">
             <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-wider flex items-center gap-2">
-              <CalendarDays size={16} className="text-sky-500" /> Employment Record
+              <CalendarDays size={16} className="text-sky-500" /> Employment
+              Record
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 bg-slate-950/50 rounded-xl border border-border/10">
@@ -156,7 +166,9 @@ export default function StaffProfilePage() {
                 <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">
                   Manager
                 </p>
-                <p className="font-bold text-slate-200">John Doe (Branch Mgr)</p>
+                <p className="font-bold text-slate-200">
+                  John Doe (Branch Mgr)
+                </p>
               </div>
             </div>
           </Card>
@@ -167,7 +179,8 @@ export default function StaffProfilePage() {
 
             <div className="flex justify-between items-center mb-6 relative">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Wallet size={16} className="text-emerald-500" /> Salary & Earnings
+                <Wallet size={16} className="text-emerald-500" /> Salary &
+                Earnings
               </h3>
               <button
                 onClick={toggleEarnings}
@@ -203,7 +216,9 @@ export default function StaffProfilePage() {
                   </div>
                   <div>
                     <p className="font-bold text-slate-200">Bonus</p>
-                    <p className="text-[10px] text-slate-500">From 5-Star Ratings</p>
+                    <p className="text-[10px] text-slate-500">
+                      From 5-Star Ratings
+                    </p>
                   </div>
                 </div>
                 <span
@@ -220,7 +235,9 @@ export default function StaffProfilePage() {
                   </div>
                   <div>
                     <p className="font-bold text-slate-200">Incentives</p>
-                    <p className="text-[10px] text-slate-500">Performance milestones</p>
+                    <p className="text-[10px] text-slate-500">
+                      Performance milestones
+                    </p>
                   </div>
                 </div>
                 <span

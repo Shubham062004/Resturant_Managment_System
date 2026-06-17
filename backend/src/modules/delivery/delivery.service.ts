@@ -12,14 +12,20 @@ export class DeliveryService {
       // Auto-assign: Find an active driver with least active assignments (Mock nearest driver logic)
       const availableDrivers = await prisma.deliveryPartner.findMany({
         where: { activeStatus: true },
-        include: { assignments: { where: { status: { notIn: ['DELIVERED', 'FAILED'] } } } },
+        include: {
+          assignments: {
+            where: { status: { notIn: ['DELIVERED', 'FAILED'] } },
+          },
+        },
       });
 
       if (availableDrivers.length === 0)
         throw new AppError('No drivers available for auto-assignment', 404);
 
       // Simple heuristic: pick driver with fewest active assignments
-      availableDrivers.sort((a: any, b: any) => a.assignments.length - b.assignments.length);
+      availableDrivers.sort(
+        (a: any, b: any) => a.assignments.length - b.assignments.length
+      );
       assignedDriverId = availableDrivers[0].id;
     }
 
@@ -39,7 +45,9 @@ export class DeliveryService {
 
     // Notify the assigned driver
     const io = getIO();
-    const driver = await prisma.deliveryPartner.findUnique({ where: { id: assignedDriverId } });
+    const driver = await prisma.deliveryPartner.findUnique({
+      where: { id: assignedDriverId },
+    });
     if (driver) {
       io.to(`driver_${driver.userId}`).emit('new_assignment', assignment);
     }
@@ -80,7 +88,8 @@ export class DeliveryService {
     });
 
     if (!assignment) throw new AppError('Assignment not found', 404);
-    if (assignment.driverId !== driver.id) throw new AppError('Unauthorized', 403);
+    if (assignment.driverId !== driver.id)
+      throw new AppError('Unauthorized', 403);
     if (assignment.status !== 'ASSIGNED')
       throw new AppError('Order already accepted or processed', 400);
 
@@ -114,7 +123,8 @@ export class DeliveryService {
     const assignment = await prisma.deliveryAssignment.findUnique({
       where: { orderId },
     });
-    if (!assignment || assignment.driverId !== driver.id) throw new AppError('Unauthorized', 403);
+    if (!assignment || assignment.driverId !== driver.id)
+      throw new AppError('Unauthorized', 403);
 
     const updated = await prisma.deliveryAssignment.update({
       where: { id: assignment.id },
@@ -153,7 +163,8 @@ export class DeliveryService {
       where: { orderId },
       include: { order: true },
     });
-    if (!assignment || assignment.driverId !== driver.id) throw new AppError('Unauthorized', 403);
+    if (!assignment || assignment.driverId !== driver.id)
+      throw new AppError('Unauthorized', 403);
 
     const updated = await prisma.deliveryAssignment.update({
       where: { id: assignment.id },
@@ -215,7 +226,10 @@ export class DeliveryService {
 
     const io = getIO();
     if (locationData.orderId) {
-      io.to(`order_${locationData.orderId}`).emit('driver_location_update', loc);
+      io.to(`order_${locationData.orderId}`).emit(
+        'driver_location_update',
+        loc
+      );
     }
     return loc;
   }
@@ -234,7 +248,7 @@ export class DeliveryService {
 
     const totalEarnings = earnings.reduce(
       (sum: number, e: any) => sum + Number(e.earnings) + Number(e.bonus || 0),
-      0,
+      0
     );
 
     return { totalEarnings, history: earnings };

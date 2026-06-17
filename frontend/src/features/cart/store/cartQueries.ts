@@ -61,7 +61,11 @@ export const useCart = (enabled = true) =>
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { productId: string; variantId?: string; quantity: number }) => {
+    mutationFn: async (payload: {
+      productId: string;
+      variantId?: string;
+      quantity: number;
+    }) => {
       const { data } = await apiClient.post('/cart/items', payload);
       return data.data as Cart;
     },
@@ -154,7 +158,10 @@ export const useCreateAddress = () => {
 export const useUpdateAddress = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...payload }: Partial<Omit<Address, 'id'>> & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...payload
+    }: Partial<Omit<Address, 'id'>> & { id: string }) => {
       const { data } = await apiClient.put(`/addresses/${id}`, payload);
       return data.data as Address;
     },

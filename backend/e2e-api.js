@@ -55,10 +55,15 @@ async function runE2E() {
   }
 
   // 1. Customer Flow
-  const loginRes = await testFlow('Customer Login', '/api/v1/auth/login', 'POST', {
-    email: 'customer@abc.com',
-    password: 'Customer@123',
-  });
+  const loginRes = await testFlow(
+    'Customer Login',
+    '/api/v1/auth/login',
+    'POST',
+    {
+      email: 'customer@abc.com',
+      password: 'Customer@123',
+    }
+  );
 
   let customerToken = loginRes?.token;
 
@@ -67,18 +72,35 @@ async function runE2E() {
 
   if (customerToken) {
     await testFlow('Fetch Cart', '/api/v1/cart', 'GET', null, customerToken);
-    await testFlow('Fetch Orders', '/api/v1/orders', 'GET', null, customerToken);
+    await testFlow(
+      'Fetch Orders',
+      '/api/v1/orders',
+      'GET',
+      null,
+      customerToken
+    );
   }
 
   // 2. Admin Flow
-  const adminLogin = await testFlow('Admin Login', '/api/v1/auth/login', 'POST', {
-    email: 'admin@abc.com',
-    password: 'Admin@123',
-  });
+  const adminLogin = await testFlow(
+    'Admin Login',
+    '/api/v1/auth/login',
+    'POST',
+    {
+      email: 'admin@abc.com',
+      password: 'Admin@123',
+    }
+  );
   let adminToken = adminLogin?.token;
 
   if (adminToken) {
-    await testFlow('Admin Dashboard', '/api/v1/admin/dashboard/metrics', 'GET', null, adminToken);
+    await testFlow(
+      'Admin Dashboard',
+      '/api/v1/admin/dashboard/metrics',
+      'GET',
+      null,
+      adminToken
+    );
   }
 
   // Summary

@@ -17,11 +17,13 @@ export const NotFoundPage: React.FC = () => {
 
       <div className="flex flex-col items-center justify-center min-h-screen bg-background text-center px-4">
         <div className="space-y-4 max-w-md">
-          <h1 className="text-6xl font-display font-black text-foreground">404</h1>
+          <h1 className="text-6xl font-display font-black text-foreground">
+            404
+          </h1>
           <h2 className="text-2xl font-bold text-foreground">Page Not Found</h2>
           <p className="text-muted-foreground text-base leading-relaxed pb-6">
-            We're sorry, but the page you are looking for doesn't exist, has been removed, or is
-            temporarily unavailable.
+            We're sorry, but the page you are looking for doesn't exist, has
+            been removed, or is temporarily unavailable.
           </p>
         </div>
 

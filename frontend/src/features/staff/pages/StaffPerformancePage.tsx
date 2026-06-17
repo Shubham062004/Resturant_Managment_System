@@ -1,4 +1,14 @@
-import { TrendingUp, Star, Award, Clock, Target, Trophy, Gift, Eye, EyeOff } from 'lucide-react';
+import {
+  TrendingUp,
+  Star,
+  Award,
+  Clock,
+  Target,
+  Trophy,
+  Gift,
+  Eye,
+  EyeOff,
+} from 'lucide-react';
 import React, { useState } from 'react';
 
 import { Badge } from '../../../shared/components/ui/Badge';
@@ -49,7 +59,9 @@ export default function StaffPerformancePage() {
           </div>
           <h3 className="text-2xl font-bold font-mono text-white mb-1">
             {metrics.todayCompleted}{' '}
-            <span className="text-sm font-sans font-normal text-slate-500">items</span>
+            <span className="text-sm font-sans font-normal text-slate-500">
+              items
+            </span>
           </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Completed Today
@@ -67,7 +79,9 @@ export default function StaffPerformancePage() {
               </Badge>
             )}
           </div>
-          <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.avgPrepTime}</h3>
+          <h3 className="text-2xl font-bold font-mono text-white mb-1">
+            {metrics.avgPrepTime}
+          </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Avg Prep Time
           </p>
@@ -81,7 +95,9 @@ export default function StaffPerformancePage() {
           </div>
           <h3 className="text-2xl font-bold font-mono text-white mb-1">
             {metrics.customerRating}{' '}
-            <span className="text-sm font-sans font-normal text-slate-500">/ 5.0</span>
+            <span className="text-sm font-sans font-normal text-slate-500">
+              / 5.0
+            </span>
           </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Customer Rating
@@ -129,7 +145,8 @@ export default function StaffPerformancePage() {
             <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-between">
               <div>
                 <p className="text-amber-500 font-bold flex items-center gap-2">
-                  <Star size={16} className="fill-amber-500" /> 5-Star Ratings Today
+                  <Star size={16} className="fill-amber-500" /> 5-Star Ratings
+                  Today
                 </p>
                 <p className="text-xs text-amber-500/70 mt-1">
                   Earn ₹{bonusData.bonusPerRating} for every perfect rating!
@@ -184,22 +201,36 @@ export default function StaffPerformancePage() {
           <div className="space-y-6">
             <div>
               <div className="flex justify-between items-end mb-2">
-                <span className="text-sm font-semibold text-slate-300">Preparation Speed</span>
-                <span className="text-xs font-bold text-emerald-500">Excellent</span>
+                <span className="text-sm font-semibold text-slate-300">
+                  Preparation Speed
+                </span>
+                <span className="text-xs font-bold text-emerald-500">
+                  Excellent
+                </span>
               </div>
               <div className="w-full bg-slate-800 rounded-full h-2">
-                <div className="bg-emerald-500 h-2 rounded-full" style={{ width: '85%' }}></div>
+                <div
+                  className="bg-emerald-500 h-2 rounded-full"
+                  style={{ width: '85%' }}
+                ></div>
               </div>
-              <p className="text-[10px] text-slate-500 mt-2">15% faster than branch average.</p>
+              <p className="text-[10px] text-slate-500 mt-2">
+                15% faster than branch average.
+              </p>
             </div>
 
             <div>
               <div className="flex justify-between items-end mb-2">
-                <span className="text-sm font-semibold text-slate-300">Quality / Accuracy</span>
+                <span className="text-sm font-semibold text-slate-300">
+                  Quality / Accuracy
+                </span>
                 <span className="text-xs font-bold text-indigo-500">98%</span>
               </div>
               <div className="w-full bg-slate-800 rounded-full h-2">
-                <div className="bg-indigo-500 h-2 rounded-full" style={{ width: '98%' }}></div>
+                <div
+                  className="bg-indigo-500 h-2 rounded-full"
+                  style={{ width: '98%' }}
+                ></div>
               </div>
               <p className="text-[10px] text-slate-500 mt-2">
                 Only 2 orders returned or remade this month.
@@ -208,13 +239,18 @@ export default function StaffPerformancePage() {
 
             <div>
               <div className="flex justify-between items-end mb-2">
-                <span className="text-sm font-semibold text-slate-300">Manager Evaluation</span>
+                <span className="text-sm font-semibold text-slate-300">
+                  Manager Evaluation
+                </span>
                 <span className="text-xs font-bold text-sky-500">
                   {metrics.managerRating} / 5.0
                 </span>
               </div>
               <div className="w-full bg-slate-800 rounded-full h-2">
-                <div className="bg-sky-500 h-2 rounded-full" style={{ width: '90%' }}></div>
+                <div
+                  className="bg-sky-500 h-2 rounded-full"
+                  style={{ width: '90%' }}
+                ></div>
               </div>
               <p className="text-[10px] text-slate-500 mt-2">
                 "Consistently delivers high quality under pressure."

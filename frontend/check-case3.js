@@ -16,7 +16,11 @@ function walk(dir) {
       let match;
       while ((match = importRegex.exec(c)) !== null) {
         const imp = match[1];
-        if (!imp.startsWith('.') && !imp.startsWith('@/') && imp.toLowerCase() !== imp) {
+        if (
+          !imp.startsWith('.') &&
+          !imp.startsWith('@/') &&
+          imp.toLowerCase() !== imp
+        ) {
           console.log('UPPERCASE IMPORT:', p, imp);
         }
       }

@@ -16,7 +16,12 @@ import { Button } from '../../../shared/components/ui/Button';
 import EmptyState from '../../../shared/components/ui/EmptyState';
 import { Input } from '../../../shared/components/ui/Input';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { useCart, useAddresses, useValidateCoupon, type Address } from '../store/cartQueries';
+import {
+  useCart,
+  useAddresses,
+  useValidateCoupon,
+  type Address,
+} from '../store/cartQueries';
 
 type CheckoutStep = 'address' | 'coupon' | 'payment';
 
@@ -32,7 +37,9 @@ export const CheckoutPage: React.FC = () => {
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [couponCode, setCouponCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [paymentProvider, setPaymentProvider] = useState<'CARD' | 'UPI' | 'COD'>('CARD');
+  const [paymentProvider, setPaymentProvider] = useState<
+    'CARD' | 'UPI' | 'COD'
+  >('CARD');
 
   if (!isAuthenticated) {
     navigate('/login', { state: { from: { pathname: '/checkout' } } });
@@ -63,11 +70,14 @@ export const CheckoutPage: React.FC = () => {
 
   const subtotal = cart.items.reduce(
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
-    0,
+    0
   );
   const taxAmount = subtotal * 0.05; // 5% GST
   const deliveryFee = subtotal > 500 ? 0 : 40; // Free delivery above 500
-  const total = Math.max(0, subtotal + taxAmount + deliveryFee - discountAmount);
+  const total = Math.max(
+    0,
+    subtotal + taxAmount + deliveryFee - discountAmount
+  );
 
   const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];
 
@@ -79,7 +89,9 @@ export const CheckoutPage: React.FC = () => {
         orderAmount: subtotal,
       });
       setDiscountAmount(result.discountAmount);
-      toast.success(`Coupon applied! You saved ₹${result.discountAmount.toFixed(0)}`);
+      toast.success(
+        `Coupon applied! You saved ₹${result.discountAmount.toFixed(0)}`
+      );
       setStep('payment');
     } catch {
       toast.error('Invalid or expired coupon');
@@ -108,33 +120,41 @@ export const CheckoutPage: React.FC = () => {
                 Secure Checkout
               </h1>
               <p className="text-neutral-400 text-sm mt-2 flex items-center gap-1">
-                <ShieldCheck size={16} className="text-emerald-500" /> End-to-end encrypted payment
+                <ShieldCheck size={16} className="text-emerald-500" />{' '}
+                End-to-end encrypted payment
               </p>
             </div>
 
             {/* Stepper */}
             <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto scrollbar-hide py-2">
-              {(['address', 'coupon', 'payment'] as CheckoutStep[]).map((s, i) => (
-                <React.Fragment key={s}>
-                  <button
-                    type="button"
-                    onClick={() => setStep(s)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
-                      step === s
-                        ? 'bg-primary/20 text-primary border border-primary/30 shadow-lg'
-                        : 'bg-white/5 text-neutral-400 border border-white/5 hover:text-white'
-                    }`}
-                  >
-                    <span
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === s ? 'bg-primary text-white' : 'bg-white/10 text-neutral-500'}`}
+              {(['address', 'coupon', 'payment'] as CheckoutStep[]).map(
+                (s, i) => (
+                  <React.Fragment key={s}>
+                    <button
+                      type="button"
+                      onClick={() => setStep(s)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                        step === s
+                          ? 'bg-primary/20 text-primary border border-primary/30 shadow-lg'
+                          : 'bg-white/5 text-neutral-400 border border-white/5 hover:text-white'
+                      }`}
                     >
-                      {i + 1}
-                    </span>
-                    {s}
-                  </button>
-                  {i < 2 && <ChevronRight size={14} className="text-neutral-700 shrink-0" />}
-                </React.Fragment>
-              ))}
+                      <span
+                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === s ? 'bg-primary text-white' : 'bg-white/10 text-neutral-500'}`}
+                      >
+                        {i + 1}
+                      </span>
+                      {s}
+                    </button>
+                    {i < 2 && (
+                      <ChevronRight
+                        size={14}
+                        className="text-neutral-700 shrink-0"
+                      />
+                    )}
+                  </React.Fragment>
+                )
+              )}
             </div>
           </div>
 
@@ -147,7 +167,9 @@ export const CheckoutPage: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                       <MapPin size={20} />
                     </div>
-                    <h2 className="text-xl font-bold font-display">Delivery Address</h2>
+                    <h2 className="text-xl font-bold font-display">
+                      Delivery Address
+                    </h2>
                   </div>
 
                   {addresses.length === 0 ? (
@@ -155,7 +177,10 @@ export const CheckoutPage: React.FC = () => {
                       <p className="text-neutral-400 mb-4">
                         You don't have any saved addresses yet.
                       </p>
-                      <Button variant="outline" onClick={() => navigate('/addresses')}>
+                      <Button
+                        variant="outline"
+                        onClick={() => navigate('/addresses')}
+                      >
                         Add New Address
                       </Button>
                     </div>
@@ -165,7 +190,8 @@ export const CheckoutPage: React.FC = () => {
                         <label
                           key={addr.id}
                           className={`flex items-start gap-4 p-5 rounded-2xl border cursor-pointer transition-all ${
-                            (selectedAddressId || defaultAddress?.id) === addr.id
+                            (selectedAddressId || defaultAddress?.id) ===
+                            addr.id
                               ? 'border-primary bg-primary/5 shadow-lg shadow-primary/10'
                               : 'border-white/10 bg-white/[0.01] hover:border-white/20'
                           }`}
@@ -174,7 +200,10 @@ export const CheckoutPage: React.FC = () => {
                             <input
                               type="radio"
                               name="address"
-                              checked={(selectedAddressId || defaultAddress?.id) === addr.id}
+                              checked={
+                                (selectedAddressId || defaultAddress?.id) ===
+                                addr.id
+                              }
                               onChange={() => setSelectedAddressId(addr.id)}
                               className="w-4 h-4 text-primary bg-transparent border-white/20 focus:ring-primary focus:ring-offset-gray-900"
                             />
@@ -219,17 +248,22 @@ export const CheckoutPage: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                       <Tag size={20} />
                     </div>
-                    <h2 className="text-xl font-bold font-display">Apply Promo Code</h2>
+                    <h2 className="text-xl font-bold font-display">
+                      Apply Promo Code
+                    </h2>
                   </div>
 
                   <div className="space-y-4">
                     <p className="text-neutral-400 text-sm">
-                      Have a coupon code? Enter it below to get a discount on your order.
+                      Have a coupon code? Enter it below to get a discount on
+                      your order.
                     </p>
                     <div className="flex gap-3">
                       <Input
                         value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        onChange={(e) =>
+                          setCouponCode(e.target.value.toUpperCase())
+                        }
                         placeholder="e.g. WELCOME50"
                         className="flex-1 bg-black/40 border-white/10 h-12 uppercase text-white font-bold tracking-wider"
                       />
@@ -246,7 +280,8 @@ export const CheckoutPage: React.FC = () => {
                       <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20">
                         <CheckCircle2 size={18} />
                         <span className="font-semibold text-sm">
-                          Code applied successfully! Saved ₹{discountAmount.toFixed(0)}
+                          Code applied successfully! Saved ₹
+                          {discountAmount.toFixed(0)}
                         </span>
                       </div>
                     )}
@@ -276,7 +311,9 @@ export const CheckoutPage: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                       <CreditCard size={20} />
                     </div>
-                    <h2 className="text-xl font-bold font-display">Payment Method</h2>
+                    <h2 className="text-xl font-bold font-display">
+                      Payment Method
+                    </h2>
                   </div>
 
                   <div className="space-y-4">
@@ -333,7 +370,8 @@ export const CheckoutPage: React.FC = () => {
             <div className="lg:col-span-5 sticky top-24">
               <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 sm:p-8 space-y-6">
                 <h3 className="text-xl font-bold font-display text-white border-b border-white/5 pb-4 flex items-center gap-2">
-                  <ShoppingBag size={20} className="text-primary" /> Order Details
+                  <ShoppingBag size={20} className="text-primary" /> Order
+                  Details
                 </h3>
 
                 <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
@@ -348,7 +386,9 @@ export const CheckoutPage: React.FC = () => {
                             {item.product.name}
                           </p>
                           {item.variant && (
-                            <p className="text-xs text-neutral-500">{item.variant.name}</p>
+                            <p className="text-xs text-neutral-500">
+                              {item.variant.name}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -382,14 +422,18 @@ export const CheckoutPage: React.FC = () => {
                     {deliveryFee === 0 ? (
                       <span className="text-emerald-400 font-bold">FREE</span>
                     ) : (
-                      <span className="text-white">₹{deliveryFee.toFixed(0)}</span>
+                      <span className="text-white">
+                        ₹{deliveryFee.toFixed(0)}
+                      </span>
                     )}
                   </div>
                 </div>
 
                 <div className="border-t border-white/5 pt-5 mt-5 flex justify-between items-end">
                   <div>
-                    <span className="text-sm text-neutral-400 block mb-1">Total to pay</span>
+                    <span className="text-sm text-neutral-400 block mb-1">
+                      Total to pay
+                    </span>
                     <span className="text-3xl font-bold font-display text-primary">
                       ₹{total.toFixed(0)}
                     </span>

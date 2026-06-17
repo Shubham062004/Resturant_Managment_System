@@ -1,5 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Flame, Search, MapPin, Tag, Home, LogOut, User, ShoppingBag } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Flame,
+  Search,
+  MapPin,
+  Tag,
+  Home,
+  LogOut,
+  User,
+  ShoppingBag,
+} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -83,7 +94,9 @@ export const Navbar: React.FC = () => {
             className="hidden lg:flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-emerald-500/20 transition-all duration-200"
           >
             <MapPin size={12} />
-            <span>Delivering to: {selectedBranch.name.replace('ABC - ', '')}</span>
+            <span>
+              Delivering to: {selectedBranch.name.replace('ABC - ', '')}
+            </span>
           </Link>
         )}
       </div>

@@ -54,13 +54,17 @@ export default function AdminLayout() {
   const dispatch = useDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const role = user?.role;
-  const userName = user ? `${user.firstName} ${user.lastName}`.trim() : 'Shubham';
+  const userName = user
+    ? `${user.firstName} ${user.lastName}`.trim()
+    : 'Shubham';
 
   // Sidebar States
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [branches, setBranches] = useState<Array<{ id: string; name: string }>>([]);
+  const [branches, setBranches] = useState<Array<{ id: string; name: string }>>(
+    []
+  );
   const [selectedBranch, setSelectedBranch] = useState('ALL');
 
   // Accordion active groups
@@ -73,7 +77,9 @@ export default function AdminLayout() {
   });
 
   const isOwner =
-    role === 'ORGANIZATION_OWNER' || role === 'FRANCHISE_OWNER' || role === 'SUPER_ADMIN';
+    role === 'ORGANIZATION_OWNER' ||
+    role === 'FRANCHISE_OWNER' ||
+    role === 'SUPER_ADMIN';
 
   // Fetch branches for dropdown selector
   useEffect(() => {
@@ -81,9 +87,16 @@ export default function AdminLayout() {
       .get('/admin/branches')
       .then((res) => {
         const branchList = res.data.data || [];
-        setBranches(branchList.map((b: any) => ({ id: b.id, name: b.name.replace('ABC - ', '') })));
+        setBranches(
+          branchList.map((b: any) => ({
+            id: b.id,
+            name: b.name.replace('ABC - ', ''),
+          }))
+        );
       })
-      .catch((err) => console.error('Error loading branches in sidebar selector:', err));
+      .catch((err) =>
+        console.error('Error loading branches in sidebar selector:', err)
+      );
   }, []);
 
   const handleLogout = async () => {
@@ -109,28 +122,68 @@ export default function AdminLayout() {
           name: 'Operations',
           icon: <LayoutGrid size={18} />,
           links: [
-            { name: 'Branch Management', path: '/admin/branches', icon: <MapPin size={18} /> },
-            { name: 'Menu Management', path: '/admin/menu', icon: <BookOpen size={18} /> },
-            { name: 'Orders', path: '/admin/orders', icon: <ClipboardList size={18} /> },
-            { name: 'Kitchen Operations', path: '/admin/kitchen', icon: <Activity size={18} /> },
-            { name: 'Inventory', path: '/admin/inventory', icon: <Box size={18} /> },
-            { name: 'Suppliers', path: '/admin/suppliers', icon: <Truck size={18} /> },
+            {
+              name: 'Branch Management',
+              path: '/admin/branches',
+              icon: <MapPin size={18} />,
+            },
+            {
+              name: 'Menu Management',
+              path: '/admin/menu',
+              icon: <BookOpen size={18} />,
+            },
+            {
+              name: 'Orders',
+              path: '/admin/orders',
+              icon: <ClipboardList size={18} />,
+            },
+            {
+              name: 'Kitchen Operations',
+              path: '/admin/kitchen',
+              icon: <Activity size={18} />,
+            },
+            {
+              name: 'Inventory',
+              path: '/admin/inventory',
+              icon: <Box size={18} />,
+            },
+            {
+              name: 'Suppliers',
+              path: '/admin/suppliers',
+              icon: <Truck size={18} />,
+            },
           ],
         },
         {
           name: 'Management',
           icon: <Users size={18} />,
           links: [
-            { name: 'Staff Management', path: '/admin/staff', icon: <Briefcase size={18} /> },
-            { name: 'Customer Database', path: '/admin/customers', icon: <Users size={18} /> },
+            {
+              name: 'Staff Management',
+              path: '/admin/staff',
+              icon: <Briefcase size={18} />,
+            },
+            {
+              name: 'Customer Database',
+              path: '/admin/customers',
+              icon: <Users size={18} />,
+            },
           ],
         },
         {
           name: 'Analytics',
           icon: <BarChart2 size={18} />,
           links: [
-            { name: 'Sales & BI Reports', path: '/admin/analytics', icon: <BarChart2 size={18} /> },
-            { name: 'AI Forecasting', path: '/admin/ai-insights', icon: <Brain size={18} /> },
+            {
+              name: 'Sales & BI Reports',
+              path: '/admin/analytics',
+              icon: <BarChart2 size={18} />,
+            },
+            {
+              name: 'AI Forecasting',
+              path: '/admin/ai-insights',
+              icon: <Brain size={18} />,
+            },
           ],
         },
         {
@@ -142,7 +195,11 @@ export default function AdminLayout() {
               path: '/admin/history/orders',
               icon: <ClipboardList size={18} />,
             },
-            { name: 'Staff History', path: '/admin/history/staff', icon: <Briefcase size={18} /> },
+            {
+              name: 'Staff History',
+              path: '/admin/history/staff',
+              icon: <Briefcase size={18} />,
+            },
             {
               name: 'Inventory History',
               path: '/admin/history/inventory',
@@ -158,7 +215,11 @@ export default function AdminLayout() {
               path: '/admin/history/suppliers',
               icon: <Truck size={18} />,
             },
-            { name: 'Branch History', path: '/admin/history/branches', icon: <MapPin size={18} /> },
+            {
+              name: 'Branch History',
+              path: '/admin/history/branches',
+              icon: <MapPin size={18} />,
+            },
             {
               name: 'Customer Activity History',
               path: '/admin/history/customers',
@@ -179,7 +240,11 @@ export default function AdminLayout() {
               path: '/admin/history/salary',
               icon: <DollarSign size={18} />,
             },
-            { name: 'Audit Logs', path: '/admin/history/audit', icon: <Shield size={18} /> },
+            {
+              name: 'Audit Logs',
+              path: '/admin/history/audit',
+              icon: <Shield size={18} />,
+            },
             {
               name: 'System Activity Logs',
               path: '/admin/history/system',
@@ -191,8 +256,16 @@ export default function AdminLayout() {
           name: 'Finance',
           icon: <DollarSign size={18} />,
           links: [
-            { name: 'Finance Control', path: '/admin/finance', icon: <DollarSign size={18} /> },
-            { name: 'P&L', path: '/admin/finance/pl', icon: <BarChart2 size={18} /> },
+            {
+              name: 'Finance Control',
+              path: '/admin/finance',
+              icon: <DollarSign size={18} />,
+            },
+            {
+              name: 'P&L',
+              path: '/admin/finance/pl',
+              icon: <BarChart2 size={18} />,
+            },
             {
               name: 'Tax Management',
               path: '/admin/finance/taxes',
@@ -204,8 +277,16 @@ export default function AdminLayout() {
           name: 'Settings',
           icon: <Settings size={18} />,
           links: [
-            { name: 'Audit & Security', path: '/admin/audit', icon: <Shield size={18} /> },
-            { name: 'System Settings', path: '/admin/settings', icon: <Settings size={18} /> },
+            {
+              name: 'Audit & Security',
+              path: '/admin/audit',
+              icon: <Shield size={18} />,
+            },
+            {
+              name: 'System Settings',
+              path: '/admin/settings',
+              icon: <Settings size={18} />,
+            },
           ],
         },
       ]
@@ -215,13 +296,23 @@ export default function AdminLayout() {
           icon: <LayoutGrid size={18} />,
           links: [
             { name: 'Dashboard', path: '/admin', icon: <Home size={18} /> },
-            { name: 'Orders Queue', path: '/admin/orders', icon: <Box size={18} /> },
+            {
+              name: 'Orders Queue',
+              path: '/admin/orders',
+              icon: <Box size={18} />,
+            },
           ],
         },
         {
           name: 'Analytics',
           icon: <BarChart2 size={18} />,
-          links: [{ name: 'Analytics', path: '/admin/analytics', icon: <BarChart2 size={18} /> }],
+          links: [
+            {
+              name: 'Analytics',
+              path: '/admin/analytics',
+              icon: <BarChart2 size={18} />,
+            },
+          ],
         },
         {
           name: 'History',
@@ -232,7 +323,11 @@ export default function AdminLayout() {
               path: '/admin/history/orders',
               icon: <ClipboardList size={18} />,
             },
-            { name: 'Staff History', path: '/admin/history/staff', icon: <Briefcase size={18} /> },
+            {
+              name: 'Staff History',
+              path: '/admin/history/staff',
+              icon: <Briefcase size={18} />,
+            },
             {
               name: 'Inventory History',
               path: '/admin/history/inventory',
@@ -248,7 +343,11 @@ export default function AdminLayout() {
               path: '/admin/history/suppliers',
               icon: <Truck size={18} />,
             },
-            { name: 'Branch History', path: '/admin/history/branches', icon: <MapPin size={18} /> },
+            {
+              name: 'Branch History',
+              path: '/admin/history/branches',
+              icon: <MapPin size={18} />,
+            },
             {
               name: 'Customer Activity History',
               path: '/admin/history/customers',
@@ -269,7 +368,11 @@ export default function AdminLayout() {
               path: '/admin/history/salary',
               icon: <DollarSign size={18} />,
             },
-            { name: 'Audit Logs', path: '/admin/history/audit', icon: <Shield size={18} /> },
+            {
+              name: 'Audit Logs',
+              path: '/admin/history/audit',
+              icon: <Shield size={18} />,
+            },
             {
               name: 'System Activity Logs',
               path: '/admin/history/system',
@@ -281,14 +384,28 @@ export default function AdminLayout() {
           name: 'Management',
           icon: <Users size={18} />,
           links: [
-            { name: 'Staff Log', path: '/admin/staff', icon: <Briefcase size={18} /> },
-            { name: 'Customers list', path: '/admin/customers', icon: <Users size={18} /> },
+            {
+              name: 'Staff Log',
+              path: '/admin/staff',
+              icon: <Briefcase size={18} />,
+            },
+            {
+              name: 'Customers list',
+              path: '/admin/customers',
+              icon: <Users size={18} />,
+            },
           ],
         },
         {
           name: 'Settings',
           icon: <Settings size={18} />,
-          links: [{ name: 'Settings', path: '/admin/settings', icon: <Settings size={18} /> }],
+          links: [
+            {
+              name: 'Settings',
+              path: '/admin/settings',
+              icon: <Settings size={18} />,
+            },
+          ],
         },
       ];
 
@@ -298,7 +415,7 @@ export default function AdminLayout() {
     return sidebarGroups
       .map((group) => {
         const filteredLinks = group.links.filter((link) =>
-          link.name.toLowerCase().includes(searchQuery.toLowerCase()),
+          link.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
         return {
           ...group,
@@ -339,7 +456,11 @@ export default function AdminLayout() {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="text-slate-400 hover:text-white p-1 hover:bg-slate-800 rounded-lg transition-colors hidden md:block"
           >
-            {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {isCollapsed ? (
+              <ChevronRight size={16} />
+            ) : (
+              <ChevronLeft size={16} />
+            )}
           </button>
         </div>
 
@@ -399,7 +520,9 @@ export default function AdminLayout() {
           {/* Expandable Sidebar groups accordion */}
           {filteredGroups.map((group) => {
             const isGroupOpen = openGroups[group.name];
-            const isGroupActive = group.links.some((l) => location.pathname === l.path);
+            const isGroupActive = group.links.some(
+              (l) => location.pathname === l.path
+            );
 
             return (
               <div key={group.name} className="space-y-1">
@@ -413,7 +536,11 @@ export default function AdminLayout() {
                       {group.icon}
                       {group.name}
                     </span>
-                    {isGroupOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                    {isGroupOpen ? (
+                      <ChevronUp size={12} />
+                    ) : (
+                      <ChevronDown size={12} />
+                    )}
                   </button>
                 ) : (
                   <div className="w-full border-t border-slate-800/60 my-2 pt-2 flex justify-center text-slate-600">
@@ -443,7 +570,9 @@ export default function AdminLayout() {
                                   : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
                               }`}
                             >
-                              <span className={`${isCollapsed ? 'mx-auto' : 'mr-3'}`}>
+                              <span
+                                className={`${isCollapsed ? 'mx-auto' : 'mr-3'}`}
+                              >
                                 {link.icon}
                               </span>
                               {!isCollapsed && <span>{link.name}</span>}
@@ -623,7 +752,9 @@ export default function AdminLayout() {
                             onClick={() => setMobileMenuOpen(false)}
                             className="flex items-center px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-800/50 hover:text-white"
                           >
-                            <span className="mr-3 text-slate-500">{link.icon}</span>
+                            <span className="mr-3 text-slate-500">
+                              {link.icon}
+                            </span>
                             {link.name}
                           </Link>
                         </li>
@@ -640,8 +771,12 @@ export default function AdminLayout() {
                     {userName.slice(0, 2)}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-200 leading-snug">{userName}</h4>
-                    <span className="text-[10px] text-slate-550 uppercase">Owner</span>
+                    <h4 className="text-xs font-bold text-slate-200 leading-snug">
+                      {userName}
+                    </h4>
+                    <span className="text-[10px] text-slate-550 uppercase">
+                      Owner
+                    </span>
                   </div>
                 </div>
                 <button

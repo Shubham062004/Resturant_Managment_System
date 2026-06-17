@@ -1,4 +1,10 @@
-import { Mail, CheckCircle2, AlertOctagon, ArrowLeft, RefreshCw } from 'lucide-react';
+import {
+  Mail,
+  CheckCircle2,
+  AlertOctagon,
+  ArrowLeft,
+  RefreshCw,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 
@@ -12,9 +18,9 @@ export const VerifyEmailPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
-  const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>(
-    token ? 'verifying' : 'idle',
-  );
+  const [status, setStatus] = useState<
+    'idle' | 'verifying' | 'success' | 'error'
+  >(token ? 'verifying' : 'idle');
   const [message, setMessage] = useState<string | null>(null);
 
   // Resend Verification Form State
@@ -36,7 +42,8 @@ export const VerifyEmailPage: React.FC = () => {
       } catch (err: any) {
         setStatus('error');
         setMessage(
-          err.response?.data?.error?.message || 'Verification token is invalid or has expired.',
+          err.response?.data?.error?.message ||
+            'Verification token is invalid or has expired.'
         );
       }
     };
@@ -52,7 +59,9 @@ export const VerifyEmailPage: React.FC = () => {
     setResendStatus(null);
 
     try {
-      const response = await apiClient.post('/auth/resend-verification', { email });
+      const response = await apiClient.post('/auth/resend-verification', {
+        email,
+      });
       setResendStatus({
         type: 'success',
         msg: response.data.message || 'Verification link resent.',
@@ -60,7 +69,9 @@ export const VerifyEmailPage: React.FC = () => {
     } catch (err: any) {
       setResendStatus({
         type: 'error',
-        msg: err.response?.data?.error?.message || 'Failed to dispatch verification link.',
+        msg:
+          err.response?.data?.error?.message ||
+          'Failed to dispatch verification link.',
       });
     } finally {
       setResendLoading(false);
@@ -73,7 +84,9 @@ export const VerifyEmailPage: React.FC = () => {
         return (
           <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent" />
-            <p className="text-white font-semibold font-display">Verifying account signatures...</p>
+            <p className="text-white font-semibold font-display">
+              Verifying account signatures...
+            </p>
             <p className="text-muted-foreground font-sans text-xs">
               Communicating verification updates to primary relational ledger
             </p>
@@ -89,8 +102,8 @@ export const VerifyEmailPage: React.FC = () => {
               {message}
             </Alert>
             <p className="text-muted-foreground font-sans text-sm leading-relaxed px-1">
-              Your email profile has been linked and certified. You can now log in to the terminal
-              and access authorized dashboards.
+              Your email profile has been linked and certified. You can now log
+              in to the terminal and access authorized dashboards.
             </p>
             <Link
               to="/login"
@@ -117,7 +130,11 @@ export const VerifyEmailPage: React.FC = () => {
             {resendStatus && (
               <Alert
                 variant={resendStatus.type === 'success' ? 'success' : 'error'}
-                title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}
+                title={
+                  resendStatus.type === 'success'
+                    ? 'Link Sent'
+                    : 'Request Refused'
+                }
               >
                 {resendStatus.msg}
               </Alert>
@@ -150,14 +167,18 @@ export const VerifyEmailPage: React.FC = () => {
         return (
           <div className="space-y-6">
             <p className="text-muted-foreground font-sans text-sm leading-relaxed text-center">
-              Please enter your registered email address to receive a verification link containing
-              system activation signatures.
+              Please enter your registered email address to receive a
+              verification link containing system activation signatures.
             </p>
 
             {resendStatus && (
               <Alert
                 variant={resendStatus.type === 'success' ? 'success' : 'error'}
-                title={resendStatus.type === 'success' ? 'Link Sent' : 'Request Refused'}
+                title={
+                  resendStatus.type === 'success'
+                    ? 'Link Sent'
+                    : 'Request Refused'
+                }
               >
                 {resendStatus.msg}
               </Alert>

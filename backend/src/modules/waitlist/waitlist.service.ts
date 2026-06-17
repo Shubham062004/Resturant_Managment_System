@@ -35,13 +35,16 @@ export class WaitlistService {
   }
 
   public static async updateWaitlistStatus(entryId: string, status: any) {
-    const existing = await prisma.waitlistEntry.findUnique({ where: { id: entryId } });
+    const existing = await prisma.waitlistEntry.findUnique({
+      where: { id: entryId },
+    });
     if (!existing) throw new AppError('Waitlist entry not found', 404);
 
     let updates: any = { status };
     if (status === 'NOTIFIED') updates.notifiedAt = new Date();
     if (status === 'SEATED') updates.seatedAt = new Date();
-    if (status === 'CANCELLED' || status === 'NO_SHOW') updates.cancelledAt = new Date();
+    if (status === 'CANCELLED' || status === 'NO_SHOW')
+      updates.cancelledAt = new Date();
 
     const updated = await prisma.waitlistEntry.update({
       where: { id: entryId },

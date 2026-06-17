@@ -12,15 +12,18 @@ export const updateStaffProfile = createAsyncThunk(
   async ({ id, data }: { id: string; data: any }) => {
     const response = await apiClient.patch(`/admin/staff/${id}`, data);
     return response.data.data;
-  },
+  }
 );
 
 export const bulkUpdateStaff = createAsyncThunk(
   'staff/bulkUpdate',
   async ({ ids, data }: { ids: string[]; data: any }) => {
-    const response = await apiClient.patch('/admin/staff/bulk-update', { ids, ...data });
+    const response = await apiClient.patch('/admin/staff/bulk-update', {
+      ids,
+      ...data,
+    });
     return { ids, updatedData: data, result: response.data };
-  },
+  }
 );
 
 const staffSlice = createSlice({
@@ -37,7 +40,9 @@ const staffSlice = createSlice({
         state.list = action.payload;
       })
       .addCase(updateStaffProfile.fulfilled, (state, action) => {
-        const index = state.list.findIndex((s: any) => s.id === action.payload.id);
+        const index = state.list.findIndex(
+          (s: any) => s.id === action.payload.id
+        );
         if (index !== -1) {
           state.list[index] = { ...state.list[index], ...action.payload };
         }

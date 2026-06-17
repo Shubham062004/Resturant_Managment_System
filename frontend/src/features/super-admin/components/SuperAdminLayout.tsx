@@ -7,11 +7,31 @@ export default function SuperAdminLayout() {
   const location = useLocation();
 
   const links = [
-    { name: 'Platform Dashboard', path: '/super-admin', icon: <Globe size={20} /> },
-    { name: 'Organizations', path: '/super-admin/organizations', icon: <Building2 size={20} /> },
-    { name: 'Franchises', path: '/super-admin/franchises', icon: <Store size={20} /> },
-    { name: 'Platform Health', path: '/super-admin/health', icon: <Activity size={20} /> },
-    { name: 'Global Settings', path: '/super-admin/settings', icon: <Settings size={20} /> },
+    {
+      name: 'Platform Dashboard',
+      path: '/super-admin',
+      icon: <Globe size={20} />,
+    },
+    {
+      name: 'Organizations',
+      path: '/super-admin/organizations',
+      icon: <Building2 size={20} />,
+    },
+    {
+      name: 'Franchises',
+      path: '/super-admin/franchises',
+      icon: <Store size={20} />,
+    },
+    {
+      name: 'Platform Health',
+      path: '/super-admin/health',
+      icon: <Activity size={20} />,
+    },
+    {
+      name: 'Global Settings',
+      path: '/super-admin/settings',
+      icon: <Settings size={20} />,
+    },
   ];
 
   return (
@@ -48,10 +68,14 @@ export default function SuperAdminLayout() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         <header className="h-16 bg-slate-800 border-b border-slate-700 flex items-center px-6 justify-between shadow-sm z-10">
-          <h1 className="text-xl font-bold text-white">Super Admin Management</h1>
+          <h1 className="text-xl font-bold text-white">
+            Super Admin Management
+          </h1>
           <div className="flex items-center space-x-6">
             <NotificationCenter />
-            <span className="text-sm font-medium text-blue-400">Platform Admin</span>
+            <span className="text-sm font-medium text-blue-400">
+              Platform Admin
+            </span>
           </div>
         </header>
         <div className="flex-1 overflow-auto p-6 bg-slate-900 text-slate-200">

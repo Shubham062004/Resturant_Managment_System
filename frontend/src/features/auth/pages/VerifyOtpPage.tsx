@@ -77,7 +77,9 @@ export const VerifyOtpPage: React.FC = () => {
             label="One-Time Password"
             placeholder="123456"
             value={otp}
-            onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            onChange={(e) =>
+              setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))
+            }
             prefixIcon={<ShieldCheck size={16} />}
             required
             maxLength={6}

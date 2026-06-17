@@ -5,7 +5,11 @@ export class CouponService {
   /**
    * Validate a coupon code for an order
    */
-  public static async validateCoupon(code: string, userId: string, orderAmount: number) {
+  public static async validateCoupon(
+    code: string,
+    userId: string,
+    orderAmount: number
+  ) {
     const coupon = await prisma.coupon.findUnique({
       where: { code: code.toUpperCase() },
     });
@@ -31,7 +35,10 @@ export class CouponService {
     }
 
     if (orderAmount < Number(coupon.minimumAmount)) {
-      throw new AppError(`Minimum order amount of ${coupon.minimumAmount} required`, 400);
+      throw new AppError(
+        `Minimum order amount of ${coupon.minimumAmount} required`,
+        400
+      );
     }
 
     // Check if user already used this coupon (optional rule: one use per user)

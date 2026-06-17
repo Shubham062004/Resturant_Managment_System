@@ -44,7 +44,10 @@ export class RecommendationService {
    * Fetch trending items.
    */
   public static async getTrending() {
-    const products = await prisma.product.findMany({ take: 5, orderBy: { basePrice: 'desc' } }); // Mock logic
+    const products = await prisma.product.findMany({
+      take: 5,
+      orderBy: { basePrice: 'desc' },
+    }); // Mock logic
     return products.map((p) => ({
       product: p,
       trendReason: 'Trending in your city',

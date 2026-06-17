@@ -53,27 +53,36 @@ export const fetchActiveOrders = createAsyncThunk(
       const response = await apiClient.get('/kitchen/orders');
       return response.data.data.orders;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
       return rejectWithValue(
-        error.response?.data?.error?.message || 'Failed to fetch kitchen orders',
+        error.response?.data?.error?.message || 'Failed to fetch kitchen orders'
       );
     }
-  },
+  }
 );
 
 export const updateOrderStatus = createAsyncThunk(
   'kitchen/updateOrderStatus',
-  async ({ id, status }: { id: string; status: string }, { rejectWithValue }) => {
+  async (
+    { id, status }: { id: string; status: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await apiClient.patch(`/kitchen/orders/${id}/status`, { status });
+      const response = await apiClient.patch(`/kitchen/orders/${id}/status`, {
+        status,
+      });
       return response.data.data.order;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
       return rejectWithValue(
-        error.response?.data?.error?.message || 'Failed to update order status',
+        error.response?.data?.error?.message || 'Failed to update order status'
       );
     }
-  },
+  }
 );
 
 const kitchenSlice = createSlice({
@@ -122,5 +131,6 @@ const kitchenSlice = createSlice({
   },
 });
 
-export const { receiveNewOrder, receiveOrderStatusUpdate } = kitchenSlice.actions;
+export const { receiveNewOrder, receiveOrderStatusUpdate } =
+  kitchenSlice.actions;
 export default kitchenSlice.reducer;

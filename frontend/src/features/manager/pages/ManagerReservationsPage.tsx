@@ -25,7 +25,9 @@ import {
 export default function ManagerReservationsPage() {
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const { reservations, status: resStatus } = useAppSelector((state) => state.reservations);
+  const { reservations, status: resStatus } = useAppSelector(
+    (state) => state.reservations
+  );
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
@@ -85,7 +87,7 @@ export default function ManagerReservationsPage() {
     .sort(
       (a, b) =>
         new Date(`${a.reservationDate}T${a.reservationTime}`).getTime() -
-        new Date(`${b.reservationDate}T${b.reservationTime}`).getTime(),
+        new Date(`${b.reservationDate}T${b.reservationTime}`).getTime()
     );
 
   return (
@@ -125,7 +127,11 @@ export default function ManagerReservationsPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -142,7 +148,10 @@ export default function ManagerReservationsPage() {
           </div>
         ) : filteredReservations.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 bg-slate-900/40 rounded-2xl border border-border/20 text-slate-500">
-            <CalendarCheck size={48} className="mb-4 opacity-50 text-slate-600" />
+            <CalendarCheck
+              size={48}
+              className="mb-4 opacity-50 text-slate-600"
+            />
             <p className="text-sm font-semibold">
               No reservations found for {dateFilter.toLowerCase()}.
             </p>
@@ -164,7 +173,8 @@ export default function ManagerReservationsPage() {
                         {res.customer?.firstName} {res.customer?.lastName}
                       </h3>
                       <p className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
-                        <Phone size={12} /> {res.customer?.phone || 'No phone provided'}
+                        <Phone size={12} />{' '}
+                        {res.customer?.phone || 'No phone provided'}
                       </p>
                     </div>
                     <Badge
@@ -182,7 +192,9 @@ export default function ManagerReservationsPage() {
                       <p className="text-sm text-slate-200 flex items-center gap-1.5 font-medium">
                         <Clock size={14} className="text-primary" />
                         {res.reservationTime}{' '}
-                        <span className="text-xs text-slate-500 ml-1">({res.reservationDate})</span>
+                        <span className="text-xs text-slate-500 ml-1">
+                          ({res.reservationDate})
+                        </span>
                       </p>
                     </div>
                     <div>
@@ -209,14 +221,19 @@ export default function ManagerReservationsPage() {
                     {res.status === 'PENDING' && (
                       <>
                         <Button
-                          onClick={() => handleUpdateStatus(res.id, 'CONFIRMED')}
+                          onClick={() =>
+                            handleUpdateStatus(res.id, 'CONFIRMED')
+                          }
                           size="sm"
                           className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 text-xs font-bold"
                         >
-                          <CheckCircle size={14} className="inline mr-1" /> Confirm
+                          <CheckCircle size={14} className="inline mr-1" />{' '}
+                          Confirm
                         </Button>
                         <Button
-                          onClick={() => handleUpdateStatus(res.id, 'CANCELLED')}
+                          onClick={() =>
+                            handleUpdateStatus(res.id, 'CANCELLED')
+                          }
                           size="sm"
                           className="flex-1 bg-rose-500/20 text-rose-500 border border-rose-500/30 hover:bg-rose-500/30 py-1.5 text-xs font-bold"
                         >
@@ -227,7 +244,9 @@ export default function ManagerReservationsPage() {
                     {res.status === 'CONFIRMED' && (
                       <>
                         <Button
-                          onClick={() => handleUpdateStatus(res.id, 'CHECKED_IN')}
+                          onClick={() =>
+                            handleUpdateStatus(res.id, 'CHECKED_IN')
+                          }
                           size="sm"
                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 text-xs font-bold"
                         >

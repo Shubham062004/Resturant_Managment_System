@@ -26,7 +26,11 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 import { formatCurrency } from '../../../shared/utils/currency';
 
@@ -35,7 +39,9 @@ const COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6'];
 export default function FinanceHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: response, isLoading } = useHistoryQuery('finance', { limit: 500 });
+  const { data: response, isLoading } = useHistoryQuery('finance', {
+    limit: 500,
+  });
 
   // The finance API currently returns aggregated metrics instead of a flat list
   const metrics = useMemo(() => response?.data || {}, [response]);
@@ -119,7 +125,7 @@ export default function FinanceHistoryPage() {
       (r: any) =>
         r.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         r.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.branch?.toLowerCase().includes(searchTerm.toLowerCase()),
+        r.branch?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [chartData.ledger, searchTerm]);
 
@@ -170,7 +176,9 @@ export default function FinanceHistoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="bg-slate-900/40 border-border/20 lg:col-span-2">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Revenue vs Profit (6 Months)</h3>
+            <h3 className="font-bold text-white text-sm">
+              Revenue vs Profit (6 Months)
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -181,7 +189,11 @@ export default function FinanceHistoryPage() {
                   data={chartData.profitTrend}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="month"
                     stroke="#94a3b8"
@@ -246,7 +258,10 @@ export default function FinanceHistoryPage() {
                     dataKey="value"
                   >
                     {chartData.expenseBreakdown.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <RechartsTooltip
@@ -303,13 +318,19 @@ export default function FinanceHistoryPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredLedger.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No transactions found.
                     </td>
                   </tr>
                 ) : (
                   filteredLedger.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
                       <td className="px-6 py-4 text-slate-400">
                         {format(row.date, 'dd MMM yyyy')}
                       </td>
@@ -328,7 +349,9 @@ export default function FinanceHistoryPage() {
                           {row.category}
                         </Badge>
                       </td>
-                      <td className="px-6 py-4 font-medium text-white">{row.description}</td>
+                      <td className="px-6 py-4 font-medium text-white">
+                        {row.description}
+                      </td>
                       <td className="px-6 py-4 text-slate-400">{row.branch}</td>
                       <td
                         className={`px-6 py-4 font-bold text-right ${row.amount > 0 ? 'text-emerald-400' : 'text-rose-400'}`}

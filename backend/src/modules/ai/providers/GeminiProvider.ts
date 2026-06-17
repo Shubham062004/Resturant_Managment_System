@@ -14,19 +14,27 @@ export class GeminiProvider implements AIProvider {
     }
   }
 
-  async generateCompletion(prompt: string, options?: AICompletionOptions): Promise<string> {
+  async generateCompletion(
+    prompt: string,
+    options?: AICompletionOptions
+  ): Promise<string> {
     // In a real implementation, we would use the @google/genai SDK here.
     // For now, we mock the response or perform a direct REST API call.
     console.log(
-      `[GeminiProvider] Generating completion using model ${options?.model || this.defaultModel}`,
+      `[GeminiProvider] Generating completion using model ${options?.model || this.defaultModel}`
     );
 
     // Mocked AI Response
     return `[Mock Gemini Response] Based on the context: "${prompt.substring(0, 50)}...", here is the generated output.`;
   }
 
-  async chat(messages: AIChatMessage[], _options?: AICompletionOptions): Promise<string> {
-    console.log(`[GeminiProvider] Chat session with ${messages.length} messages.`);
+  async chat(
+    messages: AIChatMessage[],
+    _options?: AICompletionOptions
+  ): Promise<string> {
+    console.log(
+      `[GeminiProvider] Chat session with ${messages.length} messages.`
+    );
     const lastMessage = messages[messages.length - 1];
 
     // Mocked Chat Response

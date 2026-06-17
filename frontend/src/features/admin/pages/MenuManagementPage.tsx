@@ -124,7 +124,9 @@ export default function MenuManagementPage() {
       setShowAddEditModal(false);
       loadData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Error saving menu item.');
+      toast.error(
+        err.response?.data?.error?.message || 'Error saving menu item.'
+      );
     }
   };
 
@@ -133,7 +135,9 @@ export default function MenuManagementPage() {
       await apiClient.patch(`/admin/products/${prod.id}`, {
         isAvailable: !prod.isAvailable,
       });
-      toast.success(`${prod.name} is now ${!prod.isAvailable ? 'Available' : 'Unavailable'}`);
+      toast.success(
+        `${prod.name} is now ${!prod.isAvailable ? 'Available' : 'Unavailable'}`
+      );
       loadData();
     } catch (err: any) {
       toast.error('Failed to change item availability.');
@@ -153,7 +157,9 @@ export default function MenuManagementPage() {
   };
 
   const filteredProducts = products
-    .filter((p) => selectedCategoryId === 'ALL' || p.categoryId === selectedCategoryId)
+    .filter(
+      (p) => selectedCategoryId === 'ALL' || p.categoryId === selectedCategoryId
+    )
     .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const totalItems = products.length;
@@ -161,7 +167,9 @@ export default function MenuManagementPage() {
   const nonVegCount = totalItems - vegCount;
   const averagePrice =
     products.length > 0
-      ? Math.round(products.reduce((acc, p) => acc + p.basePrice, 0) / products.length)
+      ? Math.round(
+          products.reduce((acc, p) => acc + p.basePrice, 0) / products.length
+        )
       : 0;
   const featuredCount = products.filter((p) => p.featured).length;
 
@@ -174,8 +182,8 @@ export default function MenuManagementPage() {
             Menu Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Configure restaurant dishes, base retail prices, dietary tags, and live menu item
-            availability.
+            Configure restaurant dishes, base retail prices, dietary tags, and
+            live menu item availability.
           </p>
         </div>
         <Button
@@ -192,8 +200,12 @@ export default function MenuManagementPage() {
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Catalog Size
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-white">{totalItems} Dishes</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Active menu items</span>
+          <p className="text-3xl font-bold font-display mt-2 text-white">
+            {totalItems} Dishes
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Active menu items
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
@@ -201,26 +213,38 @@ export default function MenuManagementPage() {
             Veg / Non-Veg Split
           </p>
           <p className="text-2xl font-bold font-display mt-2 text-[#16A34A]">
-            {vegCount} <span className="text-xs text-slate-400 font-normal">Veg</span> /{' '}
-            {nonVegCount} <span className="text-xs text-slate-400 font-normal">Non-Veg</span>
+            {vegCount}{' '}
+            <span className="text-xs text-slate-400 font-normal">Veg</span> /{' '}
+            {nonVegCount}{' '}
+            <span className="text-xs text-slate-400 font-normal">Non-Veg</span>
           </p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Dietary classifications</span>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Dietary classifications
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Avg Menu Price
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">₹{averagePrice}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Base retail average</span>
+          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">
+            ₹{averagePrice}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Base retail average
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Featured Dishes
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">{featuredCount}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Promoted menu items</span>
+          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">
+            {featuredCount}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Promoted menu items
+          </span>
         </Card>
       </div>
 
@@ -228,7 +252,9 @@ export default function MenuManagementPage() {
       <Card className="border-slate-800 bg-[#111827] rounded-2xl p-6 shadow-lg">
         <CardHeader className="border-none p-0 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h3 className="text-lg font-bold font-display text-white">Active Catalog</h3>
+            <h3 className="text-lg font-bold font-display text-white">
+              Active Catalog
+            </h3>
             <p className="text-xs text-slate-400">
               Manage pricing, availability toggles, and culinary categories
             </p>
@@ -271,7 +297,9 @@ export default function MenuManagementPage() {
             <RefreshCw className="animate-spin text-primary w-10 h-10" />
           </div>
         ) : filteredProducts.length === 0 ? (
-          <p className="text-slate-500 text-sm text-center py-8">No menu items found.</p>
+          <p className="text-slate-500 text-sm text-center py-8">
+            No menu items found.
+          </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((p) => (
@@ -280,7 +308,9 @@ export default function MenuManagementPage() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className={`p-5 rounded-2xl border bg-gradient-to-b from-slate-900/60 to-slate-950/40 relative flex flex-col justify-between ${
-                  p.isAvailable ? 'border-border/30' : 'border-rose-900/40 opacity-70'
+                  p.isAvailable
+                    ? 'border-border/30'
+                    : 'border-rose-900/40 opacity-70'
                 }`}
               >
                 <div>
@@ -301,7 +331,9 @@ export default function MenuManagementPage() {
                     )}
                   </div>
 
-                  <h4 className="font-bold text-base text-slate-200 mt-3">{p.name}</h4>
+                  <h4 className="font-bold text-base text-slate-200 mt-3">
+                    {p.name}
+                  </h4>
                   <p className="text-xs text-slate-400 mt-1 line-clamp-2">
                     {p.description || 'No description provided.'}
                   </p>
@@ -333,7 +365,11 @@ export default function MenuManagementPage() {
                             : 'bg-rose-950/20 hover:bg-rose-950 text-rose-400 border-rose-500/20'
                         }`}
                       >
-                        {p.isAvailable ? <Eye size={12} /> : <EyeOff size={12} />}
+                        {p.isAvailable ? (
+                          <Eye size={12} />
+                        ) : (
+                          <EyeOff size={12} />
+                        )}
                       </Button>
                       <Button
                         onClick={() => openEditModal(p)}
@@ -427,7 +463,10 @@ export default function MenuManagementPage() {
                     onChange={(e) => setFormIsVeg(e.target.checked)}
                     className="rounded text-indigo-600 focus:ring-indigo-500 bg-slate-950 border-slate-800 w-4 h-4"
                   />
-                  <label htmlFor="formIsVeg" className="text-sm text-slate-300 select-none">
+                  <label
+                    htmlFor="formIsVeg"
+                    className="text-sm text-slate-300 select-none"
+                  >
                     Vegetarian Recipe
                   </label>
                 </div>

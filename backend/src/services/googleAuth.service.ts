@@ -5,7 +5,7 @@ import logger from '../utils/logger';
 // Setup OAuth Client
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID || 'mock_client_id',
-  process.env.GOOGLE_CLIENT_SECRET || 'mock_client_secret',
+  process.env.GOOGLE_CLIENT_SECRET || 'mock_client_secret'
 );
 
 export interface GoogleUserPayload {
@@ -20,12 +20,17 @@ export class GoogleAuthService {
   /**
    * Verifies Google ID Token and returns user details
    */
-  public static async verifyGoogleToken(token: string): Promise<GoogleUserPayload> {
+  public static async verifyGoogleToken(
+    token: string
+  ): Promise<GoogleUserPayload> {
     try {
       // Development bypass fallback if keys are missing
-      if (!process.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID === 'mock_client_id') {
+      if (
+        !process.env.GOOGLE_CLIENT_ID ||
+        process.env.GOOGLE_CLIENT_ID === 'mock_client_id'
+      ) {
         logger.warn(
-          '[Google Auth Service] Missing GOOGLE_CLIENT_ID. Running in MOCK fallback mode.',
+          '[Google Auth Service] Missing GOOGLE_CLIENT_ID. Running in MOCK fallback mode.'
         );
 
         // If the token itself is an email address, use it; otherwise mock default
@@ -60,7 +65,9 @@ export class GoogleAuthService {
 
       const payload = ticket.getPayload();
       if (!payload || !payload.email) {
-        throw new Error('Google token validation returned an empty payload or missing email.');
+        throw new Error(
+          'Google token validation returned an empty payload or missing email.'
+        );
       }
 
       return {
@@ -71,9 +78,12 @@ export class GoogleAuthService {
         isEmailVerified: payload.email_verified || false,
       };
     } catch (error) {
-      logger.error(error, '[Google Auth Service] Failed to verify Google token:');
+      logger.error(
+        error,
+        '[Google Auth Service] Failed to verify Google token:'
+      );
       throw new Error(
-        'Google OAuth token verification failed. The signature is invalid or expired.',
+        'Google OAuth token verification failed. The signature is invalid or expired.'
       );
     }
   }

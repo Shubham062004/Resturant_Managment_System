@@ -10,7 +10,14 @@ const router = Router();
 // Apply authentication and authorization for History Module
 // All endpoints below require Admin or Super Admin access
 router.use(authGuard);
-router.use(restrictTo(Role.ADMIN, Role.SUPER_ADMIN, Role.ORGANIZATION_OWNER, Role.FRANCHISE_OWNER));
+router.use(
+  restrictTo(
+    Role.ADMIN,
+    Role.SUPER_ADMIN,
+    Role.ORGANIZATION_OWNER,
+    Role.FRANCHISE_OWNER
+  )
+);
 
 // Register 11 endpoints
 router.get('/orders', historyController.getOrders);

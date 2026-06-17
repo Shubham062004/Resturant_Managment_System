@@ -63,7 +63,7 @@ export default function AuditLogPage() {
       (log) =>
         log.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         log.actionType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        log.targetId.toLowerCase().includes(searchTerm.toLowerCase()),
+        log.targetId.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
   const getSeverityStyle = (action: string) => {
@@ -94,7 +94,9 @@ export default function AuditLogPage() {
   const totalEvents = logs.length;
   const criticalEvents = logs.filter((log) => {
     const act = log.actionType.toUpperCase();
-    return act.includes('DELETE') || act.includes('REMOVE') || act.includes('BREACH');
+    return (
+      act.includes('DELETE') || act.includes('REMOVE') || act.includes('BREACH')
+    );
   }).length;
   const uniqueActors = new Set(logs.map((log) => log.userId)).size;
 
@@ -112,8 +114,8 @@ export default function AuditLogPage() {
             </h1>
           </div>
           <p className="text-slate-400 text-sm mt-1 ml-9">
-            Cryptographically logged administrator actions, permission escalations, core catalog
-            adjustments, and security state telemetry.
+            Cryptographically logged administrator actions, permission
+            escalations, core catalog adjustments, and security state telemetry.
           </p>
         </div>
         <Button
@@ -170,7 +172,9 @@ export default function AuditLogPage() {
           <p className="text-3xl font-extrabold font-display mt-2 text-white">
             {uniqueActors} Accounts
           </p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Unique credentials verified</span>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Unique credentials verified
+          </span>
         </Card>
       </div>
 
@@ -184,7 +188,9 @@ export default function AuditLogPage() {
                 <h3 className="text-lg font-bold font-display text-white">
                   System Events Explorer
                 </h3>
-                <p className="text-xs text-slate-400">Filter and audit secure action logs</p>
+                <p className="text-xs text-slate-400">
+                  Filter and audit secure action logs
+                </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
@@ -224,7 +230,9 @@ export default function AuditLogPage() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20">
                 <RefreshCw className="animate-spin text-[#2563EB] w-10 h-10 mb-4" />
-                <p className="text-xs text-slate-400">Parsing security registers...</p>
+                <p className="text-xs text-slate-400">
+                  Parsing security registers...
+                </p>
               </div>
             ) : filteredLogs.length === 0 ? (
               <p className="text-slate-500 text-sm text-center py-16">
@@ -244,14 +252,18 @@ export default function AuditLogPage() {
                   <tbody className="divide-y divide-slate-800 text-xs text-slate-300">
                     {filteredLogs.map((log, index) => {
                       const logId = log.id || log._id || index.toString();
-                      const isSelected = selectedLog?.id === log.id || selectedLog?._id === log._id;
+                      const isSelected =
+                        selectedLog?.id === log.id ||
+                        selectedLog?._id === log._id;
 
                       return (
                         <tr
                           key={logId}
                           onClick={() => setSelectedLog(log)}
                           className={`cursor-pointer transition-colors ${
-                            isSelected ? 'bg-slate-900' : 'hover:bg-slate-900/40'
+                            isSelected
+                              ? 'bg-slate-900'
+                              : 'hover:bg-slate-900/40'
                           }`}
                         >
                           <td className="py-3.5 px-4 font-bold text-white">
@@ -275,7 +287,9 @@ export default function AuditLogPage() {
                           <td className="py-3.5 px-4 text-right text-slate-400 font-medium">
                             <div className="flex items-center justify-end gap-1.5">
                               <Clock size={12} className="text-slate-500" />
-                              <span>{new Date(log.createdAt).toLocaleTimeString()}</span>
+                              <span>
+                                {new Date(log.createdAt).toLocaleTimeString()}
+                              </span>
                             </div>
                           </td>
                         </tr>
@@ -294,7 +308,9 @@ export default function AuditLogPage() {
             <div>
               <div className="flex items-center gap-2 pb-4 border-b border-slate-800">
                 <Terminal size={16} className="text-indigo-400" />
-                <h3 className="text-base font-bold font-display text-white">Payload Inspector</h3>
+                <h3 className="text-base font-bold font-display text-white">
+                  Payload Inspector
+                </h3>
               </div>
 
               {selectedLog ? (
@@ -313,7 +329,9 @@ export default function AuditLogPage() {
                       <span className="text-slate-500 font-semibold uppercase text-[9px] block">
                         Operator
                       </span>
-                      <span className="text-slate-200 font-medium">{selectedLog.userId}</span>
+                      <span className="text-slate-200 font-medium">
+                        {selectedLog.userId}
+                      </span>
                     </div>
                     <div className="space-y-1">
                       <span className="text-slate-500 font-semibold uppercase text-[9px] block">
@@ -340,7 +358,9 @@ export default function AuditLogPage() {
                     </span>
                     {selectedLog.changes ? (
                       <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 overflow-x-auto max-h-[300px] font-mono text-[11px] text-emerald-400">
-                        <pre>{JSON.stringify(selectedLog.changes, null, 2)}</pre>
+                        <pre>
+                          {JSON.stringify(selectedLog.changes, null, 2)}
+                        </pre>
                       </div>
                     ) : (
                       <div className="bg-slate-950 p-4 rounded-xl border border-slate-850 text-center text-slate-500 italic">
@@ -353,8 +373,8 @@ export default function AuditLogPage() {
                 <div className="flex flex-col items-center justify-center py-24 text-center text-slate-500">
                   <FileCode size={36} className="text-slate-600 mb-3" />
                   <p className="text-xs font-semibold">
-                    Select a security event row from the explorer table to inspect its payload
-                    properties.
+                    Select a security event row from the explorer table to
+                    inspect its payload properties.
                   </p>
                 </div>
               )}

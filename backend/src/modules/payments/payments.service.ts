@@ -135,12 +135,16 @@ export class PaymentsService {
       });
 
       if (cart && cart.items.length > 0) {
-        const orderDraft = await prisma.orderDraft.findUnique({ where: { id: orderDraftId } });
+        const orderDraft = await prisma.orderDraft.findUnique({
+          where: { id: orderDraftId },
+        });
 
         if (orderDraft) {
           // In production, grab branchId and restaurantId from cart items
           const firstProductId = cart.items[0].productId;
-          const product = await prisma.product.findUnique({ where: { id: firstProductId } });
+          const product = await prisma.product.findUnique({
+            where: { id: firstProductId },
+          });
 
           if (product) {
             const branch = await prisma.branch.findFirst({

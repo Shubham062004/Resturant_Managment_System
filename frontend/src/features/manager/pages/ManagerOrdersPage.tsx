@@ -74,7 +74,8 @@ export default function ManagerOrdersPage() {
       const allOrders = res.data.data || [];
       // Filter for this branch only
       const branchOrders = allOrders.filter(
-        (o: any) => o.branchId === selectedBranchId || o.branch?.id === selectedBranchId,
+        (o: any) =>
+          o.branchId === selectedBranchId || o.branch?.id === selectedBranchId
       );
       setOrders(branchOrders);
     } catch (err) {
@@ -90,7 +91,9 @@ export default function ManagerOrdersPage() {
       toast.success(`Order moved to ${newStatus}`);
       fetchOrders();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Could not update status');
+      toast.error(
+        err.response?.data?.error?.message || 'Could not update status'
+      );
     }
   };
 
@@ -131,7 +134,8 @@ export default function ManagerOrdersPage() {
   ];
 
   const getOrderCard = (order: Order) => {
-    const isLate = new Date().getTime() - new Date(order.createdAt).getTime() > 20 * 60000; // 20 mins
+    const isLate =
+      new Date().getTime() - new Date(order.createdAt).getTime() > 20 * 60000; // 20 mins
 
     return (
       <motion.div
@@ -149,7 +153,10 @@ export default function ManagerOrdersPage() {
                 #{order.orderNumber.slice(-6).toUpperCase()}
               </span>
               {isLate && order.status !== 'DELIVERED' && (
-                <AlertTriangle size={14} className="text-rose-500 animate-pulse" />
+                <AlertTriangle
+                  size={14}
+                  className="text-rose-500 animate-pulse"
+                />
               )}
             </div>
             <p className="text-[10px] text-slate-400 mt-0.5">
@@ -217,7 +224,9 @@ export default function ManagerOrdersPage() {
               size="sm"
               className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] py-1 h-7"
             >
-              {order.orderType === 'DELIVERY' ? 'Hand to Rider' : 'Hand to Customer'}
+              {order.orderType === 'DELIVERY'
+                ? 'Hand to Rider'
+                : 'Hand to Customer'}
             </Button>
           )}
           <Button
@@ -253,7 +262,11 @@ export default function ManagerOrdersPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -272,7 +285,9 @@ export default function ManagerOrdersPage() {
       <div className="flex-1 overflow-x-auto custom-scrollbar pb-4">
         <div className="flex gap-4 h-full min-w-[1000px]">
           {columns.map((col) => {
-            const columnOrders = orders.filter((o) => col.statuses.includes(o.status));
+            const columnOrders = orders.filter((o) =>
+              col.statuses.includes(o.status)
+            );
             const ColIcon = col.icon;
 
             return (
@@ -290,7 +305,9 @@ export default function ManagerOrdersPage() {
                     >
                       <ColIcon className={`w-4 h-4 ${col.color}`} />
                     </div>
-                    <h3 className="font-bold text-white tracking-wide text-sm">{col.title}</h3>
+                    <h3 className="font-bold text-white tracking-wide text-sm">
+                      {col.title}
+                    </h3>
                   </div>
                   <Badge
                     variant="neutral"
@@ -314,10 +331,14 @@ export default function ManagerOrdersPage() {
                   ) : columnOrders.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center opacity-40">
                       <ShoppingBag size={32} className="text-slate-600 mb-3" />
-                      <p className="text-xs font-semibold text-slate-500">No Orders Here</p>
+                      <p className="text-xs font-semibold text-slate-500">
+                        No Orders Here
+                      </p>
                     </div>
                   ) : (
-                    <AnimatePresence>{columnOrders.map(getOrderCard)}</AnimatePresence>
+                    <AnimatePresence>
+                      {columnOrders.map(getOrderCard)}
+                    </AnimatePresence>
                   )}
                 </div>
               </div>

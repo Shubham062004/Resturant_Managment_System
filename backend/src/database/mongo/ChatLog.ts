@@ -19,7 +19,11 @@ const ChatLogSchema = new Schema<IChatLog>({
   userId: { type: String, index: true },
   messages: [
     {
-      role: { type: String, enum: ['user', 'assistant', 'system'], required: true },
+      role: {
+        type: String,
+        enum: ['user', 'assistant', 'system'],
+        required: true,
+      },
       content: { type: String, required: true },
       timestamp: { type: Date, default: Date.now },
     },

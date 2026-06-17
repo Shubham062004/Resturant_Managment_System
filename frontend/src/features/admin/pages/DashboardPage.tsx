@@ -20,8 +20,12 @@ export default function DashboardPage() {
     socket.emit('join-branch', branchId);
 
     // Refresh dashboard on key events
-    socket.on('order-updated', () => dispatch(fetchDashboardOverview(branchId)));
-    socket.on('reservation-created', () => dispatch(fetchDashboardOverview(branchId)));
+    socket.on('order-updated', () =>
+      dispatch(fetchDashboardOverview(branchId))
+    );
+    socket.on('reservation-created', () =>
+      dispatch(fetchDashboardOverview(branchId))
+    );
 
     return () => {
       socket.disconnect();
@@ -64,10 +68,15 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {kpis.map((kpi, idx) => (
-          <Card key={idx} className="p-6 flex flex-col justify-center items-start">
+          <Card
+            key={idx}
+            className="p-6 flex flex-col justify-center items-start"
+          >
             <div className="flex items-center space-x-4 mb-4">
               <div className="p-3 bg-slate-100 rounded-lg">{kpi.icon}</div>
-              <h3 className="text-slate-500 text-sm font-medium">{kpi.title}</h3>
+              <h3 className="text-slate-500 text-sm font-medium">
+                {kpi.title}
+              </h3>
             </div>
             <p className="text-3xl font-bold text-slate-800">{kpi.value}</p>
           </Card>

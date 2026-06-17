@@ -17,7 +17,13 @@ interface InventoryRequest {
   id: string;
   branch: { name: string };
   requestedBy: { firstName: string; lastName: string };
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PACKED' | 'DISPATCHED' | 'DELIVERED';
+  status:
+    | 'PENDING'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'PACKED'
+    | 'DISPATCHED'
+    | 'DELIVERED';
   notes: string;
   createdAt: string;
   items: InventoryRequestItem[];
@@ -27,7 +33,8 @@ export default function InventoryRequestsPage() {
   const toast = useToast();
   const [requests, setRequests] = useState<InventoryRequest[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedRequest, setSelectedRequest] = useState<InventoryRequest | null>(null);
+  const [selectedRequest, setSelectedRequest] =
+    useState<InventoryRequest | null>(null);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,7 +63,9 @@ export default function InventoryRequestsPage() {
       setSelectedRequest(null);
       loadRequests();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Error processing request');
+      toast.error(
+        err.response?.data?.error?.message || 'Error processing request'
+      );
     }
   };
 
@@ -73,7 +82,7 @@ export default function InventoryRequestsPage() {
   const totalPages = Math.ceil(requests.length / itemsPerPage);
   const paginatedRequests = requests.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const getStatusBadge = (status: string) => {
@@ -86,7 +95,9 @@ export default function InventoryRequestsPage() {
       DELIVERED: 'bg-slate-800 text-slate-300 border-slate-700',
     };
     return (
-      <span className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${styles[status]}`}>
+      <span
+        className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${styles[status]}`}
+      >
         {status}
       </span>
     );
@@ -100,7 +111,8 @@ export default function InventoryRequestsPage() {
             Inventory Requests
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Manage branch stock replenishment requests and track dispatch status.
+            Manage branch stock replenishment requests and track dispatch
+            status.
           </p>
         </div>
       </div>
@@ -131,12 +143,17 @@ export default function InventoryRequestsPage() {
               {paginatedRequests.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-slate-500">
-                    {loading ? 'Loading requests...' : 'No inventory requests found.'}
+                    {loading
+                      ? 'Loading requests...'
+                      : 'No inventory requests found.'}
                   </td>
                 </tr>
               ) : (
                 paginatedRequests.map((req) => (
-                  <tr key={req.id} className="hover:bg-slate-800/20 transition-colors">
+                  <tr
+                    key={req.id}
+                    className="hover:bg-slate-800/20 transition-colors"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap text-slate-300">
                       {new Intl.DateTimeFormat('en-US', {
                         month: 'short',
@@ -144,11 +161,15 @@ export default function InventoryRequestsPage() {
                         year: 'numeric',
                       }).format(new Date(req.createdAt))}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-slate-200">{req.branch.name}</td>
+                    <td className="px-6 py-4 font-semibold text-slate-200">
+                      {req.branch.name}
+                    </td>
                     <td className="px-6 py-4 text-slate-400">
                       {req.requestedBy.firstName} {req.requestedBy.lastName}
                     </td>
-                    <td className="px-6 py-4 text-slate-300 font-mono">{req.items.length} items</td>
+                    <td className="px-6 py-4 text-slate-300 font-mono">
+                      {req.items.length} items
+                    </td>
                     <td className="px-6 py-4">{getStatusBadge(req.status)}</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
@@ -187,7 +208,8 @@ export default function InventoryRequestsPage() {
                 <option value={50}>50</option>
               </select>
               <span className="ml-3">
-                out of <strong className="text-white">{requests.length}</strong> entries
+                out of <strong className="text-white">{requests.length}</strong>{' '}
+                entries
               </span>
             </div>
 
@@ -213,7 +235,9 @@ export default function InventoryRequestsPage() {
                 </button>
               ))}
               <button
-                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
                 className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-white disabled:opacity-50"
               >
@@ -229,7 +253,9 @@ export default function InventoryRequestsPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl">
             <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-              <h2 className="text-xl font-bold font-display">Request Details</h2>
+              <h2 className="text-xl font-bold font-display">
+                Request Details
+              </h2>
               <button
                 onClick={() => setSelectedRequest(null)}
                 className="text-slate-400 hover:text-white"
@@ -242,7 +268,9 @@ export default function InventoryRequestsPage() {
               <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
                 <div>
                   <p className="text-slate-500">Branch</p>
-                  <p className="font-semibold text-lg">{selectedRequest.branch.name}</p>
+                  <p className="font-semibold text-lg">
+                    {selectedRequest.branch.name}
+                  </p>
                 </div>
                 <div>
                   <p className="text-slate-500">Date</p>
@@ -255,12 +283,15 @@ export default function InventoryRequestsPage() {
                 </div>
                 <div>
                   <p className="text-slate-500">Status</p>
-                  <div className="mt-1">{getStatusBadge(selectedRequest.status)}</div>
+                  <div className="mt-1">
+                    {getStatusBadge(selectedRequest.status)}
+                  </div>
                 </div>
                 <div>
                   <p className="text-slate-500">Requested By</p>
                   <p className="font-medium text-slate-300">
-                    {selectedRequest.requestedBy.firstName} {selectedRequest.requestedBy.lastName}
+                    {selectedRequest.requestedBy.firstName}{' '}
+                    {selectedRequest.requestedBy.lastName}
                   </p>
                 </div>
               </div>
@@ -269,7 +300,9 @@ export default function InventoryRequestsPage() {
                 <table className="w-full text-sm text-left">
                   <thead className="bg-slate-900/50">
                     <tr>
-                      <th className="px-4 py-3 text-slate-400 font-medium">Ingredient</th>
+                      <th className="px-4 py-3 text-slate-400 font-medium">
+                        Ingredient
+                      </th>
                       <th className="px-4 py-3 text-slate-400 font-medium text-right">
                         Requested Qty
                       </th>
@@ -281,12 +314,16 @@ export default function InventoryRequestsPage() {
                   <tbody className="divide-y divide-slate-800/40">
                     {selectedRequest.items.map((item) => (
                       <tr key={item.id}>
-                        <td className="px-4 py-3 font-medium">{item.ingredient.name}</td>
+                        <td className="px-4 py-3 font-medium">
+                          {item.ingredient.name}
+                        </td>
                         <td className="px-4 py-3 text-right font-mono text-slate-300">
                           {item.requestedQuantity} {item.ingredient.unit}
                         </td>
                         <td className="px-4 py-3 text-right font-mono text-emerald-400">
-                          {item.approvedQuantity !== null ? item.approvedQuantity : '-'}{' '}
+                          {item.approvedQuantity !== null
+                            ? item.approvedQuantity
+                            : '-'}{' '}
                           {item.ingredient.unit}
                         </td>
                       </tr>
@@ -297,8 +334,12 @@ export default function InventoryRequestsPage() {
 
               {selectedRequest.notes && (
                 <div className="mb-6 bg-slate-900/30 p-4 rounded-xl border border-slate-800">
-                  <p className="text-slate-400 text-xs uppercase font-semibold mb-1">Notes</p>
-                  <p className="text-slate-300 text-sm">{selectedRequest.notes}</p>
+                  <p className="text-slate-400 text-xs uppercase font-semibold mb-1">
+                    Notes
+                  </p>
+                  <p className="text-slate-300 text-sm">
+                    {selectedRequest.notes}
+                  </p>
                 </div>
               )}
 
@@ -306,14 +347,18 @@ export default function InventoryRequestsPage() {
                 {selectedRequest.status === 'PENDING' && (
                   <>
                     <Button
-                      onClick={() => handleApprove(selectedRequest.id, 'REJECTED')}
+                      onClick={() =>
+                        handleApprove(selectedRequest.id, 'REJECTED')
+                      }
                       variant="outline"
                       className="text-rose-400 border-rose-900/50 hover:bg-rose-950/40"
                     >
                       <X size={16} className="mr-2" /> Reject
                     </Button>
                     <Button
-                      onClick={() => handleApprove(selectedRequest.id, 'APPROVED')}
+                      onClick={() =>
+                        handleApprove(selectedRequest.id, 'APPROVED')
+                      }
                       className="bg-emerald-600 hover:bg-emerald-500 text-white"
                     >
                       <Check size={16} className="mr-2" /> Approve Request
@@ -322,7 +367,9 @@ export default function InventoryRequestsPage() {
                 )}
                 {selectedRequest.status === 'APPROVED' && (
                   <Button
-                    onClick={() => handleUpdateStatus(selectedRequest.id, 'PACKED')}
+                    onClick={() =>
+                      handleUpdateStatus(selectedRequest.id, 'PACKED')
+                    }
                     className="bg-blue-600 hover:bg-blue-500"
                   >
                     <Package size={16} className="mr-2" /> Mark as Packed
@@ -330,7 +377,9 @@ export default function InventoryRequestsPage() {
                 )}
                 {selectedRequest.status === 'PACKED' && (
                   <Button
-                    onClick={() => handleUpdateStatus(selectedRequest.id, 'DISPATCHED')}
+                    onClick={() =>
+                      handleUpdateStatus(selectedRequest.id, 'DISPATCHED')
+                    }
                     className="bg-purple-600 hover:bg-purple-500"
                   >
                     <Truck size={16} className="mr-2" /> Mark as Dispatched
@@ -338,7 +387,9 @@ export default function InventoryRequestsPage() {
                 )}
                 {selectedRequest.status === 'DISPATCHED' && (
                   <Button
-                    onClick={() => handleUpdateStatus(selectedRequest.id, 'DELIVERED')}
+                    onClick={() =>
+                      handleUpdateStatus(selectedRequest.id, 'DELIVERED')
+                    }
                     className="bg-slate-700 hover:bg-slate-600 text-white"
                   >
                     <CheckCircle2 size={16} className="mr-2" /> Confirm Delivery

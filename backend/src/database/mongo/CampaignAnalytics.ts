@@ -24,4 +24,7 @@ const CampaignAnalyticsSchema: Schema = new Schema({
 
 export const CampaignAnalytics =
   mongoose.models.CampaignAnalytics ||
-  mongoose.model<ICampaignAnalytics>('CampaignAnalytics', CampaignAnalyticsSchema);
+  mongoose.model<ICampaignAnalytics>(
+    'CampaignAnalytics',
+    CampaignAnalyticsSchema
+  );

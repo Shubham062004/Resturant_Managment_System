@@ -17,18 +17,18 @@ router.post(
   '/',
   restrictTo('ADMIN', 'SUPER_ADMIN'),
   validate(createTableSchema),
-  TableController.createTable,
+  TableController.createTable
 );
 router.get(
   '/branch/:branchId',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER', 'KITCHEN_MANAGER'),
-  TableController.getBranchTables,
+  TableController.getBranchTables
 );
 router.patch(
   '/:id',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
   validate(updateTableSchema),
-  TableController.updateTable,
+  TableController.updateTable
 );
 
 export default router;

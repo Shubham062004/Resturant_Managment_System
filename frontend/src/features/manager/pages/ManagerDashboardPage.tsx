@@ -103,7 +103,7 @@ export default function ManagerDashboardPage() {
     const fetchKpis = async () => {
       try {
         const res = await apiClient.get(
-          `/admin/analytics/manager-dashboard?branchId=${selectedBranchId}`,
+          `/admin/analytics/manager-dashboard?branchId=${selectedBranchId}`
         );
         if (res.data?.status === 'success') {
           setKpiData(res.data.data);
@@ -115,7 +115,15 @@ export default function ManagerDashboardPage() {
     fetchKpis();
   }, [selectedBranchId]);
 
-  const StatCard = ({ title, value, icon: Icon, trend, trendUp, colorClass, delay }: any) => (
+  const StatCard = ({
+    title,
+    value,
+    icon: Icon,
+    trend,
+    trendUp,
+    colorClass,
+    delay,
+  }: any) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -138,8 +146,12 @@ export default function ManagerDashboardPage() {
             )}
           </div>
           <div className="relative z-10">
-            <h3 className="text-2xl font-bold font-display text-white mb-1">{value}</h3>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{title}</p>
+            <h3 className="text-2xl font-bold font-display text-white mb-1">
+              {value}
+            </h3>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              {title}
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -151,7 +163,9 @@ export default function ManagerDashboardPage() {
       {/* Header Area */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold font-display text-white tracking-tight">Overview</h1>
+          <h1 className="text-3xl font-bold font-display text-white tracking-tight">
+            Overview
+          </h1>
           <p className="text-sm text-slate-400 mt-1">
             Real-time pulse of your restaurant operations.
           </p>
@@ -169,7 +183,11 @@ export default function ManagerDashboardPage() {
                 className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
               >
                 {branches.map((b) => (
-                  <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                  <option
+                    key={b.id}
+                    value={b.id}
+                    className="bg-slate-900 text-white"
+                  >
                     {b.name}
                   </option>
                 ))}
@@ -263,7 +281,9 @@ export default function ManagerDashboardPage() {
         >
           <Card className="h-full border-border/30 bg-slate-900/60 backdrop-blur-xl rounded-2xl overflow-hidden flex flex-col">
             <div className="p-5 border-b border-border/20 flex items-center justify-between shrink-0">
-              <h3 className="font-display font-bold text-lg text-white">Live Activity</h3>
+              <h3 className="font-display font-bold text-lg text-white">
+                Live Activity
+              </h3>
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
 
@@ -284,7 +304,9 @@ export default function ManagerDashboardPage() {
                     </div>
 
                     <div className="flex-1 min-w-0 pt-1.5">
-                      <p className="text-sm font-medium text-slate-200">{activity.message}</p>
+                      <p className="text-sm font-medium text-slate-200">
+                        {activity.message}
+                      </p>
                       <p className="text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-wider">
                         {activity.time}
                       </p>

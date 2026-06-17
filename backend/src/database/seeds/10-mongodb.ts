@@ -21,7 +21,7 @@ export async function seedMongoDB(customerIds: string[]) {
       4,
       day,
       Math.floor(Math.random() * 24),
-      Math.floor(Math.random() * 60),
+      Math.floor(Math.random() * 60)
     );
 
     cartEvents.push({
@@ -42,7 +42,7 @@ export async function seedMongoDB(customerIds: string[]) {
       4,
       day,
       Math.floor(Math.random() * 24),
-      Math.floor(Math.random() * 60),
+      Math.floor(Math.random() * 60)
     );
 
     checkoutEvents.push({
@@ -77,7 +77,7 @@ export async function seedMongoDB(customerIds: string[]) {
       4,
       day,
       Math.floor(Math.random() * 24),
-      Math.floor(Math.random() * 60),
+      Math.floor(Math.random() * 60)
     );
     searchAnalytics.push({
       query: term,
@@ -92,6 +92,6 @@ export async function seedMongoDB(customerIds: string[]) {
   await SearchAnalytic.insertMany(searchAnalytics);
 
   console.log(
-    `✅ Inserted ${cartEvents.length} CartEvents, ${checkoutEvents.length} CheckoutEvents, and ${searchAnalytics.length} SearchAnalytics.`,
+    `✅ Inserted ${cartEvents.length} CartEvents, ${checkoutEvents.length} CheckoutEvents, and ${searchAnalytics.length} SearchAnalytics.`
   );
 }

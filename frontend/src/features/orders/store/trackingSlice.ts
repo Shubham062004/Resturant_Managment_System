@@ -30,21 +30,28 @@ const trackingSlice = createSlice({
     updateLiveStatus: (state, action: PayloadAction<string>) => {
       state.liveStatus = action.payload;
       state.logs.push(
-        `Order status updated to: ${action.payload} at ${new Date().toLocaleTimeString()}`,
+        `Order status updated to: ${action.payload} at ${new Date().toLocaleTimeString()}`
       );
     },
     updateDriverLocation: (
       state,
-      action: PayloadAction<{ latitude: number; longitude: number }>,
+      action: PayloadAction<{ latitude: number; longitude: number }>
     ) => {
       state.driverLocation = action.payload;
     },
     addLog: (state, action: PayloadAction<string>) => {
-      state.logs.push(`${action.payload} at ${new Date().toLocaleTimeString()}`);
+      state.logs.push(
+        `${action.payload} at ${new Date().toLocaleTimeString()}`
+      );
     },
   },
 });
 
-export const { setConnected, setActiveOrder, updateLiveStatus, updateDriverLocation, addLog } =
-  trackingSlice.actions;
+export const {
+  setConnected,
+  setActiveOrder,
+  updateLiveStatus,
+  updateDriverLocation,
+  addLog,
+} = trackingSlice.actions;
 export default trackingSlice.reducer;

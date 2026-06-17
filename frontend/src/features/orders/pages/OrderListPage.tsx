@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardHeader, CardContent, CardFooter } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from '../../../shared/components/ui/Card';
 import { fetchMyOrders } from '../store/orderSlice';
 
 export default function OrderListPage() {
@@ -39,7 +44,9 @@ export default function OrderListPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-display font-bold text-white mb-6">Your Orders</h1>
+      <h1 className="text-3xl font-display font-bold text-white mb-6">
+        Your Orders
+      </h1>
 
       {status === 'loading' && <p className="text-white">Loading orders...</p>}
       {status === 'succeeded' && orders.length === 0 && (
@@ -51,17 +58,22 @@ export default function OrderListPage() {
           <Card key={order.id} className="bg-surface/50 border-border/50">
             <CardHeader className="flex flex-row justify-between items-center">
               <div>
-                <h3 className="font-semibold text-white">Order #{order.orderNumber}</h3>
+                <h3 className="font-semibold text-white">
+                  Order #{order.orderNumber}
+                </h3>
                 <p className="text-sm text-muted-foreground">
                   {new Date(order.createdAt).toLocaleDateString()}
                 </p>
               </div>
-              <Badge variant={getStatusColor(order.status) as any}>{order.status}</Badge>
+              <Badge variant={getStatusColor(order.status) as any}>
+                {order.status}
+              </Badge>
             </CardHeader>
             <CardContent>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-muted-foreground">
-                  {order.items.length} item(s) from {order.restaurant?.name || 'ABC'}
+                  {order.items.length} item(s) from{' '}
+                  {order.restaurant?.name || 'ABC'}
                 </span>
                 <span className="font-bold text-white">
                   ${Number(order.totalAmount).toFixed(2)}

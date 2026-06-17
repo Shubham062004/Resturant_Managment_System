@@ -27,17 +27,24 @@ const ComingSoonBanner: React.FC<ComingSoonBannerProps> = ({
       className={`relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-950/50 via-yellow-950/40 to-amber-950/50 px-5 py-4 ${className}`}
       style={{
         backdropFilter: 'blur(12px)',
-        boxShadow: '0 0 0 1px rgba(251,191,36,0.15), 0 4px 24px rgba(251,191,36,0.08)',
+        boxShadow:
+          '0 0 0 1px rgba(251,191,36,0.15), 0 4px 24px rgba(251,191,36,0.08)',
       }}
     >
       {/* Decorative glow blobs */}
       <div
         className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full opacity-20"
-        style={{ background: 'radial-gradient(circle, rgba(251,191,36,0.6) 0%, transparent 70%)' }}
+        style={{
+          background:
+            'radial-gradient(circle, rgba(251,191,36,0.6) 0%, transparent 70%)',
+        }}
       />
       <div
         className="pointer-events-none absolute -left-6 -bottom-6 h-24 w-24 rounded-full opacity-10"
-        style={{ background: 'radial-gradient(circle, rgba(251,191,36,0.6) 0%, transparent 70%)' }}
+        style={{
+          background:
+            'radial-gradient(circle, rgba(251,191,36,0.6) 0%, transparent 70%)',
+        }}
       />
 
       <div className="relative flex flex-col sm:flex-row sm:items-center gap-3">
@@ -64,11 +71,15 @@ const ComingSoonBanner: React.FC<ComingSoonBannerProps> = ({
           </div>
           <p className="text-xs text-amber-200/60 leading-relaxed">
             The data displayed on this page is{' '}
-            <span className="text-amber-300/80 font-medium">sample / demo data</span> for preview
-            purposes. Full functionality — including live backend integration, CRUD operations, and
-            real-time updates — is{' '}
-            <span className="text-amber-300/80 font-medium">actively under development</span> and
-            will be released in an upcoming sprint.
+            <span className="text-amber-300/80 font-medium">
+              sample / demo data
+            </span>{' '}
+            for preview purposes. Full functionality — including live backend
+            integration, CRUD operations, and real-time updates — is{' '}
+            <span className="text-amber-300/80 font-medium">
+              actively under development
+            </span>{' '}
+            and will be released in an upcoming sprint.
           </p>
         </div>
 

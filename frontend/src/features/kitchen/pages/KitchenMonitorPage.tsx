@@ -68,7 +68,9 @@ export default function KitchenMonitorPage() {
 
   const getElapsedTime = (createdAtStr: string) => {
     const created = new Date(createdAtStr);
-    const diff = Math.floor((currentTime.getTime() - created.getTime()) / 60000); // diff in minutes
+    const diff = Math.floor(
+      (currentTime.getTime() - created.getTime()) / 60000
+    ); // diff in minutes
     if (diff < 0) return 'Just now';
     return `${diff}m ago`;
   };
@@ -152,9 +154,16 @@ export default function KitchenMonitorPage() {
                       {/* Task items list */}
                       <div className="border-t border-border/10 pt-2 space-y-2">
                         {order.tasks?.map((task) => (
-                          <div key={task.id} className="flex justify-between text-xs font-sans">
-                            <span className="text-slate-300 font-medium">{task.product?.name}</span>
-                            <span className="text-primary font-bold">x{task.quantity}</span>
+                          <div
+                            key={task.id}
+                            className="flex justify-between text-xs font-sans"
+                          >
+                            <span className="text-slate-300 font-medium">
+                              {task.product?.name}
+                            </span>
+                            <span className="text-primary font-bold">
+                              x{task.quantity}
+                            </span>
                           </div>
                         ))}
                       </div>

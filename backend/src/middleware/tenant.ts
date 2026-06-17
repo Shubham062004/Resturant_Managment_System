@@ -4,7 +4,11 @@ import { prisma } from '../config/db';
 import { AuthRequest } from '../types/express';
 import AppError from '../utils/appError';
 
-export const tenantGuard = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const tenantGuard = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     if (!req.user) {
       return next(new AppError('Unauthorized', 401));
@@ -23,7 +27,12 @@ export const tenantGuard = async (req: AuthRequest, res: Response, next: NextFun
     });
 
     if (!user || !user.organizationId) {
-      return next(new AppError('Forbidden. User does not belong to any Organization.', 403));
+      return next(
+        new AppError(
+          'Forbidden. User does not belong to any Organization.',
+          403
+        )
+      );
     }
 
     // Apply the tenant filter globally to this request

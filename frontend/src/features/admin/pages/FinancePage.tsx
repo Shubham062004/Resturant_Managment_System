@@ -56,7 +56,9 @@ export default function FinancePage() {
   const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState<SummaryData | null>(null);
-  const [branchPerformance, setBranchPerformance] = useState<BranchPerformance[]>([]);
+  const [branchPerformance, setBranchPerformance] = useState<
+    BranchPerformance[]
+  >([]);
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
 
   const loadData = async () => {
@@ -101,12 +103,16 @@ export default function FinancePage() {
   const refunds = Math.round(revenue * 0.012); // Estimated 1.2% refund rate
   const bonuses = Math.round(revenue * 0.015); // Estimated 1.5% performance incentive
   const taxRate = 0.18; // 18% corporate tax
-  const taxableIncome = Math.max(0, revenue - (payroll + spoilage + poCost + refunds + bonuses));
+  const taxableIncome = Math.max(
+    0,
+    revenue - (payroll + spoilage + poCost + refunds + bonuses)
+  );
   const taxes = Math.round(taxableIncome * taxRate);
 
   const totalExpenses = payroll + spoilage + poCost + refunds + bonuses + taxes;
   const netProfit = Math.max(0, revenue - totalExpenses);
-  const profitMargin = revenue > 0 ? ((netProfit / revenue) * 100).toFixed(1) : '0';
+  const profitMargin =
+    revenue > 0 ? ((netProfit / revenue) * 100).toFixed(1) : '0';
   const gstCollected = Math.round(revenue * 0.05); // 5% standard GST on food
 
   // Breakdown percentages
@@ -123,8 +129,8 @@ export default function FinancePage() {
             Financial Control Tower
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Real-time P&L breakdowns, corporate tax margins, branch-level profit distribution, and
-            automated invoice audits.
+            Real-time P&L breakdowns, corporate tax margins, branch-level profit
+            distribution, and automated invoice audits.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -186,7 +192,9 @@ export default function FinancePage() {
                 ₹{totalExpenses.toLocaleString('en-IN')}
               </p>
               <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-500">
-                <span className="text-slate-400 font-semibold">{getPercent(totalExpenses)}%</span>
+                <span className="text-slate-400 font-semibold">
+                  {getPercent(totalExpenses)}%
+                </span>
                 outflow ratio
               </div>
             </Card>
@@ -222,7 +230,9 @@ export default function FinancePage() {
                 {profitMargin}%
               </p>
               <div className="flex items-center gap-1 mt-2 text-[10px] text-slate-500">
-                <span className="text-[#06B6D4] font-semibold">Healthy Range</span>
+                <span className="text-[#06B6D4] font-semibold">
+                  Healthy Range
+                </span>
                 Target: 25.0%
               </div>
             </Card>
@@ -238,7 +248,9 @@ export default function FinancePage() {
                     <h3 className="text-lg font-bold font-display text-white">
                       Consolidated Profit & Loss Ledger
                     </h3>
-                    <p className="text-xs text-slate-400">Current active tracking period</p>
+                    <p className="text-xs text-slate-400">
+                      Current active tracking period
+                    </p>
                   </div>
                   <span className="px-3 py-1 text-xs font-semibold bg-[#2563EB]/10 text-[#2563EB] rounded-full border border-[#2563EB]/20">
                     Audit Ready
@@ -250,7 +262,8 @@ export default function FinancePage() {
                   <div className="p-4 bg-emerald-950/20 border border-emerald-800/30 rounded-2xl flex justify-between items-center">
                     <div>
                       <p className="text-sm font-bold text-white flex items-center gap-2">
-                        <TrendingUp size={16} className="text-[#16A34A]" /> Total Inbound Revenue
+                        <TrendingUp size={16} className="text-[#16A34A]" />{' '}
+                        Total Inbound Revenue
                       </p>
                       <p className="text-[10px] text-slate-400 mt-0.5">
                         Consolidated customer order retail sales
@@ -275,7 +288,8 @@ export default function FinancePage() {
                             Staff Salaries & Incentives (Payroll)
                           </span>
                           <span className="text-slate-200">
-                            ₹{payroll.toLocaleString('en-IN')} ({getPercent(payroll)}%)
+                            ₹{payroll.toLocaleString('en-IN')} (
+                            {getPercent(payroll)}%)
                           </span>
                         </div>
                         <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -293,7 +307,8 @@ export default function FinancePage() {
                             Inventory Purchase Orders & Wholesale (Suppliers)
                           </span>
                           <span className="text-slate-200">
-                            ₹{poCost.toLocaleString('en-IN')} ({getPercent(poCost)}%)
+                            ₹{poCost.toLocaleString('en-IN')} (
+                            {getPercent(poCost)}%)
                           </span>
                         </div>
                         <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -307,9 +322,12 @@ export default function FinancePage() {
                       {/* Corporate Taxes */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Corporate Tax Reserve (18% Slab)</span>
+                          <span className="text-slate-300">
+                            Corporate Tax Reserve (18% Slab)
+                          </span>
                           <span className="text-slate-200">
-                            ₹{taxes.toLocaleString('en-IN')} ({getPercent(taxes)}%)
+                            ₹{taxes.toLocaleString('en-IN')} (
+                            {getPercent(taxes)}%)
                           </span>
                         </div>
                         <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -323,9 +341,12 @@ export default function FinancePage() {
                       {/* Spoilage */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Waste Cost & Spoilage Incidents</span>
+                          <span className="text-slate-300">
+                            Waste Cost & Spoilage Incidents
+                          </span>
                           <span className="text-slate-200">
-                            ₹{spoilage.toLocaleString('en-IN')} ({getPercent(spoilage)}%)
+                            ₹{spoilage.toLocaleString('en-IN')} (
+                            {getPercent(spoilage)}%)
                           </span>
                         </div>
                         <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -339,9 +360,12 @@ export default function FinancePage() {
                       {/* Customer Refunds */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Client Refunds & Cancellations</span>
+                          <span className="text-slate-300">
+                            Client Refunds & Cancellations
+                          </span>
                           <span className="text-slate-200">
-                            ₹{refunds.toLocaleString('en-IN')} ({getPercent(refunds)}%)
+                            ₹{refunds.toLocaleString('en-IN')} (
+                            {getPercent(refunds)}%)
                           </span>
                         </div>
                         <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -355,9 +379,12 @@ export default function FinancePage() {
                       {/* Bonuses */}
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs font-semibold">
-                          <span className="text-slate-300">Bonuses & Performance Rewards</span>
+                          <span className="text-slate-300">
+                            Bonuses & Performance Rewards
+                          </span>
                           <span className="text-slate-200">
-                            ₹{bonuses.toLocaleString('en-IN')} ({getPercent(bonuses)}%)
+                            ₹{bonuses.toLocaleString('en-IN')} (
+                            {getPercent(bonuses)}%)
                           </span>
                         </div>
                         <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
@@ -374,8 +401,8 @@ export default function FinancePage() {
                   <div className="p-4 bg-[#2563EB]/10 border border-[#2563EB]/30 rounded-2xl flex justify-between items-center">
                     <div>
                       <p className="text-sm font-bold text-white flex items-center gap-2">
-                        <DollarSign size={16} className="text-[#2563EB]" /> Consolidated Net Profit
-                        Yield
+                        <DollarSign size={16} className="text-[#2563EB]" />{' '}
+                        Consolidated Net Profit Yield
                       </p>
                       <p className="text-[10px] text-slate-400 mt-0.5">
                         Net income generated after all operational deductions
@@ -395,7 +422,8 @@ export default function FinancePage() {
                     Branch Wise Profit & Margin Performance
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Allocated revenue, estimated operations cost, and branch yield ranking
+                    Allocated revenue, estimated operations cost, and branch
+                    yield ranking
                   </p>
                 </CardHeader>
 
@@ -417,7 +445,9 @@ export default function FinancePage() {
                         const bExpense = Math.round(branch.revenue * 0.72);
                         const bProfit = Math.max(0, branch.revenue - bExpense);
                         const bMargin =
-                          branch.revenue > 0 ? ((bProfit / branch.revenue) * 100).toFixed(1) : '0';
+                          branch.revenue > 0
+                            ? ((bProfit / branch.revenue) * 100).toFixed(1)
+                            : '0';
 
                         return (
                           <tr
@@ -428,7 +458,9 @@ export default function FinancePage() {
                               <Building size={14} className="text-slate-500" />
                               {branch.name}
                             </td>
-                            <td className="py-3.5 px-4 text-slate-400">{branch.city}</td>
+                            <td className="py-3.5 px-4 text-slate-400">
+                              {branch.city}
+                            </td>
                             <td className="py-3.5 px-4 text-right font-medium">
                               ₹{branch.revenue.toLocaleString('en-IN')}
                             </td>
@@ -446,7 +478,10 @@ export default function FinancePage() {
                       })}
                       {branchPerformance.length === 0 && (
                         <tr>
-                          <td colSpan={6} className="py-8 text-center text-slate-500 font-medium">
+                          <td
+                            colSpan={6}
+                            className="py-8 text-center text-slate-500 font-medium"
+                          >
                             No branches linked to financial records.
                           </td>
                         </tr>
@@ -460,12 +495,12 @@ export default function FinancePage() {
               <Card className="p-6 bg-[#111827] border-slate-800 shadow-xl">
                 <CardHeader className="border-none p-0 mb-4">
                   <h3 className="text-base font-bold font-display text-white flex items-center gap-2">
-                    <ShieldCheck size={16} className="text-[#06B6D4]" /> Predictive Financial
-                    Forecast (3 Months)
+                    <ShieldCheck size={16} className="text-[#06B6D4]" />{' '}
+                    Predictive Financial Forecast (3 Months)
                   </h3>
                   <p className="text-xs text-slate-400">
-                    AI-driven projections based on consumer demand trends and inventory bulk
-                    purchase contracts
+                    AI-driven projections based on consumer demand trends and
+                    inventory bulk purchase contracts
                   </p>
                 </CardHeader>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs">
@@ -480,7 +515,8 @@ export default function FinancePage() {
                       ₹{Math.round(revenue * 1.042).toLocaleString('en-IN')}
                     </div>
                     <p className="text-[10px] text-slate-500">
-                      Based on early seasonal menu updates and reservation volumes.
+                      Based on early seasonal menu updates and reservation
+                      volumes.
                     </p>
                   </div>
                   <div className="p-4 bg-slate-950/40 border border-slate-800/80 rounded-2xl space-y-2">
@@ -494,7 +530,8 @@ export default function FinancePage() {
                       ₹{Math.round(revenue * 1.068).toLocaleString('en-IN')}
                     </div>
                     <p className="text-[10px] text-slate-500">
-                      Summer tourist traffic spikes and delivery partnerships growth.
+                      Summer tourist traffic spikes and delivery partnerships
+                      growth.
                     </p>
                   </div>
                   <div className="p-4 bg-slate-950/40 border border-slate-800/80 rounded-2xl space-y-2">
@@ -587,12 +624,14 @@ export default function FinancePage() {
                             {po.supplier?.name || 'Bulk Supplier'}
                           </p>
                           <p className="text-[9px] text-slate-500 mt-0.5 flex items-center gap-1">
-                            <CreditCard size={10} /> PO ID: {po.id.slice(-8).toUpperCase()}
+                            <CreditCard size={10} /> PO ID:{' '}
+                            {po.id.slice(-8).toUpperCase()}
                           </p>
                         </div>
                         <span
                           className={`px-2 py-0.5 rounded text-[8px] font-bold ${
-                            po.status === 'COMPLETED' || po.status === 'DELIVERED'
+                            po.status === 'COMPLETED' ||
+                            po.status === 'DELIVERED'
                               ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                               : po.status === 'PENDING'
                                 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
@@ -633,27 +672,34 @@ export default function FinancePage() {
                     className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:bg-slate-900 text-xs py-2 px-3 text-slate-200"
                   >
                     <span className="flex items-center gap-2">
-                      <FileText size={14} className="text-[#2563EB]" /> GST Filings GSTR-1
+                      <FileText size={14} className="text-[#2563EB]" /> GST
+                      Filings GSTR-1
                     </span>
                     <Download size={14} />
                   </Button>
 
                   <Button
-                    onClick={() => handleDownloadReport('Profit & Loss Summary')}
+                    onClick={() =>
+                      handleDownloadReport('Profit & Loss Summary')
+                    }
                     className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:bg-slate-900 text-xs py-2 px-3 text-slate-200"
                   >
                     <span className="flex items-center gap-2">
-                      <FileText size={14} className="text-[#16A34A]" /> P&L Consolidated
+                      <FileText size={14} className="text-[#16A34A]" /> P&L
+                      Consolidated
                     </span>
                     <Download size={14} />
                   </Button>
 
                   <Button
-                    onClick={() => handleDownloadReport('Corporate Tax Summary')}
+                    onClick={() =>
+                      handleDownloadReport('Corporate Tax Summary')
+                    }
                     className="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:bg-slate-900 text-xs py-2 px-3 text-slate-200"
                   >
                     <span className="flex items-center gap-2">
-                      <FileText size={14} className="text-[#F59E0B]" /> Corporate Tax Ledger
+                      <FileText size={14} className="text-[#F59E0B]" />{' '}
+                      Corporate Tax Ledger
                     </span>
                     <Download size={14} />
                   </Button>

@@ -4,7 +4,11 @@ import { AuthRequest } from '../../types/express';
 
 import { KitchenService } from './kitchen.service';
 
-export const getActiveOrders = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const getActiveOrders = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const assignedCategory = req.user?.assignedCategory;
     const orders = await KitchenService.getActiveOrders(assignedCategory);
@@ -17,7 +21,11 @@ export const getActiveOrders = async (req: AuthRequest, res: Response, next: Nex
   }
 };
 
-export const getStations = async (req: Request, res: Response, next: NextFunction) => {
+export const getStations = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const stations = await KitchenService.getStations();
     res.status(200).json({
@@ -29,7 +37,11 @@ export const getStations = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const createStation = async (req: Request, res: Response, next: NextFunction) => {
+export const createStation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { name, description } = req.body;
     const station = await KitchenService.createStation(name, description);
@@ -42,7 +54,11 @@ export const createStation = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-export const updateOrderStatus = async (req: Request, res: Response, next: NextFunction) => {
+export const updateOrderStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -56,11 +72,20 @@ export const updateOrderStatus = async (req: Request, res: Response, next: NextF
   }
 };
 
-export const assignOrder = async (req: Request, res: Response, next: NextFunction) => {
+export const assignOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { id } = req.params;
     const { stationId, assignedTo, priority } = req.body;
-    const order = await KitchenService.assignOrder(id, stationId, assignedTo, priority);
+    const order = await KitchenService.assignOrder(
+      id,
+      stationId,
+      assignedTo,
+      priority
+    );
     res.status(200).json({
       status: 'success',
       data: { order },
@@ -70,7 +95,11 @@ export const assignOrder = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const getAnalytics = async (req: Request, res: Response, next: NextFunction) => {
+export const getAnalytics = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const analytics = await KitchenService.getAnalytics();
     res.status(200).json({
@@ -82,7 +111,11 @@ export const getAnalytics = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-export const getStaffOrders = async (req: Request, res: Response, next: NextFunction) => {
+export const getStaffOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { id } = req.params;
     const orders = await KitchenService.getStaffOrders(id);

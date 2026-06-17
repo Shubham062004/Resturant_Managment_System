@@ -18,18 +18,20 @@ const isCi =
 
 if (isCi) {
   console.log(
-    '[Husky] CI/CD environment detected or HUSKY=0. Skipping Husky installation to prevent build failures.',
+    '[Husky] CI/CD environment detected or HUSKY=0. Skipping Husky installation to prevent build failures.'
   );
   process.exit(0);
 }
 
 try {
   // Execute Husky installation
-  console.log('[Husky] Local development environment detected. Installing Git hooks...');
+  console.log(
+    '[Husky] Local development environment detected. Installing Git hooks...'
+  );
   execSync('npx husky', { stdio: 'inherit' });
 } catch (error) {
   // Only fail silently if husky itself isn't found, which happens during production installs
   console.log(
-    '[Husky] Failed to install husky. This is expected in production builds where devDependencies are skipped.',
+    '[Husky] Failed to install husky. This is expected in production builds where devDependencies are skipped.'
   );
 }

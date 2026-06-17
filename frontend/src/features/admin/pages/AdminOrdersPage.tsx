@@ -108,10 +108,14 @@ export default function AdminOrdersPage() {
       toast.success(`Order status updated to ${newStatus}`);
       fetchOrders();
       if (selectedOrder?.id === orderId) {
-        setSelectedOrder((prev) => (prev ? { ...prev, status: newStatus } : null));
+        setSelectedOrder((prev) =>
+          prev ? { ...prev, status: newStatus } : null
+        );
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Could not update order status.');
+      toast.error(
+        error.response?.data?.error?.message || 'Could not update order status.'
+      );
     } finally {
       setSubmittingAction(false);
     }
@@ -124,10 +128,14 @@ export default function AdminOrdersPage() {
       toast.success('Order cancelled successfully.');
       fetchOrders();
       if (selectedOrder?.id === orderId) {
-        setSelectedOrder((prev) => (prev ? { ...prev, status: 'CANCELLED' } : null));
+        setSelectedOrder((prev) =>
+          prev ? { ...prev, status: 'CANCELLED' } : null
+        );
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Could not cancel order.');
+      toast.error(
+        error.response?.data?.error?.message || 'Could not cancel order.'
+      );
     } finally {
       setSubmittingAction(false);
     }
@@ -140,7 +148,9 @@ export default function AdminOrdersPage() {
       setSubmittingAction(true);
       const amount = parseFloat(refundAmount);
       if (isNaN(amount) || amount <= 0 || amount > selectedOrder.totalAmount) {
-        toast.error(`Refund amount must be between 0 and ₹${selectedOrder.totalAmount}`);
+        toast.error(
+          `Refund amount must be between 0 and ₹${selectedOrder.totalAmount}`
+        );
         return;
       }
 
@@ -157,7 +167,9 @@ export default function AdminOrdersPage() {
       setRefundReason('');
       fetchOrders();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Could not initiate refund.');
+      toast.error(
+        error.response?.data?.error?.message || 'Could not initiate refund.'
+      );
     } finally {
       setSubmittingAction(false);
     }
@@ -166,17 +178,23 @@ export default function AdminOrdersPage() {
   // Derived metrics
   const totalOrdersCount = orders.length;
   const pendingOrdersCount = orders.filter((o) =>
-    ['PLACED', 'ACCEPTED', 'PREPARING', 'READY', 'READY_FOR_PICKUP'].includes(o.status),
+    ['PLACED', 'ACCEPTED', 'PREPARING', 'READY', 'READY_FOR_PICKUP'].includes(
+      o.status
+    )
   ).length;
   const completedOrdersCount = orders.filter((o) =>
-    ['DELIVERED', 'PICKED_UP'].includes(o.status),
+    ['DELIVERED', 'PICKED_UP'].includes(o.status)
   ).length;
-  const cancelledOrdersCount = orders.filter((o) => o.status === 'CANCELLED').length;
+  const cancelledOrdersCount = orders.filter(
+    (o) => o.status === 'CANCELLED'
+  ).length;
   const totalRevenue = orders
     .filter((o) => ['DELIVERED', 'PICKED_UP'].includes(o.status))
     .reduce((acc, o) => acc + Number(o.totalAmount), 0);
 
-  const branches = Array.from(new Set(orders.map((o) => o.branch?.name).filter(Boolean)));
+  const branches = Array.from(
+    new Set(orders.map((o) => o.branch?.name).filter(Boolean))
+  );
 
   // Filtered orders
   const filteredOrders = orders.filter((o) => {
@@ -186,7 +204,8 @@ export default function AdminOrdersPage() {
       customerName.includes(searchQuery.toLowerCase()) ||
       orderNum.includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'ALL' || o.status === statusFilter;
-    const matchesBranch = branchFilter === 'ALL' || o.branch?.name === branchFilter;
+    const matchesBranch =
+      branchFilter === 'ALL' || o.branch?.name === branchFilter;
     const matchesType = typeFilter === 'ALL' || o.orderType === typeFilter;
 
     return matchesSearch && matchesStatus && matchesBranch && matchesType;
@@ -223,8 +242,8 @@ export default function AdminOrdersPage() {
             Order Command Center
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Monitor orders lifecycle, alter workflow status, initiate customer refunds, and audit
-            remote sales.
+            Monitor orders lifecycle, alter workflow status, initiate customer
+            refunds, and audit remote sales.
           </p>
         </div>
         <Button
@@ -243,8 +262,12 @@ export default function AdminOrdersPage() {
             <span>Total Orders</span>
             <ShoppingBag className="text-blue-500 w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold font-display mt-3">{totalOrdersCount}</p>
-          <span className="text-[10px] text-slate-500 block mt-1">Overall logged orders</span>
+          <p className="text-2xl font-bold font-display mt-3">
+            {totalOrdersCount}
+          </p>
+          <span className="text-[10px] text-slate-500 block mt-1">
+            Overall logged orders
+          </span>
         </Card>
 
         <Card className="p-5 bg-gradient-to-b from-amber-500/10 to-transparent border-amber-500/20 rounded-2xl">
@@ -252,8 +275,12 @@ export default function AdminOrdersPage() {
             <span>Active Orders</span>
             <Clock className="text-amber-500 w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold font-display mt-3">{pendingOrdersCount}</p>
-          <span className="text-[10px] text-slate-500 block mt-1">Awaiting completion</span>
+          <p className="text-2xl font-bold font-display mt-3">
+            {pendingOrdersCount}
+          </p>
+          <span className="text-[10px] text-slate-500 block mt-1">
+            Awaiting completion
+          </span>
         </Card>
 
         <Card className="p-5 bg-gradient-to-b from-emerald-500/10 to-transparent border-emerald-500/20 rounded-2xl">
@@ -261,8 +288,12 @@ export default function AdminOrdersPage() {
             <span>Completed Orders</span>
             <CheckCircle className="text-emerald-500 w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold font-display mt-3">{completedOrdersCount}</p>
-          <span className="text-[10px] text-slate-500 block mt-1">Successful deliveries</span>
+          <p className="text-2xl font-bold font-display mt-3">
+            {completedOrdersCount}
+          </p>
+          <span className="text-[10px] text-slate-500 block mt-1">
+            Successful deliveries
+          </span>
         </Card>
 
         <Card className="p-5 bg-gradient-to-b from-rose-500/10 to-transparent border-rose-500/20 rounded-2xl">
@@ -270,8 +301,12 @@ export default function AdminOrdersPage() {
             <span>Cancelled Orders</span>
             <XCircle className="text-rose-500 w-5 h-5" />
           </div>
-          <p className="text-2xl font-bold font-display mt-3">{cancelledOrdersCount}</p>
-          <span className="text-[10px] text-slate-500 block mt-1">Voided transactions</span>
+          <p className="text-2xl font-bold font-display mt-3">
+            {cancelledOrdersCount}
+          </p>
+          <span className="text-[10px] text-slate-500 block mt-1">
+            Voided transactions
+          </span>
         </Card>
 
         <Card className="p-5 bg-gradient-to-b from-lime-500/10 to-transparent border-lime-500/20 rounded-2xl">
@@ -282,7 +317,9 @@ export default function AdminOrdersPage() {
           <p className="text-2xl font-bold font-display mt-3">
             ₹{totalRevenue.toLocaleString('en-IN')}
           </p>
-          <span className="text-[10px] text-slate-500 block mt-1">Completed orders value</span>
+          <span className="text-[10px] text-slate-500 block mt-1">
+            Completed orders value
+          </span>
         </Card>
       </div>
 
@@ -290,7 +327,9 @@ export default function AdminOrdersPage() {
       <Card className="p-6 bg-[#111827] border-slate-800 rounded-2xl shadow-xl">
         <CardHeader className="border-none p-0 mb-6 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
           <div>
-            <h3 className="text-lg font-bold font-display text-white">Live Operations Grid</h3>
+            <h3 className="text-lg font-bold font-display text-white">
+              Live Operations Grid
+            </h3>
             <p className="text-xs text-slate-450">
               Benchmarking, status tracking, and order overrides
             </p>
@@ -423,7 +462,8 @@ export default function AdminOrdersPage() {
                     <td className="py-3 font-semibold text-slate-200">
                       #{order.orderNumber.slice(-8).toUpperCase()}
                       <span className="block text-[10px] text-slate-500 font-normal mt-0.5">
-                        {order.items.length} item{order.items.length !== 1 ? 's' : ''}
+                        {order.items.length} item
+                        {order.items.length !== 1 ? 's' : ''}
                       </span>
                     </td>
                     <td className="py-3 text-slate-400">
@@ -439,7 +479,9 @@ export default function AdminOrdersPage() {
                       <p className="text-slate-200 font-medium">
                         {order.user.firstName} {order.user.lastName}
                       </p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">{order.user.email}</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        {order.user.email}
+                      </p>
                     </td>
                     <td className="py-3 text-slate-300 font-medium">
                       {order.branch?.name.replace('ABC - ', '') || 'Central'}
@@ -497,7 +539,8 @@ export default function AdminOrdersPage() {
                     Order Details: #{selectedOrder.orderNumber.toUpperCase()}
                   </h2>
                   <p className="text-xs text-slate-400">
-                    Logged on {new Date(selectedOrder.createdAt).toLocaleString()}
+                    Logged on{' '}
+                    {new Date(selectedOrder.createdAt).toLocaleString()}
                   </p>
                 </div>
                 <button
@@ -517,9 +560,12 @@ export default function AdminOrdersPage() {
                     </h3>
                     <div className="p-3 bg-slate-950/50 rounded-xl border border-border/10 space-y-1 text-sm">
                       <p className="text-slate-200 font-semibold">
-                        {selectedOrder.user.firstName} {selectedOrder.user.lastName}
+                        {selectedOrder.user.firstName}{' '}
+                        {selectedOrder.user.lastName}
                       </p>
-                      <p className="text-slate-400 text-xs">{selectedOrder.user.email}</p>
+                      <p className="text-slate-400 text-xs">
+                        {selectedOrder.user.email}
+                      </p>
                       <p className="text-indigo-400 text-xs pt-1.5 border-t border-border/5 mt-1.5">
                         Branch: {selectedOrder.branch?.name || 'Central'}
                       </p>
@@ -532,7 +578,9 @@ export default function AdminOrdersPage() {
                     </h3>
                     <div className="p-3 bg-slate-950/50 rounded-xl border border-border/10 space-y-3">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-400">Current workflow:</span>
+                        <span className="text-slate-400">
+                          Current workflow:
+                        </span>
                         <span
                           className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${getStatusBadgeClass(selectedOrder.status)}`}
                         >
@@ -545,7 +593,12 @@ export default function AdminOrdersPage() {
                           <div className="flex flex-wrap gap-2 pt-2 border-t border-border/5">
                             {selectedOrder.status === 'PLACED' && (
                               <Button
-                                onClick={() => handleUpdateStatus(selectedOrder.id, 'ACCEPTED')}
+                                onClick={() =>
+                                  handleUpdateStatus(
+                                    selectedOrder.id,
+                                    'ACCEPTED'
+                                  )
+                                }
                                 size="sm"
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] py-1 px-2.5"
                               >
@@ -554,7 +607,12 @@ export default function AdminOrdersPage() {
                             )}
                             {selectedOrder.status === 'ACCEPTED' && (
                               <Button
-                                onClick={() => handleUpdateStatus(selectedOrder.id, 'PREPARING')}
+                                onClick={() =>
+                                  handleUpdateStatus(
+                                    selectedOrder.id,
+                                    'PREPARING'
+                                  )
+                                }
                                 size="sm"
                                 className="bg-amber-600 hover:bg-amber-700 text-white text-[11px] py-1 px-2.5"
                               >
@@ -563,16 +621,25 @@ export default function AdminOrdersPage() {
                             )}
                             {selectedOrder.status === 'PREPARING' && (
                               <Button
-                                onClick={() => handleUpdateStatus(selectedOrder.id, 'READY')}
+                                onClick={() =>
+                                  handleUpdateStatus(selectedOrder.id, 'READY')
+                                }
                                 size="sm"
                                 className="bg-blue-600 hover:bg-blue-700 text-white text-[11px] py-1 px-2.5"
                               >
                                 Mark Ready
                               </Button>
                             )}
-                            {['READY', 'OUT_FOR_DELIVERY'].includes(selectedOrder.status) && (
+                            {['READY', 'OUT_FOR_DELIVERY'].includes(
+                              selectedOrder.status
+                            ) && (
                               <Button
-                                onClick={() => handleUpdateStatus(selectedOrder.id, 'DELIVERED')}
+                                onClick={() =>
+                                  handleUpdateStatus(
+                                    selectedOrder.id,
+                                    'DELIVERED'
+                                  )
+                                }
                                 size="sm"
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] py-1 px-2.5"
                               >
@@ -581,7 +648,9 @@ export default function AdminOrdersPage() {
                             )}
 
                             <Button
-                              onClick={() => handleCancelOrder(selectedOrder.id)}
+                              onClick={() =>
+                                handleCancelOrder(selectedOrder.id)
+                              }
                               size="sm"
                               className="bg-rose-500/20 text-rose-500 border border-rose-500/30 hover:bg-rose-500/30 text-[11px] py-1 px-2.5"
                             >
@@ -590,14 +659,17 @@ export default function AdminOrdersPage() {
                           </div>
                         )}
 
-                      {['DELIVERED', 'PICKED_UP'].includes(selectedOrder.status) && (
+                      {['DELIVERED', 'PICKED_UP'].includes(
+                        selectedOrder.status
+                      ) && (
                         <div className="pt-2 border-t border-border/5">
                           <Button
                             onClick={() => setShowRefundModal(true)}
                             size="sm"
                             className="w-full bg-violet-600/20 text-violet-400 border border-violet-500/30 hover:bg-violet-600/30 text-[11px] py-1"
                           >
-                            <Undo size={12} className="inline mr-1" /> Issue Refund
+                            <Undo size={12} className="inline mr-1" /> Issue
+                            Refund
                           </Button>
                         </div>
                       )}
@@ -634,7 +706,8 @@ export default function AdminOrdersPage() {
                           </div>
                         </div>
                         <p className="text-sm font-bold text-slate-300 font-mono">
-                          ₹{(item.price * item.quantity).toLocaleString('en-IN')}
+                          ₹
+                          {(item.price * item.quantity).toLocaleString('en-IN')}
                         </p>
                       </div>
                     ))}
@@ -658,18 +731,29 @@ export default function AdminOrdersPage() {
                   <div className="flex justify-between">
                     <span className="text-slate-500">Delivery Fee:</span>
                     <span className="text-slate-300">
-                      ₹{Number(selectedOrder.deliveryFee).toLocaleString('en-IN')}
+                      ₹
+                      {Number(selectedOrder.deliveryFee).toLocaleString(
+                        'en-IN'
+                      )}
                     </span>
                   </div>
                   {Number(selectedOrder.discount) > 0 && (
                     <div className="flex justify-between text-rose-400">
                       <span>Promo Discount:</span>
-                      <span>-₹{Number(selectedOrder.discount).toLocaleString('en-IN')}</span>
+                      <span>
+                        -₹
+                        {Number(selectedOrder.discount).toLocaleString('en-IN')}
+                      </span>
                     </div>
                   )}
                   <div className="border-t border-border/10 pt-2 flex justify-between font-bold text-sm text-emerald-400">
                     <span>Total Amount Charged:</span>
-                    <span>₹{Number(selectedOrder.totalAmount).toLocaleString('en-IN')}</span>
+                    <span>
+                      ₹
+                      {Number(selectedOrder.totalAmount).toLocaleString(
+                        'en-IN'
+                      )}
+                    </span>
                   </div>
                 </div>
 
@@ -686,7 +770,9 @@ export default function AdminOrdersPage() {
                           className="p-3 bg-violet-500/5 border border-violet-500/10 rounded-xl flex justify-between items-center text-xs"
                         >
                           <div>
-                            <p className="font-semibold text-slate-300">Refund: ₹{refund.amount}</p>
+                            <p className="font-semibold text-slate-300">
+                              Refund: ₹{refund.amount}
+                            </p>
                             <p className="text-slate-500 text-[10px] mt-0.5">
                               Reason: {refund.reason}
                             </p>

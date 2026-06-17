@@ -44,7 +44,9 @@ export default function StaffCategoryOrdersPage() {
       setLoading(true);
       const response = await apiClient.get(`/kitchen/staff/${user.id}/orders`);
       setOrders(response.data.data.orders || []);
-      setAssignedCategory(response.data.data.assignedCategory || 'All Stations');
+      setAssignedCategory(
+        response.data.data.assignedCategory || 'All Stations'
+      );
     } catch (error) {
       console.error('Error fetching staff category orders:', error);
       toast.error('Could not load your station queue orders.');
@@ -59,11 +61,18 @@ export default function StaffCategoryOrdersPage() {
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     try {
-      await apiClient.patch(`/kitchen/orders/${orderId}/status`, { status: newStatus });
-      toast.success(`Ticket status successfully changed to ${newStatus.replace('_', ' ')}.`);
+      await apiClient.patch(`/kitchen/orders/${orderId}/status`, {
+        status: newStatus,
+      });
+      toast.success(
+        `Ticket status successfully changed to ${newStatus.replace('_', ' ')}.`
+      );
       fetchStaffCategoryOrders();
     } catch (error: any) {
-      toast.error(error.response?.data?.error?.message || 'Could not change ticket status.');
+      toast.error(
+        error.response?.data?.error?.message ||
+          'Could not change ticket status.'
+      );
     }
   };
 
@@ -71,7 +80,9 @@ export default function StaffCategoryOrdersPage() {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
         <RefreshCw className="animate-spin text-orange-500 w-10 h-10 mb-3" />
-        <p className="font-display font-medium text-sm">Synchronizing Station Queue...</p>
+        <p className="font-display font-medium text-sm">
+          Synchronizing Station Queue...
+        </p>
       </div>
     );
   }
@@ -149,7 +160,9 @@ export default function StaffCategoryOrdersPage() {
                     {order.tasks.map((t) => (
                       <div key={t.id} className="flex justify-between">
                         <span>{t.product.name}</span>
-                        <span className="font-bold text-slate-200">x{t.quantity}</span>
+                        <span className="font-bold text-slate-200">
+                          x{t.quantity}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -198,12 +211,16 @@ export default function StaffCategoryOrdersPage() {
                     {order.tasks.map((t) => (
                       <div key={t.id} className="flex justify-between">
                         <span>{t.product.name}</span>
-                        <span className="font-bold text-slate-200">x{t.quantity}</span>
+                        <span className="font-bold text-slate-200">
+                          x{t.quantity}
+                        </span>
                       </div>
                     ))}
                   </div>
                   <Button
-                    onClick={() => handleUpdateStatus(order.id, 'READY_FOR_PACKING')}
+                    onClick={() =>
+                      handleUpdateStatus(order.id, 'READY_FOR_PACKING')
+                    }
                     className="w-full bg-green-600 text-white font-bold text-xs py-2 hover:bg-green-700 mt-2 flex items-center justify-center gap-1.5"
                   >
                     <Check size={12} /> Mark Cooked
@@ -226,7 +243,9 @@ export default function StaffCategoryOrdersPage() {
           </div>
           <div className="flex-1 overflow-y-auto space-y-4">
             {readyOrders.length === 0 ? (
-              <p className="text-slate-600 text-xs text-center italic py-8">No ready tickets</p>
+              <p className="text-slate-600 text-xs text-center italic py-8">
+                No ready tickets
+              </p>
             ) : (
               readyOrders.map((order) => (
                 <div
@@ -245,7 +264,9 @@ export default function StaffCategoryOrdersPage() {
                     {order.tasks.map((t) => (
                       <div key={t.id} className="flex justify-between">
                         <span>{t.product.name}</span>
-                        <span className="font-bold text-slate-200">x{t.quantity}</span>
+                        <span className="font-bold text-slate-200">
+                          x{t.quantity}
+                        </span>
                       </div>
                     ))}
                   </div>

@@ -53,7 +53,9 @@ export const LoginPage: React.FC = () => {
       // Check if it's a valid 10-digit phone number
       const digitsOnly = identifier.replace(/\D/g, '');
       if (digitsOnly.length !== 10) {
-        setValidationError('Please enter a valid email or a 10-digit phone number.');
+        setValidationError(
+          'Please enter a valid email or a 10-digit phone number.'
+        );
         return;
       }
       payload = { phone: digitsOnly, password };
@@ -76,7 +78,9 @@ export const LoginPage: React.FC = () => {
         });
       } else {
         // Automatically determine redirect path based on user role if 'from' is undefined or root
-        const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
+        const dashboardRoute = getDashboardRouteByRole(
+          result.payload.user?.role
+        );
         const destination = !from || from === '/login' ? dashboardRoute : from;
         navigate(destination, { replace: true });
       }

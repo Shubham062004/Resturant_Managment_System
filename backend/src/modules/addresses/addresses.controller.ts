@@ -27,7 +27,11 @@ export const createAddress = async (req: AuthRequest, res: Response) => {
 export const updateAddress = async (req: AuthRequest, res: Response) => {
   const userId = req.user!.id;
   const addressId = req.params.id;
-  const address = await AddressService.updateAddress(userId, addressId, req.body);
+  const address = await AddressService.updateAddress(
+    userId,
+    addressId,
+    req.body
+  );
 
   res.status(200).json({
     success: true,

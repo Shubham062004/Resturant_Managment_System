@@ -123,7 +123,11 @@ export const MainLayout = ({ children }: { children?: React.ReactNode }) => {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="p-2 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
             >
-              {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isSidebarOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
             <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold bg-secondary px-3 py-1.5 rounded-md border border-border">
               Station #01 - FOH Desk

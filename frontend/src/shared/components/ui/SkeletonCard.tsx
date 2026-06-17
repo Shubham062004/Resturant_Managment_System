@@ -5,7 +5,10 @@ interface SkeletonCardProps {
   className?: string;
 }
 
-const SkeletonCard: React.FC<SkeletonCardProps> = ({ variant = 'food', className = '' }) => {
+const SkeletonCard: React.FC<SkeletonCardProps> = ({
+  variant = 'food',
+  className = '',
+}) => {
   if (variant === 'restaurant') {
     return (
       <div

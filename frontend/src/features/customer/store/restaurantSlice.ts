@@ -43,7 +43,7 @@ export const restaurantSlice = createSlice({
       action: PayloadAction<{
         sortBy: 'popularity' | 'rating' | 'name';
         sortOrder?: 'asc' | 'desc';
-      }>,
+      }>
     ) => {
       state.sortBy = action.payload.sortBy;
       if (action.payload.sortOrder) {
@@ -60,7 +60,13 @@ export const restaurantSlice = createSlice({
   },
 });
 
-export const { setSearch, setRating, toggleVeg, toggleOpenNow, setSorting, resetFilters } =
-  restaurantSlice.actions;
+export const {
+  setSearch,
+  setRating,
+  toggleVeg,
+  toggleOpenNow,
+  setSorting,
+  resetFilters,
+} = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

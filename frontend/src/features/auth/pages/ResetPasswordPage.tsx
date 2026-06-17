@@ -25,7 +25,9 @@ export const ResetPasswordPage: React.FC = () => {
     setError(null);
 
     if (!token) {
-      setError('Reset token is missing in the URL query params. Please verify your link.');
+      setError(
+        'Reset token is missing in the URL query params. Please verify your link.'
+      );
       return;
     }
 
@@ -42,11 +44,16 @@ export const ResetPasswordPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await apiClient.post('/auth/reset-password', { token, password });
+      const response = await apiClient.post('/auth/reset-password', {
+        token,
+        password,
+      });
       toast.success(response.data.message || 'Password updated successfully!');
       navigate('/login');
     } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to reset password.');
+      setError(
+        err.response?.data?.error?.message || 'Failed to reset password.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +69,9 @@ export const ResetPasswordPage: React.FC = () => {
           <h2 className="text-3xl font-extrabold font-display tracking-tight text-white">
             Reset Password
           </h2>
-          <p className="text-muted-foreground font-sans text-sm">Save new system credentials</p>
+          <p className="text-muted-foreground font-sans text-sm">
+            Save new system credentials
+          </p>
         </div>
 
         {error && (
@@ -74,8 +83,8 @@ export const ResetPasswordPage: React.FC = () => {
         {!token ? (
           <div className="space-y-4 text-center">
             <p className="text-muted-foreground font-sans text-sm">
-              The reset token parameters are missing from your URL. Request a new password recovery
-              link.
+              The reset token parameters are missing from your URL. Request a
+              new password recovery link.
             </p>
             <Link
               to="/forgot-password"

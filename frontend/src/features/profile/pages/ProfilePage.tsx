@@ -53,7 +53,9 @@ export const ProfilePage: React.FC = () => {
     // Validate type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      setValidationError('Invalid image format. Allowed formats: JPEG, PNG, WEBP, GIF.');
+      setValidationError(
+        'Invalid image format. Allowed formats: JPEG, PNG, WEBP, GIF.'
+      );
       return;
     }
 
@@ -80,7 +82,9 @@ export const ProfilePage: React.FC = () => {
     }
 
     if (phone && !/^\+?[1-9]\d{1,14}$/.test(phone)) {
-      setValidationError('Invalid phone number format. Use E.164 standard (e.g. +1234567890).');
+      setValidationError(
+        'Invalid phone number format. Use E.164 standard (e.g. +1234567890).'
+      );
       setIsLoading(false);
       return;
     }
@@ -100,10 +104,14 @@ export const ProfilePage: React.FC = () => {
         toast.success('Your profile details have been saved successfully.');
         setAvatarFile(null);
       } else {
-        setValidationError((result.payload as string) || 'Failed to update profile.');
+        setValidationError(
+          (result.payload as string) || 'Failed to update profile.'
+        );
       }
     } catch (err) {
-      setValidationError('An unexpected error occurred while saving your details.');
+      setValidationError(
+        'An unexpected error occurred while saving your details.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +120,7 @@ export const ProfilePage: React.FC = () => {
   const handleLogoutAll = async () => {
     if (
       window.confirm(
-        'Are you sure you want to terminate all active sessions on other devices? You will be signed out from this client.',
+        'Are you sure you want to terminate all active sessions on other devices? You will be signed out from this client.'
       )
     ) {
       await dispatch(logoutAllDevices());
@@ -150,7 +158,10 @@ export const ProfilePage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Avatar & Metadata Info */}
         <div className="glass-panel p-6 rounded-xl flex flex-col items-center text-center space-y-6">
-          <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
+          <div
+            className="relative group cursor-pointer"
+            onClick={handleAvatarClick}
+          >
             <Avatar
               src={getAvatarSrc()}
               name={`${user.firstName} ${user.lastName}`}
@@ -171,7 +182,9 @@ export const ProfilePage: React.FC = () => {
 
           <div className="space-y-1">
             <h2 className="text-xl font-bold font-display text-white">{`${user.firstName} ${user.lastName}`}</h2>
-            <p className="text-xs text-muted-foreground font-sans">{user.email}</p>
+            <p className="text-xs text-muted-foreground font-sans">
+              {user.email}
+            </p>
           </div>
 
           <div className="flex flex-wrap gap-2 justify-center">
@@ -179,11 +192,17 @@ export const ProfilePage: React.FC = () => {
               {user.role}
             </Badge>
             {user.isEmailVerified ? (
-              <Badge variant="success" className="text-[10px] py-1 flex items-center gap-1">
+              <Badge
+                variant="success"
+                className="text-[10px] py-1 flex items-center gap-1"
+              >
                 <ShieldCheck size={10} /> Verified
               </Badge>
             ) : (
-              <Badge variant="warning" className="text-[10px] py-1 flex items-center gap-1">
+              <Badge
+                variant="warning"
+                className="text-[10px] py-1 flex items-center gap-1"
+              >
                 <ShieldAlert size={10} /> Unverified Email
               </Badge>
             )}
@@ -241,7 +260,7 @@ export const ProfilePage: React.FC = () => {
                       (user.attendanceCount || 22) *
                         12 *
                         ((user.performanceScore || 4.7) / 5.0) *
-                        5,
+                        5
                     ).toLocaleString('en-IN')}
                   </span>
                   <span className="text-[10px] text-slate-500 mt-1 block">
@@ -261,7 +280,7 @@ export const ProfilePage: React.FC = () => {
                         (user.attendanceCount || 22) *
                           12 *
                           ((user.performanceScore || 4.7) / 5.0) *
-                          5,
+                          5
                     ).toLocaleString('en-IN')}
                   </span>
                   <span className="text-[10px] text-slate-500 mt-1 block">

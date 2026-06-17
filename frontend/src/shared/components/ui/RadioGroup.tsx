@@ -7,7 +7,9 @@ interface RadioGroupContextValue {
   disabled?: boolean;
 }
 
-const RadioGroupContext = React.createContext<RadioGroupContextValue | null>(null);
+const RadioGroupContext = React.createContext<RadioGroupContextValue | null>(
+  null
+);
 
 export interface RadioGroupProps {
   name: string;
@@ -29,7 +31,9 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   children,
 }) => {
   return (
-    <RadioGroupContext.Provider value={{ name, selectedValue: value, onChange, disabled }}>
+    <RadioGroupContext.Provider
+      value={{ name, selectedValue: value, onChange, disabled }}
+    >
       <div
         role="radiogroup"
         className={`flex ${direction === 'horizontal' ? 'flex-row gap-6' : 'flex-col gap-3'} ${className}`}
@@ -58,7 +62,9 @@ export const RadioGroupItem: React.FC<RadioGroupItemProps> = ({
 }) => {
   const context = React.useContext(RadioGroupContext);
   if (!context) {
-    throw new Error('RadioGroupItem must be used within a RadioGroup component');
+    throw new Error(
+      'RadioGroupItem must be used within a RadioGroup component'
+    );
   }
 
   const { name, selectedValue, onChange, disabled: groupDisabled } = context;

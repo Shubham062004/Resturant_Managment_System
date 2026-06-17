@@ -29,15 +29,19 @@ router.use(
     'ADMIN',
     'SUPER_ADMIN',
     'ORGANIZATION_OWNER',
-    'BRANCH_MANAGER',
-  ),
+    'BRANCH_MANAGER'
+  )
 );
 
 router.route('/orders').get(getActiveOrders);
 
-router.route('/orders/:id/status').patch(validate(updateOrderStatusSchema), updateOrderStatus);
+router
+  .route('/orders/:id/status')
+  .patch(validate(updateOrderStatusSchema), updateOrderStatus);
 
-router.route('/orders/:id/assign').patch(validate(assignOrderSchema), assignOrder);
+router
+  .route('/orders/:id/assign')
+  .patch(validate(assignOrderSchema), assignOrder);
 
 router.route('/staff/:id/orders').get(getStaffOrders);
 
@@ -47,11 +51,14 @@ router
   .post(
     restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN'),
     validate(createStationSchema),
-    createStation,
+    createStation
   );
 
 router
   .route('/analytics')
-  .get(restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER'), getAnalytics);
+  .get(
+    restrictTo('HEAD_CHEF', 'ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER'),
+    getAnalytics
+  );
 
 export default router;

@@ -24,33 +24,47 @@ const initialState: InventoryState = {
   error: null,
 };
 
-export const fetchInventory = createAsyncThunk('inventory/fetchInventory', async () => {
-  const response = await api.get('/inventory');
-  return response.data.data;
-});
+export const fetchInventory = createAsyncThunk(
+  'inventory/fetchInventory',
+  async () => {
+    const response = await api.get('/inventory');
+    return response.data.data;
+  }
+);
 
-export const fetchSuppliers = createAsyncThunk('inventory/fetchSuppliers', async () => {
-  const response = await api.get('/inventory/suppliers');
-  return response.data.data;
-});
+export const fetchSuppliers = createAsyncThunk(
+  'inventory/fetchSuppliers',
+  async () => {
+    const response = await api.get('/inventory/suppliers');
+    return response.data.data;
+  }
+);
 
-export const fetchPurchaseOrders = createAsyncThunk('inventory/fetchPurchaseOrders', async () => {
-  const response = await api.get('/inventory/purchase-orders');
-  return response.data.data;
-});
+export const fetchPurchaseOrders = createAsyncThunk(
+  'inventory/fetchPurchaseOrders',
+  async () => {
+    const response = await api.get('/inventory/purchase-orders');
+    return response.data.data;
+  }
+);
 
-export const fetchAnalytics = createAsyncThunk('inventory/fetchAnalytics', async () => {
-  const response = await api.get('/inventory/analytics');
-  return response.data.data;
-});
+export const fetchAnalytics = createAsyncThunk(
+  'inventory/fetchAnalytics',
+  async () => {
+    const response = await api.get('/inventory/analytics');
+    return response.data.data;
+  }
+);
 
 export const fetchInventoryRequests = createAsyncThunk(
   'inventory/fetchInventoryRequests',
   async (branchId?: string) => {
-    const url = branchId ? `/inventory/requests?branchId=${branchId}` : '/inventory/requests';
+    const url = branchId
+      ? `/inventory/requests?branchId=${branchId}`
+      : '/inventory/requests';
     const response = await api.get(url);
     return response.data.data;
-  },
+  }
 );
 
 export const createInventoryRequest = createAsyncThunk(
@@ -58,7 +72,7 @@ export const createInventoryRequest = createAsyncThunk(
   async (data: any) => {
     const response = await api.post('/inventory/requests', data);
     return response.data.data;
-  },
+  }
 );
 
 export const approveInventoryRequest = createAsyncThunk(
@@ -66,7 +80,7 @@ export const approveInventoryRequest = createAsyncThunk(
   async ({ id, data }: { id: string; data: any }) => {
     const response = await api.patch(`/inventory/requests/${id}/approve`, data);
     return response.data.data;
-  },
+  }
 );
 
 export const updateInventoryRequestStatus = createAsyncThunk(
@@ -80,9 +94,11 @@ export const updateInventoryRequestStatus = createAsyncThunk(
     status: 'PACKED' | 'DISPATCHED' | 'DELIVERED';
     type: 'dispatch' | 'deliver';
   }) => {
-    const response = await api.patch(`/inventory/requests/${id}/${type}`, { status });
+    const response = await api.patch(`/inventory/requests/${id}/${type}`, {
+      status,
+    });
     return response.data.data;
-  },
+  }
 );
 
 const inventorySlice = createSlice({
@@ -98,13 +114,17 @@ const inventorySlice = createSlice({
       }
     },
     socketPurchaseReceived: (state, action: PayloadAction<any>) => {
-      const idx = state.purchaseOrders.findIndex((p) => p.id === action.payload.id);
+      const idx = state.purchaseOrders.findIndex(
+        (p) => p.id === action.payload.id
+      );
       if (idx !== -1) {
         state.purchaseOrders[idx] = action.payload;
       }
     },
     socketInventoryRequestUpdated: (state, action: PayloadAction<any>) => {
-      const idx = state.inventoryRequests.findIndex((r) => r.id === action.payload.id);
+      const idx = state.inventoryRequests.findIndex(
+        (r) => r.id === action.payload.id
+      );
       if (idx !== -1) {
         state.inventoryRequests[idx] = action.payload;
       } else {
@@ -137,13 +157,17 @@ const inventorySlice = createSlice({
         state.inventoryRequests.unshift(action.payload);
       })
       .addCase(approveInventoryRequest.fulfilled, (state, action) => {
-        const idx = state.inventoryRequests.findIndex((r) => r.id === action.payload.id);
+        const idx = state.inventoryRequests.findIndex(
+          (r) => r.id === action.payload.id
+        );
         if (idx !== -1) {
           state.inventoryRequests[idx] = action.payload;
         }
       })
       .addCase(updateInventoryRequestStatus.fulfilled, (state, action) => {
-        const idx = state.inventoryRequests.findIndex((r) => r.id === action.payload.id);
+        const idx = state.inventoryRequests.findIndex(
+          (r) => r.id === action.payload.id
+        );
         if (idx !== -1) {
           state.inventoryRequests[idx] = action.payload;
         }
@@ -151,6 +175,9 @@ const inventorySlice = createSlice({
   },
 });
 
-export const { socketInventoryUpdate, socketPurchaseReceived, socketInventoryRequestUpdated } =
-  inventorySlice.actions;
+export const {
+  socketInventoryUpdate,
+  socketPurchaseReceived,
+  socketInventoryRequestUpdated,
+} = inventorySlice.actions;
 export default inventorySlice.reducer;

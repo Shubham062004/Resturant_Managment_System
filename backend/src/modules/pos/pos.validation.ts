@@ -39,7 +39,7 @@ export const createPOSOrderSchema = {
           variantId: z.string().uuid().optional(),
           quantity: z.number().int().positive(),
           notes: z.string().optional(),
-        }),
+        })
       )
       .min(1),
     discount: z.number().min(0).optional(),
@@ -55,7 +55,7 @@ export const processPaymentSchema = {
           method: z.enum(['CASH', 'UPI', 'CARD', 'WALLET', 'SPLIT']),
           amount: z.number().positive(),
           transactionReference: z.string().optional(),
-        }),
+        })
       )
       .min(1),
   }),

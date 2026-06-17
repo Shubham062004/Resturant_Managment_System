@@ -42,7 +42,12 @@ export class CartService {
       cart = await prisma.cart.create({
         data: { userId },
         include: {
-          items: { include: { product: { include: { restaurant: true } }, variant: true } },
+          items: {
+            include: {
+              product: { include: { restaurant: true } },
+              variant: true,
+            },
+          },
         },
       });
     }
@@ -55,7 +60,7 @@ export class CartService {
    */
   public static async addItem(
     userId: string,
-    data: { productId: string; variantId?: string; quantity: number },
+    data: { productId: string; variantId?: string; quantity: number }
   ) {
     let cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
@@ -63,7 +68,9 @@ export class CartService {
     }
 
     // Verify product exists and get price
-    const product = await prisma.product.findUnique({ where: { id: data.productId } });
+    const product = await prisma.product.findUnique({
+      where: { id: data.productId },
+    });
     if (!product || !product.isAvailable) {
       throw new AppError('Product not found or unavailable', 404);
     }
@@ -71,7 +78,9 @@ export class CartService {
     let price = product.basePrice;
 
     if (data.variantId) {
-      const variant = await prisma.productVariant.findUnique({ where: { id: data.variantId } });
+      const variant = await prisma.productVariant.findUnique({
+        where: { id: data.variantId },
+      });
       if (!variant) {
         throw new AppError('Variant not found', 404);
       }
@@ -120,7 +129,11 @@ export class CartService {
   /**
    * Update item quantity
    */
-  public static async updateItemQuantity(userId: string, itemId: string, quantity: number) {
+  public static async updateItemQuantity(
+    userId: string,
+    itemId: string,
+    quantity: number
+  ) {
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) throw new AppError('Cart not found', 404);
 
@@ -195,7 +208,7 @@ export class CartService {
    */
   public static async mergeCart(
     userId: string,
-    items: Array<{ productId: string; variantId?: string; quantity: number }>,
+    items: Array<{ productId: string; variantId?: string; quantity: number }>
   ) {
     let cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
@@ -207,7 +220,9 @@ export class CartService {
         productId: item.productId,
         variantId: item.variantId,
         quantity: item.quantity,
-      }).catch((err) => logger.warn(`Failed to merge cart item ${item.productId}`, err));
+      }).catch((err) =>
+        logger.warn(`Failed to merge cart item ${item.productId}`, err)
+      );
     }
 
     return this.getCart(userId);

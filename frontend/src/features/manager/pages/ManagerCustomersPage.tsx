@@ -50,7 +50,8 @@ export default function ManagerCustomersPage() {
         const res = await apiClient.get('/admin/orders');
         const allOrders = res.data.data || [];
         const branchOrders = allOrders.filter(
-          (o: any) => o.branchId === selectedBranchId || o.branch?.id === selectedBranchId,
+          (o: any) =>
+            o.branchId === selectedBranchId || o.branch?.id === selectedBranchId
         );
 
         setOrders(branchOrders);
@@ -96,7 +97,9 @@ export default function ManagerCustomersPage() {
       const nameMatch = `${c.firstName} ${c.lastName}`
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-      const emailMatch = c.email?.toLowerCase().includes(searchQuery.toLowerCase());
+      const emailMatch = c.email
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase());
       return nameMatch || emailMatch;
     })
     .sort((a, b) => b.totalSpent - a.totalSpent);
@@ -134,7 +137,11 @@ export default function ManagerCustomersPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -157,7 +164,10 @@ export default function ManagerCustomersPage() {
             {loading ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 bg-slate-900/50 animate-pulse rounded-xl" />
+                  <div
+                    key={i}
+                    className="h-16 bg-slate-900/50 animate-pulse rounded-xl"
+                  />
                 ))}
               </div>
             ) : filteredCustomers.length === 0 ? (
@@ -186,15 +196,20 @@ export default function ManagerCustomersPage() {
                       </p>
                     </div>
                     {customer.totalSpent > 5000 && (
-                      <Star size={14} className="text-amber-400 fill-amber-400/20" />
+                      <Star
+                        size={14}
+                        className="text-amber-400 fill-amber-400/20"
+                      />
                     )}
                   </div>
                   <div className="flex items-center gap-4 text-xs font-semibold text-slate-400">
                     <span className="flex items-center gap-1">
-                      <ShoppingBag size={12} className="text-emerald-500" /> {customer.orderCount}{' '}
-                      Orders
+                      <ShoppingBag size={12} className="text-emerald-500" />{' '}
+                      {customer.orderCount} Orders
                     </span>
-                    <span className="font-mono">₹{customer.totalSpent.toLocaleString()} Spent</span>
+                    <span className="font-mono">
+                      ₹{customer.totalSpent.toLocaleString()} Spent
+                    </span>
                   </div>
                 </div>
               ))
@@ -207,7 +222,9 @@ export default function ManagerCustomersPage() {
           {!selectedCustomer ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-500 opacity-50">
               <Users size={64} className="mb-4" />
-              <p className="font-semibold">Select a customer to view history & feedback.</p>
+              <p className="font-semibold">
+                Select a customer to view history & feedback.
+              </p>
             </div>
           ) : (
             <>
@@ -223,16 +240,21 @@ export default function ManagerCustomersPage() {
                       {selectedCustomer.firstName} {selectedCustomer.lastName}
                     </h2>
                     <p className="text-sm text-slate-400 mt-1">
-                      {selectedCustomer.email} • {selectedCustomer.phone || 'No Phone'}
+                      {selectedCustomer.email} •{' '}
+                      {selectedCustomer.phone || 'No Phone'}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <Badge
-                    variant={selectedCustomer.totalSpent > 5000 ? 'warning' : 'neutral'}
+                    variant={
+                      selectedCustomer.totalSpent > 5000 ? 'warning' : 'neutral'
+                    }
                     className="text-xs font-bold px-3 py-1"
                   >
-                    {selectedCustomer.totalSpent > 5000 ? 'VIP Customer' : 'Standard'}
+                    {selectedCustomer.totalSpent > 5000
+                      ? 'VIP Customer'
+                      : 'Standard'}
                   </Badge>
                   <Button
                     size="sm"
@@ -270,7 +292,8 @@ export default function ManagerCustomersPage() {
                     <p className="text-2xl font-bold text-slate-200 font-mono">
                       ₹
                       {Math.round(
-                        selectedCustomer.totalSpent / selectedCustomer.orderCount,
+                        selectedCustomer.totalSpent /
+                          selectedCustomer.orderCount
                       ).toLocaleString()}
                     </p>
                   </div>
@@ -280,7 +303,8 @@ export default function ManagerCustomersPage() {
                 {selectedCustomer.feedback?.length > 0 && (
                   <div>
                     <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-3">
-                      <AlertTriangle className="text-rose-500 w-4 h-4" /> Reported Issues
+                      <AlertTriangle className="text-rose-500 w-4 h-4" />{' '}
+                      Reported Issues
                     </h3>
                     <div className="space-y-3">
                       {selectedCustomer.feedback.map((fb: any, idx: number) => (
@@ -308,13 +332,15 @@ export default function ManagerCustomersPage() {
                 {/* Order History */}
                 <div>
                   <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-3">
-                    <History className="text-sky-500 w-4 h-4" /> Order History at this Branch
+                    <History className="text-sky-500 w-4 h-4" /> Order History
+                    at this Branch
                   </h3>
                   <div className="space-y-3">
                     {selectedCustomer.recentOrders
                       .sort(
                         (a: any, b: any) =>
-                          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+                          new Date(b.createdAt).getTime() -
+                          new Date(a.createdAt).getTime()
                       )
                       .slice(0, 5)
                       .map((order: any) => (
@@ -339,7 +365,9 @@ export default function ManagerCustomersPage() {
                             <p className="font-bold text-emerald-400 font-mono">
                               ₹{order.totalAmount.toLocaleString()}
                             </p>
-                            <p className="text-[10px] text-slate-500 mt-1">{order.status}</p>
+                            <p className="text-[10px] text-slate-500 mt-1">
+                              {order.status}
+                            </p>
                           </div>
                         </div>
                       ))}

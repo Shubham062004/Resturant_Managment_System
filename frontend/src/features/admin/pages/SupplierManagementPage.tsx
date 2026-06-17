@@ -51,7 +51,9 @@ export default function SupplierManagementPage() {
 
   // Modals state
   const [showAddEditModal, setShowAddEditModal] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+    null
+  );
 
   // Form fields
   const [formName, setFormName] = useState('');
@@ -112,7 +114,10 @@ export default function SupplierManagementPage() {
       };
 
       if (selectedSupplier) {
-        await apiClient.patch(`/inventory/suppliers/${selectedSupplier.id}`, payload);
+        await apiClient.patch(
+          `/inventory/suppliers/${selectedSupplier.id}`,
+          payload
+        );
         toast.success(`Updated supplier: ${formName}`);
       } else {
         await apiClient.post('/inventory/suppliers', payload);
@@ -121,24 +126,32 @@ export default function SupplierManagementPage() {
       setShowAddEditModal(false);
       loadData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Error saving supplier.');
+      toast.error(
+        err.response?.data?.error?.message || 'Error saving supplier.'
+      );
     }
   };
 
   const filteredSuppliers = suppliers.filter(
     (s) =>
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.contactName.toLowerCase().includes(searchTerm.toLowerCase()),
+      s.contactName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalSuppliers = suppliers.length;
-  const totalPOAmount = purchaseOrders.reduce((acc, po) => acc + po.totalAmount, 0);
+  const totalPOAmount = purchaseOrders.reduce(
+    (acc, po) => acc + po.totalAmount,
+    0
+  );
   const pendingPOs = purchaseOrders.filter(
-    (po) => po.status === 'PENDING' || po.status === 'PLACED',
+    (po) => po.status === 'PENDING' || po.status === 'PLACED'
   ).length;
   const avgRating =
     suppliers.length > 0
-      ? (suppliers.reduce((acc, s) => acc + (s.rating || 4.5), 0) / suppliers.length).toFixed(1)
+      ? (
+          suppliers.reduce((acc, s) => acc + (s.rating || 4.5), 0) /
+          suppliers.length
+        ).toFixed(1)
       : '4.6';
 
   return (
@@ -150,8 +163,8 @@ export default function SupplierManagementPage() {
             Supplier Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Maintain wholesale distributor profiles, evaluate supplier performance metrics, and
-            track procurement purchase orders.
+            Maintain wholesale distributor profiles, evaluate supplier
+            performance metrics, and track procurement purchase orders.
           </p>
         </div>
         <Button
@@ -171,8 +184,12 @@ export default function SupplierManagementPage() {
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Active Partners
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-white">{totalSuppliers}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Distributors registered</span>
+          <p className="text-3xl font-bold font-display mt-2 text-white">
+            {totalSuppliers}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Distributors registered
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
@@ -182,22 +199,30 @@ export default function SupplierManagementPage() {
           <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">
             ₹{totalPOAmount.toLocaleString('en-IN')}
           </p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Cumulative purchase orders</span>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Cumulative purchase orders
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Awaiting Dispatches
           </p>
-          <p className="text-3xl font-bold font-[#F59E0B] mt-2 text-[#F59E0B]">{pendingPOs}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Pending purchase orders</span>
+          <p className="text-3xl font-bold font-[#F59E0B] mt-2 text-[#F59E0B]">
+            {pendingPOs}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Pending purchase orders
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Avg Partner Rating
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">★ {avgRating}</p>
+          <p className="text-3xl font-bold font-display mt-2 text-[#06B6D4]">
+            ★ {avgRating}
+          </p>
           <span className="text-[10px] text-slate-500 mt-1 block">
             Supplier fulfillment average
           </span>
@@ -211,7 +236,9 @@ export default function SupplierManagementPage() {
           <Card className="p-6 bg-[#111827] border-slate-800 shadow-lg">
             <CardHeader className="border-none p-0 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h3 className="text-lg font-bold font-display text-white">Active Distributors</h3>
+                <h3 className="text-lg font-bold font-display text-white">
+                  Active Distributors
+                </h3>
                 <p className="text-xs text-slate-400">
                   Directory of ingredient and materials partners
                 </p>
@@ -232,7 +259,9 @@ export default function SupplierManagementPage() {
                 <RefreshCw className="animate-spin text-primary w-8 h-8" />
               </div>
             ) : filteredSuppliers.length === 0 ? (
-              <p className="text-slate-500 text-sm text-center py-8">No distributors registered.</p>
+              <p className="text-slate-500 text-sm text-center py-8">
+                No distributors registered.
+              </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {filteredSuppliers.map((s, idx) => {
@@ -247,8 +276,12 @@ export default function SupplierManagementPage() {
                       <div>
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="font-bold text-slate-200">{s.name}</h4>
-                            <p className="text-xs text-slate-400 mt-0.5">Rep: {s.contactName}</p>
+                            <h4 className="font-bold text-slate-200">
+                              {s.name}
+                            </h4>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                              Rep: {s.contactName}
+                            </p>
                           </div>
                           <div className="flex items-center gap-1 text-xs text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full">
                             <Star size={12} fill="currentColor" />
@@ -312,7 +345,9 @@ export default function SupplierManagementPage() {
                     className="p-3 bg-slate-950 border border-slate-800/60 rounded-xl space-y-2"
                   >
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-bold text-slate-300">{po.supplier.name}</span>
+                      <span className="font-bold text-slate-300">
+                        {po.supplier.name}
+                      </span>
                       <span
                         className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                           po.status === 'RECEIVED'
@@ -328,7 +363,8 @@ export default function SupplierManagementPage() {
 
                     <div className="flex justify-between items-center text-xs text-slate-400 pt-1 border-t border-border/5">
                       <span className="flex items-center gap-1">
-                        <Calendar size={12} /> {new Date(po.createdAt).toLocaleDateString()}
+                        <Calendar size={12} />{' '}
+                        {new Date(po.createdAt).toLocaleDateString()}
                       </span>
                       <span className="font-semibold text-emerald-400">
                         ₹{po.totalAmount.toLocaleString('en-IN')}
@@ -354,7 +390,9 @@ export default function SupplierManagementPage() {
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">
-                  {selectedSupplier ? 'Modify Supplier Profile' : 'Add Wholesale Supplier'}
+                  {selectedSupplier
+                    ? 'Modify Supplier Profile'
+                    : 'Add Wholesale Supplier'}
                 </h2>
                 <button
                   onClick={() => setShowAddEditModal(false)}
@@ -441,7 +479,10 @@ export default function SupplierManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Save Profile
                   </Button>
                 </div>

@@ -3,7 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../../config/db';
 
 export class OrganizationController {
-  public static async getOrganizations(req: Request, res: Response, next: NextFunction) {
+  public static async getOrganizations(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const organizations = await prisma.organization.findMany({
         include: {
@@ -19,7 +23,11 @@ export class OrganizationController {
     }
   }
 
-  public static async createOrganization(req: Request, res: Response, next: NextFunction) {
+  public static async createOrganization(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { name, slug } = req.body;
       const org = await prisma.organization.create({
@@ -31,7 +39,11 @@ export class OrganizationController {
     }
   }
 
-  public static async updateOrganization(req: Request, res: Response, next: NextFunction) {
+  public static async updateOrganization(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const org = await prisma.organization.update({
         where: { id: req.params.id },

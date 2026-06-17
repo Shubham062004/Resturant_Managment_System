@@ -16,14 +16,26 @@ router.post('/chat', AIController.postChat);
 router.use(
   '/predictions',
   authGuard,
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
+  restrictTo(
+    'ADMIN',
+    'SUPER_ADMIN',
+    'BRANCH_MANAGER',
+    'ORGANIZATION_OWNER',
+    'FRANCHISE_OWNER'
+  )
 );
 router.get('/predictions', AIController.getPredictions);
 
 router.use(
   '/customer-segment',
   authGuard,
-  restrictTo('ADMIN', 'SUPER_ADMIN', 'BRANCH_MANAGER', 'ORGANIZATION_OWNER', 'FRANCHISE_OWNER'),
+  restrictTo(
+    'ADMIN',
+    'SUPER_ADMIN',
+    'BRANCH_MANAGER',
+    'ORGANIZATION_OWNER',
+    'FRANCHISE_OWNER'
+  )
 );
 router.get('/customer-segment', AIController.getCustomerSegment);
 

@@ -15,19 +15,26 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 import { formatCurrency } from '../../../shared/utils/currency';
 
 export default function SupplierHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: response, isLoading } = useHistoryQuery('suppliers', { limit: 500 });
+  const { data: response, isLoading } = useHistoryQuery('suppliers', {
+    limit: 500,
+  });
   const records = useMemo(() => response?.data || [], [response]);
 
   // Derived KPIs
   const stats = useMemo(() => {
-    if (!records.length) return { totalSpend: 0, orders: 0, onTime: 0, avgRating: 0 };
+    if (!records.length)
+      return { totalSpend: 0, orders: 0, onTime: 0, avgRating: 0 };
 
     let totalOrders = 0;
     let sumRating = 0;
@@ -72,7 +79,7 @@ export default function SupplierHistoryPage() {
     return records.filter(
       (r: any) =>
         r.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.contactPerson?.toLowerCase().includes(searchTerm.toLowerCase()),
+        r.contactPerson?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [records, searchTerm]);
 
@@ -127,7 +134,9 @@ export default function SupplierHistoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="bg-slate-900/40 border-border/20">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Monthly Purchasing Spend</h3>
+            <h3 className="font-bold text-white text-sm">
+              Monthly Purchasing Spend
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -138,7 +147,11 @@ export default function SupplierHistoryPage() {
                   data={chartData.monthlySpend}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="month"
                     stroke="#94a3b8"
@@ -176,7 +189,9 @@ export default function SupplierHistoryPage() {
 
         <Card className="bg-slate-900/40 border-border/20">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Top Suppliers by Volume</h3>
+            <h3 className="font-bold text-white text-sm">
+              Top Suppliers by Volume
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -264,18 +279,28 @@ export default function SupplierHistoryPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No suppliers found.
                     </td>
                   </tr>
                 ) : (
                   filteredRecords.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div className="font-medium text-white">{row.name}</div>
-                        <div className="text-xs text-slate-400">{row.email}</div>
+                        <div className="text-xs text-slate-400">
+                          {row.email}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 text-slate-300">{row.contactPerson || 'N/A'}</td>
+                      <td className="px-6 py-4 text-slate-300">
+                        {row.contactPerson || 'N/A'}
+                      </td>
                       <td className="px-6 py-4 font-bold text-blue-400">
                         {row.purchaseOrders?.length || 0}
                       </td>
@@ -285,7 +310,9 @@ export default function SupplierHistoryPage() {
                         </Badge>
                       </td>
                       <td className="px-6 py-4 text-slate-400">
-                        {row.createdAt ? format(new Date(row.createdAt), 'MMM yyyy') : 'Unknown'}
+                        {row.createdAt
+                          ? format(new Date(row.createdAt), 'MMM yyyy')
+                          : 'Unknown'}
                       </td>
                     </tr>
                   ))

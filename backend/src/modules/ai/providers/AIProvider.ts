@@ -19,12 +19,18 @@ export interface AIProvider {
   /**
    * Generate text completion based on a prompt.
    */
-  generateCompletion(prompt: string, options?: AICompletionOptions): Promise<string>;
+  generateCompletion(
+    prompt: string,
+    options?: AICompletionOptions
+  ): Promise<string>;
 
   /**
    * Conduct a chat session with the AI.
    */
-  chat(messages: AIChatMessage[], options?: AICompletionOptions): Promise<string>;
+  chat(
+    messages: AIChatMessage[],
+    options?: AICompletionOptions
+  ): Promise<string>;
 
   /**
    * Retrieve the name of the active provider (e.g., 'GEMINI', 'OPENAI').

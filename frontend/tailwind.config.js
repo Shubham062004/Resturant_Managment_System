@@ -59,7 +59,8 @@ export default {
       },
       boxShadow: {
         glass: '0 8px 32px 0 rgba(0, 0, 0, 0.08)',
-        premium: '0 10px 30px -10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05)',
+        premium:
+          '0 10px 30px -10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05)',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

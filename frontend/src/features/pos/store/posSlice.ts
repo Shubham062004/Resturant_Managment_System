@@ -41,17 +41,20 @@ const initialState: POSState = {
   error: null,
 };
 
-export const fetchTerminals = createAsyncThunk('pos/fetchTerminals', async (branchId: string) => {
-  const response = await api.get(`/pos/terminals/${branchId}`);
-  return response.data.data;
-});
+export const fetchTerminals = createAsyncThunk(
+  'pos/fetchTerminals',
+  async (branchId: string) => {
+    const response = await api.get(`/pos/terminals/${branchId}`);
+    return response.data.data;
+  }
+);
 
 export const startShift = createAsyncThunk(
   'pos/startShift',
   async (data: { terminalId: string; openingAmount: number }) => {
     const response = await api.post('/pos/shifts/start', data);
     return response.data.data;
-  },
+  }
 );
 
 export const endShift = createAsyncThunk(
@@ -59,7 +62,7 @@ export const endShift = createAsyncThunk(
   async (data: { drawerId: string; closingAmount: number; notes?: string }) => {
     const response = await api.post(`/pos/shifts/end/${data.drawerId}`, data);
     return response.data.data;
-  },
+  }
 );
 
 export const checkoutPOS = createAsyncThunk(
@@ -75,7 +78,7 @@ export const checkoutPOS = createAsyncThunk(
     };
     const response = await api.post('/pos/orders', payload);
     return response.data.data;
-  },
+  }
 );
 
 export const processPayment = createAsyncThunk(
@@ -83,7 +86,7 @@ export const processPayment = createAsyncThunk(
   async (data: { posOrderId: string; payments: any[] }) => {
     const response = await api.post('/pos/payments', data);
     return response.data.data; // { status, remaining or payments }
-  },
+  }
 );
 
 const calculateTotals = (cart: any) => {
@@ -103,14 +106,19 @@ const posSlice = createSlice({
     setActiveTerminal: (state, action: PayloadAction<any>) => {
       state.activeTerminal = action.payload;
     },
-    setOrderType: (state, action: PayloadAction<'DINE_IN' | 'TAKEAWAY' | 'WALK_IN'>) => {
+    setOrderType: (
+      state,
+      action: PayloadAction<'DINE_IN' | 'TAKEAWAY' | 'WALK_IN'>
+    ) => {
       state.cart.orderType = action.payload;
     },
     setTableId: (state, action: PayloadAction<string | undefined>) => {
       state.cart.tableId = action.payload;
     },
     addToCart: (state, action: PayloadAction<any>) => {
-      const existing = state.cart.items.find((i) => i.productId === action.payload.productId);
+      const existing = state.cart.items.find(
+        (i) => i.productId === action.payload.productId
+      );
       if (existing) {
         existing.quantity += action.payload.quantity;
       } else {
@@ -118,20 +126,27 @@ const posSlice = createSlice({
       }
       calculateTotals(state.cart);
     },
-    updateQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
-      const item = state.cart.items.find((i) => i.productId === action.payload.productId);
+    updateQuantity: (
+      state,
+      action: PayloadAction<{ productId: string; quantity: number }>
+    ) => {
+      const item = state.cart.items.find(
+        (i) => i.productId === action.payload.productId
+      );
       if (item) {
         item.quantity = action.payload.quantity;
         if (item.quantity <= 0) {
           state.cart.items = state.cart.items.filter(
-            (i) => i.productId !== action.payload.productId,
+            (i) => i.productId !== action.payload.productId
           );
         }
       }
       calculateTotals(state.cart);
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state.cart.items = state.cart.items.filter((i) => i.productId !== action.payload);
+      state.cart.items = state.cart.items.filter(
+        (i) => i.productId !== action.payload
+      );
       calculateTotals(state.cart);
     },
     clearCart: (state) => {
@@ -148,7 +163,9 @@ const posSlice = createSlice({
       })
       .addCase(startShift.fulfilled, (state, action) => {
         state.activeDrawer = action.payload;
-        state.activeTerminal = action.payload?.terminal || { id: action.meta.arg.terminalId };
+        state.activeTerminal = action.payload?.terminal || {
+          id: action.meta.arg.terminalId,
+        };
       })
       .addCase(endShift.fulfilled, (state) => {
         state.activeDrawer = null;

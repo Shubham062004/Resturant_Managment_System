@@ -19,11 +19,18 @@ const RecommendationEventSchema = new Schema<IRecommendationEvent>({
     enum: ['VIEW', 'CLICK', 'ADD_TO_CART', 'PURCHASE', 'DISMISS'],
     required: true,
   },
-  source: { type: String, enum: ['HOME', 'CART', 'CHECKOUT', 'ASSISTANT'], required: true },
+  source: {
+    type: String,
+    enum: ['HOME', 'CART', 'CHECKOUT', 'ASSISTANT'],
+    required: true,
+  },
   timestamp: { type: Date, default: Date.now, index: true },
   metadata: { type: Schema.Types.Mixed },
 });
 
 export const RecommendationEvent =
   mongoose.models.RecommendationEvent ||
-  mongoose.model<IRecommendationEvent>('RecommendationEvent', RecommendationEventSchema);
+  mongoose.model<IRecommendationEvent>(
+    'RecommendationEvent',
+    RecommendationEventSchema
+  );

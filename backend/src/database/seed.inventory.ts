@@ -19,7 +19,11 @@
 
 import { randomUUID } from 'crypto';
 
-import { PrismaClient, StockMovementType, PurchaseOrderStatus } from '@prisma/client';
+import {
+  PrismaClient,
+  StockMovementType,
+  PurchaseOrderStatus,
+} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -1089,7 +1093,10 @@ const SUPPLIER_CATEGORY_MAP: Record<string, number> = {
 };
 
 // Recipe mappings: product category → required ingredient SKUs with qty
-const RECIPE_INGREDIENT_MAP: Record<string, Array<{ sku: string; qty: number }>> = {
+const RECIPE_INGREDIENT_MAP: Record<
+  string,
+  Array<{ sku: string; qty: number }>
+> = {
   Burger: [
     { sku: 'BAK-001', qty: 1 }, // Burger Bun
     { sku: 'VEG-001', qty: 0.05 }, // Onion
@@ -1181,13 +1188,19 @@ async function main() {
   // --- Step 0: Fetch branches ---
   const branches = await prisma.branch.findMany({ orderBy: { name: 'asc' } });
   if (branches.length === 0) {
-    throw new Error('❌ No branches found. Please run the main seed first (npm run seed).');
+    throw new Error(
+      '❌ No branches found. Please run the main seed first (npm run seed).'
+    );
   }
   console.log(`✅ Found ${branches.length} branches.`);
 
   // Fetch a valid admin/manager user to act as recordedBy
   const adminUser = await prisma.user.findFirst({
-    where: { role: { in: ['ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER'] } },
+    where: {
+      role: {
+        in: ['ADMIN', 'SUPER_ADMIN', 'INVENTORY_MANAGER', 'ORGANIZATION_OWNER'],
+      },
+    },
   });
   if (!adminUser) {
     throw new Error('❌ No admin user found. Please run the main seed first.');
@@ -1257,8 +1270,12 @@ async function main() {
   console.log(`✅ Seeded ${ingredientRecords.length} ingredients.`);
 
   // Build lookup maps
-  const ingBySku = new Map<string, any>(ingredientRecords.map((r) => [r.sku, r]));
-  const ingByName = new Map<string, any>(ingredientRecords.map((r) => [r.name, r]));
+  const ingBySku = new Map<string, any>(
+    ingredientRecords.map((r) => [r.sku, r])
+  );
+  const ingByName = new Map<string, any>(
+    ingredientRecords.map((r) => [r.name, r])
+  );
 
   // --- Step 4: Seed Inventory per Branch ---
   console.log('🌱 Seeding branch inventories...');
@@ -1288,7 +1305,7 @@ async function main() {
   }
   await prisma.inventory.createMany({ data: inventoriesToCreate });
   console.log(
-    `✅ Seeded ${inventoriesToCreate.length} inventory records across ${branches.length} branches.`,
+    `✅ Seeded ${inventoriesToCreate.length} inventory records across ${branches.length} branches.`
   );
 
   // --- Step 5: Seed 100+ Purchase Orders (May 2026) ---
@@ -1308,10 +1325,12 @@ async function main() {
 
       // Pick 3-7 ingredients from this category
       const catIngredients = ingredientRecords.filter(
-        (r) => r.category === catKey || r.category === 'Dry Goods',
+        (r) => r.category === catKey || r.category === 'Dry Goods'
       );
       const numItems = randInt(3, 7);
-      const selectedIngs = catIngredients.sort(() => Math.random() - 0.5).slice(0, numItems);
+      const selectedIngs = catIngredients
+        .sort(() => Math.random() - 0.5)
+        .slice(0, numItems);
       if (selectedIngs.length === 0) {
         poCount++;
         continue;
@@ -1342,9 +1361,13 @@ async function main() {
         supplierId: supplier.id,
         branchId: branch.id,
         totalAmount: parseFloat(poTotal.toFixed(2)),
-        status: isReceived ? PurchaseOrderStatus.RECEIVED : PurchaseOrderStatus.APPROVED,
+        status: isReceived
+          ? PurchaseOrderStatus.RECEIVED
+          : PurchaseOrderStatus.APPROVED,
         orderedAt: poDate,
-        receivedAt: isReceived ? new Date(poDate.getTime() + 2 * 24 * 3600 * 1000) : null,
+        receivedAt: isReceived
+          ? new Date(poDate.getTime() + 2 * 24 * 3600 * 1000)
+          : null,
         createdAt: poDate,
         updatedAt: poDate,
       });
@@ -1355,9 +1378,11 @@ async function main() {
   }
 
   await prisma.purchaseOrder.createMany({ data: purchaseOrdersToCreate });
-  await prisma.purchaseOrderItem.createMany({ data: purchaseOrderItemsToCreate });
+  await prisma.purchaseOrderItem.createMany({
+    data: purchaseOrderItemsToCreate,
+  });
   console.log(
-    `✅ Seeded ${purchaseOrdersToCreate.length} purchase orders with ${purchaseOrderItemsToCreate.length} line items.`,
+    `✅ Seeded ${purchaseOrdersToCreate.length} purchase orders with ${purchaseOrderItemsToCreate.length} line items.`
   );
 
   // --- Step 6: Seed 500+ Stock Movements ---
@@ -1365,8 +1390,12 @@ async function main() {
   const movementsToCreate: any[] = [];
 
   // PURCHASE movements from received POs
-  for (const po of purchaseOrdersToCreate.filter((p) => p.status === 'RECEIVED')) {
-    const poItems = purchaseOrderItemsToCreate.filter((i) => i.purchaseOrderId === po.id);
+  for (const po of purchaseOrdersToCreate.filter(
+    (p) => p.status === 'RECEIVED'
+  )) {
+    const poItems = purchaseOrderItemsToCreate.filter(
+      (i) => i.purchaseOrderId === po.id
+    );
     for (const item of poItems) {
       movementsToCreate.push({
         id: randomUUID(),
@@ -1451,33 +1480,95 @@ async function main() {
 
   const batchSize = 100;
   for (let i = 0; i < movementsToCreate.length; i += batchSize) {
-    await prisma.stockMovement.createMany({ data: movementsToCreate.slice(i, i + batchSize) });
+    await prisma.stockMovement.createMany({
+      data: movementsToCreate.slice(i, i + batchSize),
+    });
   }
   console.log(`✅ Seeded ${movementsToCreate.length} stock movement records.`);
 
   // --- Step 7: Waste Records ---
   console.log('🌱 Seeding Waste Records (expired/spoiled items)...');
   const wasteDefinitions = [
-    { name: 'Full Cream Milk', reason: 'Expired - past use-by date', qty: rnd(2, 5) },
-    { name: 'Fresh Cream', reason: 'Expired - sour smell detected', qty: rnd(1, 3) },
+    {
+      name: 'Full Cream Milk',
+      reason: 'Expired - past use-by date',
+      qty: rnd(2, 5),
+    },
+    {
+      name: 'Fresh Cream',
+      reason: 'Expired - sour smell detected',
+      qty: rnd(1, 3),
+    },
     { name: 'Tomato', reason: 'Damaged - bruised in transit', qty: rnd(3, 8) },
-    { name: 'Paneer', reason: 'Spoiled - refrigeration failure', qty: rnd(2, 5) },
-    { name: 'Curd (Dahi)', reason: 'Expired - past shelf life', qty: rnd(1, 3) },
+    {
+      name: 'Paneer',
+      reason: 'Spoiled - refrigeration failure',
+      qty: rnd(2, 5),
+    },
+    {
+      name: 'Curd (Dahi)',
+      reason: 'Expired - past shelf life',
+      qty: rnd(1, 3),
+    },
     { name: 'Lettuce', reason: 'Wilted - temperature breach', qty: rnd(1, 3) },
     { name: 'Mushrooms', reason: 'Mold growth detected', qty: rnd(0.5, 2) },
-    { name: 'Chicken Breast', reason: 'Cold chain breach - discarded', qty: rnd(2, 5) },
-    { name: 'Fish Fillet', reason: 'Exceeded 2-day holding time', qty: rnd(1, 3) },
+    {
+      name: 'Chicken Breast',
+      reason: 'Cold chain breach - discarded',
+      qty: rnd(2, 5),
+    },
+    {
+      name: 'Fish Fillet',
+      reason: 'Exceeded 2-day holding time',
+      qty: rnd(1, 3),
+    },
     { name: 'Burger Bun', reason: 'Mold on surface', qty: rnd(20, 50) },
-    { name: 'Pizza Base (10 inch)', reason: 'Cracked - unusable', qty: rnd(10, 25) },
-    { name: 'Ice Cream (Vanilla)', reason: 'Power outage - melted and refrozen', qty: rnd(2, 5) },
-    { name: 'Brownie Base', reason: 'Overbaked batch discarded', qty: rnd(1, 2) },
-    { name: 'Garlic', reason: 'Sprouted - unfit for kitchen use', qty: rnd(0.5, 2) },
-    { name: 'Coriander Leaves', reason: 'Wilted and yellowed', qty: rnd(0.5, 2) },
+    {
+      name: 'Pizza Base (10 inch)',
+      reason: 'Cracked - unusable',
+      qty: rnd(10, 25),
+    },
+    {
+      name: 'Ice Cream (Vanilla)',
+      reason: 'Power outage - melted and refrozen',
+      qty: rnd(2, 5),
+    },
+    {
+      name: 'Brownie Base',
+      reason: 'Overbaked batch discarded',
+      qty: rnd(1, 2),
+    },
+    {
+      name: 'Garlic',
+      reason: 'Sprouted - unfit for kitchen use',
+      qty: rnd(0.5, 2),
+    },
+    {
+      name: 'Coriander Leaves',
+      reason: 'Wilted and yellowed',
+      qty: rnd(0.5, 2),
+    },
     { name: 'Green Chilli', reason: 'Rotted in storage', qty: rnd(0.3, 1) },
-    { name: 'Full Cream Milk', reason: 'Left out overnight - discarded', qty: rnd(1, 3) },
-    { name: 'Tomato', reason: 'Over-ripe batch received from supplier', qty: rnd(2, 5) },
-    { name: 'Chicken Breast', reason: 'Weight check failed - returned batch', qty: rnd(3, 6) },
-    { name: 'Paneer', reason: 'Vendor quality issue - replaced', qty: rnd(1, 3) },
+    {
+      name: 'Full Cream Milk',
+      reason: 'Left out overnight - discarded',
+      qty: rnd(1, 3),
+    },
+    {
+      name: 'Tomato',
+      reason: 'Over-ripe batch received from supplier',
+      qty: rnd(2, 5),
+    },
+    {
+      name: 'Chicken Breast',
+      reason: 'Weight check failed - returned batch',
+      qty: rnd(3, 6),
+    },
+    {
+      name: 'Paneer',
+      reason: 'Vendor quality issue - replaced',
+      qty: rnd(1, 3),
+    },
   ];
 
   const wasteToCreate: any[] = [];
@@ -1509,7 +1600,9 @@ async function main() {
   }
   await prisma.wasteRecord.createMany({ data: wasteToCreate });
   // Also persist the WASTE stock movements
-  const wasteMovements = movementsToCreate.filter((m) => m.type === StockMovementType.WASTE);
+  const wasteMovements = movementsToCreate.filter(
+    (m) => m.type === StockMovementType.WASTE
+  );
   if (wasteMovements.length > 0) {
     await prisma.stockMovement.createMany({ data: wasteMovements });
   }
@@ -1568,7 +1661,8 @@ async function main() {
       }
     }
     // Fallback: use category name from product's linked category
-    const recipeItems = RECIPE_INGREDIENT_MAP[mappingKey] ?? RECIPE_INGREDIENT_MAP['Burger'];
+    const recipeItems =
+      RECIPE_INGREDIENT_MAP[mappingKey] ?? RECIPE_INGREDIENT_MAP['Burger'];
 
     for (const ri of recipeItems) {
       const ing = ingBySku.get(ri.sku);
@@ -1587,7 +1681,9 @@ async function main() {
 
   const recBatchSize = 100;
   for (let i = 0; i < recipesToCreate.length; i += recBatchSize) {
-    await prisma.recipeMapping.createMany({ data: recipesToCreate.slice(i, i + recBatchSize) });
+    await prisma.recipeMapping.createMany({
+      data: recipesToCreate.slice(i, i + recBatchSize),
+    });
   }
   console.log(`✅ Seeded ${recipesToCreate.length} recipe mappings.`);
 
@@ -1613,14 +1709,14 @@ async function main() {
   console.log('=============================================================');
   console.log(`🧅  Ingredients Created      : ${totalIngredients}`);
   console.log(
-    `📦  Inventory Records        : ${totalInventory} (${branches.length} branches × ${totalIngredients} items)`,
+    `📦  Inventory Records        : ${totalInventory} (${branches.length} branches × ${totalIngredients} items)`
   );
   console.log(`🏭  Suppliers Created        : ${totalSuppliers}`);
   console.log(`🛒  Purchase Orders          : ${totalPOs}`);
   console.log(`📊  Stock Movements          : ${totalMovements}`);
   console.log(`🗑️   Waste Records           : ${totalWaste}`);
   console.log(
-    `⚠️   Inventory Alerts        : ${totalAlerts} (${lowStock} Low Stock, ${outOfStock} Out of Stock)`,
+    `⚠️   Inventory Alerts        : ${totalAlerts} (${lowStock} Low Stock, ${outOfStock} Out of Stock)`
   );
   console.log(`🍕  Recipe Mappings          : ${totalRecipes}`);
   console.log('=============================================================');

@@ -12,6 +12,11 @@ const router = Router();
 router.get('/active', getActiveCoupons);
 
 // Authenticated route to validate a coupon against user and order
-router.post('/validate', authGuard, validate(validateCouponSchema), validateCoupon);
+router.post(
+  '/validate',
+  authGuard,
+  validate(validateCouponSchema),
+  validateCoupon
+);
 
 export default router;

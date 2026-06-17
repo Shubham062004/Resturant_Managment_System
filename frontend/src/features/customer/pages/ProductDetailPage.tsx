@@ -36,7 +36,12 @@ export const ProductDetailPage: React.FC = () => {
   const toast = useToast();
   const addToCart = useAddToCart();
 
-  const { data: response, isLoading, isError, refetch } = useProductBySlug(slug || '');
+  const {
+    data: response,
+    isLoading,
+    isError,
+    refetch,
+  } = useProductBySlug(slug || '');
   const toggleFavoriteMutation = useToggleFavorite();
   const trackRecommendationClickMutation = useTrackRecommendationClick();
   const createReviewMutation = useCreateReview();
@@ -60,7 +65,8 @@ export const ProductDetailPage: React.FC = () => {
   useEffect(() => {
     if (product) {
       if (product.variants && product.variants.length > 0) {
-        const defaultVar = product.variants.find((v) => v.isDefault) || product.variants[0];
+        const defaultVar =
+          product.variants.find((v) => v.isDefault) || product.variants[0];
         setSelectedVariantId(defaultVar.id);
       }
       if (product.image) {
@@ -91,9 +97,12 @@ export const ProductDetailPage: React.FC = () => {
       <div className="min-h-screen bg-[#08070F] text-white pt-32 pb-20 px-4 flex items-center justify-center">
         <div className="bg-red-500/[0.02] border border-red-500/10 p-10 rounded-2xl text-center max-w-md w-full">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <p className="text-red-400 font-bold mb-3 font-display text-2xl">Item Not Found</p>
+          <p className="text-red-400 font-bold mb-3 font-display text-2xl">
+            Item Not Found
+          </p>
           <p className="text-neutral-400 text-sm mb-6">
-            This item might be temporarily out of stock or removed from the menu.
+            This item might be temporarily out of stock or removed from the
+            menu.
           </p>
           <Link
             to="/restaurants"
@@ -106,7 +115,9 @@ export const ProductDetailPage: React.FC = () => {
     );
   }
 
-  const activeVariant = product.variants?.find((v) => v.id === selectedVariantId);
+  const activeVariant = product.variants?.find(
+    (v) => v.id === selectedVariantId
+  );
   const displayPrice = activeVariant ? activeVariant.price : product.basePrice;
 
   const handleFavoriteToggle = () => {
@@ -122,7 +133,7 @@ export const ProductDetailPage: React.FC = () => {
       {
         onSuccess: () => navigate(`/product/${recSlug}`),
         onError: () => navigate(`/product/${recSlug}`),
-      },
+      }
     );
   };
 
@@ -131,12 +142,18 @@ export const ProductDetailPage: React.FC = () => {
     setFeedbackMsg(null);
 
     if (!user) {
-      setFeedbackMsg({ type: 'error', text: 'You must be logged in to submit a review.' });
+      setFeedbackMsg({
+        type: 'error',
+        text: 'You must be logged in to submit a review.',
+      });
       return;
     }
 
     if (reviewComment.trim().length < 3) {
-      setFeedbackMsg({ type: 'error', text: 'Comment must be at least 3 characters long.' });
+      setFeedbackMsg({
+        type: 'error',
+        text: 'Comment must be at least 3 characters long.',
+      });
       return;
     }
 
@@ -151,29 +168,38 @@ export const ProductDetailPage: React.FC = () => {
         { ...payload, id: editingReviewId },
         {
           onSuccess: () => {
-            setFeedbackMsg({ type: 'success', text: 'Review updated successfully!' });
+            setFeedbackMsg({
+              type: 'success',
+              text: 'Review updated successfully!',
+            });
             handleCancelEdit();
             refetch();
           },
           onError: (err: any) => {
             setFeedbackMsg({
               type: 'error',
-              text: err.response?.data?.error?.message || 'Failed to update review.',
+              text:
+                err.response?.data?.error?.message ||
+                'Failed to update review.',
             });
           },
-        },
+        }
       );
     } else {
       createReviewMutation.mutate(payload, {
         onSuccess: () => {
-          setFeedbackMsg({ type: 'success', text: 'Review submitted successfully!' });
+          setFeedbackMsg({
+            type: 'success',
+            text: 'Review submitted successfully!',
+          });
           handleCancelEdit();
           refetch();
         },
         onError: (err: any) => {
           setFeedbackMsg({
             type: 'error',
-            text: err.response?.data?.error?.message || 'Failed to submit review.',
+            text:
+              err.response?.data?.error?.message || 'Failed to submit review.',
           });
         },
       });
@@ -185,7 +211,9 @@ export const ProductDetailPage: React.FC = () => {
     setReviewRating(review.rating);
     setReviewComment(review.comment || '');
     setFeedbackMsg(null);
-    document.getElementById('review-form-section')?.scrollIntoView({ behavior: 'smooth' });
+    document
+      .getElementById('review-form-section')
+      ?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleDeleteClick = (reviewId: string) => {
@@ -193,13 +221,17 @@ export const ProductDetailPage: React.FC = () => {
       setFeedbackMsg(null);
       deleteReviewMutation.mutate(reviewId, {
         onSuccess: () => {
-          setFeedbackMsg({ type: 'success', text: 'Review deleted successfully!' });
+          setFeedbackMsg({
+            type: 'success',
+            text: 'Review deleted successfully!',
+          });
           refetch();
         },
         onError: (err: any) => {
           setFeedbackMsg({
             type: 'error',
-            text: err.response?.data?.error?.message || 'Failed to delete review.',
+            text:
+              err.response?.data?.error?.message || 'Failed to delete review.',
           });
         },
       });
@@ -231,7 +263,10 @@ export const ProductDetailPage: React.FC = () => {
           <div className="space-y-6">
             <div className="aspect-square rounded-3xl overflow-hidden bg-neutral-900 relative shadow-2xl">
               <img
-                src={activeImage || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'}
+                src={
+                  activeImage ||
+                  'https://images.unsplash.com/photo-1546069901-ba9599a7e63c'
+                }
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
@@ -292,7 +327,10 @@ export const ProductDetailPage: React.FC = () => {
                       : 'bg-white/5 text-neutral-400 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  <Heart size={20} className={isFavorited ? 'fill-current' : ''} />
+                  <Heart
+                    size={20}
+                    className={isFavorited ? 'fill-current' : ''}
+                  />
                 </button>
               </div>
 
@@ -336,7 +374,9 @@ export const ProductDetailPage: React.FC = () => {
                     <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold">
                       Energy
                     </p>
-                    <p className="text-sm font-bold text-white">{product.calories} kcal</p>
+                    <p className="text-sm font-bold text-white">
+                      {product.calories} kcal
+                    </p>
                   </div>
                 </div>
               )}
@@ -349,7 +389,9 @@ export const ProductDetailPage: React.FC = () => {
                     <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-semibold">
                       Prep Time
                     </p>
-                    <p className="text-sm font-bold text-white">{product.preparationTime} mins</p>
+                    <p className="text-sm font-bold text-white">
+                      {product.preparationTime} mins
+                    </p>
                   </div>
                 </div>
               )}
@@ -358,7 +400,9 @@ export const ProductDetailPage: React.FC = () => {
             {/* Variants */}
             {product.variants && product.variants.length > 0 && (
               <div className="space-y-4">
-                <p className="text-sm text-white font-semibold">Choose Options:</p>
+                <p className="text-sm text-white font-semibold">
+                  Choose Options:
+                </p>
                 <div className="grid grid-cols-2 gap-3">
                   {product.variants.map((v) => (
                     <button
@@ -478,7 +522,9 @@ export const ProductDetailPage: React.FC = () => {
                           ))}
                         </div>
                       </div>
-                      <p className="text-neutral-300 text-sm leading-relaxed">{rev.comment}</p>
+                      <p className="text-neutral-300 text-sm leading-relaxed">
+                        {rev.comment}
+                      </p>
 
                       {isAuthor && (
                         <div className="flex gap-4 justify-end mt-4 pt-3 border-t border-white/5">
@@ -502,7 +548,9 @@ export const ProductDetailPage: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-12 rounded-2xl border border-white/5 bg-white/[0.02]">
-                <p className="text-neutral-500 text-sm">No reviews yet. Be the first to review!</p>
+                <p className="text-neutral-500 text-sm">
+                  No reviews yet. Be the first to review!
+                </p>
               </div>
             )}
           </div>
@@ -566,7 +614,8 @@ export const ProductDetailPage: React.FC = () => {
                       type="submit"
                       className="flex-1 h-11 bg-primary hover:bg-primary-hover text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all"
                     >
-                      <Send size={16} /> {editingReviewId ? 'Update' : 'Post Review'}
+                      <Send size={16} />{' '}
+                      {editingReviewId ? 'Update' : 'Post Review'}
                     </button>
                     {editingReviewId && (
                       <button
@@ -581,7 +630,9 @@ export const ProductDetailPage: React.FC = () => {
                 </form>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-neutral-400 text-sm mb-4">Please log in to leave a review.</p>
+                  <p className="text-neutral-400 text-sm mb-4">
+                    Please log in to leave a review.
+                  </p>
                   <Link
                     to="/login"
                     className="py-2.5 px-6 bg-primary text-white rounded-xl text-sm font-bold inline-block"

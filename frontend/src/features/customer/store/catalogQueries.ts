@@ -170,14 +170,20 @@ export const useRestaurants = (filters: {
       if (!cleanParams.veg) delete cleanParams.veg;
       if (!cleanParams.openNow) delete cleanParams.openNow;
 
-      const { data } = await apiClient.get('/catalog/restaurants', { params: cleanParams });
+      const { data } = await apiClient.get('/catalog/restaurants', {
+        params: cleanParams,
+      });
       return data;
     },
   });
 };
 
 // 2. Fetch Branches (paginated)
-export const useBranches = (filters?: { restaurantId?: string; page?: number; limit?: number }) => {
+export const useBranches = (filters?: {
+  restaurantId?: string;
+  page?: number;
+  limit?: number;
+}) => {
   return useQuery<{
     success: boolean;
     data: Branch[];
@@ -185,7 +191,9 @@ export const useBranches = (filters?: { restaurantId?: string; page?: number; li
   }>({
     queryKey: ['branches', filters],
     queryFn: async () => {
-      const { data } = await apiClient.get('/catalog/branches', { params: filters });
+      const { data } = await apiClient.get('/catalog/branches', {
+        params: filters,
+      });
       return data;
     },
   });
@@ -205,7 +213,11 @@ export const useRestaurantBySlug = (slug: string) => {
 
 // 3. Fetch Category details & products by slug
 export const useCategoryBySlug = (slug: string, restaurantId?: string) => {
-  return useQuery<{ success: boolean; data: Category & { products: Product[] }; message: string }>({
+  return useQuery<{
+    success: boolean;
+    data: Category & { products: Product[] };
+    message: string;
+  }>({
     queryKey: ['category', slug, restaurantId],
     queryFn: async () => {
       const { data } = await apiClient.get(`/catalog/categories/slug/${slug}`, {
@@ -239,7 +251,9 @@ export const useProducts = (filters: {
       if (!cleanParams.categoryId) delete cleanParams.categoryId;
       if (cleanParams.isVeg === undefined) delete cleanParams.isVeg;
 
-      const { data } = await apiClient.get('/catalog/products', { params: cleanParams });
+      const { data } = await apiClient.get('/catalog/products', {
+        params: cleanParams,
+      });
       return data;
     },
   });
@@ -278,10 +292,13 @@ export const useTrackRecommendationClick = () => {
       productId: string;
       recommendedProductId: string;
     }) => {
-      const { data } = await apiClient.post('/catalog/products/recommendations/click', {
-        productId,
-        recommendedProductId,
-      });
+      const { data } = await apiClient.post(
+        '/catalog/products/recommendations/click',
+        {
+          productId,
+          recommendedProductId,
+        }
+      );
       return data;
     },
   });
@@ -291,7 +308,11 @@ export const useTrackRecommendationClick = () => {
 export const useCreateReview = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (reviewData: { productId: string; rating: number; comment: string }) => {
+    mutationFn: async (reviewData: {
+      productId: string;
+      rating: number;
+      comment: string;
+    }) => {
       const { data } = await apiClient.post('/catalog/reviews', reviewData);
       return data;
     },
@@ -316,7 +337,10 @@ export const useUpdateReview = () => {
       rating: number;
       comment: string;
     }) => {
-      const { data } = await apiClient.put(`/catalog/reviews/${id}`, { rating, comment });
+      const { data } = await apiClient.put(`/catalog/reviews/${id}`, {
+        rating,
+        comment,
+      });
       return data;
     },
     onSuccess: () => {
@@ -348,7 +372,9 @@ export const useToggleFavorite = () => {
 
   return useMutation({
     mutationFn: async (productId: string) => {
-      const { data } = await apiClient.post('/catalog/favorites', { productId });
+      const { data } = await apiClient.post('/catalog/favorites', {
+        productId,
+      });
       return data;
     },
     onMutate: async (productId) => {

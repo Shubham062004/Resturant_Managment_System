@@ -39,12 +39,14 @@ export const Drawer: React.FC<DrawerProps> = ({
 
       if (e.key === 'Tab' && drawerRef.current) {
         const focusableElements = drawerRef.current.querySelectorAll(
-          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]',
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]'
         );
         if (focusableElements.length === 0) return;
 
         const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
 
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
@@ -65,7 +67,7 @@ export const Drawer: React.FC<DrawerProps> = ({
     setTimeout(() => {
       if (drawerRef.current) {
         const focusable = drawerRef.current.querySelector(
-          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]',
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
         ) as HTMLElement;
         if (focusable) {
           focusable.focus();

@@ -50,7 +50,8 @@ export default function IngredientManagementPage() {
 
   // Modals state
   const [showAddEditModal, setShowAddEditModal] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
+  const [selectedIngredient, setSelectedIngredient] =
+    useState<Ingredient | null>(null);
 
   // Form fields for Add/Edit
   const [formName, setFormName] = useState('');
@@ -133,7 +134,10 @@ export default function IngredientManagementPage() {
       };
 
       if (selectedIngredient) {
-        await apiClient.patch(`/inventory/ingredients/${selectedIngredient.id}`, payload);
+        await apiClient.patch(
+          `/inventory/ingredients/${selectedIngredient.id}`,
+          payload
+        );
         toast.success(`Updated ingredient: ${formName}`);
       } else {
         await apiClient.post('/inventory/ingredients', payload);
@@ -142,7 +146,9 @@ export default function IngredientManagementPage() {
       setShowAddEditModal(false);
       loadData();
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Error saving ingredient.');
+      toast.error(
+        err.response?.data?.error?.message || 'Error saving ingredient.'
+      );
     }
   };
 
@@ -154,7 +160,8 @@ export default function IngredientManagementPage() {
       loadData();
     } catch (err: any) {
       toast.error(
-        err.response?.data?.error?.message || 'Error deleting ingredient. It may be in use.',
+        err.response?.data?.error?.message ||
+          'Error deleting ingredient. It may be in use.'
       );
     }
   };
@@ -176,13 +183,20 @@ export default function IngredientManagementPage() {
       setShowWasteModal(false);
       setWasteQty('');
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Could not log waste record.');
+      toast.error(
+        err.response?.data?.error?.message || 'Could not log waste record.'
+      );
     }
   };
 
   const handleTransferStock = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!transferSourceId || !transferDestId || !transferIngredientId || !transferQty) {
+    if (
+      !transferSourceId ||
+      !transferDestId ||
+      !transferIngredientId ||
+      !transferQty
+    ) {
       toast.warning('Please complete all transfer details.');
       return;
     }
@@ -202,25 +216,29 @@ export default function IngredientManagementPage() {
       setShowTransferModal(false);
       setTransferQty('');
     } catch (err: any) {
-      toast.error(err.response?.data?.error?.message || 'Stock transfer failed.');
+      toast.error(
+        err.response?.data?.error?.message || 'Stock transfer failed.'
+      );
     }
   };
 
   const categories = Array.from(new Set(ingredients.map((i) => i.category)));
 
   const filteredIngredients = ingredients
-    .filter((i) => selectedCategory === 'ALL' || i.category === selectedCategory)
+    .filter(
+      (i) => selectedCategory === 'ALL' || i.category === selectedCategory
+    )
     .filter(
       (i) =>
         i.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        i.sku.toLowerCase().includes(searchTerm.toLowerCase()),
+        i.sku.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredIngredients.length / itemsPerPage);
   const paginatedIngredients = filteredIngredients.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   // Stats
@@ -236,8 +254,8 @@ export default function IngredientManagementPage() {
             Ingredient Management
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Central repository for ingredient master files, cost configuration, waste management,
-            and real-time alerts.
+            Central repository for ingredient master files, cost configuration,
+            waste management, and real-time alerts.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -268,8 +286,12 @@ export default function IngredientManagementPage() {
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Total Ingredients
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-white">{ingredients.length}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Active SKU catalog</span>
+          <p className="text-3xl font-bold font-display mt-2 text-white">
+            {ingredients.length}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Active SKU catalog
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
@@ -279,16 +301,24 @@ export default function IngredientManagementPage() {
             </p>
             <AlertTriangle size={16} className="text-[#F59E0B]" />
           </div>
-          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">{lowStockCount}</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Requires branch restock</span>
+          <p className="text-3xl font-bold font-display mt-2 text-[#F59E0B]">
+            {lowStockCount}
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Requires branch restock
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Waste This Month
           </p>
-          <p className="text-3xl font-bold font-display mt-2 text-[#DC2626]">₹3,450</p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Spoilage & expired log</span>
+          <p className="text-3xl font-bold font-display mt-2 text-[#DC2626]">
+            ₹3,450
+          </p>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Spoilage & expired log
+          </span>
         </Card>
 
         <Card className="p-6 bg-[#111827] border-slate-850 shadow-lg">
@@ -301,7 +331,9 @@ export default function IngredientManagementPage() {
           <p className="text-3xl font-bold font-display mt-2 text-[#16A34A]">
             ₹{totalCost.toLocaleString('en-IN')}
           </p>
-          <span className="text-[10px] text-slate-500 mt-1 block">Est. cost this month</span>
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Est. cost this month
+          </span>
         </Card>
       </div>
 
@@ -309,9 +341,12 @@ export default function IngredientManagementPage() {
       <Card className="border-slate-800 bg-[#111827] rounded-2xl p-6 shadow-lg">
         <CardHeader className="border-none p-0 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h3 className="text-lg font-bold font-display text-white">Ingredient Directory</h3>
+            <h3 className="text-lg font-bold font-display text-white">
+              Ingredient Directory
+            </h3>
             <p className="text-xs text-slate-400">
-              Search and filter active ingredient formulations and safety reorder parameters
+              Search and filter active ingredient formulations and safety
+              reorder parameters
             </p>
           </div>
 
@@ -365,15 +400,25 @@ export default function IngredientManagementPage() {
             <tbody className="divide-y divide-slate-800/40">
               {paginatedIngredients.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-6 text-center text-slate-500 text-xs">
+                  <td
+                    colSpan={7}
+                    className="py-6 text-center text-slate-500 text-xs"
+                  >
                     No ingredients found matching the parameters.
                   </td>
                 </tr>
               ) : (
                 paginatedIngredients.map((i) => (
-                  <tr key={i.id} className="hover:bg-slate-800/10 transition-colors">
-                    <td className="py-3 font-mono text-slate-400 text-xs">{i.sku}</td>
-                    <td className="py-3 font-semibold text-slate-200">{i.name}</td>
+                  <tr
+                    key={i.id}
+                    className="hover:bg-slate-800/10 transition-colors"
+                  >
+                    <td className="py-3 font-mono text-slate-400 text-xs">
+                      {i.sku}
+                    </td>
+                    <td className="py-3 font-semibold text-slate-200">
+                      {i.name}
+                    </td>
                     <td className="py-3 text-slate-400 text-xs">
                       <span className="px-2 py-0.5 bg-slate-950 border border-slate-800/60 rounded-full">
                         {i.category}
@@ -430,7 +475,10 @@ export default function IngredientManagementPage() {
                 <option value={50}>50</option>
               </select>
               <span>
-                out of <strong className="text-slate-200">{filteredIngredients.length}</strong>{' '}
+                out of{' '}
+                <strong className="text-slate-200">
+                  {filteredIngredients.length}
+                </strong>{' '}
                 entries
               </span>
             </div>
@@ -477,7 +525,10 @@ export default function IngredientManagementPage() {
                     </button>
                   );
                 }
-                if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                if (
+                  pageNum === currentPage - 2 ||
+                  pageNum === currentPage + 2
+                ) {
                   return (
                     <span key={pageNum} className="text-slate-500 px-1">
                       ...
@@ -488,7 +539,9 @@ export default function IngredientManagementPage() {
               })}
 
               <button
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
                 className="p-2 rounded-lg border border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
@@ -522,7 +575,9 @@ export default function IngredientManagementPage() {
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
                 <h2 className="text-lg font-bold font-display">
-                  {selectedIngredient ? 'Modify Ingredient Master' : 'Create Ingredient Master'}
+                  {selectedIngredient
+                    ? 'Modify Ingredient Master'
+                    : 'Create Ingredient Master'}
                 </h2>
                 <button
                   onClick={() => setShowAddEditModal(false)}
@@ -582,7 +637,9 @@ export default function IngredientManagementPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs text-slate-400 font-semibold uppercase">Unit</label>
+                    <label className="text-xs text-slate-400 font-semibold uppercase">
+                      Unit
+                    </label>
                     <Input
                       required
                       value={formUnit}
@@ -631,7 +688,10 @@ export default function IngredientManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Save Ingredient
                   </Button>
                 </div>
@@ -652,7 +712,9 @@ export default function IngredientManagementPage() {
               className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-                <h2 className="text-lg font-bold font-display">Log Spoilage / Waste Record</h2>
+                <h2 className="text-lg font-bold font-display">
+                  Log Spoilage / Waste Record
+                </h2>
                 <button
                   onClick={() => setShowWasteModal(false)}
                   className="text-slate-400 hover:text-white"
@@ -718,7 +780,9 @@ export default function IngredientManagementPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-slate-400 font-semibold uppercase">Reason</label>
+                  <label className="text-xs text-slate-400 font-semibold uppercase">
+                    Reason
+                  </label>
                   <select
                     value={wasteReason}
                     onChange={(e) => setWasteReason(e.target.value)}
@@ -740,7 +804,10 @@ export default function IngredientManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Submit Report
                   </Button>
                 </div>
@@ -761,7 +828,9 @@ export default function IngredientManagementPage() {
               className="bg-[#111827] border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl"
             >
               <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
-                <h2 className="text-lg font-bold font-display">Inter-Branch Inventory Transfer</h2>
+                <h2 className="text-lg font-bold font-display">
+                  Inter-Branch Inventory Transfer
+                </h2>
                 <button
                   onClick={() => setShowTransferModal(false)}
                   className="text-slate-400 hover:text-white"
@@ -856,7 +925,10 @@ export default function IngredientManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white">
+                  <Button
+                    type="submit"
+                    className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+                  >
                     Execute Transfer
                   </Button>
                 </div>

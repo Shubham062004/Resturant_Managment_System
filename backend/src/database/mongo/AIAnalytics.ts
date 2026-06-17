@@ -23,4 +23,5 @@ const AIAnalyticsSchema = new Schema<IAIAnalytics>({
 });
 
 export const AIAnalytics =
-  mongoose.models.AIAnalytics || mongoose.model<IAIAnalytics>('AIAnalytics', AIAnalyticsSchema);
+  mongoose.models.AIAnalytics ||
+  mongoose.model<IAIAnalytics>('AIAnalytics', AIAnalyticsSchema);

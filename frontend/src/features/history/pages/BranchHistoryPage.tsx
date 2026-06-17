@@ -1,5 +1,12 @@
 import { format } from 'date-fns';
-import { Download, Search, MapPin, Store, Users, ShoppingBag } from 'lucide-react';
+import {
+  Download,
+  Search,
+  MapPin,
+  Store,
+  Users,
+  ShoppingBag,
+} from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import {
   BarChart,
@@ -16,7 +23,11 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 import { formatCurrency } from '../../../shared/utils/currency';
 
@@ -25,20 +36,24 @@ const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 export default function BranchHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: response, isLoading } = useHistoryQuery('branches', { limit: 100 });
+  const { data: response, isLoading } = useHistoryQuery('branches', {
+    limit: 100,
+  });
 
   // Filter out any Lucknow references to strictly show Delhi branches as requested
   const records = useMemo(() => {
     const data = response?.data || [];
     return data.filter(
       (r: any) =>
-        r.city?.toLowerCase() !== 'lucknow' && r.address?.toLowerCase().indexOf('lucknow') === -1,
+        r.city?.toLowerCase() !== 'lucknow' &&
+        r.address?.toLowerCase().indexOf('lucknow') === -1
     );
   }, [response]);
 
   // Derived KPIs
   const stats = useMemo(() => {
-    if (!records.length) return { totalRevenue: 0, totalOrders: 0, branches: 0 };
+    if (!records.length)
+      return { totalRevenue: 0, totalOrders: 0, branches: 0 };
 
     let totalOrders = 0;
     records.forEach((r: any) => {
@@ -69,7 +84,7 @@ export default function BranchHistoryPage() {
     return records.filter(
       (r: any) =>
         r.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.city?.toLowerCase().includes(searchTerm.toLowerCase()),
+        r.city?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [records, searchTerm]);
 
@@ -135,7 +150,11 @@ export default function BranchHistoryPage() {
                   data={chartData.branchComparison}
                   margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="name"
                     stroke="#94a3b8"
@@ -191,9 +210,14 @@ export default function BranchHistoryPage() {
                     dataKey="orders"
                     nameKey="name"
                   >
-                    {chartData.branchComparison.map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                    {chartData.branchComparison.map(
+                      (entry: any, index: number) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      )
+                    )}
                   </Pie>
                   <RechartsTooltip
                     contentStyle={{
@@ -247,20 +271,28 @@ export default function BranchHistoryPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No branches found matching criteria.
                     </td>
                   </tr>
                 ) : (
                   filteredRecords.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-slate-400">
                             <MapPin size={16} />
                           </div>
                           <div>
-                            <div className="font-medium text-white">{row.name}</div>
+                            <div className="font-medium text-white">
+                              {row.name}
+                            </div>
                             <div className="text-xs text-slate-400 max-w-[200px] truncate">
                               {row.address}
                             </div>
@@ -268,7 +300,9 @@ export default function BranchHistoryPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-slate-300">
-                        <Badge className="bg-slate-800 text-slate-300">{row.city}</Badge>
+                        <Badge className="bg-slate-800 text-slate-300">
+                          {row.city}
+                        </Badge>
                       </td>
                       <td className="px-6 py-4 font-bold text-blue-400">
                         {row._count?.Order || 0}

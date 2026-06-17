@@ -5,7 +5,10 @@ export interface CenteredLayoutProps {
   className?: string;
 }
 
-export const CenteredLayout: React.FC<CenteredLayoutProps> = ({ children, className = '' }) => {
+export const CenteredLayout: React.FC<CenteredLayoutProps> = ({
+  children,
+  className = '',
+}) => {
   return (
     <div
       className={`min-h-screen flex items-center justify-center bg-background text-foreground transition-colors duration-300 p-4 relative overflow-hidden

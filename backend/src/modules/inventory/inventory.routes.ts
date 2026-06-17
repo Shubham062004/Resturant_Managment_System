@@ -17,13 +17,19 @@ router.use(authGuard);
 router
   .route('/requests')
   .get(
-    restrictTo('ORGANIZATION_OWNER', 'BRANCH_MANAGER', 'INVENTORY_MANAGER', 'SUPER_ADMIN', 'ADMIN'),
-    controller.getInventoryRequests,
+    restrictTo(
+      'ORGANIZATION_OWNER',
+      'BRANCH_MANAGER',
+      'INVENTORY_MANAGER',
+      'SUPER_ADMIN',
+      'ADMIN'
+    ),
+    controller.getInventoryRequests
   )
   .post(
     restrictTo('BRANCH_MANAGER', 'SUPER_ADMIN', 'ADMIN'),
     validate(validation.createInventoryRequestSchema),
-    controller.createInventoryRequest,
+    controller.createInventoryRequest
   );
 
 router
@@ -31,7 +37,7 @@ router
   .patch(
     restrictTo('ORGANIZATION_OWNER', 'SUPER_ADMIN', 'ADMIN'),
     validate(validation.approveInventoryRequestSchema),
-    controller.approveInventoryRequest,
+    controller.approveInventoryRequest
   );
 
 router
@@ -39,7 +45,7 @@ router
   .patch(
     restrictTo('INVENTORY_MANAGER', 'SUPER_ADMIN', 'ADMIN'),
     validate(validation.updateInventoryRequestStatusSchema),
-    controller.updateInventoryRequestStatus,
+    controller.updateInventoryRequestStatus
   );
 
 router
@@ -47,7 +53,7 @@ router
   .patch(
     restrictTo('BRANCH_MANAGER', 'SUPER_ADMIN', 'ADMIN'),
     validate(validation.updateInventoryRequestStatusSchema),
-    controller.updateInventoryRequestStatus,
+    controller.updateInventoryRequestStatus
   );
 
 // ----------------------------------------------------
@@ -62,9 +68,9 @@ router
       'HEAD_CHEF',
       'KITCHEN_MANAGER',
       'ORGANIZATION_OWNER',
-      'INVENTORY_MANAGER',
+      'INVENTORY_MANAGER'
     ),
-    controller.getIngredients,
+    controller.getIngredients
   )
   .post(
     restrictTo(
@@ -72,10 +78,10 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
     validate(validation.createIngredientSchema),
-    controller.createIngredient,
+    controller.createIngredient
   );
 
 router
@@ -86,10 +92,10 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
     validate(validation.updateIngredientSchema),
-    controller.updateIngredient,
+    controller.updateIngredient
   )
   .delete(
     restrictTo(
@@ -97,9 +103,9 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
-    controller.deleteIngredient,
+    controller.deleteIngredient
   );
 
 // ----------------------------------------------------
@@ -108,8 +114,13 @@ router
 router
   .route('/suppliers')
   .get(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'INVENTORY_MANAGER'),
-    controller.getSuppliers,
+    restrictTo(
+      'ADMIN',
+      'SUPER_ADMIN',
+      'ORGANIZATION_OWNER',
+      'INVENTORY_MANAGER'
+    ),
+    controller.getSuppliers
   )
   .post(
     restrictTo(
@@ -117,10 +128,10 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
     validate(validation.createSupplierSchema),
-    controller.createSupplier,
+    controller.createSupplier
   );
 
 router
@@ -131,10 +142,10 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
     validate(validation.updateSupplierSchema),
-    controller.updateSupplier,
+    controller.updateSupplier
   );
 
 // ----------------------------------------------------
@@ -143,8 +154,13 @@ router
 router
   .route('/purchase-orders')
   .get(
-    restrictTo('ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'INVENTORY_MANAGER'),
-    controller.getPurchaseOrders,
+    restrictTo(
+      'ADMIN',
+      'SUPER_ADMIN',
+      'ORGANIZATION_OWNER',
+      'INVENTORY_MANAGER'
+    ),
+    controller.getPurchaseOrders
   )
   .post(
     restrictTo(
@@ -152,10 +168,10 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
     validate(validation.createPurchaseOrderSchema),
-    controller.createPurchaseOrder,
+    controller.createPurchaseOrder
   );
 
 router
@@ -166,10 +182,10 @@ router
       'SUPER_ADMIN',
       'INVENTORY_MANAGER',
       'ORGANIZATION_OWNER',
-      'FRANCHISE_OWNER',
+      'FRANCHISE_OWNER'
     ),
     validate(validation.updatePurchaseOrderStatusSchema),
-    controller.updatePurchaseOrderStatus,
+    controller.updatePurchaseOrderStatus
   );
 
 // ----------------------------------------------------
@@ -185,9 +201,9 @@ router
       'BRANCH_MANAGER',
       'INVENTORY_MANAGER',
       'HEAD_CHEF',
-      'KITCHEN_MANAGER',
+      'KITCHEN_MANAGER'
     ),
-    controller.getInventory,
+    controller.getInventory
   );
 
 router.post(
@@ -198,10 +214,10 @@ router.post(
     'BRANCH_MANAGER',
     'INVENTORY_MANAGER',
     'ORGANIZATION_OWNER',
-    'FRANCHISE_OWNER',
+    'FRANCHISE_OWNER'
   ),
   validate(validation.adjustInventorySchema),
-  controller.adjustInventory,
+  controller.adjustInventory
 );
 
 router.post(
@@ -212,10 +228,10 @@ router.post(
     'BRANCH_MANAGER',
     'INVENTORY_MANAGER',
     'ORGANIZATION_OWNER',
-    'FRANCHISE_OWNER',
+    'FRANCHISE_OWNER'
   ),
   validate(validation.inventoryTransferSchema),
-  controller.transferInventory,
+  controller.transferInventory
 );
 
 router.post(
@@ -227,16 +243,16 @@ router.post(
     'HEAD_CHEF',
     'KITCHEN_MANAGER',
     'ORGANIZATION_OWNER',
-    'FRANCHISE_OWNER',
+    'FRANCHISE_OWNER'
   ),
   validate(validation.logWasteSchema),
-  controller.logWaste,
+  controller.logWaste
 );
 
 router.get(
   '/analytics',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'ORGANIZATION_OWNER', 'INVENTORY_MANAGER'),
-  controller.getAnalytics,
+  controller.getAnalytics
 );
 
 export default router;

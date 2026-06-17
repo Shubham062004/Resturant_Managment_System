@@ -17,7 +17,7 @@ async function testLogin() {
     const result = await AuthService.loginUser(
       { email: 'admin@abcrestaurant.com', password: 'Admin@123' },
       '127.0.0.1',
-      'Test Script',
+      'Test Script'
     );
     console.log('Login success:', result);
   } catch (error: any) {

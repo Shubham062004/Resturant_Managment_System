@@ -4,7 +4,15 @@ const prisma = new PrismaClient();
 
 export class HistoryService {
   async getOrders(filters: any) {
-    const { page = 1, limit = 50, branchId, startDate, endDate, status, search } = filters;
+    const {
+      page = 1,
+      limit = 50,
+      branchId,
+      startDate,
+      endDate,
+      status,
+      search,
+    } = filters;
     const skip = (page - 1) * limit;
 
     const whereClause: any = {};
@@ -34,13 +42,19 @@ export class HistoryService {
           items: true,
           kitchenOrder: {
             include: {
-              assignedUser: { select: { id: true, firstName: true, lastName: true } },
+              assignedUser: {
+                select: { id: true, firstName: true, lastName: true },
+              },
             },
           },
           deliveryAssignment: {
             include: {
               driver: {
-                include: { user: { select: { id: true, firstName: true, lastName: true } } },
+                include: {
+                  user: {
+                    select: { id: true, firstName: true, lastName: true },
+                  },
+                },
               },
             },
           },
@@ -98,7 +112,15 @@ export class HistoryService {
   }
 
   async getInventory(filters: any) {
-    const { page = 1, limit = 50, branchId, status, search, startDate, endDate } = filters;
+    const {
+      page = 1,
+      limit = 50,
+      branchId,
+      status,
+      search,
+      startDate,
+      endDate,
+    } = filters;
     const skip = (page - 1) * limit;
 
     const whereClause: any = {};
@@ -113,8 +135,12 @@ export class HistoryService {
     if (search) {
       whereClause.OR = [
         { id: { contains: search, mode: 'insensitive' } },
-        { requestedBy: { firstName: { contains: search, mode: 'insensitive' } } },
-        { requestedBy: { lastName: { contains: search, mode: 'insensitive' } } },
+        {
+          requestedBy: { firstName: { contains: search, mode: 'insensitive' } },
+        },
+        {
+          requestedBy: { lastName: { contains: search, mode: 'insensitive' } },
+        },
       ];
     }
 
@@ -163,7 +189,12 @@ export class HistoryService {
       prisma.ingredient.count({ where: whereClause }),
     ]);
 
-    return { data: ingredients, total, page: Number(page), limit: Number(limit) };
+    return {
+      data: ingredients,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+    };
   }
 
   async getSuppliers(filters: any) {
@@ -214,7 +245,11 @@ export class HistoryService {
         where: whereClause,
         include: {
           _count: {
-            select: { Order: true, inventoryRequests: true, workAssignments: true },
+            select: {
+              Order: true,
+              inventoryRequests: true,
+              workAssignments: true,
+            },
           },
         },
         skip,
@@ -290,24 +325,25 @@ export class HistoryService {
       refundWhere.createdAt = { gte: start, lte: end };
     }
 
-    const [totalRevenue, totalPayroll, totalPurchases, totalRefunds] = await Promise.all([
-      prisma.order.aggregate({
-        where: { ...orderWhere, status: 'DELIVERED' },
-        _sum: { totalAmount: true, tax: true },
-      }),
-      prisma.payrollRecord.aggregate({
-        where: payrollWhere,
-        _sum: { netPaid: true },
-      }),
-      prisma.purchaseOrder.aggregate({
-        where: { ...purchaseWhere, status: 'RECEIVED' },
-        _sum: { totalAmount: true },
-      }),
-      prisma.refund.aggregate({
-        where: { ...refundWhere, status: 'COMPLETED' },
-        _sum: { amount: true },
-      }),
-    ]);
+    const [totalRevenue, totalPayroll, totalPurchases, totalRefunds] =
+      await Promise.all([
+        prisma.order.aggregate({
+          where: { ...orderWhere, status: 'DELIVERED' },
+          _sum: { totalAmount: true, tax: true },
+        }),
+        prisma.payrollRecord.aggregate({
+          where: payrollWhere,
+          _sum: { netPaid: true },
+        }),
+        prisma.purchaseOrder.aggregate({
+          where: { ...purchaseWhere, status: 'RECEIVED' },
+          _sum: { totalAmount: true },
+        }),
+        prisma.refund.aggregate({
+          where: { ...refundWhere, status: 'COMPLETED' },
+          _sum: { amount: true },
+        }),
+      ]);
 
     const revenue = Number(totalRevenue._sum.totalAmount || 0);
     const payroll = Number(totalPayroll._sum.netPaid || 0);
@@ -330,7 +366,15 @@ export class HistoryService {
   }
 
   async getAttendance(filters: any) {
-    const { page = 1, limit = 50, branchId, date, startDate, endDate, search } = filters;
+    const {
+      page = 1,
+      limit = 50,
+      branchId,
+      date,
+      startDate,
+      endDate,
+      search,
+    } = filters;
     const skip = (page - 1) * limit;
 
     const whereClause: any = {};
@@ -372,7 +416,12 @@ export class HistoryService {
       prisma.attendanceLog.count({ where: whereClause }),
     ]);
 
-    return { data: attendance, total, page: Number(page), limit: Number(limit) };
+    return {
+      data: attendance,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+    };
   }
 
   async getSalary(filters: any) {
@@ -412,7 +461,15 @@ export class HistoryService {
   }
 
   async getAudit(filters: any) {
-    const { page = 1, limit = 50, action, userId, search, startDate, endDate } = filters;
+    const {
+      page = 1,
+      limit = 50,
+      action,
+      userId,
+      search,
+      startDate,
+      endDate,
+    } = filters;
     const skip = (page - 1) * limit;
 
     const whereClause: any = {};
@@ -437,7 +494,14 @@ export class HistoryService {
       prisma.auditLog.findMany({
         where: whereClause,
         include: {
-          user: { select: { firstName: true, lastName: true, email: true, role: true } },
+          user: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
+              role: true,
+            },
+          },
         },
         skip,
         take: Number(limit),

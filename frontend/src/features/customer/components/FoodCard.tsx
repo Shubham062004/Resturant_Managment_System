@@ -20,7 +20,11 @@ interface FoodCardProps {
   className?: string;
 }
 
-const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, className = '' }) => {
+const FoodCard: React.FC<FoodCardProps> = ({
+  product,
+  showAddToCart = true,
+  className = '',
+}) => {
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { favoritedIds } = useAppSelector((state) => state.favorite);
@@ -132,7 +136,9 @@ const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, clas
             >
               <Heart
                 size={16}
-                className={isFavorite ? 'text-red-500 fill-red-500' : 'text-white/80'}
+                className={
+                  isFavorite ? 'text-red-500 fill-red-500' : 'text-white/80'
+                }
               />
             </button>
 
@@ -167,7 +173,9 @@ const FoodCard: React.FC<FoodCardProps> = ({ product, showAddToCart = true, clas
             )}
 
             <div className="flex items-center justify-between pt-1">
-              <span className="text-primary font-bold text-base">₹{price.toFixed(0)}</span>
+              <span className="text-primary font-bold text-base">
+                ₹{price.toFixed(0)}
+              </span>
 
               {/* Add to Cart / Quantity stepper */}
               {showAddToCart && (

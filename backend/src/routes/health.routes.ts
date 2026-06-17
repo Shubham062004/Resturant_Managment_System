@@ -28,9 +28,12 @@ router.get('/database', async (req, res) => {
     // Ping PostgreSQL
     await prisma.$queryRaw`SELECT 1`;
     // Ping MongoDB
-    if (mongoose.connection.readyState !== 1) throw new Error('MongoDB not connected');
+    if (mongoose.connection.readyState !== 1)
+      throw new Error('MongoDB not connected');
 
-    res.status(200).json({ status: 'OK', postgres: 'connected', mongodb: 'connected' });
+    res
+      .status(200)
+      .json({ status: 'OK', postgres: 'connected', mongodb: 'connected' });
   } catch (error: any) {
     res.status(503).json({ status: 'DEGRADED', error: error.message });
   }

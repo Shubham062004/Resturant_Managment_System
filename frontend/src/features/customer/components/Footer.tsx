@@ -1,4 +1,11 @@
-import { Flame, Send, Facebook, Twitter, Instagram, Github } from 'lucide-react';
+import {
+  Flame,
+  Send,
+  Facebook,
+  Twitter,
+  Instagram,
+  Github,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -35,8 +42,8 @@ export const Footer: React.FC = () => {
             <span>ABC</span>
           </Link>
           <p className="text-sm leading-relaxed text-neutral-400">
-            Premium food delivery service bringing fire-baked pizzas, gourmet burgers, and authentic
-            cuisines directly to your door in 30 minutes.
+            Premium food delivery service bringing fire-baked pizzas, gourmet
+            burgers, and authentic cuisines directly to your door in 30 minutes.
           </p>
           <div className="flex gap-4 pt-2">
             <a
@@ -116,27 +123,42 @@ export const Footer: React.FC = () => {
           </h3>
           <ul className="space-y-3 text-sm">
             <li>
-              <Link to="/about" className="hover:text-primary transition-colors">
+              <Link
+                to="/about"
+                className="hover:text-primary transition-colors"
+              >
                 About Us
               </Link>
             </li>
             <li>
-              <Link to="/branches" className="hover:text-primary transition-colors">
+              <Link
+                to="/branches"
+                className="hover:text-primary transition-colors"
+              >
                 Find a Restaurant
               </Link>
             </li>
             <li>
-              <Link to="/offers" className="hover:text-primary transition-colors">
+              <Link
+                to="/offers"
+                className="hover:text-primary transition-colors"
+              >
                 Deals & Offers
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-primary transition-colors">
+              <Link
+                to="/contact"
+                className="hover:text-primary transition-colors"
+              >
                 Help & Support
               </Link>
             </li>
             <li>
-              <Link to="/rider-signup" className="hover:text-primary transition-colors">
+              <Link
+                to="/rider-signup"
+                className="hover:text-primary transition-colors"
+              >
                 Become a Rider
               </Link>
             </li>
@@ -149,7 +171,8 @@ export const Footer: React.FC = () => {
             Newsletter
           </h3>
           <p className="text-sm leading-relaxed text-neutral-400">
-            Subscribe to get exclusive promo codes, special offers, and updates on new menu items.
+            Subscribe to get exclusive promo codes, special offers, and updates
+            on new menu items.
           </p>
           <form onSubmit={handleSubscribe} className="flex gap-2 relative">
             <input
@@ -173,7 +196,10 @@ export const Footer: React.FC = () => {
 
       {/* Bottom Legal Bar */}
       <div className="max-w-7xl mx-auto px-6 border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
-        <span>© {new Date().getFullYear()} ABC Restaurant Group. All rights reserved.</span>
+        <span>
+          © {new Date().getFullYear()} ABC Restaurant Group. All rights
+          reserved.
+        </span>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
           <a href="#" className="hover:text-white transition-colors">
             Privacy Policy

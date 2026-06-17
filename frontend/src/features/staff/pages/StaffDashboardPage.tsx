@@ -132,7 +132,9 @@ export default function StaffDashboardPage() {
               <ClipboardList className="w-5 h-5 text-orange-500" />
             </div>
           </div>
-          <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.todayTasks}</h3>
+          <h3 className="text-2xl font-bold font-mono text-white mb-1">
+            {metrics.todayTasks}
+          </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Today's Tasks
           </p>
@@ -147,7 +149,9 @@ export default function StaffDashboardPage() {
               Good pace
             </Badge>
           </div>
-          <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.completedTasks}</h3>
+          <h3 className="text-2xl font-bold font-mono text-white mb-1">
+            {metrics.completedTasks}
+          </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Completed Tasks
           </p>
@@ -159,7 +163,9 @@ export default function StaffDashboardPage() {
               <Clock className="w-5 h-5 text-rose-500" />
             </div>
           </div>
-          <h3 className="text-2xl font-bold font-mono text-white mb-1">{metrics.pendingTasks}</h3>
+          <h3 className="text-2xl font-bold font-mono text-white mb-1">
+            {metrics.pendingTasks}
+          </h3>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Pending Tasks
           </p>
@@ -193,8 +199,12 @@ export default function StaffDashboardPage() {
               </h3>
             </div>
             <div className="p-5">
-              <p className="text-xl font-bold text-slate-200">{metrics.currentShift}</p>
-              <p className="text-sm text-slate-500 mt-1">Branch: ABC Downtown</p>
+              <p className="text-xl font-bold text-slate-200">
+                {metrics.currentShift}
+              </p>
+              <p className="text-sm text-slate-500 mt-1">
+                Branch: ABC Downtown
+              </p>
             </div>
           </Card>
 

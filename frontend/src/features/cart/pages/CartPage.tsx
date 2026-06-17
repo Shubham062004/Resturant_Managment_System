@@ -1,4 +1,13 @@
-import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Tag, Info, X } from 'lucide-react';
+import {
+  Minus,
+  Plus,
+  Trash2,
+  ShoppingBag,
+  ArrowRight,
+  Tag,
+  Info,
+  X,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -41,7 +50,9 @@ export const CartPage: React.FC = () => {
           title="Sign in to view your cart"
           description="Log in to add items and proceed to checkout."
           actionLabel="Go to Login"
-          onAction={() => navigate('/login', { state: { from: { pathname: '/cart' } } })}
+          onAction={() =>
+            navigate('/login', { state: { from: { pathname: '/cart' } } })
+          }
         />
       </div>
     );
@@ -71,7 +82,7 @@ export const CartPage: React.FC = () => {
 
   const subtotal = cart.items.reduce(
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
-    0,
+    0
   );
 
   const discount = appliedCoupon ? appliedCoupon.discountAmount : 0;
@@ -99,8 +110,14 @@ export const CartPage: React.FC = () => {
     e.preventDefault();
     if (!couponCode.trim()) return;
     try {
-      const res = await validateCoupon.mutateAsync({ code: couponCode, orderAmount: subtotal });
-      setAppliedCoupon({ code: res.coupon.code, discountAmount: res.discountAmount });
+      const res = await validateCoupon.mutateAsync({
+        code: couponCode,
+        orderAmount: subtotal,
+      });
+      setAppliedCoupon({
+        code: res.coupon.code,
+        discountAmount: res.discountAmount,
+      });
       toast.success('Coupon applied successfully!');
     } catch (err: any) {
       toast.error(err.response?.data?.error?.message || 'Invalid coupon code');
@@ -116,7 +133,10 @@ export const CartPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="My Cart — ABC Restaurant" description="Review your order before checkout." />
+      <SEO
+        title="My Cart — ABC Restaurant"
+        description="Review your order before checkout."
+      />
       <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-32">
         <div className="max-w-6xl mx-auto px-6 space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/5">
@@ -126,13 +146,16 @@ export const CartPage: React.FC = () => {
                 Your Cart
               </h1>
               <p className="text-neutral-400 text-sm mt-2">
-                {cart.items.length} {cart.items.length === 1 ? 'item' : 'items'} in your cart
+                {cart.items.length} {cart.items.length === 1 ? 'item' : 'items'}{' '}
+                in your cart
               </p>
             </div>
             {cart.items.length > 0 && (
               <button
                 onClick={() => {
-                  if (window.confirm('Are you sure you want to clear your cart?')) {
+                  if (
+                    window.confirm('Are you sure you want to clear your cart?')
+                  ) {
                     clearCart.mutate();
                   }
                 }}
@@ -187,7 +210,9 @@ export const CartPage: React.FC = () => {
                           {item.product.name}
                         </Link>
                         {item.variant && (
-                          <p className="text-xs text-neutral-400 mt-1">{item.variant.name}</p>
+                          <p className="text-xs text-neutral-400 mt-1">
+                            {item.variant.name}
+                          </p>
                         )}
                         <p className="text-sm text-primary font-bold mt-2">
                           ₹{parseFloat(item.price).toFixed(0)}
@@ -199,7 +224,9 @@ export const CartPage: React.FC = () => {
                         <div className="flex items-center gap-0 bg-white/[0.04] border border-white/10 rounded-lg overflow-hidden">
                           <button
                             type="button"
-                            onClick={() => handleQuantity(item.id, item.quantity - 1)}
+                            onClick={() =>
+                              handleQuantity(item.id, item.quantity - 1)
+                            }
                             className="px-3 py-2 hover:bg-white/10 transition-colors text-white"
                             aria-label="Decrease quantity"
                           >
@@ -210,7 +237,9 @@ export const CartPage: React.FC = () => {
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleQuantity(item.id, item.quantity + 1)}
+                            onClick={() =>
+                              handleQuantity(item.id, item.quantity + 1)
+                            }
                             className="px-3 py-2 hover:bg-white/10 transition-colors text-white"
                             aria-label="Increase quantity"
                           >
@@ -235,7 +264,9 @@ export const CartPage: React.FC = () => {
                   ))}
                 </div>
 
-                <SmartComboSuggestion cartItemIds={cart.items.map((item) => item.product.id)} />
+                <SmartComboSuggestion
+                  cartItemIds={cart.items.map((item) => item.product.id)}
+                />
               </div>
 
               {/* Right Column: Order Summary */}
@@ -251,7 +282,9 @@ export const CartPage: React.FC = () => {
                         <span className="text-emerald-400 font-bold text-sm">
                           {appliedCoupon.code}
                         </span>
-                        <span className="text-emerald-500/80 text-xs">Coupon Applied</span>
+                        <span className="text-emerald-500/80 text-xs">
+                          Coupon Applied
+                        </span>
                       </div>
                       <button
                         onClick={handleRemoveCoupon}
@@ -283,7 +316,9 @@ export const CartPage: React.FC = () => {
 
                 {/* Summary Box */}
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 space-y-4">
-                  <h3 className="font-bold text-white text-lg">Order Summary</h3>
+                  <h3 className="font-bold text-white text-lg">
+                    Order Summary
+                  </h3>
 
                   <div className="space-y-3 text-sm pt-2">
                     <div className="flex justify-between text-neutral-400">
@@ -306,8 +341,12 @@ export const CartPage: React.FC = () => {
 
                   <div className="border-t border-white/5 pt-4 mt-4">
                     <div className="flex justify-between items-end mb-6">
-                      <span className="font-semibold text-white">Estimated Total</span>
-                      <span className="text-2xl font-bold text-primary">₹{total.toFixed(0)}</span>
+                      <span className="font-semibold text-white">
+                        Estimated Total
+                      </span>
+                      <span className="text-2xl font-bold text-primary">
+                        ₹{total.toFixed(0)}
+                      </span>
                     </div>
                     <Button
                       variant="primary"

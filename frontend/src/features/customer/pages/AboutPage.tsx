@@ -38,8 +38,8 @@ export const AboutPage: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-muted-foreground font-sans max-w-xl mx-auto leading-relaxed text-sm md:text-base"
           >
-            We are culinary builders and automation architects, serving fire-baked perfection with
-            absolute delivery reliability.
+            We are culinary builders and automation architects, serving
+            fire-baked perfection with absolute delivery reliability.
           </motion.p>
         </div>
 
@@ -50,14 +50,14 @@ export const AboutPage: React.FC = () => {
               The Hearth & The Code
             </h2>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-              ABC began with a single vision: how to serve authentic Neapolitan-style stone crust
-              pizzas and handcrafted gourmet burger blends without the traditional restaurant
-              delays.
+              ABC began with a single vision: how to serve authentic
+              Neapolitan-style stone crust pizzas and handcrafted gourmet burger
+              blends without the traditional restaurant delays.
             </p>
             <p className="text-sm text-muted-foreground font-sans leading-relaxed">
-              By combining a customized 800°F stone hearth pizza deck with a modular kitchen
-              dispatching system, we unified high-speed culinary prep with live client progress
-              tickets.
+              By combining a customized 800°F stone hearth pizza deck with a
+              modular kitchen dispatching system, we unified high-speed culinary
+              prep with live client progress tickets.
             </p>
           </div>
           <div className="relative rounded-2xl overflow-hidden aspect-video border border-border/60 shadow-lg">
@@ -77,28 +77,34 @@ export const AboutPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-card/45 border border-border/50 p-6 rounded-xl space-y-3">
               <Target className="text-primary" size={20} />
-              <h3 className="font-display font-bold text-sm text-white">Absolute Quality</h3>
+              <h3 className="font-display font-bold text-sm text-white">
+                Absolute Quality
+              </h3>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Premium unbleached flours, fresh San Marzano tomatoes, and custom blend brisket
-                patties. Never frozen.
+                Premium unbleached flours, fresh San Marzano tomatoes, and
+                custom blend brisket patties. Never frozen.
               </p>
             </div>
 
             <div className="bg-card/45 border border-border/50 p-6 rounded-xl space-y-3">
               <Clock className="text-primary" size={20} />
-              <h3 className="font-display font-bold text-sm text-white">Rapid Fulfilment</h3>
+              <h3 className="font-display font-bold text-sm text-white">
+                Rapid Fulfilment
+              </h3>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Proprietary heat retention boxes and smart logistics ensure food arrives at peak
-                tasting temperature.
+                Proprietary heat retention boxes and smart logistics ensure food
+                arrives at peak tasting temperature.
               </p>
             </div>
 
             <div className="bg-card/45 border border-border/50 p-6 rounded-xl space-y-3">
               <ShieldCheck className="text-primary" size={20} />
-              <h3 className="font-display font-bold text-sm text-white">Sanitation Shield</h3>
+              <h3 className="font-display font-bold text-sm text-white">
+                Sanitation Shield
+              </h3>
               <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-                Rigid temperature logs and contactless handoffs verify safety protocols at every
-                single checkpoint.
+                Rigid temperature logs and contactless handoffs verify safety
+                protocols at every single checkpoint.
               </p>
             </div>
           </div>

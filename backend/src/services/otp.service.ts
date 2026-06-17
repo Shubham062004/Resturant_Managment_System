@@ -28,12 +28,16 @@ export class OtpService {
   public static async dispatchOtp(
     phoneOrEmail: string,
     otp: string,
-    provider: 'TWILIO' | 'MSG91' | 'FIREBASE' | 'MOCK' = 'MOCK',
+    provider: 'TWILIO' | 'MSG91' | 'FIREBASE' | 'MOCK' = 'MOCK'
   ): Promise<void> {
-    logger.info(`[OTP Service] Dispatching OTP using ${provider} to ${phoneOrEmail}...`);
+    logger.info(
+      `[OTP Service] Dispatching OTP using ${provider} to ${phoneOrEmail}...`
+    );
 
     if (process.env.NODE_ENV === 'development') {
-      logger.info(`[OTP Service] Development Mode -> OTP for ${phoneOrEmail} is ${otp}`);
+      logger.info(
+        `[OTP Service] Development Mode -> OTP for ${phoneOrEmail} is ${otp}`
+      );
       return;
     }
 
@@ -48,7 +52,9 @@ export class OtpService {
         // Firebase integration logic here
         break;
       default:
-        logger.warn(`[OTP Service] Mock dispatch for ${phoneOrEmail} with OTP ${otp}`);
+        logger.warn(
+          `[OTP Service] Mock dispatch for ${phoneOrEmail} with OTP ${otp}`
+        );
         break;
     }
   }
@@ -58,7 +64,7 @@ export class OtpService {
    */
   public static async saveOtp(
     identifier: { email?: string; phone?: string; userId?: string },
-    otp: string,
+    otp: string
   ) {
     const codeHash = this.hashOtp(otp);
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
@@ -89,7 +95,7 @@ export class OtpService {
    */
   public static async verifyOtp(
     identifier: { email?: string; phone?: string },
-    otp: string,
+    otp: string
   ): Promise<boolean> {
     const codeHash = this.hashOtp(otp);
 

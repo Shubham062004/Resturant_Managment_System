@@ -31,7 +31,9 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             </div>
             <span>ABC Restaurant</span>
           </div>
-          <p className="text-white/80 font-sans text-lg">Fresh Food. Fast Service.</p>
+          <p className="text-white/80 font-sans text-lg">
+            Fresh Food. Fast Service.
+          </p>
         </div>
       </div>
 
@@ -40,15 +42,21 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
         {/* Mobile-only branding */}
         <div className="lg:hidden flex flex-col items-center gap-2 mb-10 text-center">
           <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-display font-black text-2xl">A</span>
+            <span className="text-white font-display font-black text-2xl">
+              A
+            </span>
           </div>
           <h1 className="font-display font-black text-2xl tracking-tight mt-2 text-foreground">
             ABC Restaurant
           </h1>
-          <p className="text-muted-foreground font-sans text-sm">Fresh Food. Fast Service.</p>
+          <p className="text-muted-foreground font-sans text-sm">
+            Fresh Food. Fast Service.
+          </p>
         </div>
 
-        <div className="w-full max-w-md mx-auto z-10 animate-fade-in-up">{children}</div>
+        <div className="w-full max-w-md mx-auto z-10 animate-fade-in-up">
+          {children}
+        </div>
       </div>
     </div>
   );

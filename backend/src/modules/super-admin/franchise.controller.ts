@@ -4,7 +4,11 @@ import { prisma } from '../../config/db';
 import { AuthRequest } from '../../types/express';
 
 export class FranchiseController {
-  public static async getFranchises(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async getFranchises(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const franchises = await prisma.franchise.findMany({
         where: req.tenantFilter,
@@ -22,7 +26,11 @@ export class FranchiseController {
     }
   }
 
-  public static async createFranchise(req: AuthRequest, res: Response, next: NextFunction) {
+  public static async createFranchise(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { ownerName, organizationId } = req.body;
       const franchise = await prisma.franchise.create({

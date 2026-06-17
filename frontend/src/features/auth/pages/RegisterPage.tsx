@@ -67,7 +67,9 @@ export const RegisterPage: React.FC = () => {
 
     const result = await dispatch(registerUser(payload));
     if (registerUser.fulfilled.match(result)) {
-      toast.success('Registration successful! Check your email for verification.');
+      toast.success(
+        'Registration successful! Check your email for verification.'
+      );
       navigate('/login');
     }
   };
@@ -105,7 +107,9 @@ export const RegisterPage: React.FC = () => {
           <h2 className="text-3xl font-display font-bold tracking-tight text-foreground">
             Create an Account
           </h2>
-          <p className="text-muted-foreground font-sans text-sm">Sign up to get started</p>
+          <p className="text-muted-foreground font-sans text-sm">
+            Sign up to get started
+          </p>
         </div>
 
         {(validationError || error) && (

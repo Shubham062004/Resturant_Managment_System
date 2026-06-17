@@ -9,7 +9,11 @@ export class ForecastingService {
     return {
       predictionType: 'DEMAND',
       forecasts: [
-        { date: new Date().toISOString(), expectedOrders: 145, confidence: 0.89 },
+        {
+          date: new Date().toISOString(),
+          expectedOrders: 145,
+          confidence: 0.89,
+        },
         {
           date: new Date(Date.now() + 86400000).toISOString(),
           expectedOrders: 160,
@@ -27,7 +31,11 @@ export class ForecastingService {
     return {
       predictionType: 'INVENTORY',
       risks: [
-        { ingredient: 'Mozzarella Cheese', daysLeft: 1.2, suggestedRestockQty: 50 },
+        {
+          ingredient: 'Mozzarella Cheese',
+          daysLeft: 1.2,
+          suggestedRestockQty: 50,
+        },
         { ingredient: 'Pizza Dough', daysLeft: 0.5, suggestedRestockQty: 100 },
       ],
       aiAnalysis: response,

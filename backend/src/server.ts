@@ -24,7 +24,7 @@ const startServer = async () => {
     // 2. Start Express Port Listener
     const server = app.listen(env.PORT, () => {
       logger.info(
-        `🚀 ABC RMS Service listening on http://localhost:${env.PORT} in [${env.NODE_ENV}] mode`,
+        `🚀 ABC RMS Service listening on http://localhost:${env.PORT} in [${env.NODE_ENV}] mode`
       );
     });
 
@@ -45,7 +45,10 @@ const startServer = async () => {
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
   } catch (error) {
-    logger.error(error, '❌ Root bootstrapper crashed during startup sequence:');
+    logger.error(
+      error,
+      '❌ Root bootstrapper crashed during startup sequence:'
+    );
     process.exit(1);
   }
 };
@@ -57,7 +60,10 @@ process.on('uncaughtException', (err) => {
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error({ reason, promise }, '💥 UNHANDLED REJECTION! Shutting down server...');
+  logger.error(
+    { reason, promise },
+    '💥 UNHANDLED REJECTION! Shutting down server...'
+  );
   process.exit(1);
 });
 

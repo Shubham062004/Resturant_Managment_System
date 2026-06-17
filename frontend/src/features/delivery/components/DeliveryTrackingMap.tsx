@@ -30,23 +30,31 @@ export const DeliveryTrackingMap: React.FC<DeliveryTrackingMapProps> = ({
               <div className="bg-primary/20 p-3 rounded-full">
                 <Navigation className="text-primary w-8 h-8" />
               </div>
-              <span className="text-xs text-muted-foreground mt-2 font-semibold">Driver</span>
+              <span className="text-xs text-muted-foreground mt-2 font-semibold">
+                Driver
+              </span>
             </div>
           )}
 
-          {driverLocation && destination && <div className="w-24 h-0.5 bg-dashed bg-border/50" />}
+          {driverLocation && destination && (
+            <div className="w-24 h-0.5 bg-dashed bg-border/50" />
+          )}
 
           {destination && (
             <div className="flex flex-col items-center">
               <div className="bg-success/20 p-3 rounded-full">
                 <MapPin className="text-success w-8 h-8" />
               </div>
-              <span className="text-xs text-muted-foreground mt-2 font-semibold">Destination</span>
+              <span className="text-xs text-muted-foreground mt-2 font-semibold">
+                Destination
+              </span>
             </div>
           )}
         </div>
         {!driverLocation && !destination && (
-          <p className="text-muted-foreground text-sm font-medium">GPS Tracking Unavailable</p>
+          <p className="text-muted-foreground text-sm font-medium">
+            GPS Tracking Unavailable
+          </p>
         )}
       </div>
     </Card>

@@ -44,19 +44,23 @@ const optionalAuth = (req: any, res: any, next: any) => {
 router.get(
   '/restaurants',
   validate({ query: restaurantQuerySchema }),
-  CatalogController.getRestaurants,
+  CatalogController.getRestaurants
 );
 router.get('/restaurants/slug/:slug', CatalogController.getRestaurantBySlug);
 router.get('/restaurants/:id', CatalogController.getRestaurantById);
 
 // Branch endpoints
-router.get('/branches', validate({ query: paginationQuerySchema }), CatalogController.getBranches);
+router.get(
+  '/branches',
+  validate({ query: paginationQuerySchema }),
+  CatalogController.getBranches
+);
 
 // Category endpoints
 router.get(
   '/categories',
   validate({ query: paginationQuerySchema }),
-  CatalogController.getCategories,
+  CatalogController.getCategories
 );
 router.get('/categories/slug/:slug', CatalogController.getCategoryBySlug);
 
@@ -65,14 +69,18 @@ router.get(
   '/products',
   optionalAuth,
   validate({ query: productQuerySchema }),
-  CatalogController.getProducts,
+  CatalogController.getProducts
 );
 router.get('/products/featured', CatalogController.getFeaturedProducts);
-router.get('/products/slug/:slug', optionalAuth, CatalogController.getProductBySlug);
+router.get(
+  '/products/slug/:slug',
+  optionalAuth,
+  CatalogController.getProductBySlug
+);
 router.post(
   '/products/recommendations/click',
   optionalAuth,
-  CatalogController.trackRecommendationClick,
+  CatalogController.trackRecommendationClick
 );
 
 // Review endpoints (Authenticated)
@@ -80,19 +88,19 @@ router.post(
   '/reviews',
   authGuard,
   validate({ body: createReviewSchema }),
-  CatalogController.createReview,
+  CatalogController.createReview
 );
 router.put(
   '/reviews/:id',
   authGuard,
   validate({ body: updateReviewSchema }),
-  CatalogController.updateReview,
+  CatalogController.updateReview
 );
 router.delete('/reviews/:id', authGuard, CatalogController.deleteReview);
 router.get(
   '/reviews/product/:productId',
   validate({ query: paginationQuerySchema }),
-  CatalogController.getReviewsByProductId,
+  CatalogController.getReviewsByProductId
 );
 
 // Favorites endpoints (Authenticated)
@@ -100,13 +108,13 @@ router.post(
   '/favorites',
   authGuard,
   validate({ body: favoriteToggleSchema }),
-  CatalogController.toggleFavorite,
+  CatalogController.toggleFavorite
 );
 router.get(
   '/favorites',
   authGuard,
   validate({ query: paginationQuerySchema }),
-  CatalogController.getFavorites,
+  CatalogController.getFavorites
 );
 
 export default router;

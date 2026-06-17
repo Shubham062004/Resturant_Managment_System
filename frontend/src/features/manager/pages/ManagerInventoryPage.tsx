@@ -1,5 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Package, Send, AlertTriangle, History, CheckCircle, Truck } from 'lucide-react';
+import {
+  Package,
+  Send,
+  AlertTriangle,
+  History,
+  CheckCircle,
+  Truck,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../app/store';
@@ -18,7 +25,9 @@ import {
 export default function ManagerInventoryPage() {
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const { inventory, inventoryRequests } = useAppSelector((state) => state.inventory);
+  const { inventory, inventoryRequests } = useAppSelector(
+    (state) => state.inventory
+  );
 
   const [branches, setBranches] = useState<any[]>([]);
   const [selectedBranchId, setSelectedBranchId] = useState<string>('');
@@ -51,7 +60,10 @@ export default function ManagerInventoryPage() {
   }, [selectedBranchId, dispatch]);
 
   const handleAddRequestItem = () => {
-    setRequestItems([...requestItems, { ingredientId: '', quantity: 1, notes: '' }]);
+    setRequestItems([
+      ...requestItems,
+      { ingredientId: '', quantity: 1, notes: '' },
+    ]);
   };
 
   const handleRemoveRequestItem = (idx: number) => {
@@ -65,7 +77,10 @@ export default function ManagerInventoryPage() {
   };
 
   const handleSubmitRequest = () => {
-    if (requestItems.length === 0 || requestItems.some((i) => !i.ingredientId || i.quantity <= 0)) {
+    if (
+      requestItems.length === 0 ||
+      requestItems.some((i) => !i.ingredientId || i.quantity <= 0)
+    ) {
       toast.error('Please fill all item fields properly.');
       return;
     }
@@ -76,7 +91,7 @@ export default function ManagerInventoryPage() {
         branchId: selectedBranchId,
         expectedDate: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
         items: requestItems,
-      }),
+      })
     )
       .unwrap()
       .then(() => {
@@ -107,8 +122,12 @@ export default function ManagerInventoryPage() {
 
   // Assume inventory slice returns global inventory array where we map items.
   // In a real app we'd filter `inventory` by branchId or use a specific endpoint.
-  const branchInventory = inventory.filter((i) => i.branchId === selectedBranchId || !i.branchId);
-  const lowStockItems = branchInventory.filter((i) => i.quantity <= (i.minimumStockLevel || 10));
+  const branchInventory = inventory.filter(
+    (i) => i.branchId === selectedBranchId || !i.branchId
+  );
+  const lowStockItems = branchInventory.filter(
+    (i) => i.quantity <= (i.minimumStockLevel || 10)
+  );
 
   return (
     <div className="flex flex-col h-full space-y-6">
@@ -132,7 +151,11 @@ export default function ManagerInventoryPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -158,7 +181,9 @@ export default function ManagerInventoryPage() {
 
             <div className="space-y-3">
               {lowStockItems.length === 0 ? (
-                <p className="text-xs text-slate-500 italic">Stock levels are healthy.</p>
+                <p className="text-xs text-slate-500 italic">
+                  Stock levels are healthy.
+                </p>
               ) : (
                 lowStockItems.slice(0, 5).map((item, i) => (
                   <div
@@ -226,7 +251,9 @@ export default function ManagerInventoryPage() {
             {inventoryRequests.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-slate-500 opacity-60">
                 <Package size={48} className="mb-4" />
-                <p className="text-sm font-semibold">No supply requests made yet.</p>
+                <p className="text-sm font-semibold">
+                  No supply requests made yet.
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -239,13 +266,17 @@ export default function ManagerInventoryPage() {
                       <div>
                         <h4 className="font-bold text-slate-200">
                           Request #
-                          {req.requestNumber?.toUpperCase() || req.id.slice(-6).toUpperCase()}
+                          {req.requestNumber?.toUpperCase() ||
+                            req.id.slice(-6).toUpperCase()}
                         </h4>
                         <p className="text-xs text-slate-400 mt-1">
-                          Submitted: {new Date(req.createdAt).toLocaleDateString()}
+                          Submitted:{' '}
+                          {new Date(req.createdAt).toLocaleDateString()}
                         </p>
                       </div>
-                      <Badge className={`text-[10px] border ${getStatusBadge(req.status)}`}>
+                      <Badge
+                        className={`text-[10px] border ${getStatusBadge(req.status)}`}
+                      >
                         {req.status}
                       </Badge>
                     </div>
@@ -255,14 +286,19 @@ export default function ManagerInventoryPage() {
                         <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
                           Items Requested
                         </p>
-                        {req.items?.slice(0, 3).map((item: any, idx: number) => (
-                          <p key={idx} className="text-xs text-slate-300 flex justify-between">
-                            <span>{item.ingredient?.name || 'Item'}</span>
-                            <span className="font-mono text-primary">
-                              {item.quantity} {item.ingredient?.unit}
-                            </span>
-                          </p>
-                        ))}
+                        {req.items
+                          ?.slice(0, 3)
+                          .map((item: any, idx: number) => (
+                            <p
+                              key={idx}
+                              className="text-xs text-slate-300 flex justify-between"
+                            >
+                              <span>{item.ingredient?.name || 'Item'}</span>
+                              <span className="font-mono text-primary">
+                                {item.quantity} {item.ingredient?.unit}
+                              </span>
+                            </p>
+                          ))}
                         {(req.items?.length || 0) > 3 && (
                           <p className="text-[10px] text-slate-500 italic">
                             + {(req.items?.length || 0) - 3} more items
@@ -305,7 +341,9 @@ export default function ManagerInventoryPage() {
             >
               <div className="p-6 border-b border-border/20 flex justify-between items-center shrink-0">
                 <div>
-                  <h3 className="text-xl font-bold text-white font-display">New Supply Request</h3>
+                  <h3 className="text-xl font-bold text-white font-display">
+                    New Supply Request
+                  </h3>
                   <p className="text-xs text-slate-400 mt-1">
                     Order ingredients from the central warehouse.
                   </p>
@@ -330,7 +368,9 @@ export default function ManagerInventoryPage() {
                       </label>
                       <select
                         value={item.ingredientId}
-                        onChange={(e) => handleUpdateItem(idx, 'ingredientId', e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateItem(idx, 'ingredientId', e.target.value)
+                        }
                         className="w-full bg-slate-900 border border-border/30 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-indigo-500"
                       >
                         <option value="">Select Item...</option>
@@ -350,7 +390,11 @@ export default function ManagerInventoryPage() {
                         min="1"
                         value={item.quantity}
                         onChange={(e) =>
-                          handleUpdateItem(idx, 'quantity', parseInt(e.target.value) || 0)
+                          handleUpdateItem(
+                            idx,
+                            'quantity',
+                            parseInt(e.target.value) || 0
+                          )
                         }
                         className="bg-slate-900 border-border/30"
                       />
@@ -363,7 +407,9 @@ export default function ManagerInventoryPage() {
                         type="text"
                         value={item.notes}
                         placeholder="Urgent, specific brand..."
-                        onChange={(e) => handleUpdateItem(idx, 'notes', e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateItem(idx, 'notes', e.target.value)
+                        }
                         className="bg-slate-900 border-border/30"
                       />
                     </div>

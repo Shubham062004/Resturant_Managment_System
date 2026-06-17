@@ -29,10 +29,14 @@ export const ForgotPasswordPage: React.FC = () => {
     try {
       const response = await apiClient.post('/auth/forgot-password', { email });
       setSuccessMessage(
-        response.data.message || 'If registered, a password reset link has been dispatched.',
+        response.data.message ||
+          'If registered, a password reset link has been dispatched.'
       );
     } catch (err: any) {
-      setError(err.response?.data?.error?.message || 'Failed to request password reset.');
+      setError(
+        err.response?.data?.error?.message ||
+          'Failed to request password reset.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -65,8 +69,8 @@ export const ForgotPasswordPage: React.FC = () => {
               {successMessage}
             </Alert>
             <p className="text-muted-foreground font-sans text-sm leading-relaxed px-1">
-              Please check your system logs or email inbox. The reset link is valid for exactly 1
-              hour.
+              Please check your system logs or email inbox. The reset link is
+              valid for exactly 1 hour.
             </p>
             <Link
               to="/login"

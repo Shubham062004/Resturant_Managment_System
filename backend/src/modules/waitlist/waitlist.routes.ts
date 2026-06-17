@@ -4,7 +4,10 @@ import { authGuard, restrictTo } from '../../middleware/authGuard';
 import validate from '../../middleware/validate';
 
 import { WaitlistController } from './waitlist.controller';
-import { joinWaitlistSchema, updateWaitlistStatusSchema } from './waitlist.validation';
+import {
+  joinWaitlistSchema,
+  updateWaitlistStatusSchema,
+} from './waitlist.validation';
 
 const router = Router();
 
@@ -14,13 +17,13 @@ router.post('/', validate(joinWaitlistSchema), WaitlistController.joinWaitlist);
 router.get(
   '/branch/:branchId',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
-  WaitlistController.getBranchWaitlist,
+  WaitlistController.getBranchWaitlist
 );
 router.patch(
   '/:id',
   restrictTo('ADMIN', 'SUPER_ADMIN', 'CASHIER'),
   validate(updateWaitlistStatusSchema),
-  WaitlistController.updateWaitlistStatus,
+  WaitlistController.updateWaitlistStatus
 );
 
 export default router;

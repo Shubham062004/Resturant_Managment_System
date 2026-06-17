@@ -1,5 +1,12 @@
 import { format } from 'date-fns';
-import { Download, Search, Clock, CalendarDays, UserX, AlertCircle } from 'lucide-react';
+import {
+  Download,
+  Search,
+  Clock,
+  CalendarDays,
+  UserX,
+  AlertCircle,
+} from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import {
   BarChart,
@@ -16,14 +23,20 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 
 export default function AttendanceHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
-  const { data: response, isLoading } = useHistoryQuery('attendance', { limit: 500 });
+  const { data: response, isLoading } = useHistoryQuery('attendance', {
+    limit: 500,
+  });
   const records = useMemo(() => response?.data || [], [response]);
 
   // Derived KPIs
@@ -129,7 +142,9 @@ export default function AttendanceHistoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         <Card className="bg-slate-900/40 border-border/20">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Weekly Attendance Distribution</h3>
+            <h3 className="font-bold text-white text-sm">
+              Weekly Attendance Distribution
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -140,7 +155,11 @@ export default function AttendanceHistoryPage() {
                   data={chartData.dailyAttendance}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="day"
                     stroke="#94a3b8"
@@ -148,7 +167,12 @@ export default function AttendanceHistoryPage() {
                     tickLine={false}
                     axisLine={false}
                   />
-                  <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+                  <YAxis
+                    stroke="#94a3b8"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <RechartsTooltip
                     cursor={{ fill: '#1e293b' }}
                     contentStyle={{
@@ -238,25 +262,37 @@ export default function AttendanceHistoryPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No attendance logs found.
                     </td>
                   </tr>
                 ) : (
                   filteredRecords.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
                       <td className="px-6 py-4 font-medium text-white">
                         {row.user?.firstName} {row.user?.lastName}
                       </td>
                       <td className="px-6 py-4 text-slate-400">
                         {format(new Date(row.date), 'dd MMM yyyy')}
                       </td>
-                      <td className="px-6 py-4 text-slate-300">{row.branch?.name || 'HQ'}</td>
+                      <td className="px-6 py-4 text-slate-300">
+                        {row.branch?.name || 'HQ'}
+                      </td>
                       <td className="px-6 py-4 text-emerald-400">
-                        {row.checkIn ? format(new Date(row.checkIn), 'HH:mm') : '--:--'}
+                        {row.checkIn
+                          ? format(new Date(row.checkIn), 'HH:mm')
+                          : '--:--'}
                       </td>
                       <td className="px-6 py-4 text-amber-400">
-                        {row.checkOut ? format(new Date(row.checkOut), 'HH:mm') : '--:--'}
+                        {row.checkOut
+                          ? format(new Date(row.checkOut), 'HH:mm')
+                          : '--:--'}
                       </td>
                       <td className="px-6 py-4 text-blue-400 font-bold">
                         {row.workingHours ? `${row.workingHours}h` : '-'}

@@ -14,7 +14,9 @@ export default function GlobalDashboardPage() {
   }, [dispatch]);
 
   if (status === 'loading' || !dashboard) {
-    return <div className="p-6 text-slate-300">Loading global analytics...</div>;
+    return (
+      <div className="p-6 text-slate-300">Loading global analytics...</div>
+    );
   }
 
   const metrics = [

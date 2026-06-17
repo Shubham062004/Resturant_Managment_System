@@ -38,8 +38,8 @@ export const OffersPage: React.FC = () => {
                 Deals & Offers
               </h1>
               <p className="text-base text-neutral-400 leading-relaxed font-sans">
-                Apply these promo codes at checkout to unlock savings on our delicious pizzas,
-                burgers, and more.
+                Apply these promo codes at checkout to unlock savings on our
+                delicious pizzas, burgers, and more.
               </p>
             </div>
 
@@ -65,7 +65,9 @@ export const OffersPage: React.FC = () => {
               </div>
             ) : isError ? (
               <div className="bg-red-500/5 border border-red-500/10 rounded-2xl p-8 text-center max-w-md mx-auto">
-                <p className="text-red-400 font-semibold">Unable to load offers right now.</p>
+                <p className="text-red-400 font-semibold">
+                  Unable to load offers right now.
+                </p>
               </div>
             ) : coupons.length === 0 ? (
               <div className="text-center py-16 bg-white/[0.02] border border-white/5 rounded-2xl max-w-2xl mx-auto">
@@ -123,13 +125,17 @@ export const OffersPage: React.FC = () => {
 
                       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500">
                         {parseFloat(offer.minimumAmount) > 0 ? (
-                          <span>Min order: ₹{parseFloat(offer.minimumAmount).toFixed(0)}</span>
+                          <span>
+                            Min order: ₹
+                            {parseFloat(offer.minimumAmount).toFixed(0)}
+                          </span>
                         ) : (
                           <span>No min order</span>
                         )}
                         <span className="flex items-center gap-1">
                           <Calendar size={12} />
-                          Valid till {new Date(offer.endDate).toLocaleDateString()}
+                          Valid till{' '}
+                          {new Date(offer.endDate).toLocaleDateString()}
                         </span>
                       </div>
                     </div>

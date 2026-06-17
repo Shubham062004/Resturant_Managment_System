@@ -2,7 +2,11 @@ import { randomUUID } from 'crypto';
 
 import { PrismaClient, Prisma } from '@prisma/client';
 
-export async function seedMenu(prisma: PrismaClient, restaurants: any[], customerIds: string[]) {
+export async function seedMenu(
+  prisma: PrismaClient,
+  restaurants: any[],
+  customerIds: string[]
+) {
   console.log('🌱 Seeding Menu (Categories, Products, Variants, Reviews)...');
 
   await prisma.review.deleteMany();
@@ -59,7 +63,8 @@ export async function seedMenu(prisma: PrismaClient, restaurants: any[], custome
           slug: `${catName.toLowerCase()}-special-${i}-${restaurant.slug}`,
           description: `Chef's special ${catName} preparation.`,
           shortDescription: `Hot and fresh ${catName}.`,
-          image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80',
+          image:
+            'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80',
           basePrice: new Prisma.Decimal(basePrice),
           rating: 4.0 + Math.random(),
           calories: 300 + i * 50,
@@ -99,7 +104,9 @@ export async function seedMenu(prisma: PrismaClient, restaurants: any[], custome
   }
 
   for (let i = 0; i < variants.length; i += pBatch) {
-    await prisma.productVariant.createMany({ data: variants.slice(i, i + pBatch) });
+    await prisma.productVariant.createMany({
+      data: variants.slice(i, i + pBatch),
+    });
   }
 
   for (let i = 0; i < reviews.length; i += pBatch) {

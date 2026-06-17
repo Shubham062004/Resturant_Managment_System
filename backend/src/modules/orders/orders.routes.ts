@@ -4,7 +4,10 @@ import { authGuard, restrictTo } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
 
 import { OrdersController } from './orders.controller';
-import { createOrderSchema, updateOrderStatusSchema } from './orders.validation';
+import {
+  createOrderSchema,
+  updateOrderStatusSchema,
+} from './orders.validation';
 
 const router = Router();
 
@@ -26,10 +29,10 @@ router.patch(
     'DELIVERY_PARTNER',
     'ORGANIZATION_OWNER',
     'FRANCHISE_OWNER',
-    'BRANCH_MANAGER',
+    'BRANCH_MANAGER'
   ),
   validate(updateOrderStatusSchema),
-  OrdersController.updateOrderStatus,
+  OrdersController.updateOrderStatus
 );
 
 export default router;

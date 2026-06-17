@@ -17,4 +17,5 @@ const KitchenEventSchema = new Schema<IKitchenEvent>({
 });
 
 export const KitchenEvent =
-  mongoose.models.KitchenEvent || mongoose.model<IKitchenEvent>('KitchenEvent', KitchenEventSchema);
+  mongoose.models.KitchenEvent ||
+  mongoose.model<IKitchenEvent>('KitchenEvent', KitchenEventSchema);

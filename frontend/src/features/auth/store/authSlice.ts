@@ -47,26 +47,34 @@ export const login = createAsyncThunk(
       const { user } = response.data.data;
       return { requireOtp: false, user };
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
       const errorMsg = error.response?.data?.error?.message || 'Login failed';
       return rejectWithValue(errorMsg);
     }
-  },
+  }
 );
 
 export const verifyOtp = createAsyncThunk(
   'auth/verifyOtp',
   async (credentials: Record<string, string>, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post('/auth/verify-login-otp', credentials);
+      const response = await apiClient.post(
+        '/auth/verify-login-otp',
+        credentials
+      );
       const { user } = response.data.data;
       return { user };
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      const errorMsg = error.response?.data?.error?.message || 'OTP verification failed';
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      const errorMsg =
+        error.response?.data?.error?.message || 'OTP verification failed';
       return rejectWithValue(errorMsg);
     }
-  },
+  }
 );
 
 export const registerUser = createAsyncThunk(
@@ -76,11 +84,14 @@ export const registerUser = createAsyncThunk(
       const response = await apiClient.post('/auth/register', userData);
       return response.data.message;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      const errorMsg = error.response?.data?.error?.message || 'Registration failed';
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      const errorMsg =
+        error.response?.data?.error?.message || 'Registration failed';
       return rejectWithValue(errorMsg);
     }
-  },
+  }
 );
 
 export const googleAuthLogin = createAsyncThunk(
@@ -91,11 +102,14 @@ export const googleAuthLogin = createAsyncThunk(
       const { user } = response.data.data;
       return { user };
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      const errorMsg = error.response?.data?.error?.message || 'Google login failed';
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      const errorMsg =
+        error.response?.data?.error?.message || 'Google login failed';
       return rejectWithValue(errorMsg);
     }
-  },
+  }
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
@@ -124,10 +138,14 @@ export const refreshSession = createAsyncThunk(
       await apiClient.post('/auth/refresh');
       return true;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      return rejectWithValue(error.response?.data?.error?.message || 'Session expired');
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      return rejectWithValue(
+        error.response?.data?.error?.message || 'Session expired'
+      );
     }
-  },
+  }
 );
 
 export const fetchProfile = createAsyncThunk(
@@ -137,11 +155,14 @@ export const fetchProfile = createAsyncThunk(
       const response = await apiClient.get('/auth/me');
       return response.data.data.user;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      const errorMsg = error.response?.data?.error?.message || 'Failed to fetch profile';
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      const errorMsg =
+        error.response?.data?.error?.message || 'Failed to fetch profile';
       return rejectWithValue(errorMsg);
     }
-  },
+  }
 );
 
 export const updateProfile = createAsyncThunk(
@@ -151,16 +172,21 @@ export const updateProfile = createAsyncThunk(
       const isFormData = formData instanceof FormData;
       const response = await apiClient.patch('/users/profile', formData, {
         headers: {
-          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+          'Content-Type': isFormData
+            ? 'multipart/form-data'
+            : 'application/json',
         },
       });
       return response.data.data.user;
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { error?: { message?: string } } } };
-      const errorMsg = error.response?.data?.error?.message || 'Failed to update profile';
+      const error = err as {
+        response?: { data?: { error?: { message?: string } } };
+      };
+      const errorMsg =
+        error.response?.data?.error?.message || 'Failed to update profile';
       return rejectWithValue(errorMsg);
     }
-  },
+  }
 );
 
 const authSlice = createSlice({

@@ -19,7 +19,7 @@ const AbandonedCartEventSchema: Schema = new Schema(
   {
     timestamps: false,
     versionKey: false,
-  },
+  }
 );
 
 export const AbandonedCartEvent =
@@ -27,7 +27,7 @@ export const AbandonedCartEvent =
   mongoose.model<IAbandonedCartEvent>(
     'AbandonedCartEvent',
     AbandonedCartEventSchema,
-    'abandoned_cart_events',
+    'abandoned_cart_events'
   );
 
 export default AbandonedCartEvent;

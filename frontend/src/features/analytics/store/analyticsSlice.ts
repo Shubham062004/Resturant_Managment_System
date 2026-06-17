@@ -22,30 +22,45 @@ const initialState: AnalyticsState = {
   error: null,
 };
 
-export const fetchExecutiveSummary = createAsyncThunk('analytics/fetchExecutive', async () => {
-  const response = await api.get('/admin/analytics/executive');
-  return response.data.data;
-});
+export const fetchExecutiveSummary = createAsyncThunk(
+  'analytics/fetchExecutive',
+  async () => {
+    const response = await api.get('/admin/analytics/executive');
+    return response.data.data;
+  }
+);
 
-export const fetchSalesTrends = createAsyncThunk('analytics/fetchSalesTrends', async () => {
-  const response = await api.get('/admin/analytics/sales-trends');
-  return response.data.data;
-});
+export const fetchSalesTrends = createAsyncThunk(
+  'analytics/fetchSalesTrends',
+  async () => {
+    const response = await api.get('/admin/analytics/sales-trends');
+    return response.data.data;
+  }
+);
 
-export const fetchCustomerAnalytics = createAsyncThunk('analytics/fetchCustomer', async () => {
-  const response = await api.get('/admin/analytics/customer');
-  return response.data.data;
-});
+export const fetchCustomerAnalytics = createAsyncThunk(
+  'analytics/fetchCustomer',
+  async () => {
+    const response = await api.get('/admin/analytics/customer');
+    return response.data.data;
+  }
+);
 
-export const fetchProductAnalytics = createAsyncThunk('analytics/fetchProduct', async () => {
-  const response = await api.get('/admin/analytics/product');
-  return response.data.data;
-});
+export const fetchProductAnalytics = createAsyncThunk(
+  'analytics/fetchProduct',
+  async () => {
+    const response = await api.get('/admin/analytics/product');
+    return response.data.data;
+  }
+);
 
-export const fetchDeliveryAnalytics = createAsyncThunk('analytics/fetchDelivery', async () => {
-  const response = await api.get('/admin/analytics/delivery');
-  return response.data.data;
-});
+export const fetchDeliveryAnalytics = createAsyncThunk(
+  'analytics/fetchDelivery',
+  async () => {
+    const response = await api.get('/admin/analytics/delivery');
+    return response.data.data;
+  }
+);
 
 const analyticsSlice = createSlice({
   name: 'analytics',

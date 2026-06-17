@@ -7,19 +7,30 @@ import { RecommendationService } from './recommendation.service';
 
 export class AIController {
   // --- Recommendations ---
-  public static async getRecommendations(req: Request, res: Response, next: NextFunction) {
+  public static async getRecommendations(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const userId = (req as any).user?.id; // If authenticated
-      const recommendations = await RecommendationService.getFoodRecommendations(userId);
+      const recommendations =
+        await RecommendationService.getFoodRecommendations(userId);
       res.status(200).json({ status: 'success', data: recommendations });
     } catch (error) {
       next(error);
     }
   }
 
-  public static async getCombos(req: Request, res: Response, next: NextFunction) {
+  public static async getCombos(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const productIds = ((req.query.productIds as string) || '').split(',').filter(Boolean);
+      const productIds = ((req.query.productIds as string) || '')
+        .split(',')
+        .filter(Boolean);
       const combos = await RecommendationService.getSmartCombos(productIds);
       res.status(200).json({ status: 'success', data: combos });
     } catch (error) {
@@ -27,7 +38,11 @@ export class AIController {
     }
   }
 
-  public static async getTrending(req: Request, res: Response, next: NextFunction) {
+  public static async getTrending(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const trending = await RecommendationService.getTrending();
       res.status(200).json({ status: 'success', data: trending });
@@ -37,7 +52,11 @@ export class AIController {
   }
 
   // --- Chat Assistant ---
-  public static async postChat(req: Request, res: Response, next: NextFunction) {
+  public static async postChat(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { messages } = req.body;
       const response = await aiService.chat(messages);
@@ -48,7 +67,11 @@ export class AIController {
   }
 
   // --- Forecasting ---
-  public static async getPredictions(req: Request, res: Response, next: NextFunction) {
+  public static async getPredictions(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { branchId, type } = req.query; // type can be 'demand' or 'inventory'
 
@@ -66,9 +89,15 @@ export class AIController {
   }
 
   // --- Customer Segmentation ---
-  public static async getCustomerSegment(req: Request, res: Response, next: NextFunction) {
+  public static async getCustomerSegment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const userIds = ((req.query.userIds as string) || '').split(',').filter(Boolean);
+      const userIds = ((req.query.userIds as string) || '')
+        .split(',')
+        .filter(Boolean);
       const segments = await MarketingService.segmentCustomers(userIds);
       res.status(200).json({ status: 'success', data: segments });
     } catch (error) {

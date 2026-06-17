@@ -48,7 +48,9 @@ describe('OrdersService', () => {
       branchId: 'branch-1',
       orderType: 'DELIVERY',
       paymentMethod: 'CARD',
-      items: [{ productId: 'prod-1', quantity: 2, unitPrice: 10.25, subtotal: 20.5 }],
+      items: [
+        { productId: 'prod-1', quantity: 2, unitPrice: 10.25, subtotal: 20.5 },
+      ],
     } as any);
 
     expect(result).toBeDefined();

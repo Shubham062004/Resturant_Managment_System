@@ -1,5 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Clock, ChefHat, AlertTriangle, CheckCircle, Timer } from 'lucide-react';
+import {
+  Flame,
+  Clock,
+  ChefHat,
+  AlertTriangle,
+  CheckCircle,
+  Timer,
+} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
@@ -47,9 +54,11 @@ export default function ManagerKitchenPage() {
     const socket = io(API_BASE_URL, { auth: { token }, withCredentials: true });
     socket.emit('join-branch', selectedBranchId);
 
-    socket.on('kds_new_order', (kitchenOrder: any) => dispatch(receiveNewOrder(kitchenOrder)));
+    socket.on('kds_new_order', (kitchenOrder: any) =>
+      dispatch(receiveNewOrder(kitchenOrder))
+    );
     socket.on('kds_status_update', (kitchenOrder: any) =>
-      dispatch(receiveOrderStatusUpdate(kitchenOrder)),
+      dispatch(receiveOrderStatusUpdate(kitchenOrder))
     );
 
     const clockInterval = setInterval(() => setCurrentTime(new Date()), 10000);
@@ -62,7 +71,9 @@ export default function ManagerKitchenPage() {
 
   const getElapsedTime = (createdAtStr: string) => {
     const created = new Date(createdAtStr);
-    const diff = Math.floor((currentTime.getTime() - created.getTime()) / 60000);
+    const diff = Math.floor(
+      (currentTime.getTime() - created.getTime()) / 60000
+    );
     return diff;
   };
 
@@ -74,7 +85,7 @@ export default function ManagerKitchenPage() {
   const ready = branchOrders.filter((o) => o.status === 'READY_FOR_PACKING');
 
   const delayedOrders = branchOrders.filter(
-    (o) => getElapsedTime(o.createdAt) > 20 && o.status !== 'PACKED',
+    (o) => getElapsedTime(o.createdAt) > 20 && o.status !== 'PACKED'
   );
 
   return (
@@ -99,7 +110,11 @@ export default function ManagerKitchenPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -122,14 +137,18 @@ export default function ManagerKitchenPage() {
             <span>In Cook Station</span>
             <Flame className="text-orange-500 w-4 h-4" />
           </div>
-          <span className="text-2xl font-bold text-white">{cooking.length}</span>
+          <span className="text-2xl font-bold text-white">
+            {cooking.length}
+          </span>
         </Card>
         <Card className="p-4 bg-slate-900/60 border-border/20 flex flex-col justify-center">
           <div className="flex justify-between items-center text-xs font-semibold text-slate-400 mb-2">
             <span>Delayed Tickets (&gt;20m)</span>
             <AlertTriangle className="text-rose-500 w-4 h-4" />
           </div>
-          <span className="text-2xl font-bold text-rose-500">{delayedOrders.length}</span>
+          <span className="text-2xl font-bold text-rose-500">
+            {delayedOrders.length}
+          </span>
         </Card>
         <Card className="p-4 bg-slate-900/60 border-border/20 flex flex-col justify-center">
           <div className="flex justify-between items-center text-xs font-semibold text-slate-400 mb-2">
@@ -137,7 +156,10 @@ export default function ManagerKitchenPage() {
             <Timer className="text-sky-500 w-4 h-4" />
           </div>
           <span className="text-2xl font-bold text-white">
-            18<span className="text-sm font-normal text-slate-500 ml-1">mins</span>
+            18
+            <span className="text-sm font-normal text-slate-500 ml-1">
+              mins
+            </span>
           </span>
         </Card>
       </div>
@@ -176,10 +198,14 @@ export default function ManagerKitchenPage() {
                 className={`p-4 border-b border-border/20 flex items-center justify-between shrink-0 bg-slate-900/80 backdrop-blur-md`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg ${col.bg} flex items-center justify-center`}>
+                  <div
+                    className={`w-8 h-8 rounded-lg ${col.bg} flex items-center justify-center`}
+                  >
                     <ChefHat className={`w-4 h-4 ${col.color}`} />
                   </div>
-                  <h3 className="font-bold text-white tracking-wide text-sm">{col.title}</h3>
+                  <h3 className="font-bold text-white tracking-wide text-sm">
+                    {col.title}
+                  </h3>
                 </div>
                 <Badge
                   variant="neutral"
@@ -211,7 +237,10 @@ export default function ManagerKitchenPage() {
                           <div className="flex justify-between items-start">
                             <div>
                               <span className="font-bold text-slate-200">
-                                #{order.order?.orderNumber?.slice(-6).toUpperCase() || 'TKT'}
+                                #
+                                {order.order?.orderNumber
+                                  ?.slice(-6)
+                                  .toUpperCase() || 'TKT'}
                               </span>
                               <span className="text-[10px] text-slate-400 block mt-0.5">
                                 {order.order?.orderType}
@@ -231,7 +260,9 @@ export default function ManagerKitchenPage() {
                                 className="flex justify-between text-xs font-medium text-slate-300"
                               >
                                 <span>{task.product?.name}</span>
-                                <span className="text-primary font-bold">x{task.quantity}</span>
+                                <span className="text-primary font-bold">
+                                  x{task.quantity}
+                                </span>
                               </div>
                             ))}
                           </div>

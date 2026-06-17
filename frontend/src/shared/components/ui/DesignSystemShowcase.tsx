@@ -19,7 +19,12 @@ import Modal from './Modal';
 import Pagination from './Pagination';
 import { RadioGroup, RadioGroupItem } from './RadioGroup';
 import Select, { SelectOption } from './Select';
-import { ProductSkeleton, TableSkeleton, CardSkeleton, ProfileSkeleton } from './Skeleton';
+import {
+  ProductSkeleton,
+  TableSkeleton,
+  CardSkeleton,
+  ProfileSkeleton,
+} from './Skeleton';
 import Switch from './Switch';
 import Tabs from './Tabs';
 import Textarea from './Textarea';
@@ -37,7 +42,9 @@ export const DesignSystemShowcase: React.FC = () => {
   const [activeTab, setActiveTab] = useState('tokens');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [drawerPos, setDrawerPos] = useState<'left' | 'right' | 'bottom'>('right');
+  const [drawerPos, setDrawerPos] = useState<'left' | 'right' | 'bottom'>(
+    'right'
+  );
 
   // Input states
   const [inputText, setInputText] = useState('');
@@ -101,7 +108,9 @@ export const DesignSystemShowcase: React.FC = () => {
           Success
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-bold font-display text-success">Success</span>
+          <span className="text-sm font-bold font-display text-success">
+            Success
+          </span>
           <span className="text-xs text-muted-foreground">#22C55E</span>
         </div>
       </div>
@@ -110,7 +119,9 @@ export const DesignSystemShowcase: React.FC = () => {
           Warning
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-bold font-display text-warning">Warning</span>
+          <span className="text-sm font-bold font-display text-warning">
+            Warning
+          </span>
           <span className="text-xs text-muted-foreground">#F59E0B</span>
         </div>
       </div>
@@ -119,7 +130,9 @@ export const DesignSystemShowcase: React.FC = () => {
           Danger
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-bold font-display text-danger">Danger</span>
+          <span className="text-sm font-bold font-display text-danger">
+            Danger
+          </span>
           <span className="text-xs text-muted-foreground">#EF4444</span>
         </div>
       </div>
@@ -140,7 +153,9 @@ export const DesignSystemShowcase: React.FC = () => {
         </div>
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-bold font-display">Background</span>
-          <span className="text-xs text-muted-foreground">Warm Light / Dark</span>
+          <span className="text-xs text-muted-foreground">
+            Warm Light / Dark
+          </span>
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -149,7 +164,9 @@ export const DesignSystemShowcase: React.FC = () => {
         </div>
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-bold font-display">Surface (Card)</span>
-          <span className="text-xs text-muted-foreground">White / Dark Grey</span>
+          <span className="text-xs text-muted-foreground">
+            White / Dark Grey
+          </span>
         </div>
       </div>
     </div>
@@ -177,45 +194,57 @@ export const DesignSystemShowcase: React.FC = () => {
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Display XL (Outfit)
                 </p>
-                <h1 className={typographyClasses.displayXL}>Oven Flame Roast</h1>
+                <h1 className={typographyClasses.displayXL}>
+                  Oven Flame Roast
+                </h1>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Display LG (Outfit)
                 </p>
-                <h2 className={typographyClasses.displayLG}>Gourmet Kitchen Terminal</h2>
+                <h2 className={typographyClasses.displayLG}>
+                  Gourmet Kitchen Terminal
+                </h2>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Display MD (Outfit)
                 </p>
-                <h3 className={typographyClasses.displayMD}>Woodfired Oven Pizzas</h3>
+                <h3 className={typographyClasses.displayMD}>
+                  Woodfired Oven Pizzas
+                </h3>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Heading XL (Outfit)
                 </p>
-                <h4 className={typographyClasses.headingXL}>Active Chef Stations</h4>
+                <h4 className={typographyClasses.headingXL}>
+                  Active Chef Stations
+                </h4>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Heading LG (Outfit)
                 </p>
-                <h5 className={typographyClasses.headingLG}>Order Queue Details</h5>
+                <h5 className={typographyClasses.headingLG}>
+                  Order Queue Details
+                </h5>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Heading MD (Inter)
                 </p>
-                <h6 className={typographyClasses.headingMD}>Menu Selection Config</h6>
+                <h6 className={typographyClasses.headingMD}>
+                  Menu Selection Config
+                </h6>
               </div>
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
                   Body LG (Inter)
                 </p>
                 <p className={typographyClasses.bodyLG}>
-                  This is body large text, optimized for descriptors, card text, or menu item
-                  descriptions.
+                  This is body large text, optimized for descriptors, card text,
+                  or menu item descriptions.
                 </p>
               </div>
               <div>
@@ -223,8 +252,8 @@ export const DesignSystemShowcase: React.FC = () => {
                   Body MD (Inter)
                 </p>
                 <p className={typographyClasses.bodyMD}>
-                  This is body medium text. This is the main reading copy for transactional tables,
-                  form fields, and sidebar settings.
+                  This is body medium text. This is the main reading copy for
+                  transactional tables, form fields, and sidebar settings.
                 </p>
               </div>
               <div>
@@ -232,8 +261,8 @@ export const DesignSystemShowcase: React.FC = () => {
                   Body SM (Inter)
                 </p>
                 <p className={typographyClasses.bodySM}>
-                  This is body small text, used for denser receipt items, small details, and KDS
-                  card indicators.
+                  This is body small text, used for denser receipt items, small
+                  details, and KDS card indicators.
                 </p>
               </div>
               <div className="flex gap-10">
@@ -315,7 +344,11 @@ export const DesignSystemShowcase: React.FC = () => {
                 onChange={(e) => setInputText(e.target.value)}
                 prefixIcon={<Search size={16} />}
               />
-              <Input label="Password field" type="password" placeholder="Enter secret pass..." />
+              <Input
+                label="Password field"
+                type="password"
+                placeholder="Enter secret pass..."
+              />
               <Input
                 label="Success Validation state"
                 success="Valid customer profile loaded."
@@ -442,13 +475,17 @@ export const DesignSystemShowcase: React.FC = () => {
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => toast.warning('Prisma database is rebuilding...')}
+                onClick={() =>
+                  toast.warning('Prisma database is rebuilding...')
+                }
               >
                 Warning Toast
               </Button>
               <Button
                 variant="danger"
-                onClick={() => toast.error('Failed to dispatch delivery rider.')}
+                onClick={() =>
+                  toast.error('Failed to dispatch delivery rider.')
+                }
               >
                 Error Toast
               </Button>
@@ -489,13 +526,22 @@ export const DesignSystemShowcase: React.FC = () => {
               <Button variant="primary" onClick={() => setIsModalOpen(true)}>
                 Open Modal
               </Button>
-              <Button variant="secondary" onClick={() => handleOpenDrawer('left')}>
+              <Button
+                variant="secondary"
+                onClick={() => handleOpenDrawer('left')}
+              >
                 Drawer Slide Left
               </Button>
-              <Button variant="secondary" onClick={() => handleOpenDrawer('right')}>
+              <Button
+                variant="secondary"
+                onClick={() => handleOpenDrawer('right')}
+              >
                 Drawer Slide Right
               </Button>
-              <Button variant="secondary" onClick={() => handleOpenDrawer('bottom')}>
+              <Button
+                variant="secondary"
+                onClick={() => handleOpenDrawer('bottom')}
+              >
                 Drawer Slide Bottom
               </Button>
             </div>
@@ -509,9 +555,16 @@ export const DesignSystemShowcase: React.FC = () => {
           >
             <div className="space-y-4">
               <p>Configure recipe values for dynamic POS pricing systems.</p>
-              <Input label="Dish Name" defaultValue="Oven Baked Pepperoni Pizza" />
+              <Input
+                label="Dish Name"
+                defaultValue="Oven Baked Pepperoni Pizza"
+              />
               <div className="flex justify-end gap-3 mt-4">
-                <Button variant="outline" size="sm" onClick={() => setIsModalOpen(false)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsModalOpen(false)}
+                >
                   Cancel
                 </Button>
                 <Button
@@ -542,7 +595,9 @@ export const DesignSystemShowcase: React.FC = () => {
               </div>
               <div className="space-y-2">
                 <h5 className="font-bold text-sm">Memory Usage</h5>
-                <p className="text-xs text-muted-foreground">34% of 16GB allocated</p>
+                <p className="text-xs text-muted-foreground">
+                  34% of 16GB allocated
+                </p>
                 <div className="w-full bg-secondary h-2.5 rounded-full overflow-hidden">
                   <div className="bg-primary h-full w-[34%]" />
                 </div>
@@ -577,7 +632,11 @@ export const DesignSystemShowcase: React.FC = () => {
                   { label: 'Ingredient List' },
                 ]}
               />
-              <Pagination currentPage={currentPage} totalPages={10} onPageChange={setCurrentPage} />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={10}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </section>
 
@@ -638,7 +697,9 @@ export const DesignSystemShowcase: React.FC = () => {
         <div className="space-y-10">
           <section className="space-y-4">
             <div className="flex items-center justify-between border-b border-border/40 pb-2">
-              <h4 className="text-lg font-bold font-display">Transitions playground</h4>
+              <h4 className="text-lg font-bold font-display">
+                Transitions playground
+              </h4>
               <Button
                 variant="primary"
                 size="sm"
@@ -648,7 +709,10 @@ export const DesignSystemShowcase: React.FC = () => {
                 Replay Animations
               </Button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" key={animKey}>
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              key={animKey}
+            >
               {/* Fade Up Card */}
               <motion.div
                 variants={fadeUp}
@@ -675,7 +739,8 @@ export const DesignSystemShowcase: React.FC = () => {
                   <Heart size={16} fill="currentColor" /> Hover Scale & Rotate
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Spring scale modifier responding dynamically to clicks and pointer hovers.
+                  Spring scale modifier responding dynamically to clicks and
+                  pointer hovers.
                 </p>
               </motion.div>
             </div>
@@ -701,21 +766,28 @@ export const DesignSystemShowcase: React.FC = () => {
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col gap-3 max-w-2xl">
-          <Badge variant="neutral" className="bg-white/10 text-white border-white/20 w-fit">
+          <Badge
+            variant="neutral"
+            className="bg-white/10 text-white border-white/20 w-fit"
+          >
             PR-002 UI System Release
           </Badge>
           <h1 className="text-4xl md:text-5xl font-extrabold font-display tracking-tight leading-none">
             ABC Design System
           </h1>
           <p className="text-white/80 font-sans text-sm md:text-base leading-relaxed">
-            Centralized design token engine, responsive layout frameworks, micro-animations, and
-            reusable components.
+            Centralized design token engine, responsive layout frameworks,
+            micro-animations, and reusable components.
           </p>
         </div>
       </div>
 
       {/* Tabs Layout */}
-      <Tabs tabs={mainShowcaseTabs} activeTabId={activeTab} onTabChange={setActiveTab} />
+      <Tabs
+        tabs={mainShowcaseTabs}
+        activeTabId={activeTab}
+        onTabChange={setActiveTab}
+      />
     </div>
   );
 };

@@ -40,7 +40,8 @@ export type ThemeTypography = typeof typography;
 // Reusable Tailwind font classes to ensure strict token styling
 export const typographyClasses = {
   displayXL: 'font-display text-5xl font-extrabold tracking-tight leading-none',
-  displayLG: 'font-display text-4xl font-extrabold tracking-tight leading-tight',
+  displayLG:
+    'font-display text-4xl font-extrabold tracking-tight leading-tight',
   displayMD: 'font-display text-3xl font-bold tracking-tight leading-snug',
   headingXL: 'font-display text-2xl font-bold leading-snug',
   headingLG: 'font-display text-xl font-bold leading-normal',

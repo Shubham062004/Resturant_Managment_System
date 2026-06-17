@@ -12,7 +12,11 @@ import {
 } from 'recharts';
 
 import { useAppSelector } from '../../../app/store';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 
 export default function RevenueChart() {
   const { revenueTrends } = useAppSelector((state) => state.analytics);
@@ -36,7 +40,11 @@ export default function RevenueChart() {
                   <stop offset="95%" stopColor="#B22222" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" vertical={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#ffffff20"
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
                 stroke="#ffffff60"
@@ -80,7 +88,11 @@ export default function RevenueChart() {
         <CardContent className="h-64 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={revenueTrends}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" vertical={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#ffffff20"
+                vertical={false}
+              />
               <XAxis
                 dataKey="date"
                 stroke="#ffffff60"
@@ -88,7 +100,12 @@ export default function RevenueChart() {
                 tickLine={false}
                 axisLine={false}
               />
-              <YAxis stroke="#ffffff60" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis
+                stroke="#ffffff60"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#1A1A1A',

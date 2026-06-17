@@ -35,4 +35,5 @@ const PromptLogSchema = new Schema<IPromptLog>({
 });
 
 export const PromptLog =
-  mongoose.models.PromptLog || mongoose.model<IPromptLog>('PromptLog', PromptLogSchema);
+  mongoose.models.PromptLog ||
+  mongoose.model<IPromptLog>('PromptLog', PromptLogSchema);

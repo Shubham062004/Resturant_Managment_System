@@ -44,7 +44,10 @@ export const Select: React.FC<SelectProps> = ({
   // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -65,7 +68,7 @@ export const Select: React.FC<SelectProps> = ({
   }, [isOpen, isSearchable]);
 
   const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(searchQuery.toLowerCase()),
+    opt.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const isSelected = (val: string) => {
@@ -115,7 +118,9 @@ export const Select: React.FC<SelectProps> = ({
         break;
       case 'ArrowDown':
         e.preventDefault();
-        setActiveIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
+        setActiveIndex((prev) =>
+          prev < filteredOptions.length - 1 ? prev + 1 : prev
+        );
         break;
       case 'ArrowUp':
         e.preventDefault();
@@ -147,7 +152,9 @@ export const Select: React.FC<SelectProps> = ({
   // Display selected item labels
   const getDisplayValue = () => {
     if (isMulti) {
-      const selectedOpts = options.filter((o) => (value as string[]).includes(o.value));
+      const selectedOpts = options.filter((o) =>
+        (value as string[]).includes(o.value)
+      );
       if (selectedOpts.length === 0)
         return <span className="text-muted-foreground">{placeholder}</span>;
       return (
@@ -173,7 +180,8 @@ export const Select: React.FC<SelectProps> = ({
     }
 
     const selectedOpt = options.find((o) => o.value === value);
-    if (!selectedOpt) return <span className="text-muted-foreground">{placeholder}</span>;
+    if (!selectedOpt)
+      return <span className="text-muted-foreground">{placeholder}</span>;
     return <span className="text-foreground">{selectedOpt.label}</span>;
   };
 
@@ -231,7 +239,10 @@ export const Select: React.FC<SelectProps> = ({
                   />
                   {searchQuery && (
                     <button type="button" onClick={() => setSearchQuery('')}>
-                      <X size={14} className="text-muted-foreground hover:text-foreground" />
+                      <X
+                        size={14}
+                        className="text-muted-foreground hover:text-foreground"
+                      />
                     </button>
                   )}
                 </div>
@@ -259,7 +270,12 @@ export const Select: React.FC<SelectProps> = ({
                       `}
                     >
                       <span>{option.label}</span>
-                      {selected && <Check size={16} className="text-primary flex-shrink-0 ml-2" />}
+                      {selected && (
+                        <Check
+                          size={16}
+                          className="text-primary flex-shrink-0 ml-2"
+                        />
+                      )}
                     </div>
                   );
                 })
@@ -270,7 +286,9 @@ export const Select: React.FC<SelectProps> = ({
       </div>
 
       {error && (
-        <p className="text-xs font-medium font-sans leading-none text-danger mt-0.5">{error}</p>
+        <p className="text-xs font-medium font-sans leading-none text-danger mt-0.5">
+          {error}
+        </p>
       )}
     </div>
   );

@@ -1,7 +1,11 @@
 import { ChatLog } from '../../database/mongo/ChatLog';
 import { PromptLog } from '../../database/mongo/PromptLog';
 
-import { AIProvider, AICompletionOptions, AIChatMessage } from './providers/AIProvider';
+import {
+  AIProvider,
+  AICompletionOptions,
+  AIChatMessage,
+} from './providers/AIProvider';
 import { GeminiProvider } from './providers/GeminiProvider';
 import { OpenAIProvider } from './providers/OpenAIProvider';
 
@@ -19,7 +23,8 @@ export class AIService {
 
     // Defaulting to Gemini, could be set via env var
     const defaultProvider = process.env.PRIMARY_AI_PROVIDER || 'GEMINI';
-    this.activeProvider = defaultProvider === 'OPENAI' ? this.openaiProvider : this.geminiProvider;
+    this.activeProvider =
+      defaultProvider === 'OPENAI' ? this.openaiProvider : this.geminiProvider;
   }
 
   public setActiveProvider(providerName: 'GEMINI' | 'OPENAI') {
@@ -34,10 +39,16 @@ export class AIService {
     return this.activeProvider.getProviderName();
   }
 
-  public async generateCompletion(prompt: string, options?: AICompletionOptions): Promise<string> {
+  public async generateCompletion(
+    prompt: string,
+    options?: AICompletionOptions
+  ): Promise<string> {
     const startTime = Date.now();
     try {
-      const response = await this.activeProvider.generateCompletion(prompt, options);
+      const response = await this.activeProvider.generateCompletion(
+        prompt,
+        options
+      );
       const latency = Date.now() - startTime;
       this.logPrompt(prompt, response, latency, 'SUCCESS');
       return response;
@@ -48,7 +59,10 @@ export class AIService {
     }
   }
 
-  public async chat(messages: AIChatMessage[], options?: AICompletionOptions): Promise<string> {
+  public async chat(
+    messages: AIChatMessage[],
+    options?: AICompletionOptions
+  ): Promise<string> {
     const startTime = Date.now();
     try {
       const response = await this.activeProvider.chat(messages, options);
@@ -67,12 +81,15 @@ export class AIService {
     response: string,
     latencyMs: number,
     status: 'SUCCESS' | 'ERROR',
-    errorMessage?: string,
+    errorMessage?: string
   ) {
     try {
       await PromptLog.create({
         provider: this.getActiveProviderName(),
-        aiModel: this.activeProvider.getProviderName() === 'GEMINI' ? 'gemini-pro' : 'gpt-4',
+        aiModel:
+          this.activeProvider.getProviderName() === 'GEMINI'
+            ? 'gemini-pro'
+            : 'gpt-4',
         promptType: 'COMPLETION',
         promptText: prompt,
         responseText: response,
@@ -90,7 +107,7 @@ export class AIService {
     response: string,
     _latencyMs: number,
     status: 'SUCCESS' | 'ERROR',
-    _errorMessage?: string,
+    _errorMessage?: string
   ) {
     try {
       const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);

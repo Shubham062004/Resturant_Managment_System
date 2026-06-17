@@ -1,9 +1,21 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 import { useAppSelector } from '../../../app/store';
 import Badge from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 
 export default function ProductMetrics() {
   const { product } = useAppSelector((state) => state.analytics);
@@ -18,7 +30,9 @@ export default function ProductMetrics() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Card className="bg-surface/50 border-border/50">
         <CardHeader>
-          <h3 className="text-lg font-bold text-white">Top Performing Products</h3>
+          <h3 className="text-lg font-bold text-white">
+            Top Performing Products
+          </h3>
         </CardHeader>
         <CardContent className="h-80 w-full relative">
           <ResponsiveContainer width="100%" height="100%">
@@ -77,7 +91,9 @@ export default function ProductMetrics() {
               >
                 <div>
                   <p className="font-bold text-white">{p.productName}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Category: {p.category}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Category: {p.category}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-primary">{p.quantity} Units</p>

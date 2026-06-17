@@ -19,7 +19,14 @@ const pageConfigs = [
     name: 'InventoryHistoryPage',
     endpoint: 'inventory',
     title: 'Inventory History',
-    headers: ['Branch', 'Ingredient', 'Requested Qty', 'Requested By', 'Status', 'Date'],
+    headers: [
+      'Branch',
+      'Ingredient',
+      'Requested Qty',
+      'Requested By',
+      'Status',
+      'Date',
+    ],
     renderRow: (row) => `
       <td className="px-6 py-4 text-white">{row.branch?.name}</td>
       <td className="px-6 py-4 text-slate-300">{row.items?.[0]?.ingredient?.name || 'Multiple'}</td>
@@ -33,7 +40,14 @@ const pageConfigs = [
     name: 'IngredientHistoryPage',
     endpoint: 'ingredients',
     title: 'Ingredient History',
-    headers: ['Ingredient', 'Category', 'Unit', 'Opening Stock', 'Purchased', 'Closing Stock'],
+    headers: [
+      'Ingredient',
+      'Category',
+      'Unit',
+      'Opening Stock',
+      'Purchased',
+      'Closing Stock',
+    ],
     renderRow: (row) => `
       <td className="px-6 py-4 text-white font-medium">{row.name}</td>
       <td className="px-6 py-4 text-slate-300">{row.category}</td>
@@ -47,7 +61,14 @@ const pageConfigs = [
     name: 'SupplierHistoryPage',
     endpoint: 'suppliers',
     title: 'Supplier History',
-    headers: ['Supplier', 'Contact', 'Email', 'Orders', 'Total Spend', 'Rating'],
+    headers: [
+      'Supplier',
+      'Contact',
+      'Email',
+      'Orders',
+      'Total Spend',
+      'Rating',
+    ],
     renderRow: (row) => `
       <td className="px-6 py-4 text-white font-medium">{row.name}</td>
       <td className="px-6 py-4 text-slate-300">{row.contactPerson || 'N/A'}</td>
@@ -74,7 +95,14 @@ const pageConfigs = [
     name: 'CustomerActivityHistoryPage',
     endpoint: 'customers',
     title: 'Customer History',
-    headers: ['Customer', 'Email', 'Total Orders', 'Coupons Used', 'Last Visit', 'Spend'],
+    headers: [
+      'Customer',
+      'Email',
+      'Total Orders',
+      'Coupons Used',
+      'Last Visit',
+      'Spend',
+    ],
     renderRow: (row) => `
       <td className="px-6 py-4 text-white font-medium">{row.firstName} {row.lastName}</td>
       <td className="px-6 py-4 text-slate-300">{row.email}</td>
@@ -99,7 +127,15 @@ const pageConfigs = [
     name: 'AttendanceHistoryPage',
     endpoint: 'attendance',
     title: 'Attendance History',
-    headers: ['Staff', 'Branch', 'Date', 'Check In', 'Check Out', 'Hours', 'Status'],
+    headers: [
+      'Staff',
+      'Branch',
+      'Date',
+      'Check In',
+      'Check Out',
+      'Hours',
+      'Status',
+    ],
     renderRow: (row) => `
       <td className="px-6 py-4 text-white font-medium">{row.user?.firstName} {row.user?.lastName}</td>
       <td className="px-6 py-4 text-slate-300">{row.branch?.name || 'N/A'}</td>
@@ -114,7 +150,15 @@ const pageConfigs = [
     name: 'SalaryBonusHistoryPage',
     endpoint: 'salary',
     title: 'Salary & Bonus History',
-    headers: ['Staff', 'Date', 'Base', 'Bonus', 'Deductions', 'Net Paid', 'Status'],
+    headers: [
+      'Staff',
+      'Date',
+      'Base',
+      'Bonus',
+      'Deductions',
+      'Net Paid',
+      'Status',
+    ],
     renderRow: (row) => `
       <td className="px-6 py-4 text-white font-medium">{row.user?.firstName} {row.user?.lastName}</td>
       <td className="px-6 py-4 text-slate-400">{new Date(row.payrollDate).toLocaleDateString()}</td>

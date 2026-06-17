@@ -24,10 +24,20 @@ import { logout } from '../../auth/store/authSlice';
 
 const NAV_LINKS = [
   { path: '/manager', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-  { path: '/manager/orders', label: 'Live Orders', icon: ShoppingBag, badge: '5' },
+  {
+    path: '/manager/orders',
+    label: 'Live Orders',
+    icon: ShoppingBag,
+    badge: '5',
+  },
   { path: '/manager/pos', label: 'POS Billing', icon: MonitorSmartphone },
   { path: '/manager/tables', label: 'Floor Plan', icon: LayoutGrid },
-  { path: '/manager/reservations', label: 'Reservations', icon: CalendarCheck, badge: '2' },
+  {
+    path: '/manager/reservations',
+    label: 'Reservations',
+    icon: CalendarCheck,
+    badge: '2',
+  },
   { path: '/manager/kitchen', label: 'Kitchen KDS', icon: ChefHat },
   { path: '/manager/staff', label: 'Staff Shift', icon: Users },
   { path: '/manager/inventory', label: 'Stock Requests', icon: Package },
@@ -80,7 +90,10 @@ export default function BranchManagerLayout() {
               </p>
             </div>
           </div>
-          <button className="lg:hidden text-slate-400 hover:text-white" onClick={closeSidebar}>
+          <button
+            className="lg:hidden text-slate-400 hover:text-white"
+            onClick={closeSidebar}
+          >
             <X size={20} />
           </button>
         </div>
@@ -112,7 +125,9 @@ export default function BranchManagerLayout() {
                   <Icon
                     size={18}
                     className={
-                      isActive ? 'text-primary' : 'text-slate-500 group-hover:text-slate-300'
+                      isActive
+                        ? 'text-primary'
+                        : 'text-slate-500 group-hover:text-slate-300'
                     }
                   />
                   <span className="text-sm">{link.label}</span>
@@ -120,7 +135,9 @@ export default function BranchManagerLayout() {
                 {link.badge && (
                   <span
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      isActive ? 'bg-primary text-white' : 'bg-slate-800 text-slate-300'
+                      isActive
+                        ? 'bg-primary text-white'
+                        : 'bg-slate-800 text-slate-300'
                     }`}
                   >
                     {link.badge}
@@ -136,7 +153,11 @@ export default function BranchManagerLayout() {
           <div className="flex items-center gap-3 px-2 mb-4">
             <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden">
               {user?.avatar ? (
-                <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                <img
+                  src={user.avatar}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <span className="text-sm font-bold text-slate-300">
                   {user?.firstName?.[0] || 'M'}
@@ -173,7 +194,9 @@ export default function BranchManagerLayout() {
             </button>
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-slate-300">Live System: Connected</span>
+              <span className="text-xs font-semibold text-slate-300">
+                Live System: Connected
+              </span>
             </div>
           </div>
 

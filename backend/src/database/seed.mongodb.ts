@@ -17,7 +17,9 @@ async function main() {
     const customerIds = customers.map((c) => c.id);
 
     if (customerIds.length === 0) {
-      console.warn('⚠️ No customers found in PostgreSQL. Run npm run seed:postgres first.');
+      console.warn(
+        '⚠️ No customers found in PostgreSQL. Run npm run seed:postgres first.'
+      );
       process.exit(1);
     }
 

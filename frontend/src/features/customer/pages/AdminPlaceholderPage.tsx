@@ -16,8 +16,8 @@ export const AdminPlaceholderPage: React.FC = () => {
         {/* Header */}
         <div className="mb-10 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-bold font-display tracking-tight text-white flex items-center justify-center md:justify-start gap-3">
-            <ShieldCheck className="h-9 w-9 text-primary animate-pulse" /> Security clearance
-            Management
+            <ShieldCheck className="h-9 w-9 text-primary animate-pulse" />{' '}
+            Security clearance Management
           </h1>
           <p className="mt-2 text-neutral-400 text-sm font-light">
             Vault security configurations and catalogs control dashboards.
@@ -36,9 +36,9 @@ export const AdminPlaceholderPage: React.FC = () => {
                   Clearance Granted: {clearanceLevel}
                 </p>
                 <p className="text-neutral-400 text-sm mt-1 font-light leading-relaxed">
-                  Your credentials have been successfully authenticated with role-based access
-                  control. You are authorized to manage restaurants, branches, categories, and
-                  products metadata.
+                  Your credentials have been successfully authenticated with
+                  role-based access control. You are authorized to manage
+                  restaurants, branches, categories, and products metadata.
                 </p>
               </div>
             </div>
@@ -53,7 +53,9 @@ export const AdminPlaceholderPage: React.FC = () => {
                   <Database className="h-5 w-5 text-primary" />
                 </div>
                 <p className="text-3xl font-extrabold text-white">5</p>
-                <p className="text-xs text-green-400 mt-2 font-medium">PostgreSQL Connected</p>
+                <p className="text-xs text-green-400 mt-2 font-medium">
+                  PostgreSQL Connected
+                </p>
               </div>
 
               <div className="glass-card p-6 rounded-2xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors">
@@ -64,7 +66,9 @@ export const AdminPlaceholderPage: React.FC = () => {
                   <Database className="h-5 w-5 text-primary" />
                 </div>
                 <p className="text-3xl font-extrabold text-white">150</p>
-                <p className="text-xs text-neutral-400 mt-2">15 Categories Seeding</p>
+                <p className="text-xs text-neutral-400 mt-2">
+                  15 Categories Seeding
+                </p>
               </div>
 
               <div className="glass-card p-6 rounded-2xl border border-white/5 bg-white/[0.01] hover:border-white/10 transition-colors">
@@ -75,17 +79,22 @@ export const AdminPlaceholderPage: React.FC = () => {
                   <KeyRound className="h-5 w-5 text-amber-500" />
                 </div>
                 <p className="text-3xl font-extrabold text-white">Active</p>
-                <p className="text-xs text-amber-400 mt-2 font-medium">Tracking Views & Queries</p>
+                <p className="text-xs text-amber-400 mt-2 font-medium">
+                  Tracking Views & Queries
+                </p>
               </div>
             </div>
 
             {/* Dummy control panel */}
             <div className="glass-panel p-8 rounded-2xl border border-white/5 bg-white/[0.01] min-h-[250px] flex flex-col justify-center items-center text-center">
               <Database className="h-12 w-12 text-neutral-600 mb-3" />
-              <p className="text-lg font-bold text-neutral-400">Mock Metadata Console</p>
+              <p className="text-lg font-bold text-neutral-400">
+                Mock Metadata Console
+              </p>
               <p className="text-neutral-500 text-sm mt-1 max-w-md font-light leading-relaxed">
-                Future administrative tools (adding restaurants, editing variants stock, or
-                analyzing query patterns) will plug directly here.
+                Future administrative tools (adding restaurants, editing
+                variants stock, or analyzing query patterns) will plug directly
+                here.
               </p>
             </div>
           </div>
@@ -98,9 +107,13 @@ export const AdminPlaceholderPage: React.FC = () => {
                 Security Clearance Level Denied
               </h2>
               <p className="text-neutral-400 text-sm font-light max-w-lg mx-auto leading-relaxed">
-                This administrative console requires either <strong>ADMIN</strong> or{' '}
-                <strong>SUPER_ADMIN</strong> permissions. Your current account clearance tier:{' '}
-                <span className="text-red-400 font-semibold">{clearanceLevel}</span>.
+                This administrative console requires either{' '}
+                <strong>ADMIN</strong> or <strong>SUPER_ADMIN</strong>{' '}
+                permissions. Your current account clearance tier:{' '}
+                <span className="text-red-400 font-semibold">
+                  {clearanceLevel}
+                </span>
+                .
               </p>
             </div>
             <div className="pt-4 flex gap-4 justify-center">

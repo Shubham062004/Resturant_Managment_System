@@ -52,16 +52,20 @@ export default function ManagerStaffPage() {
     const nameMatch = `${s.firstName} ${s.lastName}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    const emailMatch = s.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const emailMatch = s.email
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
     const roleMatch = s.role.toLowerCase().includes(searchQuery.toLowerCase());
     return nameMatch || emailMatch || roleMatch;
   });
 
   const getRoleBadge = (role: string) => {
-    if (role.includes('MANAGER')) return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+    if (role.includes('MANAGER'))
+      return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
     if (role.includes('KITCHEN') || role.includes('CHEF'))
       return 'bg-amber-500/20 text-amber-500 border-amber-500/30';
-    if (role.includes('DELIVERY')) return 'bg-sky-500/20 text-sky-400 border-sky-500/30';
+    if (role.includes('DELIVERY'))
+      return 'bg-sky-500/20 text-sky-400 border-sky-500/30';
     return 'bg-slate-800 text-slate-300 border-slate-700';
   };
 
@@ -98,7 +102,11 @@ export default function ManagerStaffPage() {
               className="bg-transparent text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer appearance-none"
             >
               {branches.map((b) => (
-                <option key={b.id} value={b.id} className="bg-slate-900 text-white">
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-slate-900 text-white"
+                >
                   {b.name}
                 </option>
               ))}
@@ -121,7 +129,9 @@ export default function ManagerStaffPage() {
         ) : filteredStaff.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 bg-slate-900/40 rounded-2xl border border-border/20 text-slate-500">
             <Users size={48} className="mb-4 opacity-50 text-slate-600" />
-            <p className="text-sm font-semibold">No staff found matching criteria.</p>
+            <p className="text-sm font-semibold">
+              No staff found matching criteria.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

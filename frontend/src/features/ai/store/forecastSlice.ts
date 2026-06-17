@@ -16,10 +16,18 @@ const initialState: ForecastState = {
 
 export const fetchPredictions = createAsyncThunk(
   'forecast/fetchPredictions',
-  async ({ branchId, type }: { branchId: string; type: 'demand' | 'inventory' }) => {
-    const response = await api.get(`/ai/predictions?branchId=${branchId}&type=${type}`);
+  async ({
+    branchId,
+    type,
+  }: {
+    branchId: string;
+    type: 'demand' | 'inventory';
+  }) => {
+    const response = await api.get(
+      `/ai/predictions?branchId=${branchId}&type=${type}`
+    );
     return { type, data: response.data.data };
-  },
+  }
 );
 
 const forecastSlice = createSlice({

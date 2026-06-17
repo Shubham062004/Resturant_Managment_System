@@ -3,7 +3,11 @@ import { randomUUID } from 'crypto';
 import { PrismaClient, Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-export async function seedUsers(prisma: PrismaClient, orgId: string, branches: any[]) {
+export async function seedUsers(
+  prisma: PrismaClient,
+  orgId: string,
+  branches: any[]
+) {
   console.log('🌱 Seeding Users (Admin, Staff, Customers)...');
 
   await prisma.user.deleteMany();
@@ -165,14 +169,16 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
                   : u.role === Role.INVENTORY_MANAGER
                     ? 'Inventory@123'
                     : 'Admin@123',
-        salt,
+        salt
       ),
       organizationId: u.role === Role.SUPER_ADMIN ? null : orgId,
       isEmailVerified: true,
       isPhoneVerified: true,
       salary: u.salary ? u.salary : null,
       attendanceCount: u.salary ? Math.floor(Math.random() * 8) + 20 : 0,
-      performanceScore: u.salary ? parseFloat((Math.random() * 1.0 + 4.0).toFixed(1)) : 5.0,
+      performanceScore: u.salary
+        ? parseFloat((Math.random() * 1.0 + 4.0).toFixed(1))
+        : 5.0,
       assignedCategory: u.assignedCategory || null,
     });
   }
@@ -291,7 +297,9 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
   // Seed customers for orders
   const customers: string[] = [];
   customers.push(usersToCreate.find((u) => u.email === 'customer@abc.com').id);
-  customers.push(usersToCreate.find((u) => u.email === 'vipcustomer@abc.com').id);
+  customers.push(
+    usersToCreate.find((u) => u.email === 'vipcustomer@abc.com').id
+  );
 
   for (let i = 1; i <= 40; i++) {
     const custId = randomUUID();
@@ -312,14 +320,18 @@ export async function seedUsers(prisma: PrismaClient, orgId: string, branches: a
   }
 
   // Extract lists for other seeders
-  const managers = usersToCreate.filter((u) => u.role === Role.BRANCH_MANAGER).map((u) => u.id);
+  const managers = usersToCreate
+    .filter((u) => u.role === Role.BRANCH_MANAGER)
+    .map((u) => u.id);
   const kitchenStaff = usersToCreate
     .filter((u) => u.role === Role.KITCHEN_STAFF || u.role === Role.HEAD_CHEF)
     .map((u) => u.id);
   const deliveryStaff = usersToCreate
     .filter((u) => u.role === Role.DELIVERY_PARTNER)
     .map((u) => u.id);
-  const cashiers = usersToCreate.filter((u) => u.role === Role.CASHIER).map((u) => u.id);
+  const cashiers = usersToCreate
+    .filter((u) => u.role === Role.CASHIER)
+    .map((u) => u.id);
 
   // Batch insert
   const batchSize = 50;

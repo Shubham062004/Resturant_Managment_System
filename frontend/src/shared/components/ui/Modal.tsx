@@ -40,12 +40,14 @@ export const Modal: React.FC<ModalProps> = ({
 
       if (e.key === 'Tab' && modalRef.current) {
         const focusableElements = modalRef.current.querySelectorAll(
-          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]',
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]'
         );
         if (focusableElements.length === 0) return;
 
         const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
 
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
@@ -67,7 +69,7 @@ export const Modal: React.FC<ModalProps> = ({
     setTimeout(() => {
       if (modalRef.current) {
         const focusable = modalRef.current.querySelector(
-          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]',
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
         ) as HTMLElement;
         if (focusable) {
           focusable.focus();

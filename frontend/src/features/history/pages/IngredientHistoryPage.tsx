@@ -1,5 +1,12 @@
 import { format } from 'date-fns';
-import { Download, Search, Leaf, TrendingDown, AlertTriangle, Activity } from 'lucide-react';
+import {
+  Download,
+  Search,
+  Leaf,
+  TrendingDown,
+  AlertTriangle,
+  Activity,
+} from 'lucide-react';
 import React, { useState, useMemo } from 'react';
 import {
   BarChart,
@@ -16,20 +23,31 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { Card, CardContent, CardHeader } from '../../../shared/components/ui/Card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '../../../shared/components/ui/Card';
 import { StatCard } from '../../../shared/components/ui/StatCard';
 import { formatCurrency } from '../../../shared/utils/currency';
 
 export default function IngredientHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: response, isLoading } = useHistoryQuery('ingredients', { limit: 500 });
+  const { data: response, isLoading } = useHistoryQuery('ingredients', {
+    limit: 500,
+  });
   const records = useMemo(() => response?.data || [], [response]);
 
   // Derived KPIs
   const stats = useMemo(() => {
     if (!records.length)
-      return { totalIngredients: 0, totalMovements: 0, highWaste: 0, estCost: 0 };
+      return {
+        totalIngredients: 0,
+        totalMovements: 0,
+        highWaste: 0,
+        estCost: 0,
+      };
 
     let totalMovements = 0;
     records.forEach((r: any) => {
@@ -63,7 +81,7 @@ export default function IngredientHistoryPage() {
     return records.filter(
       (r: any) =>
         r.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.category?.toLowerCase().includes(searchTerm.toLowerCase()),
+        r.category?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [records, searchTerm]);
 
@@ -118,7 +136,9 @@ export default function IngredientHistoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         <Card className="bg-slate-900/40 border-border/20">
           <CardHeader className="border-b border-border/10 pb-4">
-            <h3 className="font-bold text-white text-sm">Most Consumed Ingredients (vs Waste)</h3>
+            <h3 className="font-bold text-white text-sm">
+              Most Consumed Ingredients (vs Waste)
+            </h3>
           </CardHeader>
           <CardContent className="p-6 h-[300px]">
             {isLoading ? (
@@ -129,7 +149,11 @@ export default function IngredientHistoryPage() {
                   data={chartData.consumptionMap}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#334155"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="name"
                     stroke="#94a3b8"
@@ -137,7 +161,12 @@ export default function IngredientHistoryPage() {
                     tickLine={false}
                     axisLine={false}
                   />
-                  <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+                  <YAxis
+                    stroke="#94a3b8"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <RechartsTooltip
                     cursor={{ fill: '#1e293b' }}
                     contentStyle={{
@@ -206,16 +235,26 @@ export default function IngredientHistoryPage() {
               <tbody className="divide-y divide-border/10">
                 {filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-16 text-center text-slate-500">
+                    <td
+                      colSpan={5}
+                      className="px-6 py-16 text-center text-slate-500"
+                    >
                       No ingredients found.
                     </td>
                   </tr>
                 ) : (
                   filteredRecords.map((row: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
-                      <td className="px-6 py-4 font-medium text-white">{row.name}</td>
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-800/30 transition-colors"
+                    >
+                      <td className="px-6 py-4 font-medium text-white">
+                        {row.name}
+                      </td>
                       <td className="px-6 py-4 text-slate-400">
-                        <Badge className="bg-slate-800 text-slate-300">{row.category}</Badge>
+                        <Badge className="bg-slate-800 text-slate-300">
+                          {row.category}
+                        </Badge>
                       </td>
                       <td className="px-6 py-4 text-slate-400">{row.unit}</td>
                       <td className="px-6 py-4">
@@ -224,7 +263,9 @@ export default function IngredientHistoryPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-slate-400">
-                        {row.updatedAt ? format(new Date(row.updatedAt), 'dd MMM yyyy') : 'Unknown'}
+                        {row.updatedAt
+                          ? format(new Date(row.updatedAt), 'dd MMM yyyy')
+                          : 'Unknown'}
                       </td>
                     </tr>
                   ))

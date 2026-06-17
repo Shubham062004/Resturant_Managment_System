@@ -44,10 +44,11 @@ app.use(
     origin: [
       'http://localhost:5173',
       'http://localhost:5174',
-      process.env.FRONTEND_URL || 'https://resturant-managment-system-frontend.vercel.app',
+      process.env.FRONTEND_URL ||
+        'https://resturant-managment-system-frontend.vercel.app',
     ],
     credentials: true,
-  }),
+  })
 );
 app.use(apiRateLimiter);
 app.use(express.json({ limit: '1mb' }));
@@ -62,7 +63,7 @@ app.use(
     stream: {
       write: (message: string) => logger.info(message.trim()),
     },
-  }),
+  })
 );
 
 // 2. Health Monitoring Route
@@ -110,8 +111,8 @@ app.all('*', (req, res, next) => {
   next(
     new AppError(
       `Resource not found. The route ${req.originalUrl} does not exist on this server.`,
-      404,
-    ),
+      404
+    )
   );
 });
 

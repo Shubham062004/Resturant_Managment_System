@@ -13,7 +13,7 @@ files.forEach((file) => {
 
   content = content.replace(
     /export const (\w+) = mongoose\.model</g,
-    'export const $1 = mongoose.models.$1 || mongoose.model<',
+    'export const $1 = mongoose.models.$1 || mongoose.model<'
   );
 
   fs.writeFileSync(filePath, content, 'utf8');

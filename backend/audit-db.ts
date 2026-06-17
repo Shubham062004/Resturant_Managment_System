@@ -33,8 +33,12 @@ async function audit() {
   }
 
   // Check date ranges for orders
-  const firstOrder = await prisma.order.findFirst({ orderBy: { createdAt: 'asc' } });
-  const lastOrder = await prisma.order.findFirst({ orderBy: { createdAt: 'desc' } });
+  const firstOrder = await prisma.order.findFirst({
+    orderBy: { createdAt: 'asc' },
+  });
+  const lastOrder = await prisma.order.findFirst({
+    orderBy: { createdAt: 'desc' },
+  });
 
   console.log('\n--- DATE RANGE (Orders) ---');
   console.log(`First Order: ${firstOrder ? firstOrder.createdAt : 'N/A'}`);

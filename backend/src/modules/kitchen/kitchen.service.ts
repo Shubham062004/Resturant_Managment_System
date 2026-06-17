@@ -157,7 +157,10 @@ export class KitchenService {
   /**
    * Update order status
    */
-  public static async updateOrderStatus(id: string, status: KitchenOrderStatus) {
+  public static async updateOrderStatus(
+    id: string,
+    status: KitchenOrderStatus
+  ) {
     const kOrder = await prisma.kitchenOrder.findUnique({ where: { id } });
     if (!kOrder) throw new AppError('Kitchen order not found', 404);
 
@@ -214,7 +217,7 @@ export class KitchenService {
     id: string,
     stationId?: string,
     assignedTo?: string,
-    priority?: KitchenPriority,
+    priority?: KitchenPriority
   ) {
     const kOrder = await prisma.kitchenOrder.findUnique({ where: { id } });
     if (!kOrder) throw new AppError('Kitchen order not found', 404);

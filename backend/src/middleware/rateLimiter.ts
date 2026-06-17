@@ -9,7 +9,8 @@ export const authRateLimiter = rateLimit({
     success: false,
     error: {
       code: 'TOO_MANY_REQUESTS',
-      message: 'Too many requests from this IP, please try again after 15 minutes',
+      message:
+        'Too many requests from this IP, please try again after 15 minutes',
       details: [],
     },
   },
@@ -39,7 +40,8 @@ export const otpRateLimiter = rateLimit({
     success: false,
     error: {
       code: 'TOO_MANY_REQUESTS',
-      message: 'Too many OTP requests from this IP, please try again after an hour',
+      message:
+        'Too many OTP requests from this IP, please try again after an hour',
       details: [],
     },
   },

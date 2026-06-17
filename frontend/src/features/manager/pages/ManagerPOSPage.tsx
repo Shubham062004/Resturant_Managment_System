@@ -34,7 +34,9 @@ import {
 export default function ManagerPOSPage() {
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const { activeDrawer, cart, activeOrder } = useAppSelector((state) => state.pos);
+  const { activeDrawer, cart, activeOrder } = useAppSelector(
+    (state) => state.pos
+  );
   const { categories, products } = useAppSelector((state) => state.menu);
 
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -59,7 +61,13 @@ export default function ManagerPOSPage() {
 
   const handleEndShift = () => {
     if (!activeDrawer) return;
-    dispatch(endShift({ drawerId: activeDrawer.id, closingAmount, notes: 'Manager shift close' }))
+    dispatch(
+      endShift({
+        drawerId: activeDrawer.id,
+        closingAmount,
+        notes: 'Manager shift close',
+      })
+    )
       .unwrap()
       .then(() => {
         toast.success('Register balanced and closed.');
@@ -98,7 +106,7 @@ export default function ManagerPOSPage() {
       processPayment({
         posOrderId: activeOrder.id,
         payments: [{ method, amount: activeOrder.order.totalAmount }],
-      }),
+      })
     )
       .unwrap()
       .then(() => {
@@ -109,8 +117,11 @@ export default function ManagerPOSPage() {
   };
 
   const filteredProducts = products.filter((p: any) => {
-    const matchesCategory = activeCategory === 'all' || p.categoryId === activeCategory;
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      activeCategory === 'all' || p.categoryId === activeCategory;
+    const matchesSearch = p.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -127,7 +138,9 @@ export default function ManagerPOSPage() {
               <Lock className="w-10 h-10 text-indigo-500" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white font-display">Register Closed</h2>
+              <h2 className="text-2xl font-bold text-white font-display">
+                Register Closed
+              </h2>
               <p className="text-sm text-slate-400 mt-2">
                 Open a new shift to access the POS terminal.
               </p>
@@ -140,7 +153,9 @@ export default function ManagerPOSPage() {
                 <Input
                   type="number"
                   value={openingAmount}
-                  onChange={(e) => setOpeningAmount(parseFloat(e.target.value) || 0)}
+                  onChange={(e) =>
+                    setOpeningAmount(parseFloat(e.target.value) || 0)
+                  }
                   className="mt-1 bg-slate-950 border-border/30 text-white py-6 text-lg text-center font-mono"
                 />
               </div>
@@ -207,7 +222,7 @@ export default function ManagerPOSPage() {
                       quantity: 1,
                       name: product.name,
                       price: product.basePrice,
-                    }),
+                    })
                   )
                 }
                 className="bg-slate-900 border border-border/10 rounded-xl p-4 cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all flex flex-col items-center justify-center text-center h-32 group"
@@ -228,7 +243,9 @@ export default function ManagerPOSPage() {
       <div className="w-full lg:w-96 flex flex-col bg-slate-900/40 rounded-2xl border border-border/10 overflow-hidden shrink-0">
         {/* Cart Header */}
         <div className="p-4 border-b border-border/20 bg-slate-900/80 backdrop-blur-md flex items-center justify-between shrink-0">
-          <h2 className="font-display font-bold text-lg text-white">Current Order</h2>
+          <h2 className="font-display font-bold text-lg text-white">
+            Current Order
+          </h2>
           <div className="flex bg-slate-950 rounded-lg p-1 border border-border/10">
             {(['WALK_IN', 'DINE_IN', 'TAKEAWAY'] as const).map((type) => (
               <button
@@ -265,7 +282,9 @@ export default function ManagerPOSPage() {
                     className="flex justify-between items-center bg-slate-950/50 p-3 rounded-xl border border-border/5"
                   >
                     <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm font-semibold text-slate-200 truncate">{item.name}</p>
+                      <p className="text-sm font-semibold text-slate-200 truncate">
+                        {item.name}
+                      </p>
                       <p className="text-xs text-indigo-400 font-mono mt-0.5">
                         ₹{(item.price * item.quantity).toLocaleString()}
                       </p>
@@ -277,7 +296,7 @@ export default function ManagerPOSPage() {
                             updateQuantity({
                               productId: item.productId,
                               quantity: item.quantity - 1,
-                            }),
+                            })
                           )
                         }
                         className="p-1 text-slate-400 hover:text-white"
@@ -293,7 +312,7 @@ export default function ManagerPOSPage() {
                             updateQuantity({
                               productId: item.productId,
                               quantity: item.quantity + 1,
-                            }),
+                            })
                           )
                         }
                         className="p-1 text-slate-400 hover:text-white"
@@ -314,19 +333,28 @@ export default function ManagerPOSPage() {
             <div className="flex justify-between text-slate-400">
               <span>Subtotal</span>
               <span className="font-mono">
-                ₹{cart.subtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ₹
+                {cart.subtotal.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
               </span>
             </div>
             <div className="flex justify-between text-slate-400">
               <span>Tax (5%)</span>
               <span className="font-mono">
-                ₹{cart.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ₹
+                {cart.tax.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
               </span>
             </div>
             <div className="flex justify-between text-white font-bold text-lg pt-2 border-t border-border/10">
               <span>Total</span>
               <span className="font-mono text-indigo-400">
-                ₹{cart.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ₹
+                {cart.total.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
               </span>
             </div>
           </div>
@@ -345,7 +373,10 @@ export default function ManagerPOSPage() {
                 disabled={cart.items.length === 0}
                 className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 text-lg rounded-xl shadow-lg shadow-indigo-500/20"
               >
-                Charge ₹{cart.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                Charge ₹
+                {cart.total.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
               </Button>
             </div>
           ) : (
@@ -399,7 +430,9 @@ export default function ManagerPOSPage() {
               exit={{ opacity: 0, scale: 0.95 }}
               className="bg-slate-900 border border-border/20 max-w-sm w-full rounded-2xl p-6 shadow-2xl"
             >
-              <h3 className="text-lg font-bold text-white font-display">Close Register</h3>
+              <h3 className="text-lg font-bold text-white font-display">
+                Close Register
+              </h3>
               <p className="text-xs text-slate-400 mt-1">
                 Count the physical drawer and verify total.
               </p>
@@ -412,7 +445,9 @@ export default function ManagerPOSPage() {
                   <Input
                     type="number"
                     value={closingAmount}
-                    onChange={(e) => setClosingAmount(parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      setClosingAmount(parseFloat(e.target.value) || 0)
+                    }
                     className="mt-1 bg-slate-950 border-border/30 text-white font-mono text-center"
                   />
                 </div>

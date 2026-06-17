@@ -46,8 +46,8 @@ const upload = multer({
       cb(
         new AppError(
           'Invalid file type. Only JPEG, PNG, WEBP, and GIF images are allowed.',
-          400,
-        ) as any,
+          400
+        ) as any
       );
     }
   },
@@ -60,7 +60,7 @@ router.patch(
   upload.single('avatar'),
   sanitizeInput,
   validate({ body: updateProfileSchema }),
-  UsersController.updateProfile,
+  UsersController.updateProfile
 );
 
 export default router;

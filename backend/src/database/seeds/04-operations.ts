@@ -2,7 +2,11 @@ import { randomUUID } from 'crypto';
 
 import { PrismaClient } from '@prisma/client';
 
-export async function seedOperations(prisma: PrismaClient, branches: any[], customerIds: string[]) {
+export async function seedOperations(
+  prisma: PrismaClient,
+  branches: any[],
+  customerIds: string[]
+) {
   console.log('🌱 Seeding Operations (Reservations, Waitlist, Inventory)...');
 
   await prisma.reservation.deleteMany();
@@ -33,7 +37,9 @@ export async function seedOperations(prisma: PrismaClient, branches: any[], cust
 
   await prisma.reservation.createMany({ data: reservations });
 
-  console.log('🌱 Inventory setup skipped for brevity (tables not defined in subset schema)');
+  console.log(
+    '🌱 Inventory setup skipped for brevity (tables not defined in subset schema)'
+  );
 
   return { reservations };
 }
