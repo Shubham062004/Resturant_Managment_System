@@ -162,7 +162,7 @@ export default function BranchHistoryPage() {
                     borderColor: '#334155',
                     borderRadius: '8px',
                   }}
-                  formatter={(v: number) => [formatCurrency(v), 'Revenue']}
+                  formatter={(v: any) => [formatCurrency(Number(v)), 'Revenue']}
                 />
                 <Bar
                   dataKey="revenue"

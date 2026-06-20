@@ -33,6 +33,7 @@ import {
 } from '../../cart/store/cartQueries';
 import HeartButton from '../components/HeartButton';
 import QuantityStepper from '../components/QuantityStepper';
+import { useCustomerBranches, Branch } from '../store/catalogQueries';
 import { selectBranch } from '../store/customerSlice';
 
 export const WishlistPage: React.FC = () => {
@@ -41,9 +42,9 @@ export const WishlistPage: React.FC = () => {
   const toast = useToast();
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { selectedBranch, branches } = useAppSelector(
-    (state) => state.customer
-  );
+  const { selectedBranch } = useAppSelector((state) => state.customer);
+  const { data: branchesRes } = useCustomerBranches();
+  const branches: Branch[] = branchesRes?.data || [];
 
   // States
   const [searchVal, setSearchVal] = useState('');

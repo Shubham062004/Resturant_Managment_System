@@ -5,6 +5,7 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  LucideIcon,
 } from 'lucide-react';
 import React from 'react';
 
@@ -25,7 +26,7 @@ interface StatItem {
   title: string;
   value: string | number;
   trend?: number;
-  icon?: React.ElementType;
+  icon?: LucideIcon;
 }
 
 interface HistoryPageLayoutProps {

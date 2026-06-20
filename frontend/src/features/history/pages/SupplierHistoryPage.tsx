@@ -94,7 +94,7 @@ export default function SupplierHistoryPage() {
                   tickFormatter={(v) => `₹${v / 1000}k`}
                 />
                 <RechartsTooltip
-                  formatter={(v: number) => [formatCurrency(v), 'Spend']}
+                  formatter={(v: any) => [formatCurrency(Number(v)), 'Spend']}
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderColor: '#334155',

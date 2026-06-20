@@ -162,7 +162,7 @@ export default function OrderHistoryPage() {
                   tickFormatter={(v) => `₹${v / 1000}k`}
                 />
                 <RechartsTooltip
-                  formatter={(v: number) => formatCurrency(v)}
+                  formatter={(v: any) => formatCurrency(Number(v))}
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderColor: '#334155',
