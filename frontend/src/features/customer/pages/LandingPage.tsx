@@ -29,12 +29,17 @@ import Card, { CardContent } from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { useCategories } from '../store/catalogQueries';
 import { fadeUp, scaleIn } from '../../../shared/theme/animations';
 import { useActiveCoupons } from '../../cart/store/cartQueries';
 import CategoryPill from '../components/CategoryPill';
 import FoodCard from '../components/FoodCard';
-import { useFeaturedProducts, useRestaurants } from '../store/catalogQueries';
+import {
+  useCategories,
+  useFeaturedProducts,
+  useRestaurants,
+  useTopReviews,
+  usePlatformStats,
+} from '../store/catalogQueries';
 import { addRecentSearch } from '../store/customerSlice';
 
 export const LandingPage: React.FC = () => {
@@ -61,6 +66,39 @@ export const LandingPage: React.FC = () => {
   const { data: categoriesRes } = useCategories({ limit: 10 });
   const categories = categoriesRes?.data ?? [];
 
+  // Real platform stats from database
+  const { data: platformStatsRes } = usePlatformStats();
+  const platformStats = platformStatsRes?.data;
+
+  // Real top reviews from database
+  const { data: reviewsRes, isLoading: reviewsLoading } = useTopReviews(3);
+  const testimonials = reviewsRes?.data ?? [];
+
+  const stats = [
+    {
+      icon: Flame,
+      label: 'Fresh Dishes',
+      value: platformStats?.dishCount ? `${platformStats.dishCount}+` : '—',
+    },
+    {
+      icon: MapPin,
+      label: 'Branches',
+      value: platformStats?.branchCount ? `${platformStats.branchCount}` : '—',
+    },
+    {
+      icon: Star,
+      label: 'Avg Rating',
+      value: platformStats?.avgRating ? `${platformStats.avgRating}★` : '—',
+    },
+    {
+      icon: Truck,
+      label: 'Delivery',
+      value: platformStats?.avgDeliveryMins
+        ? `${platformStats.avgDeliveryMins} min`
+        : '—',
+    },
+  ];
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const query = searchQuery.trim();
@@ -85,13 +123,6 @@ export const LandingPage: React.FC = () => {
     'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop&q=80',
-  ];
-
-  const stats = [
-    { icon: Flame, label: 'Fresh Dishes', value: '500+' },
-    { icon: MapPin, label: 'Branches', value: '20+' },
-    { icon: Star, label: 'Avg Rating', value: '4.8★' },
-    { icon: Truck, label: 'Delivery', value: '30 min' },
   ];
 
   return (
@@ -537,71 +568,63 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Brand testimonials — curated, not hardcoded mock data */}
-              {[
-                {
-                  id: 'tm1',
-                  name: 'Priya Sharma',
-                  role: 'Foodie & Regular Customer',
-                  rating: 5,
-                  comment:
-                    'The pizzas here are absolutely incredible — crispy crust, generous toppings. I order every week and the quality is always consistent!',
-                  avatar: 'https://i.pravatar.cc/80?img=47',
-                },
-                {
-                  id: 'tm2',
-                  name: 'Rahul Verma',
-                  role: 'Software Engineer, Delhi',
-                  rating: 5,
-                  comment:
-                    'Fast delivery, hot food, and amazing taste. The paneer burger is my go-to. ABC has truly redefined fast food in my city.',
-                  avatar: 'https://i.pravatar.cc/80?img=12',
-                },
-                {
-                  id: 'tm3',
-                  name: 'Ananya Kapoor',
-                  role: 'Food Blogger',
-                  rating: 4,
-                  comment:
-                    'The new dessert menu is divine! Sizzling brownie with ice cream — an absolute must-try. The app makes ordering super easy too.',
-                  avatar: 'https://i.pravatar.cc/80?img=25',
-                },
-              ].map((t) => (
-                <Card
-                  key={t.id}
-                  className="bg-white/[0.03] border-white/[0.06] p-6 flex flex-col justify-between space-y-5"
-                >
-                  <div className="flex gap-1 mb-1">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        size={14}
-                        className={
-                          s <= Math.round(t.rating)
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-neutral-700'
-                        }
-                      />
-                    ))}
-                  </div>
-                  <p className="text-sm text-neutral-300 leading-relaxed flex-1">
-                    &ldquo;{t.comment}&rdquo;
-                  </p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      className="w-10 h-10 rounded-full object-cover border border-white/10"
-                    />
-                    <div>
-                      <p className="text-sm font-semibold text-white">
-                        {t.name}
-                      </p>
-                      <p className="text-[10px] text-neutral-500">{t.role}</p>
+              {reviewsLoading ? (
+                [1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="h-48 rounded-2xl bg-white/5 animate-pulse"
+                  />
+                ))
+              ) : testimonials.length > 0 ? (
+                testimonials.map((t) => (
+                  <Card
+                    key={t.id}
+                    className="bg-white/[0.03] border-white/[0.06] p-6 flex flex-col justify-between space-y-5"
+                  >
+                    <div className="flex gap-1 mb-1">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star
+                          key={s}
+                          size={14}
+                          className={
+                            s <= Math.round(t.rating)
+                              ? 'text-amber-400 fill-amber-400'
+                              : 'text-neutral-700'
+                          }
+                        />
+                      ))}
                     </div>
-                  </div>
-                </Card>
-              ))}
+                    <p className="text-sm text-neutral-300 leading-relaxed flex-1">
+                      &ldquo;{t.comment}&rdquo;
+                    </p>
+                    <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+                      {t.avatar ? (
+                        <img
+                          src={t.avatar}
+                          alt={t.name}
+                          className="w-10 h-10 rounded-full object-cover border border-white/10"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+                          {t.name.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-semibold text-white">
+                          {t.name}
+                        </p>
+                        <p className="text-[10px] text-neutral-500">
+                          {t.role} · {t.productName}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                <div className="col-span-3 text-center py-12 text-neutral-500">
+                  No reviews yet. Be the first to share your experience!
+                </div>
+              )}
             </div>
           </div>
         </section>

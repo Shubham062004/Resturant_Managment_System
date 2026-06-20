@@ -368,4 +368,39 @@ export class CatalogController {
       next(error);
     }
   }
+
+  public static async getTopReviews(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const limit = Number(req.query.limit) || 6;
+      const reviews = await CatalogService.getTopReviews(limit);
+      res.status(200).json({
+        success: true,
+        data: reviews,
+        message: 'Top reviews retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getPlatformStats(
+    _req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const stats = await CatalogService.getPlatformStats();
+      res.status(200).json({
+        success: true,
+        data: stats,
+        message: 'Platform stats retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

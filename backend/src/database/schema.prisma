@@ -475,8 +475,26 @@ model Branch {
   workAssignments WorkAssignment[]
   ingredientConsumptions IngredientConsumptionLog[]
   wishlistItems   Wishlist[]
+  menuItems       BranchMenuItem[]
+  coupons         Coupon[]
 
   @@index([restaurantId])
+}
+
+model BranchMenuItem {
+  id          String   @id @default(uuid())
+  branchId    String
+  branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  isAvailable Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([branchId, productId])
+  @@index([branchId])
+  @@index([productId])
 }
 
 model RestaurantSettings {
@@ -539,6 +557,7 @@ model Product {
   recipeMappings   RecipeMapping[]
   recommendations  Recommendation[]
   wishlistItems    Wishlist[]
+  branchMenuItems  BranchMenuItem[]
 
   @@unique([restaurantId, slug])
   @@index([restaurantId])
@@ -667,15 +686,30 @@ model Coupon {
   usageLimit    Int?
   usedCount     Int           @default(0)
   active        Boolean       @default(true)
+  offerType     OfferType     @default(GLOBAL)
+  branchId      String?
+  branch        Branch?       @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  isSeasonal    Boolean       @default(false)
+  isBirthday    Boolean       @default(false)
   usages        CouponUsage[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+
+  @@index([branchId])
+  @@index([offerType])
 }
 
 enum DiscountType {
   PERCENTAGE
   FIXED_AMOUNT
   FREE_DELIVERY
+}
+
+enum OfferType {
+  GLOBAL
+  BRANCH
+  SEASONAL
+  BIRTHDAY
 }
 
 model CouponUsage {
@@ -1425,6 +1459,22 @@ model AuditLog {
   @@index([userId])
   @@index([action])
   @@index([entity])
+  @@index([timestamp])
+}
+
+model SystemLog {
+  id        String   @id @default(uuid())
+  level     String   // INFO, WARN, ERROR
+  module    String   // API, AUTH, ORDER, INVENTORY, PAYMENT, SYSTEM
+  message   String
+  details   String?
+  ipAddress String?
+  userId    String?
+  duration  Int?     // response time in ms
+  timestamp DateTime @default(now())
+
+  @@index([module])
+  @@index([level])
   @@index([timestamp])
 }
 

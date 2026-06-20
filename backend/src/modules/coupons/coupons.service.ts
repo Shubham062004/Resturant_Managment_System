@@ -3,7 +3,7 @@ import AppError from '../../utils/appError';
 
 export class CouponService {
   /**
-   * Validate a coupon code for an order
+   * Validate a coupon code for an order — database only
    */
   public static async validateCoupon(
     code: string,
@@ -11,61 +11,6 @@ export class CouponService {
     orderAmount: number
   ) {
     const uppercaseCode = code.toUpperCase();
-    const hardcodedCoupons: Record<
-      string,
-      { discountValue: number; minimumAmount: number; description: string }
-    > = {
-      WELCOME50: {
-        discountValue: 50,
-        minimumAmount: 499,
-        description: 'Get ₹50 off on orders of ₹499 or more',
-      },
-      SAVE100: {
-        discountValue: 100,
-        minimumAmount: 999,
-        description: 'Get ₹100 off on orders of ₹999 or more',
-      },
-      PARTY200: {
-        discountValue: 200,
-        minimumAmount: 1499,
-        description: 'Get ₹200 off on orders of ₹1499 or more',
-      },
-      SUPER300: {
-        discountValue: 300,
-        minimumAmount: 1999,
-        description: 'Get ₹300 off on orders of ₹1999 or more',
-      },
-      MEGA500: {
-        discountValue: 500,
-        minimumAmount: 2999,
-        description: 'Get ₹500 off on orders of ₹2999 or more',
-      },
-    };
-
-    if (hardcodedCoupons[uppercaseCode]) {
-      const match = hardcodedCoupons[uppercaseCode];
-      if (orderAmount < match.minimumAmount) {
-        throw new AppError(
-          `Minimum order amount of ₹${match.minimumAmount} required`,
-          400
-        );
-      }
-      return {
-        coupon: {
-          id: `hardcoded-${uppercaseCode}`,
-          code: uppercaseCode,
-          discountType: 'FIXED_AMOUNT' as const,
-          discountValue: match.discountValue.toString(),
-          minimumAmount: match.minimumAmount.toString(),
-          description: match.description,
-          active: true,
-          startDate: new Date(),
-          endDate: new Date(Date.now() + 30 * 24 * 3600 * 1000),
-          usedCount: 0,
-        },
-        discountAmount: match.discountValue,
-      };
-    }
 
     const coupon = await prisma.coupon.findUnique({
       where: { code: uppercaseCode },
@@ -93,12 +38,11 @@ export class CouponService {
 
     if (orderAmount < Number(coupon.minimumAmount)) {
       throw new AppError(
-        `Minimum order amount of ${coupon.minimumAmount} required`,
+        `Minimum order amount of ₹${coupon.minimumAmount} required`,
         400
       );
     }
 
-    // Check if user already used this coupon (optional rule: one use per user)
     const usage = await prisma.couponUsage.findFirst({
       where: { couponId: coupon.id, userId },
     });
@@ -115,28 +59,33 @@ export class CouponService {
       }
     } else if (coupon.discountType === 'FIXED_AMOUNT') {
       discountAmount = Number(coupon.discountValue);
-    } else if (coupon.discountType === 'FREE_DELIVERY') {
-      // Free delivery logic handled by pricing engine, but we validate it here
-      discountAmount = 0; // Value is calculated at checkout based on delivery fee
     }
 
-    return {
-      coupon,
-      discountAmount,
-    };
+    return { coupon, discountAmount };
   }
 
   /**
-   * Get all active coupons (for listing on Offers page)
+   * Get all active coupons from database
    */
-  public static async getActiveCoupons() {
+  public static async getActiveCoupons(branchId?: string) {
     const now = new Date();
+    const where: Record<string, unknown> = {
+      active: true,
+      startDate: { lte: now },
+      endDate: { gte: now },
+    };
+
+    if (branchId) {
+      where.OR = [
+        { offerType: 'GLOBAL' },
+        { offerType: 'BRANCH', branchId },
+        { offerType: 'SEASONAL', isSeasonal: true },
+        { offerType: 'BIRTHDAY', isBirthday: true },
+      ];
+    }
+
     return prisma.coupon.findMany({
-      where: {
-        active: true,
-        startDate: { lte: now },
-        endDate: { gte: now },
-      },
+      where,
       orderBy: { createdAt: 'desc' },
     });
   }

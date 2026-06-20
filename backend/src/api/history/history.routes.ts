@@ -31,5 +31,6 @@ router.get('/finance', historyController.getFinance);
 router.get('/attendance', historyController.getAttendance);
 router.get('/salary', historyController.getSalary);
 router.get('/audit', historyController.getAudit);
+router.get('/system-logs', historyController.getSystemLogs);
 
 export default router;

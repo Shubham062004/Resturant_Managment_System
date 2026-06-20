@@ -100,6 +100,7 @@ async function main() {
 
   await prisma.couponUsage.deleteMany();
   await prisma.coupon.deleteMany();
+  await prisma.branchMenuItem.deleteMany();
   await prisma.address.deleteMany();
 
   await prisma.cartItem.deleteMany();
@@ -562,6 +563,100 @@ async function main() {
     products.push(dbProd);
   }
 
+  // 7b. Seed BranchMenuItem mappings (all products available at all branches)
+  console.log('🌱 Seeding Branch ↔ MenuItem mappings...');
+  const branchMenuItems = [];
+  for (const branch of branches) {
+    for (const product of products) {
+      branchMenuItems.push({
+        branchId: branch.id,
+        productId: product.id,
+        isAvailable: true,
+        sortOrder: products.indexOf(product),
+      });
+    }
+  }
+  await prisma.branchMenuItem.createMany({ data: branchMenuItems });
+
+  // 7c. Seed Coupons (global, branch, seasonal, birthday offers)
+  console.log('🌱 Seeding Coupons & Offers...');
+  const couponStart = new Date(2025, 6, 1);
+  const couponEnd = new Date(2026, 11, 31);
+  await prisma.coupon.createMany({
+    data: [
+      {
+        code: 'WELCOME50',
+        description: 'Get ₹50 off on orders of ₹499+',
+        discountType: 'FIXED_AMOUNT',
+        discountValue: 50,
+        minimumAmount: 499,
+        startDate: couponStart,
+        endDate: couponEnd,
+        offerType: 'GLOBAL',
+        active: true,
+      },
+      {
+        code: 'SAVE100',
+        description: 'Get ₹100 off on orders of ₹999+',
+        discountType: 'FIXED_AMOUNT',
+        discountValue: 100,
+        minimumAmount: 999,
+        startDate: couponStart,
+        endDate: couponEnd,
+        offerType: 'GLOBAL',
+        active: true,
+      },
+      {
+        code: 'PARTY200',
+        description: 'Get ₹200 off on orders of ₹1499+',
+        discountType: 'FIXED_AMOUNT',
+        discountValue: 200,
+        minimumAmount: 1499,
+        startDate: couponStart,
+        endDate: couponEnd,
+        offerType: 'GLOBAL',
+        active: true,
+      },
+      {
+        code: 'MONSOON25',
+        description: '25% off during monsoon season',
+        discountType: 'PERCENTAGE',
+        discountValue: 25,
+        minimumAmount: 399,
+        maxDiscount: 150,
+        startDate: new Date(2025, 6, 1),
+        endDate: new Date(2025, 8, 30),
+        offerType: 'SEASONAL',
+        isSeasonal: true,
+        active: true,
+      },
+      {
+        code: 'BIRTHDAY100',
+        description: '₹100 off on your birthday month',
+        discountType: 'FIXED_AMOUNT',
+        discountValue: 100,
+        minimumAmount: 599,
+        startDate: couponStart,
+        endDate: couponEnd,
+        offerType: 'BIRTHDAY',
+        isBirthday: true,
+        active: true,
+      },
+      {
+        code: 'CPBRANCH50',
+        description: 'Connaught Place exclusive ₹50 off',
+        discountType: 'FIXED_AMOUNT',
+        discountValue: 50,
+        minimumAmount: 399,
+        startDate: couponStart,
+        endDate: couponEnd,
+        offerType: 'BRANCH',
+        branchId: branches[0].id,
+        active: true,
+      },
+    ],
+  });
+
   // 8. Seed 50 Ingredients
   console.log('🌱 Seeding 50 Ingredients...');
   const ingredientNames = [
@@ -747,11 +842,12 @@ async function main() {
   }
   await prisma.inventory.createMany({ data: inventoriesToCreate });
 
-  // 12. Seeding 300 Completed Orders (May 1 2026 → May 31 2026, Target Revenue: ₹15–20 Lakh total)
+  // 12. Seeding orders across 365 days (July 2025 → June 2026)
   console.log(
-    '🌱 Batch Generating 300 Completed Orders (Target Revenue: ₹15–20 Lakh)...'
+    '🌱 Batch Generating 300 Completed Orders across 365-day history...'
   );
   const numOrders = 300;
+  const historyStart = new Date(2025, 6, 1); // July 1, 2025
 
   const ordersToCreate = [];
   const orderItemsToCreate = [];
@@ -767,10 +863,10 @@ async function main() {
     const orderId = randomUUID();
     const custId = customerIds[i % customerIds.length];
     const branch = branches[i % branches.length];
-    const day = (i % 31) + 1;
-    const hour = 11 + (i % 11);
-    const minute = (i * 13) % 60;
-    const orderDate = new Date(2026, 4, day, hour, minute);
+    const dayOffset = i % 365;
+    const orderDate = new Date(historyStart);
+    orderDate.setDate(orderDate.getDate() + dayOffset);
+    orderDate.setHours(11 + (i % 11), (i * 13) % 60, 0, 0);
 
     const numItems = 2 + (i % 3);
     let subtotalVal = 0;

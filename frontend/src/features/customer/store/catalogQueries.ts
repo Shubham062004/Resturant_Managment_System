@@ -488,14 +488,60 @@ export const useCategories = (filters?: {
   }>({
     queryKey: ['categories', filters],
     queryFn: async () => {
-      const cleanParams: any = { ...filters };
+      const cleanParams: Record<string, unknown> = { ...filters };
       if (!cleanParams.restaurantId) delete cleanParams.restaurantId;
       const { data } = await apiClient.get('/catalog/categories', {
         params: cleanParams,
       });
       return data;
     },
-    staleTime: 5 * 60 * 1000, // 5 min cache — categories rarely change
+    staleTime: 5 * 60 * 1000,
   });
 };
 
+// 17. Fetch Top Reviews for Landing Page
+export const useTopReviews = (limit = 6) => {
+  return useQuery<{
+    success: boolean;
+    data: Array<{
+      id: string;
+      name: string;
+      role: string;
+      rating: number;
+      comment: string;
+      avatar: string | null;
+      productName: string;
+    }>;
+  }>({
+    queryKey: ['reviews', 'top', limit],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/reviews/top', {
+        params: { limit },
+      });
+      return data;
+    },
+    staleTime: 10 * 60 * 1000,
+  });
+};
+
+// 18. Fetch Platform Stats for Landing Page
+export const usePlatformStats = () => {
+  return useQuery<{
+    success: boolean;
+    data: {
+      dishCount: number;
+      branchCount: number;
+      avgRating: number | null;
+      reviewCount: number;
+      completedOrders: number;
+      avgDeliveryMins: number | null;
+    };
+  }>({
+    queryKey: ['platform-stats'],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/platform-stats');
+      return data;
+    },
+    staleTime: 10 * 60 * 1000,
+  });
+};

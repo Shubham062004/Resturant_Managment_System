@@ -101,6 +101,15 @@ export class HistoryController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  async getSystemLogs(req: Request, res: Response) {
+    try {
+      const result = await historyService.getSystemLogs(req.query);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 export const historyController = new HistoryController();

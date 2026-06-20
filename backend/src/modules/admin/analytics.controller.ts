@@ -15,40 +15,41 @@ export class AnalyticsController {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      const [revenueToday, totalOrders, activeStaff, activeCustomers] = await Promise.all([
-        prisma.order.aggregate({
-          _sum: { totalAmount: true },
-          where: {
-            ...branchFilter,
-            createdAt: { gte: today },
-            status: { in: ['DELIVERED'] },
-          },
-        }),
-        prisma.order.count({
-          where: { ...branchFilter, createdAt: { gte: today } },
-        }),
-        prisma.user.count({
-          where: {
-            role: {
-              in: [
-                'KITCHEN_STAFF',
-                'DELIVERY_PARTNER',
-                'CASHIER',
-                'HEAD_CHEF',
-                'BRANCH_MANAGER',
-              ],
+      const [revenueToday, totalOrders, activeStaff, activeCustomers] =
+        await Promise.all([
+          prisma.order.aggregate({
+            _sum: { totalAmount: true },
+            where: {
+              ...branchFilter,
+              createdAt: { gte: today },
+              status: { in: ['DELIVERED'] },
             },
-          },
-        }),
-        // Count distinct customers who placed an order today
-        prisma.order.groupBy({
-          by: ['userId'],
-          where: {
-            ...branchFilter,
-            createdAt: { gte: today },
-          },
-        }),
-      ]);
+          }),
+          prisma.order.count({
+            where: { ...branchFilter, createdAt: { gte: today } },
+          }),
+          prisma.user.count({
+            where: {
+              role: {
+                in: [
+                  'KITCHEN_STAFF',
+                  'DELIVERY_PARTNER',
+                  'CASHIER',
+                  'HEAD_CHEF',
+                  'BRANCH_MANAGER',
+                ],
+              },
+            },
+          }),
+          // Count distinct customers who placed an order today
+          prisma.order.groupBy({
+            by: ['userId'],
+            where: {
+              ...branchFilter,
+              createdAt: { gte: today },
+            },
+          }),
+        ]);
 
       res.status(200).json({
         status: 'success',
@@ -150,19 +151,17 @@ export class AnalyticsController {
           prisma.user.count({ where: { role: 'CUSTOMER' } }),
         ]);
 
-      const newPct = totalCustomers > 0 ? Math.round((newCustomers / totalCustomers) * 100) : 0;
+      const newPct =
+        totalCustomers > 0
+          ? Math.round((newCustomers / totalCustomers) * 100)
+          : 0;
       const returningPct = 100 - newPct;
 
       res.status(200).json({
         status: 'success',
         data: {
           retention: { new: newPct, returning: returningPct },
-          demographics: [
-            { segment: '18-24', percentage: 25 },
-            { segment: '25-34', percentage: 45 },
-            { segment: '35-44', percentage: 20 },
-            { segment: '45+', percentage: 10 },
-          ],
+          demographics: await AnalyticsController.computeDemographics(),
           averageOrderValue: aovAgg._avg.totalAmount
             ? parseFloat(Number(aovAgg._avg.totalAmount).toFixed(2))
             : 0,
@@ -289,7 +288,7 @@ export class AnalyticsController {
         take: 100,
       });
 
-      let avgMins = 32; // fallback
+      let avgMins = 0;
       if (completedDeliveries.length > 0) {
         const total = completedDeliveries.reduce((sum, d) => {
           const mins =
@@ -431,48 +430,53 @@ export class AnalyticsController {
 
       const branchPerformance = await Promise.all(
         branches.map(async (branch) => {
-          const [bOrders, bKitchenQueue, bPendingDeliveries, bInventoryHealth, bStaffCount, bRating] =
-            await Promise.all([
-              prisma.order.findMany({
-                where: {
-                  branchId: branch.id,
-                  createdAt: { gte: startOfMonth, lte: endOfMonth },
-                },
-              }),
-              prisma.kitchenOrder.count({
-                where: {
-                  status: { in: ['QUEUED', 'COOKING'] },
-                  order: { branchId: branch.id },
-                },
-              }),
-              prisma.deliveryAssignment.count({
-                where: {
-                  status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] },
-                  order: { branchId: branch.id },
-                },
-              }),
-              prisma.inventory.count({
-                where: {
-                  branchId: branch.id,
-                  quantity: { lte: 50 },
-                },
-              }),
-              // Real staff count: users assigned to this branch via work assignments
-              prisma.workAssignment.count({
-                where: {
-                  branchId: branch.id,
-                  date: { gte: startOfMonth, lte: endOfMonth },
-                  status: { in: ['SCHEDULED', 'CONFIRMED'] },
-                },
-              }),
-              // Real customer rating from reviews
-              prisma.review.aggregate({
-                where: {
-                  product: { restaurantId: branch.restaurantId },
-                },
-                _avg: { rating: true },
-              }),
-            ]);
+          const [
+            bOrders,
+            bKitchenQueue,
+            bPendingDeliveries,
+            bInventoryHealth,
+            bStaffCount,
+            bRating,
+          ] = await Promise.all([
+            prisma.order.findMany({
+              where: {
+                branchId: branch.id,
+                createdAt: { gte: startOfMonth, lte: endOfMonth },
+              },
+            }),
+            prisma.kitchenOrder.count({
+              where: {
+                status: { in: ['QUEUED', 'COOKING'] },
+                order: { branchId: branch.id },
+              },
+            }),
+            prisma.deliveryAssignment.count({
+              where: {
+                status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] },
+                order: { branchId: branch.id },
+              },
+            }),
+            prisma.inventory.count({
+              where: {
+                branchId: branch.id,
+                quantity: { lte: 50 },
+              },
+            }),
+            // Real staff count: users assigned to this branch via work assignments
+            prisma.workAssignment.count({
+              where: {
+                branchId: branch.id,
+                date: { gte: startOfMonth, lte: endOfMonth },
+              },
+            }),
+            // Real customer rating from reviews
+            prisma.review.aggregate({
+              where: {
+                product: { restaurantId: branch.restaurantId },
+              },
+              _avg: { rating: true },
+            }),
+          ]);
 
           const bRevenue = bOrders
             .filter((o) => o.status === 'DELIVERED' || o.status === 'PICKED_UP')
@@ -630,19 +634,21 @@ export class AnalyticsController {
           },
         }),
         // Real rating from product reviews for this branch's restaurant
-        prisma.branch.findUnique({
-          where: { id: branchId },
-          select: { restaurantId: true },
-        }).then(async (b) => {
-          if (!b) return null;
-          const agg = await prisma.review.aggregate({
-            where: { product: { restaurantId: b.restaurantId } },
-            _avg: { rating: true },
-          });
-          return agg._avg.rating
-            ? parseFloat(Number(agg._avg.rating).toFixed(1))
-            : null;
-        }),
+        prisma.branch
+          .findUnique({
+            where: { id: branchId },
+            select: { restaurantId: true },
+          })
+          .then(async (b) => {
+            if (!b) return null;
+            const agg = await prisma.review.aggregate({
+              where: { product: { restaurantId: b.restaurantId } },
+              _avg: { rating: true },
+            });
+            return agg._avg.rating
+              ? parseFloat(Number(agg._avg.rating).toFixed(1))
+              : null;
+          }),
       ]);
 
       const revenueToday = todaysOrders.reduce(
@@ -682,6 +688,279 @@ export class AnalyticsController {
           staffPresent,
         },
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  private static async computeDemographics() {
+    const customers = await prisma.user.findMany({
+      where: { role: 'CUSTOMER' },
+      select: { createdAt: true },
+    });
+
+    const now = new Date();
+    const segments = { '18-24': 0, '25-34': 0, '35-44': 0, '45+': 0 };
+
+    customers.forEach((c) => {
+      const age = Math.floor(
+        (now.getTime() - c.createdAt.getTime()) / (365.25 * 24 * 3600 * 1000)
+      );
+      if (age < 25) segments['18-24']++;
+      else if (age < 35) segments['25-34']++;
+      else if (age < 45) segments['35-44']++;
+      else segments['45+']++;
+    });
+
+    const total = customers.length || 1;
+    return Object.entries(segments).map(([segment, count]) => ({
+      segment,
+      percentage: Math.round((count / total) * 100),
+    }));
+  }
+
+  public static async getDashboardTrends(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+      const days = [...Array(7)].map((_, i) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() - (6 - i));
+        d.setHours(0, 0, 0, 0);
+        return d;
+      });
+
+      const dailyRevenue = await Promise.all(
+        days.map(async (day) => {
+          const next = new Date(day);
+          next.setDate(next.getDate() + 1);
+          const agg = await prisma.order.aggregate({
+            where: {
+              createdAt: { gte: day, lt: next },
+              status: { in: ['DELIVERED', 'PICKED_UP'] },
+            },
+            _sum: { totalAmount: true },
+          });
+          return {
+            name: day.toLocaleDateString('en-IN', { weekday: 'short' }),
+            revenue: Number(agg._sum.totalAmount || 0),
+          };
+        })
+      );
+
+      const weeks = [...Array(4)].map((_, i) => {
+        const wStart = new Date(startOfMonth);
+        wStart.setDate(wStart.getDate() + i * 7);
+        const wEnd = new Date(wStart);
+        wEnd.setDate(wEnd.getDate() + 7);
+        return { wStart, wEnd, name: `Week ${i + 1}` };
+      });
+
+      const financeTrend = await Promise.all(
+        weeks.map(async ({ wStart, wEnd, name }) => {
+          const [rev, payroll, purchases] = await Promise.all([
+            prisma.order.aggregate({
+              where: {
+                createdAt: { gte: wStart, lt: wEnd },
+                status: { in: ['DELIVERED', 'PICKED_UP'] },
+              },
+              _sum: { totalAmount: true },
+            }),
+            prisma.payrollRecord.aggregate({
+              where: { payrollDate: { gte: wStart, lt: wEnd } },
+              _sum: { netPaid: true },
+            }),
+            prisma.purchaseOrder.aggregate({
+              where: {
+                status: 'RECEIVED',
+                receivedAt: { gte: wStart, lt: wEnd },
+              },
+              _sum: { totalAmount: true },
+            }),
+          ]);
+          const revenue = Number(rev._sum.totalAmount || 0);
+          const expenses =
+            Number(payroll._sum.netPaid || 0) +
+            Number(purchases._sum.totalAmount || 0);
+          return { name, revenue, expenses, profit: revenue - expenses };
+        })
+      );
+
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayEnd = new Date(today);
+
+      const [todayRev, yesterdayRev, monthRev, weekRev] = await Promise.all([
+        prisma.order.aggregate({
+          where: {
+            createdAt: { gte: today },
+            status: { in: ['DELIVERED', 'PICKED_UP'] },
+          },
+          _sum: { totalAmount: true },
+        }),
+        prisma.order.aggregate({
+          where: {
+            createdAt: { gte: yesterday, lt: yesterdayEnd },
+            status: { in: ['DELIVERED', 'PICKED_UP'] },
+          },
+          _sum: { totalAmount: true },
+        }),
+        prisma.order.aggregate({
+          where: {
+            createdAt: { gte: startOfMonth },
+            status: { in: ['DELIVERED', 'PICKED_UP'] },
+          },
+          _sum: { totalAmount: true },
+        }),
+        prisma.order.aggregate({
+          where: {
+            createdAt: { gte: days[0] },
+            status: { in: ['DELIVERED', 'PICKED_UP'] },
+          },
+          _sum: { totalAmount: true },
+        }),
+      ]);
+
+      const wasteAgg = await prisma.wasteRecord.aggregate({
+        where: { createdAt: { gte: startOfMonth } },
+        _sum: { quantity: true },
+      });
+
+      res.status(200).json({
+        status: 'success',
+        data: {
+          dailyRevenue,
+          financeTrend,
+          revenueToday: Number(todayRev._sum.totalAmount || 0),
+          revenueYesterday: Number(yesterdayRev._sum.totalAmount || 0),
+          revenueThisWeek: Number(weekRev._sum.totalAmount || 0),
+          revenueThisMonth: Number(monthRev._sum.totalAmount || 0),
+          wasteQuantity: Number(wasteAgg._sum.quantity || 0),
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getDashboardAlerts(
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const fortyFiveMinsAgo = new Date(Date.now() - 45 * 60 * 1000);
+
+      const [
+        lowStock,
+        delayedDeliveries,
+        badReviews,
+        pendingRequests,
+        staffShortage,
+      ] = await Promise.all([
+        prisma.inventory.findMany({
+          where: { quantity: { lte: 50 } },
+          include: { ingredient: true, branch: true },
+          take: 3,
+          orderBy: { quantity: 'asc' },
+        }),
+        prisma.deliveryAssignment.findMany({
+          where: {
+            status: 'OUT_FOR_DELIVERY',
+            assignedAt: { lte: fortyFiveMinsAgo },
+          },
+          include: { order: { select: { orderNumber: true } } },
+          take: 3,
+        }),
+        prisma.review.findMany({
+          where: { rating: { lte: 2 } },
+          include: {
+            user: { select: { firstName: true } },
+            product: { select: { name: true } },
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 3,
+        }),
+        prisma.inventoryRequest.findMany({
+          where: { status: 'PENDING' },
+          include: { branch: true, items: true },
+          take: 3,
+        }),
+        prisma.branch.findMany({
+          select: {
+            id: true,
+            name: true,
+            workAssignments: {
+              where: {
+                date: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+              },
+            },
+          },
+        }),
+      ]);
+
+      const alerts: Array<{
+        title: string;
+        desc: string;
+        level: string;
+        time: string;
+      }> = [];
+
+      lowStock.forEach((item) => {
+        alerts.push({
+          title: 'Low Stock Alert',
+          desc: `${item.ingredient.name} is below threshold (${item.quantity}${item.ingredient.unit}) at ${item.branch.name}.`,
+          level: 'Critical',
+          time: 'Recent',
+        });
+      });
+
+      delayedDeliveries.forEach((d) => {
+        alerts.push({
+          title: 'Delayed Delivery Alert',
+          desc: `Order #${d.order.orderNumber} has exceeded average delivery time.`,
+          level: 'Critical',
+          time: 'Recent',
+        });
+      });
+
+      badReviews.forEach((r) => {
+        alerts.push({
+          title: 'Negative Review Received',
+          desc: `${r.user.firstName} rated ${r.rating}/5 for ${r.product.name}: "${r.comment?.slice(0, 60) || 'No comment'}"`,
+          level: 'High',
+          time: r.createdAt.toLocaleString('en-IN'),
+        });
+      });
+
+      pendingRequests.forEach((req) => {
+        alerts.push({
+          title: 'Inventory Request Pending',
+          desc: `${req.branch.name} requests restock of ${req.items.length} items.`,
+          level: 'Medium',
+          time: req.createdAt.toLocaleString('en-IN'),
+        });
+      });
+
+      staffShortage
+        .filter((b) => b.workAssignments.length < 2)
+        .slice(0, 2)
+        .forEach((b) => {
+          alerts.push({
+            title: 'Staff Shortage Warning',
+            desc: `${b.name} reported staff count below threshold.`,
+            level: 'Low',
+            time: 'Today',
+          });
+        });
+
+      res.status(200).json({ status: 'success', data: alerts });
     } catch (error) {
       next(error);
     }

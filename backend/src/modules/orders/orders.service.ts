@@ -99,17 +99,85 @@ export class OrdersService {
   }
 
   /**
-   * Get all orders for the user
+   * Get all orders for the user with pagination, filters, and search
    */
-  public static async getMyOrders(userId: string) {
-    return prisma.order.findMany({
-      where: { userId },
-      include: {
-        items: { include: { product: true } },
-        restaurant: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+  public static async getMyOrders(
+    userId: string,
+    query: {
+      page?: number;
+      limit?: number;
+      status?: string;
+      search?: string;
+      tab?: 'active' | 'past';
+      orderType?: string;
+    } = {}
+  ) {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const ACTIVE_STATUSES = [
+      'PLACED',
+      'ACCEPTED',
+      'PREPARING',
+      'READY',
+      'OUT_FOR_DELIVERY',
+      'READY_FOR_PICKUP',
+    ];
+
+    const where: Record<string, unknown> = { userId };
+
+    if (query.tab === 'active') {
+      where.status = { in: ACTIVE_STATUSES };
+    } else if (query.tab === 'past') {
+      where.status = { notIn: ACTIVE_STATUSES };
+    }
+
+    if (query.status) where.status = query.status;
+    if (query.orderType) where.orderType = query.orderType;
+
+    if (query.search) {
+      where.OR = [
+        { orderNumber: { contains: query.search, mode: 'insensitive' } },
+        {
+          items: {
+            some: {
+              product: {
+                name: { contains: query.search, mode: 'insensitive' },
+              },
+            },
+          },
+        },
+      ];
+    }
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where,
+        include: {
+          items: { include: { product: true } },
+          restaurant: true,
+          branch: {
+            select: { id: true, name: true, address: true, city: true },
+          },
+          address: { select: { addressLine1: true, city: true } },
+          statusHistory: { orderBy: { timestamp: 'asc' } },
+          payment: { select: { status: true, provider: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.order.count({ where }),
+    ]);
+
+    return {
+      orders,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   /**

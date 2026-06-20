@@ -942,4 +942,86 @@ export class CatalogService {
       );
     }
   }
+
+  /**
+   * Get top-rated reviews for landing page testimonials
+   */
+  public static async getTopReviews(limit = 6) {
+    const reviews = await prisma.review.findMany({
+      where: {
+        comment: { not: null },
+        rating: { gte: 4 },
+      },
+      include: {
+        user: {
+          select: { firstName: true, lastName: true, avatar: true },
+        },
+        product: {
+          select: { name: true, category: { select: { name: true } } },
+        },
+      },
+      orderBy: [{ rating: 'desc' }, { createdAt: 'desc' }],
+      take: limit,
+    });
+
+    return reviews.map((r) => ({
+      id: r.id,
+      name: `${r.user.firstName} ${r.user.lastName}`,
+      role: r.product.category?.name
+        ? `${r.product.category.name} lover`
+        : 'Customer',
+      rating: r.rating,
+      comment: r.comment,
+      avatar: r.user.avatar || null,
+      productName: r.product.name,
+      createdAt: r.createdAt,
+    }));
+  }
+
+  /**
+   * Platform stats for landing page — all from database
+   */
+  public static async getPlatformStats() {
+    const [productCount, branchCount, ratingAgg, orderCount, avgDeliveryMins] =
+      await Promise.all([
+        prisma.product.count({ where: { isAvailable: true } }),
+        prisma.branch.count({ where: { isActive: true } }),
+        prisma.review.aggregate({
+          _avg: { rating: true },
+          _count: { id: true },
+        }),
+        prisma.order.count({
+          where: { status: { in: ['DELIVERED', 'PICKED_UP'] } },
+        }),
+        prisma.deliveryAssignment.findMany({
+          where: { status: 'DELIVERED', deliveredAt: { not: null } },
+          select: { assignedAt: true, deliveredAt: true },
+          take: 100,
+          orderBy: { deliveredAt: 'desc' },
+        }),
+      ]);
+
+    let avgDelivery = null;
+    if (avgDeliveryMins.length > 0) {
+      const total = avgDeliveryMins.reduce((sum, d) => {
+        const mins =
+          (new Date(d.deliveredAt!).getTime() -
+            new Date(d.assignedAt).getTime()) /
+          60000;
+        return sum + mins;
+      }, 0);
+      avgDelivery = Math.round(total / avgDeliveryMins.length);
+    }
+
+    return {
+      dishCount: productCount,
+      branchCount,
+      avgRating: ratingAgg._avg.rating
+        ? parseFloat(Number(ratingAgg._avg.rating).toFixed(1))
+        : null,
+      reviewCount: ratingAgg._count.id,
+      completedOrders: orderCount,
+      avgDeliveryMins: avgDelivery,
+    };
+  }
 }

@@ -94,6 +94,14 @@ router.get('/analytics/customer', AnalyticsController.getCustomerAnalytics);
 router.get('/analytics/product', AnalyticsController.getProductAnalytics);
 router.get('/analytics/delivery', AnalyticsController.getDeliveryAnalytics);
 router.get(
+  '/analytics/dashboard-trends',
+  AnalyticsController.getDashboardTrends
+);
+router.get(
+  '/analytics/dashboard-alerts',
+  AnalyticsController.getDashboardAlerts
+);
+router.get(
   '/analytics/popular-products',
   AnalyticsController.getProductAnalytics
 ); // alias

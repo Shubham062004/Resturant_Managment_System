@@ -1,5 +1,6 @@
 import { prisma } from '../../config/db';
 import AppError from '../../utils/appError';
+import { getBranchProductIds } from '../../utils/branchMenu';
 
 export class CustomerService {
   /**
@@ -74,7 +75,7 @@ export class CustomerService {
     });
     const branchRating = ratingAgg._avg.rating
       ? parseFloat(ratingAgg._avg.rating.toFixed(1))
-      : 4.5;
+      : null;
 
     const branchDetails = {
       id: branch.id,
@@ -89,11 +90,12 @@ export class CustomerService {
       isOpen,
     };
 
-    // Fetch all active products belonging to this branch's restaurant,
-    // ordered by featured first, then by rating descending
+    // Fetch products available at this branch via BranchMenuItem or restaurant fallback
+    const productIds = await getBranchProductIds(branchId);
+
     const products = await prisma.product.findMany({
       where: {
-        restaurantId: branch.restaurantId,
+        id: { in: productIds },
         isAvailable: true,
       },
       include: {
@@ -138,21 +140,25 @@ export class CustomerService {
 
     const now = new Date();
 
-    // Fetch all globally active coupons that haven't expired and haven't
-    // hit their usage limit
-    const coupons = await prisma.coupon.findMany({
+    const couponsRaw = await prisma.coupon.findMany({
       where: {
         active: true,
         startDate: { lte: now },
         endDate: { gte: now },
         OR: [
-          { usageLimit: null },
-          { usageLimit: { gt: prisma.coupon.fields.usedCount } },
+          { offerType: 'GLOBAL' },
+          { offerType: 'BRANCH', branchId },
+          { offerType: 'SEASONAL', isSeasonal: true },
+          { offerType: 'BIRTHDAY', isBirthday: true },
         ],
       },
       orderBy: [{ discountValue: 'desc' }, { createdAt: 'desc' }],
       take: 20,
     });
+
+    const coupons = couponsRaw.filter(
+      (c) => !c.usageLimit || c.usedCount < c.usageLimit
+    );
 
     return coupons;
   }

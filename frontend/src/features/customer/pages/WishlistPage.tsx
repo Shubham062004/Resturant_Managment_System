@@ -15,20 +15,25 @@ import {
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAppSelector, useAppDispatch } from '../../../app/store';
-import SEO from '../../../shared/components/SEO';
-import { Button } from '../../../shared/components/ui/Button';
-import { useToast } from '../../../shared/components/ui/Toast';
 import {
   useWishlist,
   useClearWishlist,
   useRemoveWishlist,
   useAddAllWishlistToCart,
 } from '../../../api/hooks/useWishlist';
-import { useAddToCart, useCart, useUpdateCartItem, useRemoveCartItem } from '../../cart/store/cartQueries';
-import { setSelectedBranch } from '../store/customerSlice';
+import { useAppSelector, useAppDispatch } from '../../../app/store';
+import SEO from '../../../shared/components/SEO';
+import { Button } from '../../../shared/components/ui/Button';
+import { useToast } from '../../../shared/components/ui/Toast';
+import {
+  useAddToCart,
+  useCart,
+  useUpdateCartItem,
+  useRemoveCartItem,
+} from '../../cart/store/cartQueries';
 import HeartButton from '../components/HeartButton';
 import QuantityStepper from '../components/QuantityStepper';
+import { selectBranch } from '../store/customerSlice';
 
 export const WishlistPage: React.FC = () => {
   const navigate = useNavigate();
@@ -36,7 +41,9 @@ export const WishlistPage: React.FC = () => {
   const toast = useToast();
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { selectedBranch, branches } = useAppSelector((state) => state.customer);
+  const { selectedBranch, branches } = useAppSelector(
+    (state) => state.customer
+  );
 
   // States
   const [searchVal, setSearchVal] = useState('');
@@ -84,16 +91,27 @@ export const WishlistPage: React.FC = () => {
 
     // Category
     if (activeCategory) {
-      result = result.filter((item) => item.product.category.name === activeCategory);
+      result = result.filter(
+        (item) => item.product.category.name === activeCategory
+      );
     }
 
     // Sorting
     if (sortBy === 'newest') {
-      result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      result.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     } else if (sortBy === 'price_asc') {
-      result.sort((a, b) => parseFloat(a.product.basePrice) - parseFloat(b.product.basePrice));
+      result.sort(
+        (a, b) =>
+          parseFloat(a.product.basePrice) - parseFloat(b.product.basePrice)
+      );
     } else if (sortBy === 'price_desc') {
-      result.sort((a, b) => parseFloat(b.product.basePrice) - parseFloat(a.product.basePrice));
+      result.sort(
+        (a, b) =>
+          parseFloat(b.product.basePrice) - parseFloat(a.product.basePrice)
+      );
     } else if (sortBy === 'rating') {
       result.sort((a, b) => b.product.rating - a.product.rating);
     }
@@ -158,12 +176,13 @@ export const WishlistPage: React.FC = () => {
   const handleSwitchBranch = (branchId: string) => {
     const targetBranch = branches.find((b) => b.id === branchId);
     if (targetBranch) {
-      dispatch(setSelectedBranch(targetBranch));
+      dispatch(selectBranch(targetBranch));
       toast.success(`Switched to branch: ${targetBranch.name}`);
     }
   };
 
-  const defaultImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80';
+  const defaultImage =
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80';
 
   return (
     <>
@@ -175,7 +194,6 @@ export const WishlistPage: React.FC = () => {
 
       <div className="min-h-screen bg-[#08070F] pt-28 pb-20 text-white">
         <div className="max-w-6xl mx-auto px-6 space-y-8">
-          
           {/* Dashboard Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
             <div>
@@ -183,7 +201,8 @@ export const WishlistPage: React.FC = () => {
                 My Favorites ❤️
               </h1>
               <p className="text-sm text-neutral-400 mt-2">
-                Manage your saved dishes and order them easily at {selectedBranch?.name || 'your local branch'}.
+                Manage your saved dishes and order them easily at{' '}
+                {selectedBranch?.name || 'your local branch'}.
               </p>
             </div>
             {wishlistItems.length > 0 && (
@@ -193,7 +212,8 @@ export const WishlistPage: React.FC = () => {
                   disabled={availableItemsCount === 0 || addAllToCart.isPending}
                   className="bg-primary hover:bg-primary-hover text-white rounded-2xl py-3 px-5 text-sm font-bold flex items-center gap-2 active:scale-95 transition-transform"
                 >
-                  <ShoppingCart size={16} /> Add Available to Cart ({availableItemsCount})
+                  <ShoppingCart size={16} /> Add Available to Cart (
+                  {availableItemsCount})
                 </Button>
                 <Button
                   variant="ghost"
@@ -211,7 +231,10 @@ export const WishlistPage: React.FC = () => {
             /* Loading Skeletons */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="bg-[#110E1C]/80 border border-white/5 p-5 rounded-3xl h-44 animate-pulse" />
+                <div
+                  key={i}
+                  className="bg-[#110E1C]/80 border border-white/5 p-5 rounded-3xl h-44 animate-pulse"
+                />
               ))}
             </div>
           ) : wishlistItems.length === 0 ? (
@@ -225,9 +248,12 @@ export const WishlistPage: React.FC = () => {
                 <Flame size={48} className="animate-bounce" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-bold font-display">Save dishes you love</h3>
+                <h3 className="text-2xl font-bold font-display">
+                  Save dishes you love
+                </h3>
                 <p className="text-neutral-400 text-sm max-w-sm">
-                  Add your favorite items and order them anytime. Explore our menu and offers.
+                  Add your favorite items and order them anytime. Explore our
+                  menu and offers.
                 </p>
               </div>
               <div className="flex items-center gap-4 pt-2">
@@ -249,13 +275,14 @@ export const WishlistPage: React.FC = () => {
           ) : (
             /* Wishlist Dashboard & Grid view */
             <div className="space-y-6">
-              
               {/* Filters toolbar */}
               <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-[#110E1C]/50 border border-white/5 p-4 rounded-3xl shadow-md">
-                
                 {/* Search */}
                 <div className="relative w-full md:w-80">
-                  <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
+                  <Search
+                    size={16}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400"
+                  />
                   <input
                     type="text"
                     placeholder="Search favorites..."
@@ -267,13 +294,14 @@ export const WishlistPage: React.FC = () => {
 
                 {/* Filter chips & Sort */}
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
-                  
                   {/* Veg / Non-Veg Toggle */}
                   <div className="bg-[#08070F] border border-white/5 p-1 rounded-2xl flex items-center">
                     <button
                       onClick={() => setVegFilter('all')}
                       className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-all ${
-                        vegFilter === 'all' ? 'bg-primary text-white' : 'text-neutral-400 hover:text-white'
+                        vegFilter === 'all'
+                          ? 'bg-primary text-white'
+                          : 'text-neutral-400 hover:text-white'
                       }`}
                     >
                       All
@@ -281,7 +309,9 @@ export const WishlistPage: React.FC = () => {
                     <button
                       onClick={() => setVegFilter('veg')}
                       className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 ${
-                        vegFilter === 'veg' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/10' : 'text-neutral-400 hover:text-white'
+                        vegFilter === 'veg'
+                          ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/10'
+                          : 'text-neutral-400 hover:text-white'
                       }`}
                     >
                       Veg
@@ -289,7 +319,9 @@ export const WishlistPage: React.FC = () => {
                     <button
                       onClick={() => setVegFilter('non-veg')}
                       className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 ${
-                        vegFilter === 'non-veg' ? 'bg-red-500/20 text-red-400 border border-red-500/10' : 'text-neutral-400 hover:text-white'
+                        vegFilter === 'non-veg'
+                          ? 'bg-red-500/20 text-red-400 border border-red-500/10'
+                          : 'text-neutral-400 hover:text-white'
                       }`}
                     >
                       Non-Veg
@@ -335,15 +367,21 @@ export const WishlistPage: React.FC = () => {
                       onChange={(e) => setSortBy(e.target.value)}
                       className="bg-transparent text-white focus:outline-none cursor-pointer"
                     >
-                      <option value="newest" className="bg-[#111019]">Newest Added</option>
-                      <option value="price_asc" className="bg-[#111019]">Price: Low to High</option>
-                      <option value="price_desc" className="bg-[#111019]">Price: High to Low</option>
-                      <option value="rating" className="bg-[#111019]">Highest Rated</option>
+                      <option value="newest" className="bg-[#111019]">
+                        Newest Added
+                      </option>
+                      <option value="price_asc" className="bg-[#111019]">
+                        Price: Low to High
+                      </option>
+                      <option value="price_desc" className="bg-[#111019]">
+                        Price: High to Low
+                      </option>
+                      <option value="rating" className="bg-[#111019]">
+                        Highest Rated
+                      </option>
                     </select>
                   </div>
-
                 </div>
-
               </div>
 
               {/* Wishlist Grid */}
@@ -358,7 +396,9 @@ export const WishlistPage: React.FC = () => {
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                   >
                     {processedItems.map((item) => {
-                      const cartItem = cart?.items.find((c) => c.productId === item.productId);
+                      const cartItem = cart?.items.find(
+                        (c) => c.productId === item.productId
+                      );
                       const cartQty = cartItem?.quantity || 0;
 
                       return (
@@ -371,12 +411,13 @@ export const WishlistPage: React.FC = () => {
                           transition={{ duration: 0.2 }}
                           className="bg-[#110E1C]/80 border border-white/5 rounded-3xl p-5 flex flex-col justify-between shadow-lg relative overflow-hidden group hover:border-white/10 hover:bg-[#151224] transition-all duration-300 gap-4"
                         >
-                          
                           {/* Heart Button Positioned top-right of image */}
-                          <HeartButton productId={item.productId} className="!top-3 !right-3" />
+                          <HeartButton
+                            productId={item.productId}
+                            className="!top-3 !right-3"
+                          />
 
                           <div className="flex gap-4">
-                            
                             {/* Product Image */}
                             <div className="relative w-24 h-24 shrink-0 rounded-2xl overflow-hidden border border-white/5">
                               <img
@@ -396,10 +437,16 @@ export const WishlistPage: React.FC = () => {
                             {/* Details */}
                             <div className="space-y-1">
                               <div className="flex items-center gap-1.5">
-                                <div className={`w-3.5 h-3.5 border flex items-center justify-center rounded-xs shrink-0 ${
-                                  item.product.isVeg ? 'border-emerald-500' : 'border-red-500'
-                                }`}>
-                                  <div className={`w-1 h-1 rounded-full ${item.product.isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                <div
+                                  className={`w-3.5 h-3.5 border flex items-center justify-center rounded-xs shrink-0 ${
+                                    item.product.isVeg
+                                      ? 'border-emerald-500'
+                                      : 'border-red-500'
+                                  }`}
+                                >
+                                  <div
+                                    className={`w-1 h-1 rounded-full ${item.product.isVeg ? 'bg-emerald-500' : 'bg-red-500'}`}
+                                  />
                                 </div>
                                 <span className="text-[10px] font-bold text-neutral-400 bg-white/5 border border-white/5 px-2 py-0.5 rounded-md uppercase tracking-wider">
                                   {item.product.category.name}
@@ -409,40 +456,59 @@ export const WishlistPage: React.FC = () => {
                                 {item.product.name}
                               </h3>
                               <p className="text-[11px] text-neutral-400 flex items-center gap-1">
-                                <MapPin size={11} className="text-neutral-500" />
-                                Saved at: <span className="text-neutral-300 font-medium">{item.savedBranch.name}</span>
+                                <MapPin
+                                  size={11}
+                                  className="text-neutral-500"
+                                />
+                                Saved at:{' '}
+                                <span className="text-neutral-300 font-medium">
+                                  {item.savedBranch.name}
+                                </span>
                               </p>
                               <div className="flex items-center gap-2 text-[10px] text-neutral-500 pt-1">
                                 <span className="flex items-center gap-0.5 text-amber-400">
                                   <Star size={11} className="fill-amber-400" />
-                                  <span className="text-neutral-300 font-bold">{item.product.rating.toFixed(1)}</span>
+                                  <span className="text-neutral-300 font-bold">
+                                    {item.product.rating.toFixed(1)}
+                                  </span>
                                 </span>
                                 <span>•</span>
                                 <span className="text-white font-extrabold text-sm">
-                                  ₹{parseFloat(item.product.basePrice).toFixed(0)}
+                                  ₹
+                                  {parseFloat(item.product.basePrice).toFixed(
+                                    0
+                                  )}
                                 </span>
                               </div>
                             </div>
-
                           </div>
 
                           {/* Branch Availability Banner */}
                           {!item.isAvailableInBranch && (
                             <div className="bg-red-500/10 border border-red-500/15 p-3 rounded-2xl flex flex-col gap-2">
                               <div className="flex items-start gap-2 text-xs text-red-400">
-                                <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+                                <AlertTriangle
+                                  size={14}
+                                  className="shrink-0 mt-0.5"
+                                />
                                 <div>
-                                  <p className="font-bold">Not available in this branch</p>
+                                  <p className="font-bold">
+                                    Not available in this branch
+                                  </p>
                                   <p className="text-[10px] text-neutral-400 leading-normal">
-                                    This item is currently only served at the {item.savedBranch.name} branch.
+                                    This item is currently only served at the{' '}
+                                    {item.savedBranch.name} branch.
                                   </p>
                                 </div>
                               </div>
                               <button
-                                onClick={() => handleSwitchBranch(item.branchId)}
+                                onClick={() =>
+                                  handleSwitchBranch(item.branchId)
+                                }
                                 className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-white text-[10px] font-bold border border-white/5 active:scale-95 transition-all"
                               >
-                                Switch to {item.savedBranch.name} <ExternalLink size={10} />
+                                Switch to {item.savedBranch.name}{' '}
+                                <ExternalLink size={10} />
                               </button>
                             </div>
                           )}
@@ -450,7 +516,9 @@ export const WishlistPage: React.FC = () => {
                           {/* Primary Stepper / Buy Action Panel */}
                           <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-auto">
                             <button
-                              onClick={() => removeWishlist.mutate(item.productId)}
+                              onClick={() =>
+                                removeWishlist.mutate(item.productId)
+                              }
                               className="text-xs text-neutral-500 hover:text-red-400 font-semibold flex items-center gap-1 py-1.5 transition-colors"
                             >
                               <Trash2 size={13} /> Remove
@@ -463,12 +531,18 @@ export const WishlistPage: React.FC = () => {
                                     quantity={cartQty}
                                     onIncrease={(e) => {
                                       e.preventDefault();
-                                      updateCartItem.mutate({ id: cartItem!.id, quantity: cartQty + 1 });
+                                      updateCartItem.mutate({
+                                        id: cartItem!.id,
+                                        quantity: cartQty + 1,
+                                      });
                                     }}
                                     onDecrease={(e) => {
                                       e.preventDefault();
                                       if (cartQty > 1) {
-                                        updateCartItem.mutate({ id: cartItem!.id, quantity: cartQty - 1 });
+                                        updateCartItem.mutate({
+                                          id: cartItem!.id,
+                                          quantity: cartQty - 1,
+                                        });
                                       } else {
                                         removeCartItem.mutate(cartItem!.id);
                                       }
@@ -486,17 +560,14 @@ export const WishlistPage: React.FC = () => {
                               </div>
                             )}
                           </div>
-
                         </motion.div>
                       );
                     })}
                   </motion.div>
                 )}
               </AnimatePresence>
-
             </div>
           )}
-
         </div>
       </div>
     </>

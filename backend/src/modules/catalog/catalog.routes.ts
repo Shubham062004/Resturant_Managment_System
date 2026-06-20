@@ -72,6 +72,8 @@ router.get(
   CatalogController.getProducts
 );
 router.get('/products/featured', CatalogController.getFeaturedProducts);
+router.get('/reviews/top', CatalogController.getTopReviews);
+router.get('/platform-stats', CatalogController.getPlatformStats);
 router.get(
   '/products/slug/:slug',
   optionalAuth,
