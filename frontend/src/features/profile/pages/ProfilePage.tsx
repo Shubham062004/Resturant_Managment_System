@@ -6,8 +6,13 @@ import {
   ShieldCheck,
   Camera,
   LogOut,
+  Heart,
+  Bookmark,
+  Sparkles,
+  ArrowRight,
 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import Alert from '../../../shared/components/ui/Alert';
@@ -17,6 +22,7 @@ import Button from '../../../shared/components/ui/Button';
 import Input from '../../../shared/components/ui/Input';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { updateProfile, logoutAllDevices } from '../../auth/store/authSlice';
+import { useWishlistSummary } from '../../../api/hooks/useWishlist';
 
 export const ProfilePage: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -324,6 +330,10 @@ export const ProfilePage: React.FC = () => {
             </div>
           )}
 
+          {user.role === 'CUSTOMER' && (
+            <WishlistSummaryCard />
+          )}
+
           <div className="glass-panel p-8 rounded-xl">
             <h2 className="text-xl font-bold font-display text-white mb-6 border-b border-border/40 pb-4">
               Personal Details
@@ -381,6 +391,121 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const WishlistSummaryCard: React.FC = () => {
+  const { data: summaryResponse, isLoading } = useWishlistSummary();
+  const summary = summaryResponse?.data;
+
+  if (isLoading) {
+    return (
+      <div className="glass-panel p-6 rounded-xl animate-pulse space-y-4">
+        <div className="h-6 bg-white/5 rounded w-1/4 animate-pulse" />
+        <div className="h-20 bg-white/5 rounded w-full animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!summary || summary.count === 0) {
+    return null;
+  }
+
+  return (
+    <div className="glass-panel p-6 rounded-xl space-y-6 font-sans text-left">
+      <div className="flex items-center justify-between border-b border-white/5 pb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-500">
+            <Heart size={16} className="fill-current" />
+          </div>
+          <h2 className="text-lg font-bold text-white font-display">My Wishlist Summary</h2>
+        </div>
+        <Link
+          to="/wishlist"
+          className="text-xs text-primary hover:text-primary-hover font-bold flex items-center gap-1 transition-all"
+        >
+          View All <ArrowRight size={12} />
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Wishlist Count & Favorite Categories */}
+        <div className="space-y-4">
+          <div>
+            <span className="text-xs text-neutral-400 block font-semibold uppercase tracking-wider">Wishlist Count</span>
+            <span className="text-2xl font-extrabold text-white mt-1 block">
+              {summary.count} {summary.count === 1 ? 'item' : 'items'} saved
+            </span>
+          </div>
+
+          {summary.favoriteCategories && summary.favoriteCategories.length > 0 && (
+            <div>
+              <span className="text-xs text-neutral-400 block font-semibold uppercase tracking-wider mb-2">Favorite Categories</span>
+              <div className="flex flex-wrap gap-2">
+                {summary.favoriteCategories.map((cat) => (
+                  <span
+                    key={cat.name}
+                    className="text-xs font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-xl"
+                  >
+                    {cat.name} ({cat.count})
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Most Saved Item */}
+        {summary.mostSavedItem && (
+          <div className="bg-slate-950/40 border border-white/5 rounded-2xl p-4 flex gap-4 items-center">
+            {summary.mostSavedItem.image && (
+              <img
+                src={summary.mostSavedItem.image}
+                alt={summary.mostSavedItem.name}
+                className="w-16 h-16 rounded-xl object-cover border border-white/5"
+              />
+            )}
+            <div className="space-y-1">
+              <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                <Sparkles size={10} fill="currentColor" /> Most Loved
+              </span>
+              <h4 className="font-bold text-white text-sm line-clamp-1">{summary.mostSavedItem.name}</h4>
+              <p className="text-xs text-neutral-400 font-medium">Saved {summary.mostSavedItem.count} times</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Recently Saved Items Grid */}
+      {summary.recentlySaved && summary.recentlySaved.length > 0 && (
+        <div className="space-y-3 pt-2 border-t border-white/5">
+          <span className="text-xs text-neutral-400 block font-semibold uppercase tracking-wider">Recently Saved Dishes</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {summary.recentlySaved.map((prod) => (
+              <Link
+                key={prod.id}
+                to="/menu"
+                className="bg-slate-950/20 border border-white/5 hover:border-white/10 rounded-2xl p-3 flex flex-col items-center text-center hover:scale-[1.02] transition-all group"
+              >
+                {prod.image ? (
+                  <img
+                    src={prod.image}
+                    alt={prod.name}
+                    className="w-12 h-12 rounded-xl object-cover mb-2 border border-white/5"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-2 text-neutral-500">
+                    <Heart size={16} />
+                  </div>
+                )}
+                <h5 className="text-xs font-bold text-white line-clamp-1 group-hover:text-primary transition-colors">{prod.name}</h5>
+                <span className="text-xs text-primary font-bold mt-1">₹{parseFloat(prod.basePrice).toFixed(0)}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

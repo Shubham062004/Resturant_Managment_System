@@ -132,10 +132,10 @@ export const Footer: React.FC = () => {
             </li>
             <li>
               <Link
-                to="/branches"
+                to="/menu"
                 className="hover:text-primary transition-colors"
               >
-                Find a Restaurant
+                Browse Menu
               </Link>
             </li>
             <li>

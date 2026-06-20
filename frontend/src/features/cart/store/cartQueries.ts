@@ -69,8 +69,50 @@ export const useAddToCart = () => {
       const { data } = await apiClient.post('/cart/items', payload);
       return data.data as Cart;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    onMutate: async (newItem) => {
+      await queryClient.cancelQueries({ queryKey: ['cart'] });
+      const previousCart = queryClient.getQueryData<Cart>(['cart']);
+
+      if (previousCart) {
+        const tempItem: CartItem = {
+          id: `temp-${Date.now()}`,
+          cartId: previousCart.id,
+          productId: newItem.productId,
+          variantId: newItem.variantId || null,
+          quantity: newItem.quantity,
+          price: '0',
+          product: {
+            id: newItem.productId,
+            name: 'Adding...',
+            basePrice: '0',
+            image: '',
+            isVeg: true,
+            isAvailable: true,
+            featured: false,
+            rating: 5,
+            slug: '',
+            gallery: [],
+            variants: [],
+            restaurantId: '',
+            categoryId: '',
+          },
+        };
+
+        queryClient.setQueryData(['cart'], {
+          ...previousCart,
+          items: [...previousCart.items, tempItem],
+        });
+      }
+
+      return { previousCart };
+    },
+    onError: (err, newItem, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(['cart'], context.previousCart);
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['cart'], data);
     },
   });
 };
@@ -82,8 +124,29 @@ export const useUpdateCartItem = () => {
       const { data } = await apiClient.put(`/cart/items/${id}`, { quantity });
       return data.data as Cart;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    onMutate: async ({ id, quantity }) => {
+      await queryClient.cancelQueries({ queryKey: ['cart'] });
+      const previousCart = queryClient.getQueryData<Cart>(['cart']);
+
+      if (previousCart) {
+        const updatedItems = previousCart.items.map((item) =>
+          item.id === id ? { ...item, quantity } : item
+        );
+        queryClient.setQueryData(['cart'], {
+          ...previousCart,
+          items: updatedItems,
+        });
+      }
+
+      return { previousCart };
+    },
+    onError: (err, newVariables, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(['cart'], context.previousCart);
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['cart'], data);
     },
   });
 };
@@ -95,8 +158,27 @@ export const useRemoveCartItem = () => {
       const { data } = await apiClient.delete(`/cart/items/${id}`);
       return data.data as Cart;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ['cart'] });
+      const previousCart = queryClient.getQueryData<Cart>(['cart']);
+
+      if (previousCart) {
+        const updatedItems = previousCart.items.filter((item) => item.id !== id);
+        queryClient.setQueryData(['cart'], {
+          ...previousCart,
+          items: updatedItems,
+        });
+      }
+
+      return { previousCart };
+    },
+    onError: (err, id, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(['cart'], context.previousCart);
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['cart'], data);
     },
   });
 };
@@ -108,8 +190,26 @@ export const useClearCart = () => {
       const { data } = await apiClient.delete('/cart');
       return data.data as Cart;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['cart'] });
+      const previousCart = queryClient.getQueryData<Cart>(['cart']);
+
+      if (previousCart) {
+        queryClient.setQueryData(['cart'], {
+          ...previousCart,
+          items: [],
+        });
+      }
+
+      return { previousCart };
+    },
+    onError: (err, newVariables, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(['cart'], context.previousCart);
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['cart'], data);
     },
   });
 };

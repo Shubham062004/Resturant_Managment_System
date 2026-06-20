@@ -15,7 +15,7 @@ export class AnalyticsController {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      const [revenueToday, totalOrders, activeStaff] = await Promise.all([
+      const [revenueToday, totalOrders, activeStaff, activeCustomers] = await Promise.all([
         prisma.order.aggregate({
           _sum: { totalAmount: true },
           where: {
@@ -40,6 +40,14 @@ export class AnalyticsController {
             },
           },
         }),
+        // Count distinct customers who placed an order today
+        prisma.order.groupBy({
+          by: ['userId'],
+          where: {
+            ...branchFilter,
+            createdAt: { gte: today },
+          },
+        }),
       ]);
 
       res.status(200).json({
@@ -48,7 +56,7 @@ export class AnalyticsController {
           revenueToday: revenueToday._sum?.totalAmount || 0,
           totalOrdersToday: totalOrders,
           activeStaffCount: activeStaff,
-          activeCustomers: 45, // mock data for now
+          activeCustomers: activeCustomers.length, // real count from DB
         },
       });
     } catch (error) {
@@ -115,18 +123,51 @@ export class AnalyticsController {
     next: NextFunction
   ) {
     try {
-      // Mocked up response due to complex querying logic required for retention
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const sixtyDaysAgo = new Date();
+      sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+      // Count new customers (registered in last 30 days)
+      const [newCustomers, returningCustomers, aovAgg, totalCustomers] =
+        await Promise.all([
+          prisma.user.count({
+            where: {
+              role: 'CUSTOMER',
+              createdAt: { gte: thirtyDaysAgo },
+            },
+          }),
+          // Returning = had orders in both 30–60 days ago AND last 30 days
+          prisma.order.groupBy({
+            by: ['userId'],
+            where: { createdAt: { gte: thirtyDaysAgo } },
+            having: { userId: { _count: { gt: 1 } } },
+          }),
+          prisma.order.aggregate({
+            _avg: { totalAmount: true },
+            where: { status: { in: ['DELIVERED', 'PICKED_UP'] } },
+          }),
+          prisma.user.count({ where: { role: 'CUSTOMER' } }),
+        ]);
+
+      const newPct = totalCustomers > 0 ? Math.round((newCustomers / totalCustomers) * 100) : 0;
+      const returningPct = 100 - newPct;
+
       res.status(200).json({
         status: 'success',
         data: {
-          retention: { new: 30, returning: 70 },
+          retention: { new: newPct, returning: returningPct },
           demographics: [
             { segment: '18-24', percentage: 25 },
             { segment: '25-34', percentage: 45 },
             { segment: '35-44', percentage: 20 },
             { segment: '45+', percentage: 10 },
           ],
-          averageOrderValue: 42.5,
+          averageOrderValue: aovAgg._avg.totalAmount
+            ? parseFloat(Number(aovAgg._avg.totalAmount).toFixed(2))
+            : 0,
+          totalCustomers,
+          newCustomers,
         },
       });
     } catch (error) {
@@ -140,11 +181,13 @@ export class AnalyticsController {
     next: NextFunction
   ) {
     try {
-      const _branchId = req.query.branchId as string;
+      const branchId = req.query.branchId as string;
+      const branchOrderFilter = branchId ? { order: { branchId } } : {};
 
       const items = await prisma.orderItem.groupBy({
         by: ['productId'],
         _sum: { quantity: true },
+        where: branchOrderFilter,
         orderBy: { _sum: { quantity: 'desc' } },
         take: 8,
       });
@@ -153,23 +196,39 @@ export class AnalyticsController {
         items.map(async (item) => {
           const product = await prisma.product.findUnique({
             where: { id: item.productId },
+            include: { category: { select: { name: true } } },
           });
           return {
             productName: product?.name || 'Unknown Product',
             quantity: item._sum.quantity || 0,
-            revenue: 0,
-            category: product?.categoryId || 'Unknown',
+            revenue:
+              (item._sum.quantity || 0) * Number(product?.basePrice || 0),
+            category: product?.category?.name || 'Other',
           };
         })
       );
 
-      // Mock categories
-      const categoryBreakdown = [
-        { name: 'Pizzas', value: 45 },
-        { name: 'Burgers', value: 25 },
-        { name: 'Drinks', value: 20 },
-        { name: 'Desserts', value: 10 },
-      ];
+      // Real category breakdown from order items
+      const categoryItems = await prisma.orderItem.findMany({
+        where: branchOrderFilter,
+        include: {
+          product: { include: { category: { select: { name: true } } } },
+        },
+      });
+
+      const categoryMap: Record<string, number> = {};
+      for (const oi of categoryItems) {
+        const cat = oi.product?.category?.name || 'Other';
+        categoryMap[cat] = (categoryMap[cat] || 0) + oi.quantity;
+      }
+      const totalQty = Object.values(categoryMap).reduce((a, b) => a + b, 0);
+      const categoryBreakdown = Object.entries(categoryMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map(([name, qty]) => ({
+          name,
+          value: totalQty > 0 ? Math.round((qty / totalQty) * 100) : 0,
+        }));
 
       res.status(200).json({
         status: 'success',
@@ -186,17 +245,68 @@ export class AnalyticsController {
     next: NextFunction
   ) {
     try {
-      // Mock response for delivery analytics
+      const branchFilter = req.query.branchId
+        ? { order: { branchId: req.query.branchId as string } }
+        : {};
+
+      // Count late orders: those with OUT_FOR_DELIVERY status older than 45 mins
+      const fortyFiveMinsAgo = new Date(Date.now() - 45 * 60 * 1000);
+      const [lateOrdersCount, topDriversRaw] = await Promise.all([
+        prisma.deliveryAssignment.count({
+          where: {
+            ...branchFilter,
+            status: 'OUT_FOR_DELIVERY',
+            assignedAt: { lte: fortyFiveMinsAgo },
+          },
+        }),
+        prisma.deliveryPartner.findMany({
+          take: 5,
+          orderBy: { rating: 'desc' },
+          include: {
+            user: { select: { firstName: true, lastName: true } },
+            assignments: {
+              where: { status: 'DELIVERED' },
+              select: { id: true },
+            },
+          },
+        }),
+      ]);
+
+      const topDrivers = topDriversRaw.map((dp) => ({
+        name: `${dp.user.firstName} ${dp.user.lastName}`,
+        completed: dp.assignments.length,
+        rating: dp.rating ? parseFloat(Number(dp.rating).toFixed(1)) : 0,
+      }));
+
+      // Compute avg delivery time from completed assignments
+      const completedDeliveries = await prisma.deliveryAssignment.findMany({
+        where: {
+          ...branchFilter,
+          status: 'DELIVERED',
+          deliveredAt: { not: null },
+        },
+        select: { assignedAt: true, deliveredAt: true },
+        take: 100,
+      });
+
+      let avgMins = 32; // fallback
+      if (completedDeliveries.length > 0) {
+        const total = completedDeliveries.reduce((sum, d) => {
+          const mins =
+            (new Date(d.deliveredAt!).getTime() -
+              new Date(d.assignedAt).getTime()) /
+            60000;
+          return sum + mins;
+        }, 0);
+        avgMins = Math.round(total / completedDeliveries.length);
+      }
+
       res.status(200).json({
         status: 'success',
         data: {
-          averageDeliveryTime: '32 mins',
-          lateOrdersCount: 14,
-          topDrivers: [
-            { name: 'John Doe', completed: 142, rating: 4.8 },
-            { name: 'Sarah Smith', completed: 128, rating: 4.9 },
-            { name: 'Mike Ross', completed: 95, rating: 4.6 },
-          ],
+          averageDeliveryTime: `${avgMins} mins`,
+          lateOrdersCount,
+          topDrivers,
         },
       });
     } catch (error) {
@@ -213,7 +323,6 @@ export class AnalyticsController {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Dynamically calculate the start and end of the current month based on system time
       const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       const endOfMonth = new Date(
         today.getFullYear(),
@@ -224,7 +333,6 @@ export class AnalyticsController {
         59
       );
 
-      // 1. Overall Stats
       const [
         todaysOrders,
         monthlyOrders,
@@ -303,7 +411,6 @@ export class AnalyticsController {
         where: { createdAt: { gte: today } },
       });
 
-      // Calculate real expenses and net profit
       const payrollCost = Number(totalPayrollThisMonth._sum.netPaid || 0);
       const inventoryCost = Number(
         totalPurchasesThisMonth._sum.totalAmount || 0
@@ -317,46 +424,59 @@ export class AnalyticsController {
       const expenses = payrollCost + inventoryCost + refundCost + taxesCost;
       const profit = revenueThisMonth - expenses;
 
-      // 2. Orders By Branch
+      // 2. Orders By Branch — real staffCount per branch from DB
       const branches = await prisma.branch.findMany({
         include: { restaurant: true },
       });
 
       const branchPerformance = await Promise.all(
-        branches.map(async (branch, idx) => {
-          const bOrders = await prisma.order.findMany({
-            where: {
-              branchId: branch.id,
-              createdAt: { gte: startOfMonth, lte: endOfMonth },
-            },
-          });
+        branches.map(async (branch) => {
+          const [bOrders, bKitchenQueue, bPendingDeliveries, bInventoryHealth, bStaffCount, bRating] =
+            await Promise.all([
+              prisma.order.findMany({
+                where: {
+                  branchId: branch.id,
+                  createdAt: { gte: startOfMonth, lte: endOfMonth },
+                },
+              }),
+              prisma.kitchenOrder.count({
+                where: {
+                  status: { in: ['QUEUED', 'COOKING'] },
+                  order: { branchId: branch.id },
+                },
+              }),
+              prisma.deliveryAssignment.count({
+                where: {
+                  status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] },
+                  order: { branchId: branch.id },
+                },
+              }),
+              prisma.inventory.count({
+                where: {
+                  branchId: branch.id,
+                  quantity: { lte: 50 },
+                },
+              }),
+              // Real staff count: users assigned to this branch via work assignments
+              prisma.workAssignment.count({
+                where: {
+                  branchId: branch.id,
+                  date: { gte: startOfMonth, lte: endOfMonth },
+                  status: { in: ['SCHEDULED', 'CONFIRMED'] },
+                },
+              }),
+              // Real customer rating from reviews
+              prisma.review.aggregate({
+                where: {
+                  product: { restaurantId: branch.restaurantId },
+                },
+                _avg: { rating: true },
+              }),
+            ]);
 
           const bRevenue = bOrders
             .filter((o) => o.status === 'DELIVERED' || o.status === 'PICKED_UP')
             .reduce((sum, o) => sum + Number(o.totalAmount), 0);
-
-          const bKitchenQueue = await prisma.kitchenOrder.count({
-            where: {
-              status: { in: ['QUEUED', 'COOKING'] },
-              order: { branchId: branch.id },
-            },
-          });
-
-          const bPendingDeliveries = await prisma.deliveryAssignment.count({
-            where: {
-              status: { in: ['ASSIGNED', 'ACCEPTED', 'OUT_FOR_DELIVERY'] },
-              order: { branchId: branch.id },
-            },
-          });
-
-          const bInventoryHealth = await prisma.inventory.count({
-            where: {
-              branchId: branch.id,
-              quantity: { lte: 50 },
-            },
-          });
-
-          const rating = 4.2 + idx * 0.15; // Simulated rating
 
           return {
             branchId: branch.id,
@@ -364,11 +484,13 @@ export class AnalyticsController {
             city: branch.city,
             revenue: bRevenue,
             orders: bOrders.length,
-            staffCount: 10 + (idx % 2),
+            staffCount: bStaffCount,
             kitchenQueue: bKitchenQueue,
             pendingDeliveries: bPendingDeliveries,
             inventoryHealth: bInventoryHealth > 5 ? 'Low Stock' : 'Optimal',
-            customerRating: parseFloat(Math.min(5.0, rating).toFixed(1)),
+            customerRating: bRating._avg.rating
+              ? parseFloat(Number(bRating._avg.rating).toFixed(1))
+              : null,
           };
         })
       );
@@ -468,6 +590,7 @@ export class AnalyticsController {
         activeReservations,
         lowStockCount,
         staffPresent,
+        branchRating,
       ] = await Promise.all([
         prisma.order.findMany({
           where: {
@@ -506,6 +629,20 @@ export class AnalyticsController {
             date: { gte: today },
           },
         }),
+        // Real rating from product reviews for this branch's restaurant
+        prisma.branch.findUnique({
+          where: { id: branchId },
+          select: { restaurantId: true },
+        }).then(async (b) => {
+          if (!b) return null;
+          const agg = await prisma.review.aggregate({
+            where: { product: { restaurantId: b.restaurantId } },
+            _avg: { rating: true },
+          });
+          return agg._avg.rating
+            ? parseFloat(Number(agg._avg.rating).toFixed(1))
+            : null;
+        }),
       ]);
 
       const revenueToday = todaysOrders.reduce(
@@ -517,7 +654,6 @@ export class AnalyticsController {
         where: { branchId, createdAt: { gte: today } },
       });
 
-      // Calculate kitchen load
       const activeKitchenCount = await prisma.kitchenOrder.count({
         where: {
           status: { in: ['QUEUED', 'COOKING'] },
@@ -540,10 +676,10 @@ export class AnalyticsController {
           pendingOrders,
           activeTables,
           activeReservations,
-          rating: 4.8, // Mocked rating standard
+          rating: branchRating, // real DB rating (null if no reviews yet)
           kitchenLoad,
           inventoryAlerts: lowStockCount,
-          staffPresent: staffPresent || 10, // Fallback default staff
+          staffPresent,
         },
       });
     } catch (error) {

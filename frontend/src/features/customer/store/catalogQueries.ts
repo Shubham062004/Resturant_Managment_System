@@ -413,3 +413,89 @@ export const useFavorites = (enabled = true) => {
     },
   });
 };
+
+// 13. Fetch Customer Delhi Branches
+export const useCustomerBranches = () => {
+  return useQuery<{ success: boolean; data: Branch[]; message: string }>({
+    queryKey: ['customer', 'branches'],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/customer/branches');
+      return data;
+    },
+  });
+};
+
+// 14. Fetch Customer Branch Menu
+export const useCustomerMenu = (branchId: string) => {
+  return useQuery<{
+    success: boolean;
+    data: {
+      branch: {
+        id: string;
+        name: string;
+        address: string;
+        city: string;
+        state: string;
+        openingTime: string;
+        closingTime: string;
+        rating: number;
+        deliveryTime: string;
+        isOpen: boolean;
+      };
+      menu: Product[];
+    };
+    message: string;
+  }>({
+    queryKey: ['customer', 'menu', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/customer/menu', {
+        params: { branchId },
+      });
+      return data;
+    },
+    enabled: !!branchId,
+  });
+};
+
+// 15. Fetch Customer Branch Offers
+export const useCustomerOffers = (branchId: string) => {
+  return useQuery<{
+    success: boolean;
+    data: any[];
+    message: string;
+  }>({
+    queryKey: ['customer', 'offers', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/customer/offers', {
+        params: { branchId },
+      });
+      return data;
+    },
+    enabled: !!branchId,
+  });
+};
+
+// 16. Fetch Categories (for Landing Page and Menu)
+export const useCategories = (filters?: {
+  restaurantId?: string;
+  limit?: number;
+}) => {
+  return useQuery<{
+    success: boolean;
+    data: Category[];
+    meta: { total: number; page: number; limit: number; totalPages: number };
+    message: string;
+  }>({
+    queryKey: ['categories', filters],
+    queryFn: async () => {
+      const cleanParams: any = { ...filters };
+      if (!cleanParams.restaurantId) delete cleanParams.restaurantId;
+      const { data } = await apiClient.get('/catalog/categories', {
+        params: cleanParams,
+      });
+      return data;
+    },
+    staleTime: 5 * 60 * 1000, // 5 min cache — categories rarely change
+  });
+};
+

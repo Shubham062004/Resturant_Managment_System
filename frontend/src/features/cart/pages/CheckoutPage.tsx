@@ -8,7 +8,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
@@ -27,19 +27,25 @@ type CheckoutStep = 'address' | 'coupon' | 'payment';
 
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: cart, isLoading } = useCart(isAuthenticated);
   const { data: addresses = [] } = useAddresses(isAuthenticated);
   const validateCoupon = useValidateCoupon();
 
-  const [step, setStep] = useState<CheckoutStep>('address');
+  const checkoutState = location.state || {};
+  const orderType = checkoutState.orderType || 'DELIVERY';
+  const tableNumber = checkoutState.tableNumber || '';
+  const isBirthdayApplied = checkoutState.isBirthdayApplied || false;
+
+  const [step, setStep] = useState<CheckoutStep>(
+    orderType === 'DELIVERY' ? 'address' : 'payment'
+  );
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
-  const [couponCode, setCouponCode] = useState('');
-  const [discountAmount, setDiscountAmount] = useState(0);
-  const [paymentProvider, setPaymentProvider] = useState<
-    'CARD' | 'UPI' | 'COD'
-  >('CARD');
+  const [couponCode, setCouponCode] = useState<string>(checkoutState.couponCode || '');
+  const [discountAmount, setDiscountAmount] = useState<number>(checkoutState.discount || 0);
+  const [paymentProvider, setPaymentProvider] = useState<'CARD' | 'UPI' | 'COD'>('CARD');
 
   if (!isAuthenticated) {
     navigate('/login', { state: { from: { pathname: '/checkout' } } });
@@ -62,7 +68,7 @@ export const CheckoutPage: React.FC = () => {
           title="Your cart is empty"
           description="Looks like you haven't added anything to your cart yet."
           actionLabel="Browse Menu"
-          onAction={() => navigate('/restaurants')}
+          onAction={() => navigate('/menu')}
         />
       </div>
     );
@@ -72,12 +78,11 @@ export const CheckoutPage: React.FC = () => {
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
     0
   );
-  const taxAmount = subtotal * 0.05; // 5% GST
-  const deliveryFee = subtotal > 500 ? 0 : 40; // Free delivery above 500
-  const total = Math.max(
-    0,
-    subtotal + taxAmount + deliveryFee - discountAmount
-  );
+
+  const deliveryFee = orderType === 'DELIVERY' ? (subtotal >= 200 ? 0 : 20) : 0;
+  const taxableAmount = Math.max(0, subtotal - discountAmount);
+  const taxAmount = taxableAmount * 0.05; // 5% GST
+  const total = Math.max(0, taxableAmount + deliveryFee + taxAmount);
 
   const defaultAddress = addresses.find((a) => a.isDefault) || addresses[0];
 
@@ -105,6 +110,8 @@ export const CheckoutPage: React.FC = () => {
     }, 2000);
   };
 
+  const steps: CheckoutStep[] = orderType === 'DELIVERY' ? ['address', 'coupon', 'payment'] : ['payment'];
+
   return (
     <>
       <SEO
@@ -121,47 +128,47 @@ export const CheckoutPage: React.FC = () => {
               </h1>
               <p className="text-neutral-400 text-sm mt-2 flex items-center gap-1">
                 <ShieldCheck size={16} className="text-emerald-500" />{' '}
-                End-to-end encrypted payment
+                {orderType === 'DELIVERY' && 'End-to-end encrypted delivery payment'}
+                {orderType === 'TAKEAWAY' && 'Self-Pickup Order details'}
+                {orderType === 'DINE_IN' && `Table #${tableNumber} Dining details`}
               </p>
             </div>
 
             {/* Stepper */}
             <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto scrollbar-hide py-2">
-              {(['address', 'coupon', 'payment'] as CheckoutStep[]).map(
-                (s, i) => (
-                  <React.Fragment key={s}>
-                    <button
-                      type="button"
-                      onClick={() => setStep(s)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
-                        step === s
-                          ? 'bg-primary/20 text-primary border border-primary/30 shadow-lg'
-                          : 'bg-white/5 text-neutral-400 border border-white/5 hover:text-white'
-                      }`}
+              {steps.map((s, i) => (
+                <React.Fragment key={s}>
+                  <button
+                    type="button"
+                    onClick={() => setStep(s)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                      step === s
+                        ? 'bg-primary/20 text-primary border border-primary/30 shadow-lg'
+                        : 'bg-white/5 text-neutral-400 border border-white/5 hover:text-white'
+                    }`}
+                  >
+                    <span
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === s ? 'bg-primary text-white' : 'bg-white/10 text-neutral-500'}`}
                     >
-                      <span
-                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${step === s ? 'bg-primary text-white' : 'bg-white/10 text-neutral-500'}`}
-                      >
-                        {i + 1}
-                      </span>
-                      {s}
-                    </button>
-                    {i < 2 && (
-                      <ChevronRight
-                        size={14}
-                        className="text-neutral-700 shrink-0"
-                      />
-                    )}
-                  </React.Fragment>
-                )
-              )}
+                      {i + 1}
+                    </span>
+                    {s}
+                  </button>
+                  {i < steps.length - 1 && (
+                    <ChevronRight
+                      size={14}
+                      className="text-neutral-700 shrink-0"
+                    />
+                  )}
+                </React.Fragment>
+              ))}
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Left Column: Steps */}
             <div className="lg:col-span-7 space-y-8">
-              {step === 'address' && (
+              {step === 'address' && orderType === 'DELIVERY' && (
                 <section className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 sm:p-8 space-y-6 animate-fade-in">
                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -242,7 +249,7 @@ export const CheckoutPage: React.FC = () => {
                 </section>
               )}
 
-              {step === 'coupon' && (
+              {step === 'coupon' && orderType === 'DELIVERY' && (
                 <section className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 sm:p-8 space-y-6 animate-fade-in">
                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -349,7 +356,7 @@ export const CheckoutPage: React.FC = () => {
 
                   <div className="pt-4 flex justify-between items-center border-t border-white/5">
                     <button
-                      onClick={() => setStep('coupon')}
+                      onClick={() => orderType === 'DELIVERY' ? setStep('coupon') : navigate('/cart')}
                       className="text-sm text-neutral-400 hover:text-white transition-colors"
                     >
                       Back
@@ -397,6 +404,29 @@ export const CheckoutPage: React.FC = () => {
                       </p>
                     </div>
                   ))}
+
+                  {/* Birthday Special Cake */}
+                  {isBirthdayApplied && (
+                    <div className="flex justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <span className="text-xs font-bold bg-white/10 px-2 py-0.5 rounded text-neutral-300 shrink-0">
+                          1x
+                        </span>
+                        <div>
+                          <p className="text-sm font-semibold text-white line-clamp-1 flex items-center gap-1.5">
+                            <span>Celebration Cake</span>
+                            <span className="text-[9px] bg-primary/20 text-primary border border-primary/20 px-1 py-0.5 rounded">Free</span>
+                          </p>
+                          <p className="text-xs text-neutral-500 font-medium">
+                            Birthday Special
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-sm font-bold text-emerald-400 shrink-0">
+                        ₹0
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-3 pt-6 border-t border-white/5 text-sm">

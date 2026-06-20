@@ -67,7 +67,7 @@ export const FavoritesPage: React.FC = () => {
               on any product to save it here for later.
             </p>
             <button
-              onClick={() => navigate('/restaurants')}
+              onClick={() => navigate('/menu')}
               className="px-6 py-3 bg-primary text-white rounded-xl text-sm font-bold"
             >
               Discover Menu

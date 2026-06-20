@@ -16,11 +16,17 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../app/store';
 import { useToast } from '../../../shared/components/ui/Toast';
-import { useAddToCart } from '../../cart/store/cartQueries';
+import {
+  useAddToCart,
+  useCart,
+  useUpdateCartItem,
+  useRemoveCartItem,
+} from '../../cart/store/cartQueries';
 import FoodCard from '../components/FoodCard';
+import QuantityStepper from '../components/QuantityStepper';
+import HeartButton from '../components/HeartButton';
 import {
   useProductBySlug,
-  useToggleFavorite,
   useTrackRecommendationClick,
   useCreateReview,
   useUpdateReview,
@@ -35,6 +41,15 @@ export const ProductDetailPage: React.FC = () => {
   const favoritedIds = useAppSelector((state) => state.favorite.favoritedIds);
   const toast = useToast();
   const addToCart = useAddToCart();
+  const updateCartItem = useUpdateCartItem();
+  const removeCartItem = useRemoveCartItem();
+  const { data: cart } = useCart(isAuthenticated);
+
+  // Find if this product is in the cart matching the selected variant
+  const cartItem = cart?.items.find(
+    (i) => i.productId === product?.id && (selectedVariantId ? i.variantId === selectedVariantId : !i.variantId)
+  );
+  const cartQty = cartItem?.quantity || 0;
 
   const {
     data: response,
@@ -42,7 +57,6 @@ export const ProductDetailPage: React.FC = () => {
     isError,
     refetch,
   } = useProductBySlug(slug || '');
-  const toggleFavoriteMutation = useToggleFavorite();
   const trackRecommendationClickMutation = useTrackRecommendationClick();
   const createReviewMutation = useCreateReview();
   const updateReviewMutation = useUpdateReview();
@@ -60,7 +74,6 @@ export const ProductDetailPage: React.FC = () => {
 
   const product = response?.data;
   const recommendations = response?.recommendations || [];
-  const isFavorited = product ? !!favoritedIds[product.id] : false;
 
   useEffect(() => {
     if (product) {
@@ -120,9 +133,7 @@ export const ProductDetailPage: React.FC = () => {
   );
   const displayPrice = activeVariant ? activeVariant.price : product.basePrice;
 
-  const handleFavoriteToggle = () => {
-    toggleFavoriteMutation.mutate(product.id);
-  };
+  // removed old handleFavoriteToggle helper
 
   const handleRecClick = (recSlug: string, recId: string) => {
     trackRecommendationClickMutation.mutate(
@@ -262,6 +273,7 @@ export const ProductDetailPage: React.FC = () => {
           {/* Left Column: Image Gallery */}
           <div className="space-y-6">
             <div className="aspect-square rounded-3xl overflow-hidden bg-neutral-900 relative shadow-2xl">
+              <HeartButton productId={product.id} className="!top-6 !right-6" size={24} />
               <img
                 src={
                   activeImage ||
@@ -319,19 +331,6 @@ export const ProductDetailPage: React.FC = () => {
                 <span className="text-xs font-bold text-primary uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full">
                   {product.category?.name || 'Category'}
                 </span>
-                <button
-                  onClick={handleFavoriteToggle}
-                  className={`p-3 rounded-full transition-all ${
-                    isFavorited
-                      ? 'bg-red-500/10 text-red-500'
-                      : 'bg-white/5 text-neutral-400 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <Heart
-                    size={20}
-                    className={isFavorited ? 'fill-current' : ''}
-                  />
-                </button>
               </div>
 
               <h1 className="text-3xl md:text-5xl font-bold font-display text-white tracking-tight leading-tight">
@@ -435,29 +434,55 @@ export const ProductDetailPage: React.FC = () => {
                 </p>
               </div>
 
-              <button
-                disabled={addToCart.isPending}
-                onClick={async () => {
-                  if (!isAuthenticated) {
-                    toast.warning('Please sign in to order.');
-                    navigate('/login');
-                    return;
-                  }
-                  try {
-                    await addToCart.mutateAsync({
-                      productId: product.id,
-                      variantId: selectedVariantId || undefined,
-                      quantity: 1,
-                    });
-                    toast.success('Added to cart successfully!');
-                  } catch {
-                    toast.error('Could not add to cart.');
-                  }
-                }}
-                className="h-14 px-8 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center justify-center min-w-[160px]"
-              >
-                {addToCart.isPending ? 'Adding...' : 'Add to Order'}
-              </button>
+              {cartQty > 0 ? (
+                <QuantityStepper
+                  quantity={cartQty}
+                  onIncrease={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (cartItem) {
+                      await updateCartItem.mutateAsync({ id: cartItem.id, quantity: cartQty + 1 });
+                    }
+                  }}
+                  onDecrease={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (cartItem) {
+                      if (cartQty > 1) {
+                        await updateCartItem.mutateAsync({ id: cartItem.id, quantity: cartQty - 1 });
+                      } else {
+                        await removeCartItem.mutateAsync(cartItem.id);
+                      }
+                    }
+                  }}
+                  isLoading={updateCartItem.isPending || removeCartItem.isPending}
+                  size="lg"
+                />
+              ) : (
+                <button
+                  disabled={addToCart.isPending}
+                  onClick={async () => {
+                    if (!isAuthenticated) {
+                      toast.warning('Please sign in to order.');
+                      navigate('/login');
+                      return;
+                    }
+                    try {
+                      await addToCart.mutateAsync({
+                        productId: product.id,
+                        variantId: selectedVariantId || undefined,
+                        quantity: 1,
+                      });
+                      toast.success('Added to cart successfully!');
+                    } catch {
+                      toast.error('Could not add to cart.');
+                    }
+                  }}
+                  className="h-14 px-8 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-sm shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 flex items-center justify-center min-w-[160px]"
+                >
+                  {addToCart.isPending ? 'Adding...' : 'Add to Order'}
+                </button>
+              )}
             </div>
           </div>
         </div>

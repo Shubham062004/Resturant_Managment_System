@@ -26,9 +26,7 @@ const AboutPage = React.lazy(
 const ContactPage = React.lazy(
   () => import('../features/customer/pages/ContactPage')
 );
-const BranchesPage = React.lazy(
-  () => import('../features/customer/pages/BranchesPage')
-);
+// Replaced branches page
 const SearchPage = React.lazy(
   () => import('../features/customer/pages/SearchPage')
 );
@@ -38,8 +36,11 @@ const OffersPage = React.lazy(
 const FavoritesPage = React.lazy(
   () => import('../features/customer/pages/FavoritesPage')
 );
-const OrderListPage = React.lazy(
-  () => import('../features/orders/pages/OrderListPage')
+const CustomerOrdersPage = React.lazy(
+  () => import('../features/customer/pages/OrdersPage')
+);
+const WishlistPage = React.lazy(
+  () => import('../features/customer/pages/WishlistPage')
 );
 const OrderTrackingPage = React.lazy(
   () => import('../features/orders/pages/OrderTrackingPage')
@@ -211,20 +212,8 @@ const OrganizationManagementPage = React.lazy(
 );
 
 // Menu Catalog Pages
-const RestaurantsPage = React.lazy(
-  () => import('../features/customer/pages/RestaurantsPage')
-);
-const RestaurantDetailPage = React.lazy(
-  () => import('../features/customer/pages/RestaurantDetailPage')
-);
-const ProductDetailPage = React.lazy(
-  () => import('../features/customer/pages/ProductDetailPage')
-);
-const CategoryDetailPage = React.lazy(
-  () => import('../features/customer/pages/CategoryDetailPage')
-);
-const AdminPlaceholderPage = React.lazy(
-  () => import('../features/customer/pages/AdminPlaceholderPage')
+const MenuPage = React.lazy(
+  () => import('../features/customer/pages/MenuPage')
 );
 
 // Cart & Checkout
@@ -367,23 +356,13 @@ const AppRouter = () => {
               <Route path="/" element={<LandingPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/branches" element={<BranchesPage />} />
+              <Route path="/branches" element={<Navigate to="/menu" replace />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/offers" element={<OffersPage />} />
 
               {/* Menu Catalog Routes */}
-              <Route path="/menu" element={<RestaurantsPage />} />
-              <Route path="/restaurants" element={<RestaurantsPage />} />
-              <Route
-                path="/restaurants/:slug"
-                element={<RestaurantDetailPage />}
-              />
-              <Route path="/product/:slug" element={<ProductDetailPage />} />
-              <Route path="/products/:slug" element={<ProductDetailPage />} />
-              <Route
-                path="/categories/:slug"
-                element={<CategoryDetailPage />}
-              />
+              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/restaurants" element={<Navigate to="/menu" replace />} />
 
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
@@ -406,7 +385,8 @@ const AppRouter = () => {
               >
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/favorites" element={<FavoritesPage />} />
-                <Route path="/orders" element={<OrderListPage />} />
+                <Route path="/orders" element={<CustomerOrdersPage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/addresses" element={<AddressesPage />} />
               </Route>
 

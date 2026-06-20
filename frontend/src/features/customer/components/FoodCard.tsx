@@ -11,8 +11,9 @@ import {
   useRemoveCartItem,
   useCart,
 } from '../../cart/store/cartQueries';
-import { useToggleFavorite } from '../store/catalogQueries';
 import type { Product } from '../store/catalogQueries';
+import QuantityStepper from './QuantityStepper';
+import HeartButton from './HeartButton';
 
 interface FoodCardProps {
   product: Product;
@@ -27,14 +28,10 @@ const FoodCard: React.FC<FoodCardProps> = ({
 }) => {
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { favoritedIds } = useAppSelector((state) => state.favorite);
-  const isFavorite = !!favoritedIds[product.id];
-
   const { data: cart } = useCart(isAuthenticated);
   const addToCart = useAddToCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
-  const toggleFav = useToggleFavorite();
 
   // Find this product in the cart
   const cartItem = cart?.items.find((i) => i.productId === product.id);
@@ -73,15 +70,7 @@ const FoodCard: React.FC<FoodCardProps> = ({
     }
   };
 
-  const handleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isAuthenticated) {
-      toast.warning('Please login to save favorites');
-      return;
-    }
-    toggleFav.mutate(product.id);
-  };
+  // removed old handleFavorite helper
 
   const price = parseFloat(product.basePrice);
 
@@ -129,18 +118,7 @@ const FoodCard: React.FC<FoodCardProps> = ({
             </div>
 
             {/* Favorite button */}
-            <button
-              onClick={handleFavorite}
-              className="absolute top-3 right-3 p-2 rounded-full bg-black/40 backdrop-blur-sm hover:bg-black/60 transition-colors"
-              aria-label="Toggle favorite"
-            >
-              <Heart
-                size={16}
-                className={
-                  isFavorite ? 'text-red-500 fill-red-500' : 'text-white/80'
-                }
-              />
-            </button>
+            <HeartButton productId={product.id} />
 
             {/* Rating + Prep time bottom overlay */}
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
@@ -181,23 +159,13 @@ const FoodCard: React.FC<FoodCardProps> = ({
               {showAddToCart && (
                 <div className="relative z-10">
                   {quantity > 0 ? (
-                    <div className="flex items-center gap-0 bg-primary rounded-xl overflow-hidden shadow-lg shadow-primary/20">
-                      <button
-                        onClick={handleDecrease}
-                        className="px-2.5 py-1.5 hover:bg-primary-hover transition-colors text-white"
-                      >
-                        <Minus size={14} />
-                      </button>
-                      <span className="px-2 py-1.5 text-white text-sm font-bold min-w-[28px] text-center">
-                        {quantity}
-                      </span>
-                      <button
-                        onClick={handleIncrease}
-                        className="px-2.5 py-1.5 hover:bg-primary-hover transition-colors text-white"
-                      >
-                        <Plus size={14} />
-                      </button>
-                    </div>
+                    <QuantityStepper
+                      quantity={quantity}
+                      onIncrease={handleIncrease}
+                      onDecrease={handleDecrease}
+                      isLoading={updateItem.isPending || removeItem.isPending}
+                      size="sm"
+                    />
                   ) : (
                     <button
                       onClick={handleAdd}

@@ -30,6 +30,7 @@ import superAdminRouter from './modules/super-admin/superadmin.routes';
 import tableRouter from './modules/tables/table.routes';
 import usersRouter from './modules/users/users.routes';
 import waitlistRouter from './modules/waitlist/waitlist.routes';
+import customerRouter from './modules/customer/customer.routes';
 import healthRouter from './routes/health.routes';
 import AppError from './utils/appError';
 import logger from './utils/logger';
@@ -97,6 +98,8 @@ app.use('/api/v1/super-admin', superAdminRouter);
 app.use('/api/v1/notifications', notificationRouter);
 app.use('/api/v1/ai', aiRouter);
 app.use('/api/v1/history', historyRouter);
+app.use('/api/v1/customer', customerRouter);
+app.use('/api/customer', customerRouter);
 
 // 4. Root Welcome Route
 app.get('/', (req, res) => {

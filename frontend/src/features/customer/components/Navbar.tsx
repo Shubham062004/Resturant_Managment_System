@@ -10,6 +10,8 @@ import {
   LogOut,
   User,
   ShoppingBag,
+  ClipboardList,
+  Heart,
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -20,6 +22,8 @@ import { useToast } from '../../../shared/components/ui/Toast';
 import { slideLeft } from '../../../shared/theme/animations';
 import { logout } from '../../auth/store/authSlice';
 import { useCart } from '../../cart/store/cartQueries';
+import { useWishlistSummary } from '../../../api/hooks/useWishlist';
+import BranchSelector from './BranchSelector';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,15 +36,17 @@ export const Navbar: React.FC = () => {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const { selectedBranch } = useAppSelector((state) => state.customer);
   const { data: cart } = useCart(isAuthenticated);
+  const { data: wishlistSummary } = useWishlistSummary(isAuthenticated);
 
-  const cartItemCount = cart?.items?.length || 0;
+  const cartItemCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const wishlistCount = wishlistSummary?.data?.count || 0;
 
   const navLinks = [
     { name: 'Home', path: '/', icon: Home },
-    { name: 'Menu', path: '/restaurants', icon: Flame },
+    { name: 'Menu', path: '/menu', icon: Flame },
     { name: 'Offers', path: '/offers', icon: Tag },
-    { name: 'Branches', path: '/branches', icon: MapPin },
-    { name: 'Search', path: '/search', icon: Search },
+    { name: 'Orders', path: '/orders', icon: ClipboardList },
+    { name: 'Wishlist', path: '/wishlist', icon: Heart },
   ];
 
   useEffect(() => {
@@ -88,17 +94,7 @@ export const Navbar: React.FC = () => {
           <span className="text-2xl">ABC</span>
         </Link>
 
-        {selectedBranch && (
-          <Link
-            to="/branches"
-            className="hidden lg:flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-emerald-500/20 transition-all duration-200"
-          >
-            <MapPin size={12} />
-            <span>
-              Delivering to: {selectedBranch.name.replace('ABC - ', '')}
-            </span>
-          </Link>
-        )}
+        <BranchSelector />
       </div>
 
       {/* Links navigation */}
@@ -109,11 +105,16 @@ export const Navbar: React.FC = () => {
             <Link
               key={link.name}
               to={link.path}
-              className={`font-semibold text-sm transition-colors relative ${
+              className={`font-semibold text-sm transition-colors relative flex items-center gap-1.5 ${
                 isActive ? 'text-primary' : 'text-neutral-400 hover:text-white'
               }`}
             >
               {link.name}
+              {link.name === 'Wishlist' && wishlistCount > 0 && (
+                <span className="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  {wishlistCount}
+                </span>
+              )}
               {isActive && (
                 <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
               )}
@@ -124,6 +125,15 @@ export const Navbar: React.FC = () => {
 
       {/* Call to Actions / User profile */}
       <div className="hidden md:flex items-center gap-5">
+        {/* Search Icon */}
+        <Link
+          to="/search"
+          className="p-2 text-neutral-400 hover:text-white transition-colors"
+          title="Search"
+        >
+          <Search size={22} />
+        </Link>
+
         {/* Cart Icon */}
         <Link
           to="/cart"
@@ -184,6 +194,10 @@ export const Navbar: React.FC = () => {
 
       {/* Hamburger drawer trigger */}
       <div className="flex md:hidden items-center gap-4">
+        <Link to="/search" className="text-neutral-300">
+          <Search size={22} />
+        </Link>
+
         <Link to="/cart" className="relative text-neutral-300">
           <ShoppingBag size={22} />
           {cartItemCount > 0 && (
@@ -219,30 +233,27 @@ export const Navbar: React.FC = () => {
               exit="exit"
               className="fixed right-0 top-20 bottom-0 w-[280px] bg-[#111019] border-l border-white/5 shadow-2xl z-30 md:hidden flex flex-col p-6 space-y-6"
             >
-              {selectedBranch && (
-                <Link
-                  to="/branches"
-                  className="flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-400 text-xs font-bold py-2.5 rounded-xl border border-emerald-500/20"
-                >
-                  <MapPin size={14} />
-                  Delivering to: {selectedBranch.name.split(' ')[0]}
-                </Link>
-              )}
-
               <nav className="flex flex-col gap-2 flex-grow">
                 {navLinks.map((link) => {
                   const isActive = location.pathname === link.path;
                   return (
                     <Link key={link.name} to={link.path}>
                       <div
-                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
+                        className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-bold transition-all ${
                           isActive
                             ? 'bg-primary/10 text-primary border border-primary/20'
                             : 'text-neutral-400 hover:bg-white/5 hover:text-white'
                         }`}
                       >
-                        <link.icon size={18} />
-                        <span>{link.name}</span>
+                        <div className="flex items-center gap-4">
+                          <link.icon size={18} />
+                          <span>{link.name}</span>
+                        </div>
+                        {link.name === 'Wishlist' && wishlistCount > 0 && (
+                          <span className="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            {wishlistCount}
+                          </span>
+                        )}
                       </div>
                     </Link>
                   );

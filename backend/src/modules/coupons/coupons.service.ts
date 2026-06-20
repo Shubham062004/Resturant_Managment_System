@@ -10,8 +10,65 @@ export class CouponService {
     userId: string,
     orderAmount: number
   ) {
+    const uppercaseCode = code.toUpperCase();
+    const hardcodedCoupons: Record<
+      string,
+      { discountValue: number; minimumAmount: number; description: string }
+    > = {
+      WELCOME50: {
+        discountValue: 50,
+        minimumAmount: 499,
+        description: 'Get ₹50 off on orders of ₹499 or more',
+      },
+      SAVE100: {
+        discountValue: 100,
+        minimumAmount: 999,
+        description: 'Get ₹100 off on orders of ₹999 or more',
+      },
+      PARTY200: {
+        discountValue: 200,
+        minimumAmount: 1499,
+        description: 'Get ₹200 off on orders of ₹1499 or more',
+      },
+      SUPER300: {
+        discountValue: 300,
+        minimumAmount: 1999,
+        description: 'Get ₹300 off on orders of ₹1999 or more',
+      },
+      MEGA500: {
+        discountValue: 500,
+        minimumAmount: 2999,
+        description: 'Get ₹500 off on orders of ₹2999 or more',
+      },
+    };
+
+    if (hardcodedCoupons[uppercaseCode]) {
+      const match = hardcodedCoupons[uppercaseCode];
+      if (orderAmount < match.minimumAmount) {
+        throw new AppError(
+          `Minimum order amount of ₹${match.minimumAmount} required`,
+          400
+        );
+      }
+      return {
+        coupon: {
+          id: `hardcoded-${uppercaseCode}`,
+          code: uppercaseCode,
+          discountType: 'FIXED_AMOUNT' as const,
+          discountValue: match.discountValue.toString(),
+          minimumAmount: match.minimumAmount.toString(),
+          description: match.description,
+          active: true,
+          startDate: new Date(),
+          endDate: new Date(Date.now() + 30 * 24 * 3600 * 1000),
+          usedCount: 0,
+        },
+        discountAmount: match.discountValue,
+      };
+    }
+
     const coupon = await prisma.coupon.findUnique({
-      where: { code: code.toUpperCase() },
+      where: { code: uppercaseCode },
     });
 
     if (!coupon) {

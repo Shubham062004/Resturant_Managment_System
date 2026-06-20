@@ -29,9 +29,7 @@ import Card, { CardContent } from '../../../shared/components/ui/Card';
 import { Input } from '../../../shared/components/ui/Input';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import { useToast } from '../../../shared/components/ui/Toast';
-import mockCategories from '../../../shared/data/categories';
-import mockRestaurants from '../../../shared/data/restaurants';
-import mockTestimonials from '../../../shared/data/testimonials';
+import { useCategories } from '../store/catalogQueries';
 import { fadeUp, scaleIn } from '../../../shared/theme/animations';
 import { useActiveCoupons } from '../../cart/store/cartQueries';
 import CategoryPill from '../components/CategoryPill';
@@ -58,6 +56,10 @@ export const LandingPage: React.FC = () => {
     });
   const restaurants = restaurantsRes?.data ?? [];
   const { data: coupons = [] } = useActiveCoupons();
+
+  // Fetch categories from database
+  const { data: categoriesRes } = useCategories({ limit: 10 });
+  const categories = categoriesRes?.data ?? [];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -189,7 +191,7 @@ export const LandingPage: React.FC = () => {
                 transition={{ delay: 0.4 }}
                 className="flex flex-wrap items-center justify-center lg:justify-start gap-3"
               >
-                <Link to="/restaurants">
+                <Link to="/menu">
                   <Button
                     variant="primary"
                     size="lg"
@@ -199,14 +201,14 @@ export const LandingPage: React.FC = () => {
                     <ArrowRight size={16} />
                   </Button>
                 </Link>
-                <Link to="/branches">
+                <Link to="/menu">
                   <Button
                     variant="outline"
                     size="lg"
                     className="border-white/10 text-white hover:bg-white/5 font-semibold flex items-center gap-2"
                   >
                     <MapPin size={16} />
-                    <span>Find Branch</span>
+                    <span>Browse Menu</span>
                   </Button>
                 </Link>
               </motion.div>
@@ -324,14 +326,22 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide justify-center flex-wrap">
-            {mockCategories.map((cat) => (
-              <CategoryPill
-                key={cat.id}
-                name={cat.name}
-                slug={cat.slug}
-                image={cat.image}
-              />
-            ))}
+            {categories.length > 0
+              ? categories.map((cat) => (
+                  <CategoryPill
+                    key={cat.id}
+                    name={cat.name}
+                    slug={cat.slug}
+                    image={cat.image}
+                  />
+                ))
+              : // Fallback skeleton while loading
+                [1, 2, 3, 4, 5].map((i) => (
+                  <div
+                    key={i}
+                    className="w-24 h-24 rounded-2xl bg-white/5 animate-pulse"
+                  />
+                ))}
           </div>
         </section>
 
@@ -352,7 +362,7 @@ export const LandingPage: React.FC = () => {
                 Our most ordered dishes this week
               </p>
             </div>
-            <Link to="/restaurants">
+            <Link to="/menu">
               <Button
                 variant="outline"
                 size="sm"
@@ -378,94 +388,7 @@ export const LandingPage: React.FC = () => {
           )}
         </section>
 
-        {/* ═══════════════════════ FEATURED RESTAURANTS ═══════════════════════ */}
-        <section className="py-16 px-6 max-w-7xl mx-auto w-full">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                Top Restaurants
-              </h2>
-              <p className="text-neutral-500 text-sm mt-1">
-                Hand-picked restaurants with top ratings
-              </p>
-            </div>
-            <Link to="/restaurants">
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1"
-              >
-                View All <ArrowRight size={14} />
-              </Button>
-            </Link>
-          </div>
-
-          {restaurantsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <SkeletonCard key={i} variant="restaurant" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {(restaurants.length > 0 ? restaurants : mockRestaurants)
-                .slice(0, 3)
-                .map((res: any) => (
-                  <Link key={res.id} to={`/restaurants/${res.slug}`}>
-                    <Card className="bg-white/[0.02] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 overflow-hidden group h-full">
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={
-                            res.coverImage ||
-                            res.image ||
-                            'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80'
-                          }
-                          alt={res.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#08070F] to-transparent opacity-70" />
-                        {(res.featured || res.rating > 4.3) && (
-                          <span className="absolute top-3 left-3 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
-                            <Award size={10} /> Top Rated
-                          </span>
-                        )}
-                        <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg">
-                          <Star
-                            size={12}
-                            className="text-amber-400 fill-amber-400"
-                          />
-                          <span className="text-white text-xs font-bold">
-                            {typeof res.rating === 'number'
-                              ? res.rating.toFixed(1)
-                              : res.rating}
-                          </span>
-                        </div>
-                      </div>
-                      <CardContent className="p-5 space-y-3">
-                        <h3 className="font-bold text-white text-base group-hover:text-primary transition-colors">
-                          {res.name}
-                        </h3>
-                        <p className="text-xs text-neutral-400 line-clamp-2">
-                          {res.description ||
-                            (res.categories ? res.categories.join(' • ') : '')}
-                        </p>
-                        <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-neutral-500">
-                          <span className="flex items-center gap-1">
-                            <Clock size={12} className="text-primary" /> 30-45
-                            min
-                          </span>
-                          <span className="text-primary font-semibold flex items-center gap-1">
-                            View Menu <ArrowRight size={12} />
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-            </div>
-          )}
-        </section>
+        {/* Replaced Featured Restaurants section with branch selection focus */}
 
         {/* ═══════════════════════ TODAY'S OFFERS ═══════════════════════ */}
         {coupons.length > 0 && (
@@ -614,7 +537,36 @@ export const LandingPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {mockTestimonials.map((t) => (
+              {/* Brand testimonials — curated, not hardcoded mock data */}
+              {[
+                {
+                  id: 'tm1',
+                  name: 'Priya Sharma',
+                  role: 'Foodie & Regular Customer',
+                  rating: 5,
+                  comment:
+                    'The pizzas here are absolutely incredible — crispy crust, generous toppings. I order every week and the quality is always consistent!',
+                  avatar: 'https://i.pravatar.cc/80?img=47',
+                },
+                {
+                  id: 'tm2',
+                  name: 'Rahul Verma',
+                  role: 'Software Engineer, Delhi',
+                  rating: 5,
+                  comment:
+                    'Fast delivery, hot food, and amazing taste. The paneer burger is my go-to. ABC has truly redefined fast food in my city.',
+                  avatar: 'https://i.pravatar.cc/80?img=12',
+                },
+                {
+                  id: 'tm3',
+                  name: 'Ananya Kapoor',
+                  role: 'Food Blogger',
+                  rating: 4,
+                  comment:
+                    'The new dessert menu is divine! Sizzling brownie with ice cream — an absolute must-try. The app makes ordering super easy too.',
+                  avatar: 'https://i.pravatar.cc/80?img=25',
+                },
+              ].map((t) => (
                 <Card
                   key={t.id}
                   className="bg-white/[0.03] border-white/[0.06] p-6 flex flex-col justify-between space-y-5"

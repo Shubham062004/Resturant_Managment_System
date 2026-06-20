@@ -76,6 +76,7 @@ model User {
   inventoryRequests      InventoryRequest[]
   auditLogs              AuditLog[]
   payrollRecords         PayrollRecord[]
+  wishlist               Wishlist[]
 }
 
 enum Role {
@@ -473,6 +474,7 @@ model Branch {
   attendanceLogs  AttendanceLog[]
   workAssignments WorkAssignment[]
   ingredientConsumptions IngredientConsumptionLog[]
+  wishlistItems   Wishlist[]
 
   @@index([restaurantId])
 }
@@ -536,6 +538,7 @@ model Product {
   kitchenTasks     KitchenTask[]
   recipeMappings   RecipeMapping[]
   recommendations  Recommendation[]
+  wishlistItems    Wishlist[]
 
   @@unique([restaurantId, slug])
   @@index([restaurantId])
@@ -584,6 +587,23 @@ model Favorite {
   @@unique([userId, productId])
   @@index([userId])
   @@index([productId])
+}
+
+model Wishlist {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  menuItemId String
+  product    Product  @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  branchId   String
+  branch     Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, menuItemId, branchId])
+  @@index([userId])
+  @@index([menuItemId])
+  @@index([branchId])
 }
 
 model Cart {

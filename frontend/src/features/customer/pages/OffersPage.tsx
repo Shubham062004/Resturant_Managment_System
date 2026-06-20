@@ -1,14 +1,22 @@
-import { Tag, Calendar, Copy, Percent, Sparkles } from 'lucide-react';
+import { Tag, Calendar, Copy, Percent, Sparkles, MapPin } from 'lucide-react';
 import React from 'react';
 
+import { useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { useActiveCoupons } from '../../cart/store/cartQueries';
+import { useCustomerOffers } from '../store/catalogQueries';
 
 export const OffersPage: React.FC = () => {
   const toast = useToast();
-  const { data: coupons = [], isLoading, isError } = useActiveCoupons();
+  const { selectedBranch } = useAppSelector((state) => state.customer);
+  const { data: branchOffersRes, isLoading: branchLoading, isError: branchError } = useCustomerOffers(selectedBranch?.id || '');
+  const { data: globalCoupons = [], isLoading: globalLoading, isError: globalError } = useActiveCoupons();
+
+  const coupons = selectedBranch ? (branchOffersRes?.data || []) : globalCoupons;
+  const isLoading = selectedBranch ? branchLoading : globalLoading;
+  const isError = selectedBranch ? branchError : globalError;
 
   const handleCopyToClipboard = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -53,9 +61,16 @@ export const OffersPage: React.FC = () => {
           </div>
 
           <div className="space-y-8">
-            <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4">
-              Active Coupon Codes
+            <h2 className="text-2xl font-bold text-white border-b border-white/5 pb-4 flex items-center justify-between">
+              <span>Active Coupon Codes</span>
+              {selectedBranch && (
+                <span className="text-xs text-neutral-400 font-semibold flex items-center gap-1">
+                  <MapPin size={12} className="text-primary" />
+                  Showing deals for {selectedBranch.name}
+                </span>
+              )}
             </h2>
+
 
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

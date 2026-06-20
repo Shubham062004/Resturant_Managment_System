@@ -17,8 +17,9 @@ import { Input } from '../../../shared/components/ui/Input';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
 import PersonalizedRecommendations from '../../ai/components/PersonalizedRecommendations';
 import FoodCard from '../components/FoodCard';
-import { useProducts } from '../store/catalogQueries';
+import { useProducts, useCustomerMenu } from '../store/catalogQueries';
 import { addRecentSearch, clearRecentSearches } from '../store/customerSlice';
+import { useMemo } from 'react';
 
 export const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,12 +64,24 @@ export const SearchPage: React.FC = () => {
   };
 
   const searchTerm = debouncedSearch.trim();
+  const { selectedBranch } = useAppSelector((state) => state.customer);
+  const { data: menuData } = useCustomerMenu(selectedBranch?.id || '');
   const { data: productsResponse, isLoading: isSearchLoading } = useProducts({
     search: searchTerm || undefined,
     page: 1,
     limit: 24,
   });
-  const searchProducts = productsResponse?.data ?? [];
+
+  const branchProductIds = useMemo(() => {
+    const list = menuData?.data?.menu || [];
+    return new Set(list.map((p) => p.id));
+  }, [menuData]);
+
+  const searchProducts = useMemo(() => {
+    const list = productsResponse?.data ?? [];
+    if (!selectedBranch) return list;
+    return list.filter((prod) => branchProductIds.has(prod.id));
+  }, [productsResponse, selectedBranch, branchProductIds]);
 
   return (
     <>

@@ -157,52 +157,68 @@ async function main() {
     },
   });
 
-  // 4. Create 5 Branches (exactly "Branch 1" to "Branch 5")
+  // 4. Create 7 Delhi Branches
   const branches = [];
   const branchLocations = [
     {
-      name: 'Branch 1',
-      address: 'Cyber City, Phase 3',
-      city: 'Gurugram',
-      state: 'Haryana',
-      lat: 28.495,
-      lng: 77.089,
-    },
-    {
-      name: 'Branch 2',
-      address: 'Sector 29 Market',
-      city: 'Gurugram',
-      state: 'Haryana',
-      lat: 28.4712,
-      lng: 77.0721,
-    },
-    {
-      name: 'Branch 3',
-      address: 'Connaught Place, Inner Circle',
+      name: 'Connaught Place',
+      address: 'Inner Circle, Connaught Place',
       city: 'New Delhi',
       state: 'Delhi',
       lat: 28.6304,
       lng: 77.2177,
     },
     {
-      name: 'Branch 4',
-      address: 'Aerocity Hospitality District',
+      name: 'Rajouri Garden',
+      address: 'Main Market, Rajouri Garden',
       city: 'New Delhi',
       state: 'Delhi',
-      lat: 28.5492,
-      lng: 77.1214,
+      lat: 28.6415,
+      lng: 77.1235,
     },
     {
-      name: 'Branch 5',
-      address: 'Golf Course Road',
-      city: 'Gurugram',
-      state: 'Haryana',
-      lat: 28.4389,
-      lng: 77.1002,
+      name: 'Saket',
+      address: 'MGF Metropolitan Mall, Saket',
+      city: 'New Delhi',
+      state: 'Delhi',
+      lat: 28.5244,
+      lng: 77.2066,
+    },
+    {
+      name: 'Dwarka',
+      address: 'Sector 12 Market, Dwarka',
+      city: 'New Delhi',
+      state: 'Delhi',
+      lat: 28.5889,
+      lng: 77.0583,
+    },
+    {
+      name: 'Karol Bagh',
+      address: 'Ajmal Khan Road, Karol Bagh',
+      city: 'New Delhi',
+      state: 'Delhi',
+      lat: 28.6441,
+      lng: 77.1895,
+    },
+    {
+      name: 'Lajpat Nagar',
+      address: 'Central Market, Lajpat Nagar',
+      city: 'New Delhi',
+      state: 'Delhi',
+      lat: 28.5677,
+      lng: 77.2433,
+    },
+    {
+      name: 'Vasant Kunj',
+      address: 'Ambience Mall, Vasant Kunj',
+      city: 'New Delhi',
+      state: 'Delhi',
+      lat: 28.5392,
+      lng: 77.1517,
     },
   ];
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     const loc = branchLocations[i];
     const branch = await prisma.branch.create({
       data: {
@@ -234,11 +250,11 @@ async function main() {
 
     branches.push(branch);
   }
-  console.log(`✅ Seeded 5 Branches and Restaurant Settings.`);
+  console.log(`✅ Seeded 7 Delhi Branches and Restaurant Settings.`);
 
   // Create POS Terminals for each branch
   const terminals = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     const term = await prisma.pOSTerminal.create({
       data: {
         branchId: branches[i].id,
@@ -251,7 +267,7 @@ async function main() {
 
   // Create 10 tables per branch (globally unique table numbers)
   const tablesToCreate = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     const branch = branches[i];
     for (let t = 1; t <= 10; t++) {
       const id = randomUUID();
@@ -308,9 +324,9 @@ async function main() {
     salary: 55000,
   });
 
-  // 5 Branch Managers
+  // 7 Branch Managers
   const managerIds = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 7; i++) {
     const id = randomUUID();
     managerIds.push(id);
     usersToCreate.push({
@@ -318,7 +334,7 @@ async function main() {
       email: `manager.br${i}@abcrestaurant.com`,
       phone: `+91999999900${i}`,
       firstName: `Manager`,
-      lastName: `Branch ${i}`,
+      lastName: branchLocations[i - 1].name,
       role: Role.BRANCH_MANAGER,
       passwordHash: userPasswordHash,
       organizationId: org.id,
@@ -366,9 +382,9 @@ async function main() {
     });
   }
 
-  // 5 Inventory Managers
+  // 7 Inventory Managers
   const inventoryManagerIds = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 7; i++) {
     const id = randomUUID();
     inventoryManagerIds.push(id);
     usersToCreate.push({
@@ -857,7 +873,7 @@ async function main() {
 
       receiptsToCreate.push({
         posOrderId: posOrderId,
-        receiptNumber: `REC-BR${(i % 5) + 1}-${1000 + i}`,
+        receiptNumber: `REC-BR${(i % 7) + 1}-${1000 + i}`,
         generatedAt: orderDate,
       });
     }
