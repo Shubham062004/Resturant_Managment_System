@@ -14,7 +14,7 @@ import {
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
 import { formatCurrency } from '../../../shared/utils/currency';
-import { DatePreset } from '../../../shared/utils/exportData';
+import type { DatePreset } from '../../../shared/utils/exportData';
 import HistoryPageLayout from '../components/HistoryPageLayout';
 
 export default function StaffHistoryPage() {

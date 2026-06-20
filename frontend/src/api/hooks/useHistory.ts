@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import apiClient from '../../services/apiClient';
-import { DatePreset } from '../../shared/utils/exportData';
+import type { DatePreset } from '../../shared/utils/exportData';
 
 const fetchHistory = async (
   endpoint: string,

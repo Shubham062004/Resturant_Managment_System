@@ -13,7 +13,7 @@ import {
 
 import { useHistoryQuery } from '../../../api/hooks/useHistory';
 import { Badge } from '../../../shared/components/ui/Badge';
-import { DatePreset } from '../../../shared/utils/exportData';
+import type { DatePreset } from '../../../shared/utils/exportData';
 import HistoryPageLayout from '../components/HistoryPageLayout';
 
 const LEVEL_COLORS: Record<string, string> = {

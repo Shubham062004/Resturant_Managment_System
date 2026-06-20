@@ -18,8 +18,8 @@ import {
   exportToCSV,
   exportToExcel,
   DATE_PRESETS,
-  DatePreset,
 } from '../../../shared/utils/exportData';
+import type { DatePreset } from '../../../shared/utils/exportData';
 
 interface StatItem {
   title: string;
@@ -222,4 +222,4 @@ export default function HistoryPageLayout({
   );
 }
 
-export { DatePreset };
+export type { DatePreset };
