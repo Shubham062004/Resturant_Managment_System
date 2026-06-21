@@ -16,13 +16,14 @@ import {
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import { useWishlistSummary } from '../../../api/hooks/useWishlist';
 import { useAppSelector, useAppDispatch } from '../../../app/store';
 import Avatar from '../../../shared/components/ui/Avatar';
 import { useToast } from '../../../shared/components/ui/Toast';
 import { slideLeft } from '../../../shared/theme/animations';
 import { logout } from '../../auth/store/authSlice';
 import { useCart } from '../../cart/store/cartQueries';
-import { useWishlistSummary } from '../../../api/hooks/useWishlist';
+
 import BranchSelector from './BranchSelector';
 
 export const Navbar: React.FC = () => {
@@ -38,7 +39,9 @@ export const Navbar: React.FC = () => {
   const { data: cart } = useCart();
   const { data: wishlistSummary } = useWishlistSummary(isAuthenticated);
 
-  const cartItemCount = cart?.items?.reduce((sum: number, item: any) => sum + item.quantity, 0) || 0;
+  const cartItemCount =
+    cart?.items?.reduce((sum: number, item: any) => sum + item.quantity, 0) ||
+    0;
   const wishlistCount = wishlistSummary?.data?.count || 0;
 
   const navLinks = isAuthenticated

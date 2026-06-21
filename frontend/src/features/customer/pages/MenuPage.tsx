@@ -1,12 +1,21 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Clock, MapPin, Search, Filter, RotateCcw, ShieldCheck, Heart } from 'lucide-react';
+import {
+  Star,
+  Clock,
+  MapPin,
+  Search,
+  Filter,
+  RotateCcw,
+  ShieldCheck,
+  Heart,
+} from 'lucide-react';
 import React, { useState, useMemo, useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../app/store';
 import SEO from '../../../shared/components/SEO';
 import SkeletonCard from '../../../shared/components/ui/SkeletonCard';
-import MenuItemCard from '../components/MenuItemCard';
 import MenuCategorySidebar from '../components/MenuCategorySidebar';
+import MenuItemCard from '../components/MenuItemCard';
 import OfferBanner from '../components/OfferBanner';
 import { useCustomerMenu, useCustomerOffers } from '../store/catalogQueries';
 
@@ -22,7 +31,12 @@ export const MenuPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('Popular');
 
   // API Queries
-  const { data: menuData, isLoading, isError, refetch } = useCustomerMenu(selectedBranch?.id || '');
+  const {
+    data: menuData,
+    isLoading,
+    isError,
+    refetch,
+  } = useCustomerMenu(selectedBranch?.id || '');
   const { data: offersData } = useCustomerOffers(selectedBranch?.id || '');
 
   const branchDetails = menuData?.data?.branch;
@@ -35,16 +49,27 @@ export const MenuPage: React.FC = () => {
   }, [selectedBranch]);
 
   // Categories list
-  const categories = ['Popular', 'Pizza', 'Burger', 'Chinese', 'Desserts', 'Drinks', 'Combos'];
+  const categories = [
+    'Popular',
+    'Pizza',
+    'Burger',
+    'Chinese',
+    'Desserts',
+    'Drinks',
+    'Combos',
+  ];
 
   // Helper to map DB products to sidebar categories
   const getProductCategory = (prod: any) => {
     const catName = prod.category?.name?.toLowerCase() || '';
-    if (catName.includes('pizza') || catName.includes('special')) return 'Pizza';
+    if (catName.includes('pizza') || catName.includes('special'))
+      return 'Pizza';
     if (catName.includes('burger')) return 'Burger';
-    if (catName.includes('noodles') || catName.includes('rice')) return 'Chinese';
+    if (catName.includes('noodles') || catName.includes('rice'))
+      return 'Chinese';
     if (catName.includes('dessert')) return 'Desserts';
-    if (catName.includes('drinks') || catName.includes('beverage')) return 'Drinks';
+    if (catName.includes('drinks') || catName.includes('beverage'))
+      return 'Drinks';
     if (catName.includes('combo')) return 'Combos';
     return 'Popular';
   };
@@ -56,7 +81,8 @@ export const MenuPage: React.FC = () => {
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesName = prod.name.toLowerCase().includes(query);
-        const matchesDesc = prod.description?.toLowerCase().includes(query) || false;
+        const matchesDesc =
+          prod.description?.toLowerCase().includes(query) || false;
         if (!matchesName && !matchesDesc) return false;
       }
 
@@ -73,7 +99,14 @@ export const MenuPage: React.FC = () => {
 
       return true;
     });
-  }, [products, searchQuery, vegFilter, nonVegFilter, bestsellerFilter, maxPrice]);
+  }, [
+    products,
+    searchQuery,
+    vegFilter,
+    nonVegFilter,
+    bestsellerFilter,
+    maxPrice,
+  ]);
 
   // Products grouped by Zomato Category for structured vertical rendering
   const groupedProducts = useMemo(() => {
@@ -143,7 +176,10 @@ export const MenuPage: React.FC = () => {
               <div className="h-12 bg-white/[0.02] border border-white/5 rounded-2xl" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-44 bg-white/[0.02] border border-white/5 rounded-3xl" />
+                  <div
+                    key={i}
+                    className="h-44 bg-white/[0.02] border border-white/5 rounded-3xl"
+                  />
                 ))}
               </div>
             </div>
@@ -161,9 +197,13 @@ export const MenuPage: React.FC = () => {
           <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto animate-bounce">
             <MapPin size={32} />
           </div>
-          <h2 className="text-xl font-bold font-display">Select Delivery Outlet</h2>
+          <h2 className="text-xl font-bold font-display">
+            Select Delivery Outlet
+          </h2>
           <p className="text-sm text-neutral-400 leading-relaxed">
-            Welcome to ABC Restaurant! Please select a branch from the location selector in the top navbar to view the available menu items and deals at your nearest outlet.
+            Welcome to ABC Restaurant! Please select a branch from the location
+            selector in the top navbar to view the available menu items and
+            deals at your nearest outlet.
           </p>
         </div>
       </div>
@@ -174,9 +214,12 @@ export const MenuPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#08070F] text-white flex items-center justify-center pt-24 pb-16 px-6">
         <div className="max-w-md w-full text-center space-y-6 bg-red-500/5 border border-red-500/10 rounded-3xl p-8 shadow-2xl">
-          <h2 className="text-xl font-bold text-red-400 font-display">Failed to Load Menu</h2>
+          <h2 className="text-xl font-bold text-red-400 font-display">
+            Failed to Load Menu
+          </h2>
           <p className="text-sm text-neutral-400 leading-relaxed">
-            We had trouble fetching the menu details for {selectedBranch.name}. Please check your connection and try again.
+            We had trouble fetching the menu details for {selectedBranch.name}.
+            Please check your connection and try again.
           </p>
           <button
             onClick={() => refetch()}
@@ -199,7 +242,6 @@ export const MenuPage: React.FC = () => {
 
       <div className="min-h-screen bg-[#08070F] text-white pt-24 pb-16 font-sans">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          
           {/* ═══════════════════════ BRANCH HEADER ═══════════════════════ */}
           <section className="relative overflow-hidden rounded-3xl border border-white/5 bg-[#110E1C]/40 p-6 md:p-8 shadow-xl backdrop-blur-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-10" />
@@ -208,7 +250,9 @@ export const MenuPage: React.FC = () => {
                 <span className="bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md">
                   {branchDetails?.isOpen ? 'Open Now' : 'Closed'}
                 </span>
-                <span className="text-neutral-500 text-xs font-semibold">ABC Outlet</span>
+                <span className="text-neutral-500 text-xs font-semibold">
+                  ABC Outlet
+                </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-extrabold text-white font-display tracking-tight">
                 ABC • {branchDetails?.name}
@@ -223,10 +267,16 @@ export const MenuPage: React.FC = () => {
             <div className="flex gap-4 sm:gap-6 border-t border-white/5 md:border-t-0 pt-4 md:pt-0 w-full md:w-auto">
               <div className="bg-white/[0.02] border border-white/5 rounded-2xl px-4 py-3 text-center shrink-0 min-w-[90px]">
                 <div className="flex items-center justify-center gap-1 text-amber-400 font-extrabold text-lg">
-                  <span>{branchDetails?.rating ? branchDetails.rating.toFixed(1) : '0.0'}</span>
+                  <span>
+                    {branchDetails?.rating
+                      ? branchDetails.rating.toFixed(1)
+                      : '0.0'}
+                  </span>
                   <Star size={16} className="fill-current text-amber-400" />
                 </div>
-                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">Rating</p>
+                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">
+                  Rating
+                </p>
               </div>
 
               <div className="bg-white/[0.02] border border-white/5 rounded-2xl px-4 py-3 text-center shrink-0 min-w-[90px]">
@@ -234,7 +284,9 @@ export const MenuPage: React.FC = () => {
                   <Clock size={16} />
                   <span>{branchDetails?.deliveryTime.split(' ')[0]}</span>
                 </div>
-                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">Mins</p>
+                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">
+                  Mins
+                </p>
               </div>
 
               <div className="bg-white/[0.02] border border-white/5 rounded-2xl px-4 py-3 text-center shrink-0 min-w-[90px] hidden sm:block">
@@ -242,7 +294,9 @@ export const MenuPage: React.FC = () => {
                   <ShieldCheck size={18} />
                   <span>100%</span>
                 </div>
-                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">Hygiene</p>
+                <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">
+                  Hygiene
+                </p>
               </div>
             </div>
           </section>
@@ -289,7 +343,9 @@ export const MenuPage: React.FC = () => {
 
               {/* Price range */}
               <div className="w-full md:w-64 flex items-center gap-3 bg-[#0D0B14]/80 border border-white/10 px-4 py-2.5 rounded-xl">
-                <span className="text-xs text-neutral-400 font-semibold shrink-0">Max Price:</span>
+                <span className="text-xs text-neutral-400 font-semibold shrink-0">
+                  Max Price:
+                </span>
                 <input
                   type="range"
                   min="100"
@@ -299,11 +355,17 @@ export const MenuPage: React.FC = () => {
                   onChange={(e) => setMaxPrice(parseInt(e.target.value))}
                   className="w-full accent-primary h-1 bg-neutral-800 rounded-lg cursor-pointer"
                 />
-                <span className="text-xs font-bold text-white shrink-0">₹{maxPrice}</span>
+                <span className="text-xs font-bold text-white shrink-0">
+                  ₹{maxPrice}
+                </span>
               </div>
 
               {/* Reset filter pills */}
-              {(searchQuery || vegFilter || nonVegFilter || bestsellerFilter || maxPrice < 3000) && (
+              {(searchQuery ||
+                vegFilter ||
+                nonVegFilter ||
+                bestsellerFilter ||
+                maxPrice < 3000) && (
                 <button
                   onClick={handleResetFilters}
                   className="flex items-center justify-center gap-1.5 py-2.5 px-4 text-xs text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors border border-white/5 w-full md:w-auto font-bold"
@@ -361,7 +423,6 @@ export const MenuPage: React.FC = () => {
 
           {/* ═══════════════════════ CATALOG BODY (SIDEBAR + PRODUCT SECTIONS) ═══════════════════════ */}
           <div className="flex flex-col md:flex-row gap-8 relative items-start">
-            
             {/* Sidebar component */}
             <MenuCategorySidebar
               categories={categories}
@@ -374,9 +435,12 @@ export const MenuPage: React.FC = () => {
               {filteredProducts.length === 0 ? (
                 <div className="text-center py-20 rounded-3xl border border-white/5 bg-[#110E1C]/20 max-w-xl mx-auto backdrop-blur-md">
                   <Search className="h-12 w-12 text-neutral-600 mx-auto mb-4" />
-                  <p className="text-lg font-bold text-white mb-1">No items match your filters</p>
+                  <p className="text-lg font-bold text-white mb-1">
+                    No items match your filters
+                  </p>
                   <p className="text-neutral-500 text-xs mb-6">
-                    Try clearing search queries or quick filter pills to explore all dishes.
+                    Try clearing search queries or quick filter pills to explore
+                    all dishes.
                   </p>
                   <button
                     onClick={handleResetFilters}
@@ -392,7 +456,11 @@ export const MenuPage: React.FC = () => {
                   if (list.length === 0) return null;
 
                   return (
-                    <section key={category} id={sectionId} className="space-y-4 pt-4 scroll-mt-24">
+                    <section
+                      key={category}
+                      id={sectionId}
+                      className="space-y-4 pt-4 scroll-mt-24"
+                    >
                       <div className="border-b border-white/5 pb-2">
                         <h2 className="text-lg font-extrabold text-white font-display tracking-tight flex items-center gap-2">
                           {category}

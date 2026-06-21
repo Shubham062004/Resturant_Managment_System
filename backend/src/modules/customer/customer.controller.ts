@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomerService } from './customer.service';
+
 import { CartService } from '../cart/cart.service';
 import { CouponService } from '../coupons/coupons.service';
+
+import { CustomerService } from './customer.service';
 
 export class CustomerController {
   public static async getBranches(
@@ -116,7 +118,7 @@ export class CustomerController {
         }
       }
 
-      const deliveryFee = subtotal === 0 ? 0 : (subtotal >= 200 ? 0 : 20);
+      const deliveryFee = subtotal === 0 ? 0 : subtotal >= 200 ? 0 : 20;
       const taxableAmount = Math.max(0, subtotal - discountAmount);
       const gst = taxableAmount * 0.05;
       const grandTotal = taxableAmount + deliveryFee + gst;

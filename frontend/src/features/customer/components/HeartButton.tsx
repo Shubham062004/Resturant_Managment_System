@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import React, { useState } from 'react';
-import { useAppSelector } from '../../../app/store';
-import { useToast } from '../../../shared/components/ui/Toast';
+
 import {
   useAddWishlist,
   useRemoveWishlist,
   useWishlist,
 } from '../../../api/hooks/useWishlist';
+import { useAppSelector } from '../../../app/store';
+import { useToast } from '../../../shared/components/ui/Toast';
 
 interface HeartButtonProps {
   productId: string;
@@ -35,7 +36,6 @@ export const HeartButton: React.FC<HeartButtonProps> = ({
     },
     isAuthenticated
   );
-
 
   const isWishlisted =
     isAuthenticated &&

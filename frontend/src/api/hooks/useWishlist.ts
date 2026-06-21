@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { apiClient } from '../../services/apiClient';
 
 export interface WishlistItem {
@@ -99,7 +100,6 @@ export const useWishlist = (
   });
 };
 
-
 // Hook to fetch wishlist summary metrics
 export const useWishlistSummary = (enabled = true) => {
   return useQuery<WishlistSummaryResponse>({
@@ -123,9 +123,12 @@ export const useAddWishlist = () => {
       menuItemId: string;
       branchId: string;
     }) => {
-      const { data } = await apiClient.post(`/customer/wishlist/${menuItemId}`, {
-        branchId,
-      });
+      const { data } = await apiClient.post(
+        `/customer/wishlist/${menuItemId}`,
+        {
+          branchId,
+        }
+      );
       return data;
     },
     onSuccess: () => {
@@ -140,7 +143,9 @@ export const useRemoveWishlist = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (menuItemId: string) => {
-      const { data } = await apiClient.delete(`/customer/wishlist/${menuItemId}`);
+      const { data } = await apiClient.delete(
+        `/customer/wishlist/${menuItemId}`
+      );
       return data;
     },
     onSuccess: () => {

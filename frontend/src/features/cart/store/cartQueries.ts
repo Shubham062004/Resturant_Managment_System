@@ -112,10 +112,17 @@ export const loadGuestCart = (): GuestCart => {
   };
 };
 
-export const saveGuestCart = (items: CartItem[], couponCode = '', discount = 0) => {
+export const saveGuestCart = (
+  items: CartItem[],
+  couponCode = '',
+  discount = 0
+) => {
   const branchId = getSelectedBranchId();
-  const subtotal = items.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
-  const deliveryFee = subtotal === 0 ? 0 : (subtotal >= 200 ? 0 : 20);
+  const subtotal = items.reduce(
+    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    0
+  );
+  const deliveryFee = subtotal === 0 ? 0 : subtotal >= 200 ? 0 : 20;
   const taxableAmount = Math.max(0, subtotal - discount);
   const gst = taxableAmount * 0.05;
   const grandTotal = taxableAmount + deliveryFee + gst;
@@ -224,7 +231,11 @@ export const useAddToCart = () => {
           guest.items.push(newCartItem);
         }
 
-        const updated = saveGuestCart(guest.items, guest.couponCode, guest.cartTotals.discount);
+        const updated = saveGuestCart(
+          guest.items,
+          guest.couponCode,
+          guest.cartTotals.discount
+        );
         return {
           id: 'guest-cart',
           items: updated.items,
@@ -260,7 +271,11 @@ export const useUpdateCartItem = () => {
           item.id === id ? { ...item, quantity } : item
         );
 
-        const updated = saveGuestCart(updatedItems, guest.couponCode, guest.cartTotals.discount);
+        const updated = saveGuestCart(
+          updatedItems,
+          guest.couponCode,
+          guest.cartTotals.discount
+        );
         return {
           id: 'guest-cart',
           items: updated.items,
@@ -290,7 +305,11 @@ export const useRemoveCartItem = () => {
         const guest = loadGuestCart();
         const updatedItems = guest.items.filter((item) => item.id !== id);
 
-        const updated = saveGuestCart(updatedItems, guest.couponCode, guest.cartTotals.discount);
+        const updated = saveGuestCart(
+          updatedItems,
+          guest.couponCode,
+          guest.cartTotals.discount
+        );
         return {
           id: 'guest-cart',
           items: updated.items,

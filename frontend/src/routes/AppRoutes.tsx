@@ -301,18 +301,23 @@ const AppRouter = () => {
       if (guestCartJson) {
         try {
           const guestCart = JSON.parse(guestCartJson);
-          if (guestCart && Array.isArray(guestCart.items) && guestCart.items.length > 0) {
+          if (
+            guestCart &&
+            Array.isArray(guestCart.items) &&
+            guestCart.items.length > 0
+          ) {
             const guestItems = guestCart.items.map((item: any) => ({
               productId: item.productId,
               variantId: item.variantId || undefined,
               quantity: item.quantity,
             }));
 
-            apiClient.post('/customer/cart/merge', {
-              guestItems,
-              couponCode: guestCart.couponCode || '',
-              branchId: guestCart.branchId || '',
-            })
+            apiClient
+              .post('/customer/cart/merge', {
+                guestItems,
+                couponCode: guestCart.couponCode || '',
+                branchId: guestCart.branchId || '',
+              })
               .then(() => {
                 localStorage.removeItem('guest_cart');
                 queryClient.invalidateQueries({ queryKey: ['cart'] });
@@ -399,13 +404,19 @@ const AppRouter = () => {
               <Route path="/" element={<LandingPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/branches" element={<Navigate to="/menu" replace />} />
+              <Route
+                path="/branches"
+                element={<Navigate to="/menu" replace />}
+              />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/offers" element={<OffersPage />} />
 
               {/* Menu Catalog Routes */}
               <Route path="/menu" element={<MenuPage />} />
-              <Route path="/restaurants" element={<Navigate to="/menu" replace />} />
+              <Route
+                path="/restaurants"
+                element={<Navigate to="/menu" replace />}
+              />
               <Route path="/products/:slug" element={<ProductDetailPage />} />
               <Route path="/product/:slug" element={<ProductDetailPage />} />
 

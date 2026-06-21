@@ -1,11 +1,11 @@
-import React from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock } from 'lucide-react';
+import React from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../app/store';
-import { getDashboardRouteByRole } from '../utils/roleRouting';
 import Button from '../../../shared/components/ui/Button';
+import { getDashboardRouteByRole } from '../utils/roleRouting';
 
 export interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -43,7 +43,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return (
         <div className="min-h-screen bg-[#08070F] text-white flex items-center justify-center relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,_rgba(120,119,198,0.12),_rgba(255,255,255,0))]" />
-          
+
           <AnimatePresence>
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
               {/* Backdrop */}
@@ -66,7 +66,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-2 text-primary">
                     <Lock size={28} />
                   </div>
-                  <h3 className="text-2xl font-bold font-display text-white">Login Required</h3>
+                  <h3 className="text-2xl font-bold font-display text-white">
+                    Login Required
+                  </h3>
                   <p className="text-neutral-400 text-sm leading-relaxed">
                     Login or create an account to access this page.
                   </p>
@@ -76,13 +78,19 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
                   {/* Continue with Google */}
                   <Button
                     onClick={() => {
-                      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+                      const apiUrl =
+                        import.meta.env.VITE_API_URL ||
+                        'http://localhost:5000/api/v1';
                       window.location.href = `${apiUrl}/auth/google`;
                     }}
                     variant="outline"
                     className="w-full h-12 border-white/10 hover:bg-white/5 font-semibold flex items-center justify-center gap-3 text-white"
                   >
-                    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                         fill="#4285F4"
@@ -156,4 +164,3 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 };
 
 export default ProtectedRoute;
-

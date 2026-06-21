@@ -33,7 +33,10 @@ export const BranchSelector: React.FC = () => {
   // Click outside listener to close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -77,11 +80,17 @@ export const BranchSelector: React.FC = () => {
         disabled={isLoading || branches.length === 0}
         className="flex items-center gap-2 bg-[#1A1825]/90 border border-white/10 hover:border-primary/50 text-white font-medium px-4 py-2 rounded-xl transition-all duration-300 shadow-md group focus:outline-none"
       >
-        <MapPin size={16} className="text-primary group-hover:scale-110 transition-transform duration-300" />
+        <MapPin
+          size={16}
+          className="text-primary group-hover:scale-110 transition-transform duration-300"
+        />
         <span className="text-sm font-semibold max-w-[120px] sm:max-w-[180px] truncate">
           {selectedBranch ? selectedBranch.name : 'Select Outlet'}
         </span>
-        <ChevronDown size={14} className={`text-neutral-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          size={14}
+          className={`text-neutral-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {/* Dropdown Menu */}
@@ -95,7 +104,9 @@ export const BranchSelector: React.FC = () => {
             className="absolute left-0 mt-2 w-72 rounded-2xl bg-[#0D0B14] border border-white/10 shadow-2xl z-50 overflow-hidden backdrop-blur-xl"
           >
             <div className="p-3 bg-white/[0.02] border-b border-white/5">
-              <p className="text-[10px] uppercase tracking-wider font-bold text-neutral-500">Select Outlet (Delhi NCR)</p>
+              <p className="text-[10px] uppercase tracking-wider font-bold text-neutral-500">
+                Select Outlet (Delhi NCR)
+              </p>
             </div>
             <div className="max-h-72 overflow-y-auto scrollbar-hide py-1">
               {branches.map((b: any) => {
@@ -105,12 +116,16 @@ export const BranchSelector: React.FC = () => {
                     key={b.id}
                     onClick={() => handleBranchClick(b)}
                     className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors duration-200 ${
-                      isSelected ? 'bg-primary/10 text-primary font-bold' : 'text-neutral-300 hover:bg-white/[0.04] hover:text-white'
+                      isSelected
+                        ? 'bg-primary/10 text-primary font-bold'
+                        : 'text-neutral-300 hover:bg-white/[0.04] hover:text-white'
                     }`}
                   >
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold">{b.name}</span>
-                      <span className="text-[11px] text-neutral-500 truncate mt-0.5 max-w-[200px]">{b.address}</span>
+                      <span className="text-[11px] text-neutral-500 truncate mt-0.5 max-w-[200px]">
+                        {b.address}
+                      </span>
                     </div>
                     {isSelected && <Check size={16} className="text-primary" />}
                   </button>
@@ -141,9 +156,19 @@ export const BranchSelector: React.FC = () => {
               <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-4">
                 <MapPin className="text-amber-400 w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Change Delivery Location?</h3>
+              <h3 className="text-lg font-bold text-white mb-2">
+                Change Delivery Location?
+              </h3>
               <p className="text-sm text-neutral-400 mb-6 leading-relaxed">
-                Changing your branch to <span className="text-white font-semibold">{pendingBranch?.name}</span> will clear your current cart items from <span className="text-white font-semibold">{selectedBranch?.name}</span>. Do you want to continue?
+                Changing your branch to{' '}
+                <span className="text-white font-semibold">
+                  {pendingBranch?.name}
+                </span>{' '}
+                will clear your current cart items from{' '}
+                <span className="text-white font-semibold">
+                  {selectedBranch?.name}
+                </span>
+                . Do you want to continue?
               </p>
               <div className="flex justify-end gap-3">
                 <button

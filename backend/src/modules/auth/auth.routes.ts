@@ -77,10 +77,7 @@ router.post(
   AuthController.verifyOtp
 );
 
-router.get(
-  '/google',
-  AuthController.getGoogleAuth
-);
+router.get('/google', AuthController.getGoogleAuth);
 
 router.post(
   '/google',

@@ -50,15 +50,18 @@ export const CartPage: React.FC = () => {
     code: string;
     discountAmount: number;
   } | null>(null);
-  const [orderType, setOrderType] = useState<'DELIVERY' | 'TAKEAWAY' | 'DINE_IN'>('DELIVERY');
+  const [orderType, setOrderType] = useState<
+    'DELIVERY' | 'TAKEAWAY' | 'DINE_IN'
+  >('DELIVERY');
   const [tableNumber, setTableNumber] = useState('');
   const [couponDrawerOpen, setCouponDrawerOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const subtotal = cart?.items?.reduce(
-    (sum: number, item: any) => sum + parseFloat(item.price) * item.quantity,
-    0
-  ) || 0;
+  const subtotal =
+    cart?.items?.reduce(
+      (sum: number, item: any) => sum + parseFloat(item.price) * item.quantity,
+      0
+    ) || 0;
 
   // Load applied coupon from local storage if guest
   useEffect(() => {
@@ -79,7 +82,9 @@ export const CartPage: React.FC = () => {
       const match = couponList.find((c) => c.code === appliedCoupon.code);
       if (match && subtotal < match.minimumAmount) {
         setAppliedCoupon(null);
-        toast.error(`Coupon ${appliedCoupon.code} removed as order subtotal is below ₹${match.minimumAmount}`);
+        toast.error(
+          `Coupon ${appliedCoupon.code} removed as order subtotal is below ₹${match.minimumAmount}`
+        );
         if (!isAuthenticated) {
           removeGuestCoupon();
         }
@@ -88,11 +93,41 @@ export const CartPage: React.FC = () => {
   }, [subtotal, appliedCoupon, isAuthenticated, toast]);
 
   const couponList = [
-    { code: 'WELCOME50', description: 'Get ₹50 off on orders of ₹499 or more', discountType: 'FIXED_AMOUNT', discountValue: 50, minimumAmount: 499 },
-    { code: 'SAVE100', description: 'Get ₹100 off on orders of ₹999 or more', discountType: 'FIXED_AMOUNT', discountValue: 100, minimumAmount: 999 },
-    { code: 'PARTY200', description: 'Get ₹200 off on orders of ₹1499 or more', discountType: 'FIXED_AMOUNT', discountValue: 200, minimumAmount: 1499 },
-    { code: 'SUPER300', description: 'Get ₹300 off on orders of ₹1999 or more', discountType: 'FIXED_AMOUNT', discountValue: 300, minimumAmount: 1999 },
-    { code: 'MEGA500', description: 'Get ₹500 off on orders of ₹2999 or more', discountType: 'FIXED_AMOUNT', discountValue: 500, minimumAmount: 2999 },
+    {
+      code: 'WELCOME50',
+      description: 'Get ₹50 off on orders of ₹499 or more',
+      discountType: 'FIXED_AMOUNT',
+      discountValue: 50,
+      minimumAmount: 499,
+    },
+    {
+      code: 'SAVE100',
+      description: 'Get ₹100 off on orders of ₹999 or more',
+      discountType: 'FIXED_AMOUNT',
+      discountValue: 100,
+      minimumAmount: 999,
+    },
+    {
+      code: 'PARTY200',
+      description: 'Get ₹200 off on orders of ₹1499 or more',
+      discountType: 'FIXED_AMOUNT',
+      discountValue: 200,
+      minimumAmount: 1499,
+    },
+    {
+      code: 'SUPER300',
+      description: 'Get ₹300 off on orders of ₹1999 or more',
+      discountType: 'FIXED_AMOUNT',
+      discountValue: 300,
+      minimumAmount: 1999,
+    },
+    {
+      code: 'MEGA500',
+      description: 'Get ₹500 off on orders of ₹2999 or more',
+      discountType: 'FIXED_AMOUNT',
+      discountValue: 500,
+      minimumAmount: 2999,
+    },
   ];
 
   if (isLoading) {
@@ -111,7 +146,9 @@ export const CartPage: React.FC = () => {
             ⚠️
           </div>
           <div className="space-y-2">
-            <h3 className="text-2xl font-bold font-display text-white">Unable to load cart</h3>
+            <h3 className="text-2xl font-bold font-display text-white">
+              Unable to load cart
+            </h3>
             <p className="text-neutral-400 text-sm leading-relaxed">
               Please check your connection and try again.
             </p>
@@ -129,7 +166,8 @@ export const CartPage: React.FC = () => {
   }
 
   const isBirthdayEligible = user?.email === 'customer1@abcrestaurant.com';
-  const isBirthdayApplied = isBirthdayEligible && subtotal >= 3000 && !appliedCoupon;
+  const isBirthdayApplied =
+    isBirthdayEligible && subtotal >= 3000 && !appliedCoupon;
 
   const discount = appliedCoupon ? appliedCoupon.discountAmount : 0;
   const deliveryFee = orderType === 'DELIVERY' ? (subtotal >= 200 ? 0 : 20) : 0;
@@ -204,9 +242,11 @@ export const CartPage: React.FC = () => {
     }
   };
 
-  const handleSelectCoupon = (coupon: typeof couponList[0]) => {
+  const handleSelectCoupon = (coupon: (typeof couponList)[0]) => {
     if (subtotal < coupon.minimumAmount) {
-      toast.error(`Spend ₹${(coupon.minimumAmount - subtotal).toFixed(0)} more to unlock this coupon`);
+      toast.error(
+        `Spend ₹${(coupon.minimumAmount - subtotal).toFixed(0)} more to unlock this coupon`
+      );
       return;
     }
 
@@ -298,9 +338,12 @@ export const CartPage: React.FC = () => {
                 🛒
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-bold font-display text-white">Your cart is empty</h3>
+                <h3 className="text-2xl font-bold font-display text-white">
+                  Your cart is empty
+                </h3>
                 <p className="text-neutral-400 text-sm leading-relaxed">
-                  Looks like you haven&apos;t added anything to your cart yet. Discover our delicious meals and desserts!
+                  Looks like you haven&apos;t added anything to your cart yet.
+                  Discover our delicious meals and desserts!
                 </p>
               </div>
               <Button
@@ -309,7 +352,10 @@ export const CartPage: React.FC = () => {
                 onClick={() => navigate('/menu')}
               >
                 Browse Menu
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight
+                  size={16}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
               </Button>
             </div>
           ) : (
@@ -319,7 +365,10 @@ export const CartPage: React.FC = () => {
                 {!isAuthenticated && (
                   <div className="flex items-center gap-3 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm">
                     <Info size={18} className="shrink-0" />
-                    <span>Your cart will be saved after login. Do not lose cart contents.</span>
+                    <span>
+                      Your cart will be saved after login. Do not lose cart
+                      contents.
+                    </span>
                   </div>
                 )}
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 sm:p-4 space-y-2">
@@ -414,11 +463,18 @@ export const CartPage: React.FC = () => {
                       <div className="flex-1 min-w-0 pr-10 sm:pr-0">
                         <p className="font-bold text-base text-white flex items-center gap-2">
                           <span>Celebration Cake</span>
-                          <span className="bg-primary/20 border border-primary/30 text-primary text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">Free Gift</span>
+                          <span className="bg-primary/20 border border-primary/30 text-primary text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">
+                            Free Gift
+                          </span>
                         </p>
-                        <p className="text-xs text-neutral-400 mt-1">Birthday Special Promotion</p>
+                        <p className="text-xs text-neutral-400 mt-1">
+                          Birthday Special Promotion
+                        </p>
                         <p className="text-sm text-primary font-bold mt-2">
-                          ₹0 <span className="line-through text-neutral-500 text-xs ml-1">₹500</span>
+                          ₹0{' '}
+                          <span className="line-through text-neutral-500 text-xs ml-1">
+                            ₹500
+                          </span>
                         </p>
                       </div>
                       <div className="text-sm text-emerald-400 font-bold shrink-0">
@@ -431,13 +487,29 @@ export const CartPage: React.FC = () => {
                 {/* Select Dining Mode Section */}
                 <div className="bg-[#110E1C]/40 border border-white/5 rounded-3xl p-6 space-y-4 backdrop-blur-xl">
                   <h3 className="font-bold text-white text-base tracking-wide flex items-center gap-2">
-                    <UtensilsCrossed size={16} className="text-primary" /> Select Dining Mode
+                    <UtensilsCrossed size={16} className="text-primary" />{' '}
+                    Select Dining Mode
                   </h3>
                   <div className="grid grid-cols-3 gap-3">
                     {[
-                      { type: 'DELIVERY', label: 'Delivery', icon: Truck, desc: 'Flat ₹20 (Free above ₹200)' },
-                      { type: 'TAKEAWAY', label: 'Takeaway', icon: Store, desc: 'Self-pickup • Free' },
-                      { type: 'DINE_IN', label: 'Dine-In', icon: UtensilsCrossed, desc: 'Eat at table • Free' },
+                      {
+                        type: 'DELIVERY',
+                        label: 'Delivery',
+                        icon: Truck,
+                        desc: 'Flat ₹20 (Free above ₹200)',
+                      },
+                      {
+                        type: 'TAKEAWAY',
+                        label: 'Takeaway',
+                        icon: Store,
+                        desc: 'Self-pickup • Free',
+                      },
+                      {
+                        type: 'DINE_IN',
+                        label: 'Dine-In',
+                        icon: UtensilsCrossed,
+                        desc: 'Eat at table • Free',
+                      },
                     ].map((item) => {
                       const Icon = item.icon;
                       const isSelected = orderType === item.type;
@@ -452,8 +524,15 @@ export const CartPage: React.FC = () => {
                               : 'border-white/10 bg-white/[0.01] hover:border-white/20 text-neutral-400 hover:text-white'
                           }`}
                         >
-                          <Icon size={20} className={isSelected ? 'text-primary' : 'text-neutral-400'} />
-                          <span className="text-xs font-bold">{item.label}</span>
+                          <Icon
+                            size={20}
+                            className={
+                              isSelected ? 'text-primary' : 'text-neutral-400'
+                            }
+                          />
+                          <span className="text-xs font-bold">
+                            {item.label}
+                          </span>
                         </button>
                       );
                     })}
@@ -465,7 +544,9 @@ export const CartPage: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="pt-2"
                     >
-                      <label className="text-xs text-neutral-400 font-semibold block mb-2">Table Number (Optional)</label>
+                      <label className="text-xs text-neutral-400 font-semibold block mb-2">
+                        Table Number (Optional)
+                      </label>
                       <Input
                         type="text"
                         value={tableNumber}
@@ -536,7 +617,9 @@ export const CartPage: React.FC = () => {
                           </span>
                         </div>
                       </div>
-                      <span className="text-[10px] uppercase font-extrabold tracking-widest text-primary bg-primary/20 px-2 py-1 rounded">Applied</span>
+                      <span className="text-[10px] uppercase font-extrabold tracking-widest text-primary bg-primary/20 px-2 py-1 rounded">
+                        Applied
+                      </span>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -559,7 +642,8 @@ export const CartPage: React.FC = () => {
                       </form>
                       {isBirthdayEligible && subtotal < 3000 && (
                         <p className="text-[10px] text-amber-400 font-semibold flex items-center gap-1">
-                          <Cake size={12} /> Add ₹{(3000 - subtotal).toFixed(0)} more items for a Free Birthday Cake!
+                          <Cake size={12} /> Add ₹{(3000 - subtotal).toFixed(0)}{' '}
+                          more items for a Free Birthday Cake!
                         </p>
                       )}
                     </div>
@@ -653,7 +737,9 @@ export const CartPage: React.FC = () => {
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
                     <Tag size={18} className="text-primary" /> Apply Coupon
                   </h3>
-                  <p className="text-xs text-neutral-500 mt-1">Select a coupon for savings on your order</p>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    Select a coupon for savings on your order
+                  </p>
                 </div>
                 <button
                   onClick={() => setCouponDrawerOpen(false)}
@@ -667,7 +753,8 @@ export const CartPage: React.FC = () => {
               <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide">
                 {isBirthdayApplied && (
                   <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 text-xs text-amber-400 leading-relaxed mb-2">
-                    📢 Applying a coupon will remove the free celebration cake from your Birthday Special offer.
+                    📢 Applying a coupon will remove the free celebration cake
+                    from your Birthday Special offer.
                   </div>
                 )}
                 {couponList.map((coupon) => {
@@ -699,7 +786,9 @@ export const CartPage: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs font-bold text-neutral-300 mt-3">{coupon.description}</p>
+                      <p className="text-xs font-bold text-neutral-300 mt-3">
+                        {coupon.description}
+                      </p>
                       {!isEligible && (
                         <p className="text-[10px] text-primary font-semibold mt-2.5">
                           Add items worth ₹{needed.toFixed(0)} more to unlock
@@ -738,7 +827,9 @@ export const CartPage: React.FC = () => {
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-2 text-primary">
                   <ShoppingBag size={28} />
                 </div>
-                <h3 className="text-2xl font-bold font-display text-white">Continue to Checkout</h3>
+                <h3 className="text-2xl font-bold font-display text-white">
+                  Continue to Checkout
+                </h3>
                 <p className="text-neutral-400 text-sm leading-relaxed">
                   Login or create an account to place your order.
                 </p>
@@ -748,13 +839,19 @@ export const CartPage: React.FC = () => {
                 {/* Continue with Google */}
                 <Button
                   onClick={() => {
-                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+                    const apiUrl =
+                      import.meta.env.VITE_API_URL ||
+                      'http://localhost:5000/api/v1';
                     window.location.href = `${apiUrl}/auth/google`;
                   }}
                   variant="outline"
                   className="w-full h-12 border-white/10 hover:bg-white/5 font-semibold flex items-center justify-center gap-3 text-white"
                 >
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                       fill="#4285F4"
@@ -787,7 +884,9 @@ export const CartPage: React.FC = () => {
                       deliveryFee,
                     };
                     navigate('/login', {
-                      state: { from: { pathname: '/checkout', state: checkoutState } },
+                      state: {
+                        from: { pathname: '/checkout', state: checkoutState },
+                      },
                     });
                   }}
                   variant="primary"
@@ -808,7 +907,9 @@ export const CartPage: React.FC = () => {
                       deliveryFee,
                     };
                     navigate('/register', {
-                      state: { from: { pathname: '/checkout', state: checkoutState } },
+                      state: {
+                        from: { pathname: '/checkout', state: checkoutState },
+                      },
                     });
                   }}
                   variant="secondary"

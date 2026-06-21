@@ -43,9 +43,15 @@ export const CheckoutPage: React.FC = () => {
     orderType === 'DELIVERY' ? 'address' : 'payment'
   );
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
-  const [couponCode, setCouponCode] = useState<string>(checkoutState.couponCode || '');
-  const [discountAmount, setDiscountAmount] = useState<number>(checkoutState.discount || 0);
-  const [paymentProvider, setPaymentProvider] = useState<'CARD' | 'UPI' | 'COD'>('CARD');
+  const [couponCode, setCouponCode] = useState<string>(
+    checkoutState.couponCode || ''
+  );
+  const [discountAmount, setDiscountAmount] = useState<number>(
+    checkoutState.discount || 0
+  );
+  const [paymentProvider, setPaymentProvider] = useState<
+    'CARD' | 'UPI' | 'COD'
+  >('CARD');
 
   if (!isAuthenticated) {
     navigate('/login', { state: { from: { pathname: '/checkout' } } });
@@ -110,7 +116,8 @@ export const CheckoutPage: React.FC = () => {
     }, 2000);
   };
 
-  const steps: CheckoutStep[] = orderType === 'DELIVERY' ? ['address', 'coupon', 'payment'] : ['payment'];
+  const steps: CheckoutStep[] =
+    orderType === 'DELIVERY' ? ['address', 'coupon', 'payment'] : ['payment'];
 
   return (
     <>
@@ -128,9 +135,11 @@ export const CheckoutPage: React.FC = () => {
               </h1>
               <p className="text-neutral-400 text-sm mt-2 flex items-center gap-1">
                 <ShieldCheck size={16} className="text-emerald-500" />{' '}
-                {orderType === 'DELIVERY' && 'End-to-end encrypted delivery payment'}
+                {orderType === 'DELIVERY' &&
+                  'End-to-end encrypted delivery payment'}
                 {orderType === 'TAKEAWAY' && 'Self-Pickup Order details'}
-                {orderType === 'DINE_IN' && `Table #${tableNumber} Dining details`}
+                {orderType === 'DINE_IN' &&
+                  `Table #${tableNumber} Dining details`}
               </p>
             </div>
 
@@ -356,7 +365,11 @@ export const CheckoutPage: React.FC = () => {
 
                   <div className="pt-4 flex justify-between items-center border-t border-white/5">
                     <button
-                      onClick={() => orderType === 'DELIVERY' ? setStep('coupon') : navigate('/cart')}
+                      onClick={() =>
+                        orderType === 'DELIVERY'
+                          ? setStep('coupon')
+                          : navigate('/cart')
+                      }
                       className="text-sm text-neutral-400 hover:text-white transition-colors"
                     >
                       Back
@@ -415,7 +428,9 @@ export const CheckoutPage: React.FC = () => {
                         <div>
                           <p className="text-sm font-semibold text-white line-clamp-1 flex items-center gap-1.5">
                             <span>Celebration Cake</span>
-                            <span className="text-[9px] bg-primary/20 text-primary border border-primary/20 px-1 py-0.5 rounded">Free</span>
+                            <span className="text-[9px] bg-primary/20 text-primary border border-primary/20 px-1 py-0.5 rounded">
+                              Free
+                            </span>
                           </p>
                           <p className="text-xs text-neutral-500 font-medium">
                             Birthday Special

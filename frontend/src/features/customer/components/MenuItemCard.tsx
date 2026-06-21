@@ -11,8 +11,9 @@ import {
   useRemoveCartItem,
 } from '../../cart/store/cartQueries';
 import { Product } from '../store/catalogQueries';
-import QuantityStepper from './QuantityStepper';
+
 import HeartButton from './HeartButton';
+import QuantityStepper from './QuantityStepper';
 
 interface MenuItemCardProps {
   product: Product;
@@ -27,7 +28,9 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
   const { data: cart } = useCart();
 
   // Find if this product is in the cart
-  const cartItem = cart?.items.find((item: any) => item.productId === product.id);
+  const cartItem = cart?.items.find(
+    (item: any) => item.productId === product.id
+  );
   const cartQty = cartItem?.quantity || 0;
 
   const handleAdd = (e: React.MouseEvent) => {
@@ -72,10 +75,13 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
   };
 
   const getVegBadgeColor = () => {
-    return product.isVeg ? 'border-emerald-500 text-emerald-500' : 'border-red-500 text-red-500';
+    return product.isVeg
+      ? 'border-emerald-500 text-emerald-500'
+      : 'border-red-500 text-red-500';
   };
 
-  const defaultImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80';
+  const defaultImage =
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&auto=format&fit=crop&q=80';
 
   return (
     <motion.div
@@ -106,8 +112,12 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
         <div className="space-y-1.5">
           {/* Veg/Non-Veg tag */}
           <div className="flex items-center gap-2">
-            <div className={`w-4 h-4 border-2 flex items-center justify-center rounded-sm shrink-0 ${getVegBadgeColor()}`}>
-              <div className={`w-1.5 h-1.5 rounded-full ${product.isVeg ? 'bg-emerald-500' : 'bg-red-500'}`} />
+            <div
+              className={`w-4 h-4 border-2 flex items-center justify-center rounded-sm shrink-0 ${getVegBadgeColor()}`}
+            >
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${product.isVeg ? 'bg-emerald-500' : 'bg-red-500'}`}
+              />
             </div>
             {product.featured && (
               <span className="text-[9px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 rounded-md uppercase tracking-wider">
@@ -121,7 +131,8 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
           </h3>
 
           <p className="text-xs text-neutral-400 line-clamp-2 leading-relaxed font-normal">
-            {product.description || 'Delicately prepared with fresh ingredients, spices, and baked to perfection.'}
+            {product.description ||
+              'Delicately prepared with fresh ingredients, spices, and baked to perfection.'}
           </p>
         </div>
 
@@ -134,12 +145,16 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
             <div className="flex items-center gap-2.5 mt-1 text-[10px] text-neutral-500">
               <span className="flex items-center gap-0.5">
                 <Star size={11} className="text-amber-400 fill-amber-400" />
-                <span className="text-neutral-300 font-bold">{product.rating.toFixed(1)}</span>
+                <span className="text-neutral-300 font-bold">
+                  {product.rating.toFixed(1)}
+                </span>
               </span>
               <span className="w-1 h-1 bg-neutral-700 rounded-full" />
               <span className="flex items-center gap-0.5">
                 <Clock size={11} className="text-neutral-400" />
-                <span className="text-neutral-400">{product.preparationTime || 20} mins</span>
+                <span className="text-neutral-400">
+                  {product.preparationTime || 20} mins
+                </span>
               </span>
             </div>
           </div>
@@ -152,7 +167,9 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
                   quantity={cartQty}
                   onIncrease={handleIncrease}
                   onDecrease={handleDecrease}
-                  isLoading={updateCartItem.isPending || removeCartItem.isPending}
+                  isLoading={
+                    updateCartItem.isPending || removeCartItem.isPending
+                  }
                   size="sm"
                 />
               ) : (

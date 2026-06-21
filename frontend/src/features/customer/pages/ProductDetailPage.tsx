@@ -23,8 +23,8 @@ import {
   useRemoveCartItem,
 } from '../../cart/store/cartQueries';
 import FoodCard from '../components/FoodCard';
-import QuantityStepper from '../components/QuantityStepper';
 import HeartButton from '../components/HeartButton';
+import QuantityStepper from '../components/QuantityStepper';
 import {
   useProductBySlug,
   useTrackRecommendationClick,
@@ -47,7 +47,9 @@ export const ProductDetailPage: React.FC = () => {
 
   // Find if this product is in the cart matching the selected variant
   const cartItem = cart?.items.find(
-    (i: any) => i.productId === product?.id && (selectedVariantId ? i.variantId === selectedVariantId : !i.variantId)
+    (i: any) =>
+      i.productId === product?.id &&
+      (selectedVariantId ? i.variantId === selectedVariantId : !i.variantId)
   );
   const cartQty = cartItem?.quantity || 0;
 
@@ -273,7 +275,11 @@ export const ProductDetailPage: React.FC = () => {
           {/* Left Column: Image Gallery */}
           <div className="space-y-6">
             <div className="aspect-square rounded-3xl overflow-hidden bg-neutral-900 relative shadow-2xl">
-              <HeartButton productId={product.id} className="!top-6 !right-6" size={24} />
+              <HeartButton
+                productId={product.id}
+                className="!top-6 !right-6"
+                size={24}
+              />
               <img
                 src={
                   activeImage ||
@@ -441,7 +447,10 @@ export const ProductDetailPage: React.FC = () => {
                     e.preventDefault();
                     e.stopPropagation();
                     if (cartItem) {
-                      await updateCartItem.mutateAsync({ id: cartItem.id, quantity: cartQty + 1 });
+                      await updateCartItem.mutateAsync({
+                        id: cartItem.id,
+                        quantity: cartQty + 1,
+                      });
                     }
                   }}
                   onDecrease={async (e) => {
@@ -449,13 +458,18 @@ export const ProductDetailPage: React.FC = () => {
                     e.stopPropagation();
                     if (cartItem) {
                       if (cartQty > 1) {
-                        await updateCartItem.mutateAsync({ id: cartItem.id, quantity: cartQty - 1 });
+                        await updateCartItem.mutateAsync({
+                          id: cartItem.id,
+                          quantity: cartQty - 1,
+                        });
                       } else {
                         await removeCartItem.mutateAsync(cartItem.id);
                       }
                     }
                   }}
-                  isLoading={updateCartItem.isPending || removeCartItem.isPending}
+                  isLoading={
+                    updateCartItem.isPending || removeCartItem.isPending
+                  }
                   size="lg"
                 />
               ) : (

@@ -12,8 +12,9 @@ import {
   useCart,
 } from '../../cart/store/cartQueries';
 import type { Product } from '../store/catalogQueries';
-import QuantityStepper from './QuantityStepper';
+
 import HeartButton from './HeartButton';
+import QuantityStepper from './QuantityStepper';
 
 interface FoodCardProps {
   product: Product;
@@ -41,7 +42,11 @@ const FoodCard: React.FC<FoodCardProps> = ({
     e.preventDefault();
     e.stopPropagation();
     try {
-      await addToCart.mutateAsync({ productId: product.id, quantity: 1, product });
+      await addToCart.mutateAsync({
+        productId: product.id,
+        quantity: 1,
+        product,
+      });
       toast.success(`${product.name} added to cart`);
     } catch {
       toast.error('Failed to add item');

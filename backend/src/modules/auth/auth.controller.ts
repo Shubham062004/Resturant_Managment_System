@@ -659,11 +659,7 @@ export class AuthController {
         redirectUri
       )}&response_type=${encodeURIComponent(
         responseType
-      )}&scope=${encodeURIComponent(
-        scope
-      )}&nonce=${encodeURIComponent(
-        nonce
-      )}`;
+      )}&scope=${encodeURIComponent(scope)}&nonce=${encodeURIComponent(nonce)}`;
 
       res.redirect(authUrl);
     } catch (error) {

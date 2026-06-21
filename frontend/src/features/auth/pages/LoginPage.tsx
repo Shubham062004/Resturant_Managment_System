@@ -24,7 +24,8 @@ export const LoginPage: React.FC = () => {
   const fromState = (location.state as any)?.from?.state;
 
   const handleGoogleLogin = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+    const apiUrl =
+      import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
     window.location.href = `${apiUrl}/auth/google`;
   };
 
