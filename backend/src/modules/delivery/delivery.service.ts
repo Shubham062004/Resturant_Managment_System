@@ -1,8 +1,11 @@
+import { PaymentStatus } from '@prisma/client';
+
 import { prisma } from '../../config/db';
 import { getIO } from '../../config/socket';
 import { DeliveryEvent } from '../../database/mongo/DeliveryEvent';
 import { DriverLocation } from '../../database/mongo/DriverLocation';
 import AppError from '../../utils/appError';
+import { OrdersService } from '../orders/orders.service';
 
 export class DeliveryService {
   static async assignOrder(orderId: string, driverId?: string) {
@@ -134,11 +137,12 @@ export class DeliveryService {
       },
     });
 
-    // Update main order status
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { status: 'OUT_FOR_DELIVERY' },
-    });
+    // Update main order status via OrdersService
+    await OrdersService.updateOrderStatus(
+      orderId,
+      'OUT_FOR_DELIVERY',
+      driver.userId
+    );
 
     await DeliveryEvent.create({
       orderId,
@@ -181,11 +185,16 @@ export class DeliveryService {
       },
     });
 
-    // Update main order status
-    await prisma.order.update({
-      where: { id: orderId },
-      data: { status: 'DELIVERED' },
-    });
+    // Update main order status via OrdersService
+    await OrdersService.updateOrderStatus(orderId, 'DELIVERED', driver.userId);
+
+    // If COD, update payment status to PAID
+    if (assignment.order.paymentId) {
+      await prisma.payment.updateMany({
+        where: { id: assignment.order.paymentId, provider: 'COD' },
+        data: { status: PaymentStatus.PAID },
+      });
+    }
 
     // Calculate Earnings (Flat 5 + 5% of order subtotal)
     const orderValue = Number(assignment.order.subtotal);

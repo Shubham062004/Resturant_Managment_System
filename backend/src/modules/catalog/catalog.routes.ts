@@ -71,6 +71,26 @@ router.get(
   validate({ query: productQuerySchema }),
   CatalogController.getProducts
 );
+router.get('/trending', optionalAuth, CatalogController.getTrending);
+router.get('/best-sellers', optionalAuth, CatalogController.getBestSellers);
+router.get(
+  '/best-in-branch/:branchId',
+  optionalAuth,
+  CatalogController.getBestInBranch
+);
+router.get('/new-arrivals', optionalAuth, CatalogController.getNewArrivals);
+router.get('/most-loved', optionalAuth, CatalogController.getMostLoved);
+router.get('/budget-meals', optionalAuth, CatalogController.getBudgetMeals);
+router.get('/recommended', optionalAuth, CatalogController.getRecommended);
+router.get('/party-orders', optionalAuth, CatalogController.getPartyOrders);
+router.get('/veg-specials', optionalAuth, CatalogController.getVegSpecials);
+router.get('/deals', optionalAuth, CatalogController.getDeals);
+router.get(
+  '/categories-showcase',
+  optionalAuth,
+  CatalogController.getCategoriesShowcase
+);
+
 router.get('/products/featured', CatalogController.getFeaturedProducts);
 router.get('/reviews/top', CatalogController.getTopReviews);
 router.get('/platform-stats', CatalogController.getPlatformStats);

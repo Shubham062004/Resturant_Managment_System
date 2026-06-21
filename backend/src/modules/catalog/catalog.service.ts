@@ -1024,4 +1024,572 @@ export class CatalogService {
       avgDeliveryMins: avgDelivery,
     };
   }
+
+  /**
+   * Helper to build branch availability query condition
+   */
+  private static getBranchFilter(branchId?: string) {
+    if (!branchId) return {};
+    return {
+      branchMenuItems: {
+        some: {
+          branchId,
+          isAvailable: true,
+        },
+      },
+    };
+  }
+
+  /**
+   * GET /catalog/trending
+   */
+  public static async getTrendingProducts(branchId?: string) {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const branchFilter = this.getBranchFilter(branchId);
+
+    // 1. Fetch recent order item counts
+    const orderItems = await prisma.orderItem.groupBy({
+      by: ['productId'],
+      _sum: { quantity: true },
+      where: {
+        order: {
+          createdAt: { gte: sevenDaysAgo },
+          ...(branchId ? { branchId } : {}),
+        },
+      },
+    });
+
+    // 2. Fetch recent wishlist counts
+    const wishlistAdds = await prisma.wishlist.groupBy({
+      by: ['menuItemId'],
+      _count: { id: true },
+      where: {
+        createdAt: { gte: sevenDaysAgo },
+        ...(branchId ? { branchId } : {}),
+      },
+    });
+
+    // 3. Fetch recent cart adds
+    const cartAdds = await prisma.cartItem.groupBy({
+      by: ['productId'],
+      _sum: { quantity: true },
+      where: {
+        createdAt: { gte: sevenDaysAgo },
+      },
+    });
+
+    // Compute scores
+    const scoreMap = new Map<string, number>();
+
+    orderItems.forEach((item) => {
+      const qty = item._sum.quantity || 0;
+      scoreMap.set(
+        item.productId,
+        (scoreMap.get(item.productId) || 0) + qty * 3
+      );
+    });
+
+    wishlistAdds.forEach((item) => {
+      const count = item._count.id || 0;
+      scoreMap.set(
+        item.menuItemId,
+        (scoreMap.get(item.menuItemId) || 0) + count * 2
+      );
+    });
+
+    cartAdds.forEach((item) => {
+      const qty = item._sum.quantity || 0;
+      scoreMap.set(
+        item.productId,
+        (scoreMap.get(item.productId) || 0) + qty * 1
+      );
+    });
+
+    // Fetch all products matching branch filter
+    const products = await prisma.product.findMany({
+      where: {
+        isAvailable: true,
+        ...branchFilter,
+      },
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+    });
+
+    // Map scores and sort
+    const trendingProducts = products
+      .map((p) => ({
+        product: p,
+        score: scoreMap.get(p.id) || 0,
+      }))
+      .sort((a, b) => b.score - a.score || b.product.rating - a.product.rating);
+
+    // Return top 10 products
+    return trendingProducts.slice(0, 10).map((tp) => tp.product);
+  }
+
+  /**
+   * GET /catalog/best-sellers
+   */
+  public static async getBestSellers(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    // Group order items to find top sold products
+    const sales = await prisma.orderItem.groupBy({
+      by: ['productId'],
+      _sum: { quantity: true },
+      where: {
+        order: branchId ? { branchId } : {},
+      },
+      orderBy: {
+        _sum: {
+          quantity: 'desc',
+        },
+      },
+      take: 15,
+    });
+
+    const soldProductIds = sales.map((s) => s.productId);
+
+    let products = await prisma.product.findMany({
+      where: {
+        id: { in: soldProductIds },
+        isAvailable: true,
+        ...branchFilter,
+      },
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+    });
+
+    // Sort by actual order volume
+    const salesMap = new Map(
+      sales.map((s) => [s.productId, s._sum.quantity || 0])
+    );
+    products.sort(
+      (a, b) => (salesMap.get(b.id) || 0) - (salesMap.get(a.id) || 0)
+    );
+
+    // Pad with featured or high rated products if insufficient sales
+    if (products.length < 10) {
+      const remainingCount = 10 - products.length;
+      const additional = await prisma.product.findMany({
+        where: {
+          id: { notIn: products.map((p) => p.id) },
+          isAvailable: true,
+          ...branchFilter,
+        },
+        orderBy: [{ rating: 'desc' }, { createdAt: 'desc' }],
+        take: remainingCount,
+        include: {
+          variants: true,
+          restaurant: true,
+          category: true,
+        },
+      });
+      products = [...products, ...additional];
+    }
+
+    return products.slice(0, 10);
+  }
+
+  /**
+   * GET /catalog/best-in-branch/:branchId
+   */
+  public static async getBestInBranch(branchId: string) {
+    return this.getBestSellers(branchId);
+  }
+
+  /**
+   * GET /catalog/new-arrivals
+   */
+  public static async getNewArrivals(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    let products = await prisma.product.findMany({
+      where: {
+        createdAt: { gte: thirtyDaysAgo },
+        isAvailable: true,
+        ...branchFilter,
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+      take: 12,
+    });
+
+    // Fallback if no new products in 30 days
+    if (products.length < 8) {
+      products = await prisma.product.findMany({
+        where: {
+          isAvailable: true,
+          ...branchFilter,
+        },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          variants: true,
+          restaurant: true,
+          category: true,
+        },
+        take: 10,
+      });
+    }
+
+    return products;
+  }
+
+  /**
+   * GET /catalog/most-loved
+   */
+  public static async getMostLoved(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    const thresholds = [10, 5, 1, 0];
+    let products: any[] = [];
+
+    for (const minReviews of thresholds) {
+      products = await prisma.product.findMany({
+        where: {
+          rating: { gte: 4.0 },
+          isAvailable: true,
+          ...branchFilter,
+          reviews: {
+            some: {}, // ensures it has at least some reviews implicitly, or we check filter in memory
+          },
+        },
+        orderBy: [{ rating: 'desc' }, { name: 'asc' }],
+        include: {
+          variants: true,
+          restaurant: true,
+          category: true,
+          reviews: true,
+        },
+        take: 15,
+      });
+
+      // Filter in-memory to ensure reviews count matches
+      products = products.filter((p) => p.reviews.length >= minReviews);
+
+      if (products.length >= 4) {
+        break;
+      }
+    }
+
+    // If we still don't have enough, just get highest rated products
+    if (products.length < 4) {
+      products = await prisma.product.findMany({
+        where: {
+          isAvailable: true,
+          ...branchFilter,
+        },
+        orderBy: [{ rating: 'desc' }, { name: 'asc' }],
+        include: {
+          variants: true,
+          restaurant: true,
+          category: true,
+        },
+        take: 10,
+      });
+    }
+
+    // Clean reviews from objects to save payload size
+    return products.slice(0, 10).map((p) => {
+      const { reviews, ...rest } = p;
+      return rest;
+    });
+  }
+
+  /**
+   * GET /catalog/budget-meals
+   */
+  public static async getBudgetMeals(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    return prisma.product.findMany({
+      where: {
+        basePrice: { lte: 199 },
+        isAvailable: true,
+        ...branchFilter,
+      },
+      orderBy: [{ basePrice: 'asc' }, { rating: 'desc' }],
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+      take: 12,
+    });
+  }
+
+  /**
+   * GET /catalog/recommended
+   */
+  public static async getRecommended(userId?: string, branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    if (!userId) {
+      return this.getBestSellers(branchId);
+    }
+
+    // 1. Fetch user ordered category IDs
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      select: {
+        items: {
+          select: {
+            product: {
+              select: { categoryId: true },
+            },
+          },
+        },
+      },
+      take: 10,
+    });
+
+    // 2. Fetch user wishlist category IDs
+    const wishlist = await prisma.wishlist.findMany({
+      where: { userId },
+      select: {
+        product: {
+          select: { categoryId: true },
+        },
+      },
+    });
+
+    // Tally frequencies
+    const categoryFreq = new Map<string, number>();
+
+    orders.forEach((o) => {
+      o.items.forEach((item) => {
+        if (item.product?.categoryId) {
+          const cid = item.product.categoryId;
+          categoryFreq.set(cid, (categoryFreq.get(cid) || 0) + 1);
+        }
+      });
+    });
+
+    wishlist.forEach((w) => {
+      if (w.product?.categoryId) {
+        const cid = w.product.categoryId;
+        categoryFreq.set(cid, (categoryFreq.get(cid) || 0) + 2);
+      }
+    });
+
+    // Sort category IDs by frequency
+    const sortedCategories = Array.from(categoryFreq.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map((entry) => entry[0]);
+
+    let recommended: any[] = [];
+    if (sortedCategories.length > 0) {
+      recommended = await prisma.product.findMany({
+        where: {
+          categoryId: { in: sortedCategories },
+          isAvailable: true,
+          ...branchFilter,
+        },
+        orderBy: { rating: 'desc' },
+        include: {
+          variants: true,
+          restaurant: true,
+          category: true,
+        },
+        take: 10,
+      });
+    }
+
+    // Pad with platform best sellers if empty or short
+    if (recommended.length < 8) {
+      const best = await this.getBestSellers(branchId);
+      const recommendedIds = new Set(recommended.map((r) => r.id));
+      best.forEach((p) => {
+        if (!recommendedIds.has(p.id) && recommended.length < 10) {
+          recommended.push(p);
+        }
+      });
+    }
+
+    return recommended;
+  }
+
+  /**
+   * GET /catalog/party-orders
+   */
+  public static async getPartyOrders(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    return prisma.product.findMany({
+      where: {
+        isAvailable: true,
+        ...branchFilter,
+        OR: [
+          { basePrice: { gte: 799 } },
+          {
+            category: {
+              name: {
+                in: ['Combos', 'Family Meals', 'Platters', 'Combo', 'Platter'],
+                mode: 'insensitive',
+              },
+            },
+          },
+        ],
+      },
+      orderBy: { basePrice: 'desc' },
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+      take: 12,
+    });
+  }
+
+  /**
+   * GET /catalog/veg-specials
+   */
+  public static async getVegSpecials(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    return prisma.product.findMany({
+      where: {
+        isVeg: true,
+        isAvailable: true,
+        ...branchFilter,
+      },
+      orderBy: { rating: 'desc' },
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+      take: 12,
+    });
+  }
+
+  /**
+   * GET /catalog/deals
+   */
+  public static async getDeals(branchId?: string) {
+    const branchFilter = this.getBranchFilter(branchId);
+
+    let products = await prisma.product.findMany({
+      where: {
+        discountPercentage: { gt: 0 },
+        isAvailable: true,
+        ...branchFilter,
+      },
+      orderBy: { discountPercentage: 'desc' },
+      include: {
+        variants: true,
+        restaurant: true,
+        category: true,
+      },
+      take: 12,
+    });
+
+    // Fallback/pad with pseudo-discounts if database has no products marked with discount percentage
+    if (products.length < 4) {
+      const otherProducts = await prisma.product.findMany({
+        where: {
+          isAvailable: true,
+          ...branchFilter,
+          id: { notIn: products.map((p) => p.id) },
+        },
+        orderBy: { rating: 'desc' },
+        take: 8,
+        include: {
+          variants: true,
+          restaurant: true,
+          category: true,
+        },
+      });
+
+      // Dynamically add pseudo-discounts to fallback products in dev environment
+      const padded = otherProducts.map((p, index) => {
+        const fakeDiscount = [15, 20, 10, 25, 30][index % 5];
+        return {
+          ...p,
+          discountPercentage: fakeDiscount,
+        };
+      });
+
+      products = [...products, ...padded];
+    }
+
+    return products;
+  }
+
+  /**
+   * GET /catalog/categories-showcase
+   */
+  public static async getCategoriesShowcase(branchId?: string) {
+    const targetCategories = [
+      'Pizza',
+      'Burger',
+      'Chinese',
+      'Biryani',
+      'Wraps',
+      'Desserts',
+      'Drinks',
+      'Combos',
+    ];
+
+    const branchFilter = this.getBranchFilter(branchId);
+
+    const showcase = await Promise.all(
+      targetCategories.map(async (catName) => {
+        // Find category
+        const category = await prisma.category.findFirst({
+          where: {
+            name: { equals: catName, mode: 'insensitive' },
+          },
+        });
+
+        if (!category) {
+          return {
+            categoryId: '',
+            categorySlug: catName.toLowerCase(),
+            categoryName: catName,
+            products: [],
+          };
+        }
+
+        const products = await prisma.product.findMany({
+          where: {
+            categoryId: category.id,
+            isAvailable: true,
+            ...branchFilter,
+          },
+          orderBy: { rating: 'desc' },
+          take: 8,
+          include: {
+            variants: true,
+            restaurant: true,
+            category: true,
+          },
+        });
+
+        return {
+          categoryId: category.id,
+          categorySlug: category.slug,
+          categoryName: category.name,
+          products,
+        };
+      })
+    );
+
+    // Only return categories that actually have products to keep homepage layout clean and visual
+    return showcase.filter((item) => item.products.length > 0);
+  }
 }

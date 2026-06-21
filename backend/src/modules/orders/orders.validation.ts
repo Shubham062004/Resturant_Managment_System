@@ -8,6 +8,8 @@ export const createOrderSchema = {
     paymentId: z.string().uuid().optional(),
     orderType: z.enum(['DINE_IN', 'DELIVERY', 'PICKUP']).default('DELIVERY'),
     notes: z.string().optional(),
+    couponCode: z.string().optional(),
+    paymentMethod: z.string().optional(),
   }),
 };
 

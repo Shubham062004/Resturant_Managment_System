@@ -88,6 +88,7 @@ export interface Product {
   isVeg: boolean;
   isAvailable: boolean;
   featured: boolean;
+  discountPercentage?: number;
   variants: ProductVariant[];
   reviews?: Review[];
   restaurant?: Restaurant;
@@ -543,5 +544,156 @@ export const usePlatformStats = () => {
       return data;
     },
     staleTime: 10 * 60 * 1000,
+  });
+};
+
+// 19. Fetch Trending Products
+export const useTrendingProducts = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['trending-products', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/trending', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 20. Fetch Best Sellers
+export const useBestSellers = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['best-sellers', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/best-sellers', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 21. Fetch Best in Current Branch
+export const useBestInBranch = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['best-in-branch', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get(
+        `/catalog/best-in-branch/${branchId}`
+      );
+      return data;
+    },
+    enabled: !!branchId,
+  });
+};
+
+// 22. Fetch New Arrivals
+export const useNewArrivals = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['new-arrivals', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/new-arrivals', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 23. Fetch Most Loved
+export const useMostLoved = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['most-loved', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/most-loved', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 24. Fetch Budget Meals (under ₹199)
+export const useBudgetMeals = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['budget-meals', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/budget-meals', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 25. Fetch Recommended For You
+export const useRecommendedProducts = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['recommended-products', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/recommended', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 26. Fetch Party Orders (above ₹799 or combos/platters)
+export const usePartyOrders = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['party-orders', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/party-orders', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 27. Fetch Vegetarian Specials
+export const useVegSpecials = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['veg-specials', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/veg-specials', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 28. Fetch Today's Deals (products with discounts)
+export const useTodayDeals = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: Product[] }>({
+    queryKey: ['today-deals', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/deals', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
+  });
+};
+
+// 29. Fetch Categories Showcase grouped products
+export interface CategoryShowcaseItem {
+  categoryId: string;
+  categorySlug: string;
+  categoryName: string;
+  products: Product[];
+}
+
+export const useCategoriesShowcase = (branchId?: string) => {
+  return useQuery<{ success: boolean; data: CategoryShowcaseItem[] }>({
+    queryKey: ['categories-showcase', branchId],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/catalog/categories-showcase', {
+        params: branchId ? { branchId } : {},
+      });
+      return data;
+    },
   });
 };

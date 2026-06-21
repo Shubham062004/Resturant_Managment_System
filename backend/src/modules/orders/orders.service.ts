@@ -1,4 +1,9 @@
-import { OrderStatus, OrderType } from '@prisma/client';
+import {
+  OrderStatus,
+  OrderType,
+  PaymentStatus,
+  PaymentProvider,
+} from '@prisma/client';
 
 import { prisma } from '../../config/db';
 import { getIO } from '../../config/socket';
@@ -18,6 +23,8 @@ export class OrdersService {
       paymentId?: string;
       orderType?: OrderType;
       notes?: string;
+      couponCode?: string;
+      paymentMethod?: string;
     }
   ) {
     const cart = await prisma.cart.findUnique({
@@ -29,63 +36,149 @@ export class OrdersService {
       throw new AppError('Cart is empty. Cannot place an order.', 400);
     }
 
-    // Calculate totals
     const subtotal = cart.items.reduce(
       (sum: number, item: any) => sum + Number(item.price) * item.quantity,
       0
     );
-    const tax = subtotal * 0.05; // Fixed 5% tax for simplicity
-    const deliveryFee = data.orderType === 'DELIVERY' ? 5.0 : 0.0;
-    const discount = 0.0; // Extend to support coupons later
-    const totalAmount = subtotal + tax + deliveryFee - discount;
 
-    const order = await prisma.order.create({
-      data: {
-        userId,
-        restaurantId: data.restaurantId,
-        branchId: data.branchId,
-        addressId: data.addressId,
-        paymentId: data.paymentId,
-        orderType: data.orderType || 'DELIVERY',
-        notes: data.notes,
-        subtotal,
-        tax,
-        deliveryFee,
-        discount,
-        totalAmount,
-        status: OrderStatus.PLACED,
-        items: {
-          create: cart.items.map((item) => ({
-            productId: item.productId,
-            variantId: item.variantId,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        },
-        statusHistory: {
-          create: {
-            newStatus: OrderStatus.PLACED,
-            changedBy: userId,
+    const order = await prisma.$transaction(async (tx) => {
+      let discount = 0.0;
+      let coupon = null;
+
+      if (data.couponCode) {
+        const uppercaseCode = data.couponCode.toUpperCase();
+        coupon = await tx.coupon.findUnique({
+          where: { code: uppercaseCode },
+        });
+
+        if (!coupon) {
+          throw new AppError('Invalid coupon code', 400);
+        }
+        if (!coupon.active) {
+          throw new AppError('This coupon is no longer active', 400);
+        }
+
+        const now = new Date();
+        if (now < coupon.startDate) {
+          throw new AppError('This coupon is not yet valid', 400);
+        }
+        if (now > coupon.endDate) {
+          throw new AppError('This coupon has expired', 400);
+        }
+
+        if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
+          throw new AppError('This coupon has reached its usage limit', 400);
+        }
+
+        if (subtotal < Number(coupon.minimumAmount)) {
+          throw new AppError(
+            `Minimum order amount of ₹${coupon.minimumAmount} required`,
+            400
+          );
+        }
+
+        const usage = await tx.couponUsage.findFirst({
+          where: { couponId: coupon.id, userId },
+        });
+        if (usage) {
+          throw new AppError('You have already used this coupon', 400);
+        }
+
+        if (coupon.discountType === 'PERCENTAGE') {
+          discount = (subtotal * Number(coupon.discountValue)) / 100;
+          if (coupon.maxDiscount && discount > Number(coupon.maxDiscount)) {
+            discount = Number(coupon.maxDiscount);
+          }
+        } else if (coupon.discountType === 'FIXED_AMOUNT') {
+          discount = Number(coupon.discountValue);
+        }
+
+        // Increment usedCount
+        await tx.coupon.update({
+          where: { id: coupon.id },
+          data: { usedCount: { increment: 1 } },
+        });
+
+        // Create CouponUsage
+        await tx.couponUsage.create({
+          data: {
+            couponId: coupon.id,
+            userId,
           },
-        },
-        kitchenOrder: {
-          create: {
-            priority: 'MEDIUM',
-            status: 'QUEUED',
-            tasks: {
-              create: cart.items.map((item) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-              })),
+        });
+      }
+
+      // Calculate totals
+      const tax = subtotal * 0.05;
+      const deliveryFee = data.orderType === 'DELIVERY' ? 5.0 : 0.0;
+      const totalAmount = subtotal + tax + deliveryFee - discount;
+
+      // Handle COD Payment creation
+      let paymentId = data.paymentId;
+      if (data.paymentMethod === 'COD') {
+        const payment = await tx.payment.create({
+          data: {
+            provider: PaymentProvider.COD,
+            amount: totalAmount,
+            status: PaymentStatus.UNPAID,
+          },
+        });
+        paymentId = payment.id;
+      }
+
+      // Create Order
+      const newOrder = await tx.order.create({
+        data: {
+          userId,
+          restaurantId: data.restaurantId,
+          branchId: data.branchId,
+          addressId: data.addressId,
+          paymentId: paymentId,
+          orderType: data.orderType || 'DELIVERY',
+          notes: data.notes,
+          subtotal,
+          tax,
+          deliveryFee,
+          discount,
+          totalAmount,
+          status: OrderStatus.PLACED,
+          items: {
+            create: cart.items.map((item) => ({
+              productId: item.productId,
+              variantId: item.variantId,
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          },
+          statusHistory: {
+            create: {
+              newStatus: OrderStatus.PLACED,
+              changedBy: userId,
+            },
+          },
+          kitchenOrder: {
+            create: {
+              priority: 'MEDIUM',
+              status: 'QUEUED',
+              tasks: {
+                create: cart.items.map((item) => ({
+                  productId: item.productId,
+                  quantity: item.quantity,
+                })),
+              },
             },
           },
         },
-      },
-      include: { items: true, kitchenOrder: { include: { tasks: true } } },
-    });
+        include: { items: true, kitchenOrder: { include: { tasks: true } } },
+      });
 
-    // Clear cart
-    await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+      // Clear Cart
+      await tx.cartItem.deleteMany({
+        where: { cartId: cart.id },
+      });
+
+      return newOrder;
+    });
 
     // Emit Socket.io event to restaurant staff
     try {

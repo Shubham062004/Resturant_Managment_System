@@ -20,6 +20,7 @@ import {
   useCart,
   useAddresses,
   useValidateCoupon,
+  usePlaceOrder,
   type Address,
 } from '../store/cartQueries';
 
@@ -33,6 +34,7 @@ export const CheckoutPage: React.FC = () => {
   const { data: cart, isLoading } = useCart();
   const { data: addresses = [] } = useAddresses(isAuthenticated);
   const validateCoupon = useValidateCoupon();
+  const placeOrder = usePlaceOrder();
 
   const checkoutState = location.state || {};
   const orderType = checkoutState.orderType || 'DELIVERY';
@@ -109,11 +111,35 @@ export const CheckoutPage: React.FC = () => {
     }
   };
 
-  const handlePlaceOrder = () => {
-    toast.success('Order placed successfully! (Simulation)');
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
+  const handlePlaceOrder = async () => {
+    try {
+      const payload: any = {
+        orderType,
+        notes: '',
+        couponCode: couponCode || undefined,
+        paymentMethod: paymentProvider,
+      };
+
+      if (orderType === 'DELIVERY') {
+        const activeAddressId = selectedAddressId || defaultAddress?.id;
+        if (!activeAddressId) {
+          toast.error('Please select a delivery address');
+          setStep('address');
+          return;
+        }
+        payload.addressId = activeAddressId;
+      }
+
+      const order = await placeOrder.mutateAsync(payload);
+      toast.success('Order placed successfully!');
+      navigate(`/orders/${order.id}`);
+    } catch (err: any) {
+      toast.error(
+        err.response?.data?.error?.message ||
+          err.message ||
+          'Failed to place order. Please try again.'
+      );
+    }
   };
 
   const steps: CheckoutStep[] =
@@ -378,6 +404,7 @@ export const CheckoutPage: React.FC = () => {
                       variant="primary"
                       className="h-14 px-10 font-bold shadow-lg shadow-primary/20 text-base"
                       onClick={handlePlaceOrder}
+                      isLoading={placeOrder.isPending}
                     >
                       Pay ₹{total.toFixed(0)} & Place Order
                     </Button>

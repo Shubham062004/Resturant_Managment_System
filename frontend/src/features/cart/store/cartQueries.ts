@@ -191,9 +191,20 @@ export const useAddToCart = () => {
       if (!isAuthenticated) {
         const guest = loadGuestCart();
 
-        const price = payload.variant
+        let price = payload.variant
           ? payload.variant.price
           : payload.product?.basePrice || '0';
+
+        if (
+          payload.product?.discountPercentage &&
+          payload.product.discountPercentage > 0
+        ) {
+          const discountPct = payload.product.discountPercentage;
+          price = (
+            parseFloat(price.toString()) *
+            (1 - discountPct / 100)
+          ).toFixed(2);
+        }
 
         const existingItemIndex = guest.items.findIndex(
           (item) =>
@@ -421,6 +432,36 @@ export const useDeleteAddress = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['addresses'] });
+    },
+  });
+};
+
+export const usePlaceOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: {
+      restaurantId?: string;
+      branchId?: string;
+      addressId?: string;
+      paymentId?: string;
+      orderType?: 'DINE_IN' | 'DELIVERY' | 'PICKUP';
+      notes?: string;
+      couponCode?: string;
+      paymentMethod?: string;
+    }) => {
+      let branchId = payload.branchId;
+      if (!branchId) {
+        branchId = getSelectedBranchId();
+      }
+      const { data } = await apiClient.post('/orders', {
+        ...payload,
+        branchId,
+      });
+      return data.data.order;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };

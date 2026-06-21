@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 import { prisma } from '../../config/db';
 import CartEvent from '../../models/CartEvent';
 import AppError from '../../utils/appError';
@@ -85,6 +87,12 @@ export class CartService {
         throw new AppError('Variant not found', 404);
       }
       price = variant.price;
+    }
+
+    if (product.discountPercentage && product.discountPercentage > 0) {
+      const discountedVal =
+        Number(price) * (1 - product.discountPercentage / 100);
+      price = new Prisma.Decimal(discountedVal.toFixed(2));
     }
 
     // Check if item already exists in cart

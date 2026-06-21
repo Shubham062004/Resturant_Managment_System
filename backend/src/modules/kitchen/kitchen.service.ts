@@ -1,4 +1,8 @@
-import { KitchenOrderStatus, KitchenPriority } from '@prisma/client';
+import {
+  KitchenOrderStatus,
+  KitchenPriority,
+  OrderStatus,
+} from '@prisma/client';
 
 import { prisma } from '../../config/db';
 import { getIO } from '../../config/socket';
@@ -7,6 +11,7 @@ import { KitchenMetric } from '../../database/mongo/KitchenMetric';
 import AppError from '../../utils/appError';
 import { DeliveryService } from '../delivery/delivery.service';
 import { InventoryService } from '../inventory/inventory.service';
+import { OrdersService } from '../orders/orders.service';
 
 export class KitchenService {
   /**
@@ -17,6 +22,11 @@ export class KitchenService {
       where: {
         status: {
           not: 'COMPLETED',
+        },
+        order: {
+          status: {
+            notIn: ['CANCELLED', 'REFUNDED'],
+          },
         },
       },
       include: {
@@ -44,7 +54,7 @@ export class KitchenService {
       return orders
         .map((ko) => {
           if (!ko.order) return null;
-          const matchedItems = ko.order.items.filter((item) => {
+          const matchedItems = ko.order.items.filter((item: any) => {
             const catSlug = item.product.category.slug.toLowerCase();
             const catName = item.product.category.name.toLowerCase();
             const filterSlug = assignedCategory.toLowerCase();
@@ -159,7 +169,8 @@ export class KitchenService {
    */
   public static async updateOrderStatus(
     id: string,
-    status: KitchenOrderStatus
+    status: KitchenOrderStatus,
+    changerId?: string
   ) {
     const kOrder = await prisma.kitchenOrder.findUnique({ where: { id } });
     if (!kOrder) throw new AppError('Kitchen order not found', 404);
@@ -196,6 +207,41 @@ export class KitchenService {
     try {
       getIO().to('staff_room').emit('kds_status_update', updated);
     } catch {}
+
+    // Sync status with parent Order
+    try {
+      let nextOrderStatus: OrderStatus | null = null;
+      if (status === 'COOKING') {
+        nextOrderStatus = OrderStatus.PREPARING;
+      } else if (status === 'READY_FOR_PACKING') {
+        nextOrderStatus = OrderStatus.PREPARING;
+      } else if (status === 'PACKED') {
+        nextOrderStatus = OrderStatus.READY;
+      } else if (status === 'COMPLETED') {
+        const parentOrder = await prisma.order.findUnique({
+          where: { id: kOrder.orderId },
+        });
+        if (parentOrder) {
+          if (parentOrder.orderType === 'DINE_IN') {
+            nextOrderStatus = OrderStatus.DELIVERED;
+          } else if (parentOrder.orderType === 'PICKUP') {
+            nextOrderStatus = OrderStatus.READY_FOR_PICKUP;
+          } else {
+            nextOrderStatus = OrderStatus.READY;
+          }
+        }
+      }
+
+      if (nextOrderStatus) {
+        await OrdersService.updateOrderStatus(
+          kOrder.orderId,
+          nextOrderStatus,
+          changerId || kOrder.assignedTo || 'system'
+        );
+      }
+    } catch (e: any) {
+      console.error('Failed to sync parent order status:', e.message);
+    }
 
     // Auto-assign delivery driver when packed
     if (status === 'PACKED') {

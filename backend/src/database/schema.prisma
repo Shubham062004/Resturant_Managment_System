@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma/client"
 }
 
 model User {
@@ -546,6 +547,7 @@ model Product {
   isVeg            Boolean          @default(false)
   isAvailable      Boolean          @default(true)
   featured         Boolean          @default(false)
+  discountPercentage Int            @default(0)
   variants         ProductVariant[]
   reviews          Review[]
   favorites        Favorite[]
@@ -749,8 +751,8 @@ enum OrderDraftStatus {
 
 model Payment {
   id            String          @id @default(uuid())
-  orderDraftId  String          @unique
-  orderDraft    OrderDraft      @relation(fields: [orderDraftId], references: [id], onDelete: Cascade)
+  orderDraftId  String?         @unique
+  orderDraft    OrderDraft?     @relation(fields: [orderDraftId], references: [id], onDelete: Cascade)
   provider      PaymentProvider
   transactionId String?         @unique
   amount        Decimal         @db.Decimal(10, 2)
@@ -763,6 +765,8 @@ model Payment {
 enum PaymentProvider {
   RAZORPAY
   STRIPE
+  COD
+  WALLET
 }
 
 // ----------------------------------------------------

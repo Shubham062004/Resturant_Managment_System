@@ -33,12 +33,24 @@ import { fadeUp, scaleIn } from '../../../shared/theme/animations';
 import { useActiveCoupons } from '../../cart/store/cartQueries';
 import CategoryPill from '../components/CategoryPill';
 import FoodCard from '../components/FoodCard';
+import ProductCarousel from '../components/ProductCarousel';
 import {
   useCategories,
   useFeaturedProducts,
   useRestaurants,
   useTopReviews,
   usePlatformStats,
+  useTrendingProducts,
+  useBestSellers,
+  useBestInBranch,
+  useNewArrivals,
+  useMostLoved,
+  useBudgetMeals,
+  useRecommendedProducts,
+  usePartyOrders,
+  useVegSpecials,
+  useTodayDeals,
+  useCategoriesShowcase,
 } from '../store/catalogQueries';
 import { addRecentSearch } from '../store/customerSlice';
 
@@ -50,10 +62,53 @@ export const LandingPage: React.FC = () => {
   const toast = useToast();
   const { selectedBranch } = useAppSelector((state) => state.customer);
 
-  // API data
-  const { data: featuredRes, isLoading: featuredLoading } =
-    useFeaturedProducts();
-  const featuredProducts = featuredRes?.data ?? [];
+  // API data with branchId filtering
+  const branchId = selectedBranch?.id;
+
+  const { data: trendingRes, isLoading: trendingLoading } =
+    useTrendingProducts(branchId);
+  const trendingProducts = trendingRes?.data ?? [];
+
+  const { data: bestSellersRes, isLoading: bestSellersLoading } =
+    useBestSellers(branchId);
+  const bestSellersProducts = bestSellersRes?.data ?? [];
+
+  const { data: bestInBranchRes, isLoading: bestInBranchLoading } =
+    useBestInBranch(branchId);
+  const bestInBranchProducts = bestInBranchRes?.data ?? [];
+
+  const { data: newArrivalsRes, isLoading: newArrivalsLoading } =
+    useNewArrivals(branchId);
+  const newArrivalsProducts = newArrivalsRes?.data ?? [];
+
+  const { data: mostLovedRes, isLoading: mostLovedLoading } =
+    useMostLoved(branchId);
+  const mostLovedProducts = mostLovedRes?.data ?? [];
+
+  const { data: budgetMealsRes, isLoading: budgetMealsLoading } =
+    useBudgetMeals(branchId);
+  const budgetMealsProducts = budgetMealsRes?.data ?? [];
+
+  const { data: recommendedRes, isLoading: recommendedLoading } =
+    useRecommendedProducts(branchId);
+  const recommendedProducts = recommendedRes?.data ?? [];
+
+  const { data: partyOrdersRes, isLoading: partyOrdersLoading } =
+    usePartyOrders(branchId);
+  const partyOrdersProducts = partyOrdersRes?.data ?? [];
+
+  const { data: vegSpecialsRes, isLoading: vegSpecialsLoading } =
+    useVegSpecials(branchId);
+  const vegSpecialsProducts = vegSpecialsRes?.data ?? [];
+
+  const { data: todayDealsRes, isLoading: todayDealsLoading } =
+    useTodayDeals(branchId);
+  const todayDealsProducts = todayDealsRes?.data ?? [];
+
+  const { data: categoriesShowcaseRes, isLoading: showcaseLoading } =
+    useCategoriesShowcase(branchId);
+  const showcaseCategories = categoriesShowcaseRes?.data ?? [];
+
   const { data: restaurantsRes, isLoading: restaurantsLoading } =
     useRestaurants({
       page: 1,
@@ -63,7 +118,7 @@ export const LandingPage: React.FC = () => {
   const { data: coupons = [] } = useActiveCoupons();
 
   // Fetch categories from database
-  const { data: categoriesRes } = useCategories({ limit: 10 });
+  const { data: categoriesRes } = useCategories({ limit: 12 });
   const categories = categoriesRes?.data ?? [];
 
   // Real platform stats from database
@@ -376,56 +431,118 @@ export const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* ═══════════════════════ TRENDING DISHES ═══════════════════════ */}
-        <section className="py-16 px-6 max-w-7xl mx-auto w-full">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingUp size={18} className="text-primary" />
-                <span className="text-primary text-xs font-bold uppercase tracking-wider">
-                  Trending
-                </span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                Popular Right Now
-              </h2>
-              <p className="text-neutral-500 text-sm mt-1">
-                Our most ordered dishes this week
-              </p>
-            </div>
-            <Link to="/menu">
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1"
-              >
-                View All <ArrowRight size={14} />
-              </Button>
-            </Link>
-          </div>
+        {/* ═══════════════════════ DYNAMIC DISCOVERY SECTIONS ═══════════════════════ */}
 
-          {featuredLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-              {[1, 2, 3, 4].map((i) => (
-                <SkeletonCard key={i} variant="food" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-              {featuredProducts.slice(0, 8).map((product) => (
-                <FoodCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-        </section>
+        {/* 1. Today's Deals (Discounted Products) */}
+        <ProductCarousel
+          title="Today's Deals"
+          subtitle="Grab your favorites at discounted prices!"
+          products={todayDealsProducts}
+          isLoading={todayDealsLoading}
+        />
 
-        {/* Replaced Featured Restaurants section with branch selection focus */}
+        {/* 2. Popular Right Now */}
+        <ProductCarousel
+          title="Popular Right Now"
+          subtitle="Most ordered dishes this week"
+          products={trendingProducts}
+          isLoading={trendingLoading}
+          totalOrdersList={[120, 110, 95, 80, 75, 60, 55, 50, 45, 40]}
+        />
 
-        {/* ═══════════════════════ TODAY'S OFFERS ═══════════════════════ */}
+        {/* 3. Best Sellers */}
+        <ProductCarousel
+          title="Best Sellers"
+          subtitle="Top selling products across all branches"
+          products={bestSellersProducts}
+          isLoading={bestSellersLoading}
+          rankStart={true}
+        />
+
+        {/* 4. Best in Selected Branch */}
+        {selectedBranch && (
+          <ProductCarousel
+            title={`Best in ${selectedBranch.name}`}
+            subtitle={`Highest order volume in ${selectedBranch.name}`}
+            products={bestInBranchProducts}
+            isLoading={bestInBranchLoading}
+          />
+        )}
+
+        {/* 5. Trending Foods */}
+        <ProductCarousel
+          title="Trending Foods"
+          subtitle="Dishes with high order and wishlist velocity right now"
+          products={trendingProducts}
+          isLoading={trendingLoading}
+          isTrendingSection={true}
+        />
+
+        {/* 6. Recommended For You */}
+        <ProductCarousel
+          title="Recommended For You"
+          subtitle="Based on your taste profile and order history"
+          products={recommendedProducts}
+          isLoading={recommendedLoading}
+        />
+
+        {/* 7. New Arrivals */}
+        <ProductCarousel
+          title="New Arrivals"
+          subtitle="Freshly launched culinary additions"
+          products={newArrivalsProducts}
+          isLoading={newArrivalsLoading}
+          badgeText="NEW"
+        />
+
+        {/* 8. Most Loved */}
+        <ProductCarousel
+          title="Most Loved"
+          subtitle="Highly rated customer favorites"
+          products={mostLovedProducts}
+          isLoading={mostLovedLoading}
+        />
+
+        {/* 9. Vegetarian Specials */}
+        <ProductCarousel
+          title="Vegetarian Specials"
+          subtitle="100% Pure Veg delicacies"
+          products={vegSpecialsProducts}
+          isLoading={vegSpecialsLoading}
+        />
+
+        {/* 10. Budget Meals */}
+        <ProductCarousel
+          title="Budget Meals"
+          subtitle="Delectable dishes under ₹199, perfect for quick bites"
+          products={budgetMealsProducts}
+          isLoading={budgetMealsLoading}
+        />
+
+        {/* 11. Party Orders */}
+        <ProductCarousel
+          title="Party Orders & Combos"
+          subtitle="Family meals, platters, and combos above ₹799"
+          products={partyOrdersProducts}
+          isLoading={partyOrdersLoading}
+        />
+
+        {/* 12. Categories Showcase (Pizza, Burger, Chinese, etc.) */}
+        {showcaseCategories.map((item) => (
+          <ProductCarousel
+            key={item.categoryName}
+            title={`${item.categoryName} Specials`}
+            subtitle={`Explore our finest ${item.categoryName.toLowerCase()} selection`}
+            products={item.products}
+            isLoading={showcaseLoading}
+          />
+        ))}
+
+        {/* 13. Active Coupons (Offers Banner) */}
         {coupons.length > 0 && (
-          <section className="py-16 px-6 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent">
+          <section className="py-12 px-6 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent">
             <div className="max-w-7xl mx-auto">
-              <div className="flex justify-between items-end mb-10">
+              <div className="flex justify-between items-end mb-8">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Sparkles size={18} className="text-amber-400" />
@@ -433,10 +550,10 @@ export const LandingPage: React.FC = () => {
                       Deals
                     </span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                  <h2 className="text-xl sm:text-2xl font-extrabold text-white">
                     Today&apos;s Offers
                   </h2>
-                  <p className="text-neutral-500 text-sm mt-1">
+                  <p className="text-neutral-500 text-xs mt-1">
                     Save more with exclusive coupon codes
                   </p>
                 </div>
@@ -444,7 +561,7 @@ export const LandingPage: React.FC = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-white/10 text-white hover:bg-white/5 font-semibold hidden sm:flex items-center gap-1"
+                    className="border-white/10 text-white hover:bg-white/5 font-semibold flex items-center gap-1"
                   >
                     All Offers <ArrowRight size={14} />
                   </Button>

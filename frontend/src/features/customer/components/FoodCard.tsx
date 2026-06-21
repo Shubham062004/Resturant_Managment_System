@@ -20,12 +20,20 @@ interface FoodCardProps {
   product: Product;
   showAddToCart?: boolean;
   className?: string;
+  rank?: number;
+  totalOrders?: number;
+  isTrending?: boolean;
+  badgeText?: string;
 }
 
 const FoodCard: React.FC<FoodCardProps> = ({
   product,
   showAddToCart = true,
   className = '',
+  rank,
+  totalOrders,
+  isTrending,
+  badgeText,
 }) => {
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
@@ -71,9 +79,10 @@ const FoodCard: React.FC<FoodCardProps> = ({
     }
   };
 
-  // removed old handleFavorite helper
-
-  const price = parseFloat(product.basePrice);
+  const originalPrice = parseFloat(product.basePrice);
+  const discountPct = product.discountPercentage || 0;
+  const discountedPrice =
+    discountPct > 0 ? originalPrice * (1 - discountPct / 100) : originalPrice;
 
   return (
     <motion.div
@@ -101,21 +110,38 @@ const FoodCard: React.FC<FoodCardProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
             {/* Badges */}
-            <div className="absolute top-3 left-3 flex gap-2">
-              {product.featured && (
-                <span className="bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                  <Star size={10} fill="currentColor" /> Bestseller
+            <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+              {rank && (
+                <span className="bg-gradient-to-r from-amber-500 to-orange-600 text-white text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow-lg border border-amber-400/20">
+                  <Star size={8} fill="currentColor" /> #{rank} Bestseller
                 </span>
               )}
-              {product.isVeg ? (
-                <span className="bg-emerald-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                  <Leaf size={10} /> Veg
-                </span>
-              ) : (
-                <span className="bg-red-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full">
-                  Non-Veg
+              {isTrending && (
+                <span className="bg-gradient-to-r from-red-600 to-rose-500 text-white text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow-lg border border-red-500/20 animate-pulse">
+                  🔥 Trending
                 </span>
               )}
+              {badgeText && (
+                <span className="bg-blue-600/90 text-white text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-lg border border-blue-500/20">
+                  {badgeText}
+                </span>
+              )}
+              {!rank && product.featured && (
+                <span className="bg-amber-500 text-white text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow-lg">
+                  <Star size={8} fill="currentColor" /> Bestseller
+                </span>
+              )}
+              <div className="flex gap-1">
+                {product.isVeg ? (
+                  <span className="bg-emerald-500/90 backdrop-blur-sm text-white text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                    <Leaf size={8} /> Veg
+                  </span>
+                ) : (
+                  <span className="bg-red-500/90 backdrop-blur-sm text-white text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded">
+                    Non-Veg
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Favorite button */}
@@ -152,9 +178,30 @@ const FoodCard: React.FC<FoodCardProps> = ({
             )}
 
             <div className="flex items-center justify-between pt-1">
-              <span className="text-primary font-bold text-base">
-                ₹{price.toFixed(0)}
-              </span>
+              <div className="flex flex-col">
+                {discountPct > 0 ? (
+                  <div className="flex items-center gap-1">
+                    <span className="text-primary font-bold text-base">
+                      ₹{discountedPrice.toFixed(0)}
+                    </span>
+                    <span className="text-neutral-500 line-through text-[11px] font-normal">
+                      ₹{originalPrice.toFixed(0)}
+                    </span>
+                    <span className="text-emerald-500 text-[10px] font-bold">
+                      {discountPct}% OFF
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-primary font-bold text-base">
+                    ₹{originalPrice.toFixed(0)}
+                  </span>
+                )}
+                {totalOrders && totalOrders > 0 ? (
+                  <span className="text-[10px] text-neutral-400 mt-0.5 font-medium">
+                    {totalOrders}+ ordered this week
+                  </span>
+                ) : null}
+              </div>
 
               {/* Add to Cart / Quantity stepper */}
               {showAddToCart && (

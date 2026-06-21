@@ -403,4 +403,203 @@ export class CatalogController {
       next(error);
     }
   }
+
+  public static async getTrending(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getTrendingProducts(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Trending products retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getBestSellers(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getBestSellers(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Best seller products retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getBestInBranch(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { branchId } = req.params;
+      const products = await CatalogService.getBestInBranch(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Best in branch products retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getNewArrivals(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getNewArrivals(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'New arrivals retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getMostLoved(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getMostLoved(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Most loved products retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getBudgetMeals(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getBudgetMeals(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Budget meals retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getRecommended(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const userId = req.user?.id;
+      const products = await CatalogService.getRecommended(userId, branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Recommended products retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getPartyOrders(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getPartyOrders(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Party order products retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getVegSpecials(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getVegSpecials(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Vegetarian specials retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getDeals(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const products = await CatalogService.getDeals(branchId);
+      res.status(200).json({
+        success: true,
+        data: products,
+        message: 'Deals retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public static async getCategoriesShowcase(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const branchId = req.query.branchId as string | undefined;
+      const showcase = await CatalogService.getCategoriesShowcase(branchId);
+      res.status(200).json({
+        success: true,
+        data: showcase,
+        message: 'Categories showcase retrieved successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

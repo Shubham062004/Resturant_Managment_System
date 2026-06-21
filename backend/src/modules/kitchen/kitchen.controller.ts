@@ -55,14 +55,18 @@ export const createStation = async (
 };
 
 export const updateOrderStatus = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    const order = await KitchenService.updateOrderStatus(id, status);
+    const order = await KitchenService.updateOrderStatus(
+      id,
+      status,
+      req.user?.id
+    );
     res.status(200).json({
       status: 'success',
       data: { order },
