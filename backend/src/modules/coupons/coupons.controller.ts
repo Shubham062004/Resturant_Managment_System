@@ -5,7 +5,7 @@ import { AuthRequest } from '../../types/express';
 import { CouponService } from './coupons.service';
 
 export const validateCoupon = async (req: AuthRequest, res: Response) => {
-  const userId = req.user!.id;
+  const userId = req.user?.id;
   const { code, orderAmount } = req.body;
 
   const result = await CouponService.validateCoupon(code, userId, orderAmount);

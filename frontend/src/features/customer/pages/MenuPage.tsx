@@ -223,7 +223,7 @@ export const MenuPage: React.FC = () => {
             <div className="flex gap-4 sm:gap-6 border-t border-white/5 md:border-t-0 pt-4 md:pt-0 w-full md:w-auto">
               <div className="bg-white/[0.02] border border-white/5 rounded-2xl px-4 py-3 text-center shrink-0 min-w-[90px]">
                 <div className="flex items-center justify-center gap-1 text-amber-400 font-extrabold text-lg">
-                  <span>{branchDetails?.rating.toFixed(1)}</span>
+                  <span>{branchDetails?.rating ? branchDetails.rating.toFixed(1) : '0.0'}</span>
                   <Star size={16} className="fill-current text-amber-400" />
                 </div>
                 <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mt-0.5">Rating</p>

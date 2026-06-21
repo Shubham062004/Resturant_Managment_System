@@ -43,11 +43,11 @@ export const ProductDetailPage: React.FC = () => {
   const addToCart = useAddToCart();
   const updateCartItem = useUpdateCartItem();
   const removeCartItem = useRemoveCartItem();
-  const { data: cart } = useCart(isAuthenticated);
+  const { data: cart } = useCart();
 
   // Find if this product is in the cart matching the selected variant
   const cartItem = cart?.items.find(
-    (i) => i.productId === product?.id && (selectedVariantId ? i.variantId === selectedVariantId : !i.variantId)
+    (i: any) => i.productId === product?.id && (selectedVariantId ? i.variantId === selectedVariantId : !i.variantId)
   );
   const cartQty = cartItem?.quantity || 0;
 
@@ -340,7 +340,7 @@ export const ProductDetailPage: React.FC = () => {
               <div className="flex items-center gap-4 text-sm text-neutral-400">
                 <div className="flex items-center gap-1 text-amber-400 font-bold bg-amber-400/10 px-2 py-1 rounded-md">
                   <Star size={16} className="fill-current" />
-                  <span>{product.rating.toFixed(1)}</span>
+                  <span>{product.rating?.toFixed(1) || '0.0'}</span>
                 </div>
                 <span>•</span>
                 <span>{product.reviews?.length || 0} reviews</span>
@@ -462,16 +462,13 @@ export const ProductDetailPage: React.FC = () => {
                 <button
                   disabled={addToCart.isPending}
                   onClick={async () => {
-                    if (!isAuthenticated) {
-                      toast.warning('Please sign in to order.');
-                      navigate('/login');
-                      return;
-                    }
                     try {
                       await addToCart.mutateAsync({
                         productId: product.id,
                         variantId: selectedVariantId || undefined,
                         quantity: 1,
+                        product,
+                        variant: activeVariant || undefined,
                       });
                       toast.success('Added to cart successfully!');
                     } catch {

@@ -75,8 +75,8 @@ export const RegisterPage: React.FC = () => {
   };
 
   const handleGoogleLogin = () => {
-    const redirectUrl = `/auth/callback/google#id_token=mock-google-user@abc.com`;
-    navigate(redirectUrl);
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+    window.location.href = `${apiUrl}/auth/google`;
   };
 
   const GoogleIcon = (

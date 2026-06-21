@@ -623,6 +623,54 @@ export class AuthController {
     }
   }
 
+  public static async getGoogleAuth(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const clientId = process.env.GOOGLE_CLIENT_ID;
+
+      let frontendOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+      if (req.headers.referer) {
+        try {
+          frontendOrigin = new URL(req.headers.referer).origin;
+        } catch {
+          // Keep default
+        }
+      }
+      const redirectUri = `${frontendOrigin}/auth/callback/google`;
+
+      if (!clientId || clientId === 'mock_client_id') {
+        logger.warn(
+          '[Google Auth] Missing or mock GOOGLE_CLIENT_ID. Bypassing and redirecting to frontend with mock token.'
+        );
+        return res.redirect(`${redirectUri}#id_token=mock-google-user@abc.com`);
+      }
+
+      // Construct Google OAuth URL (Implicit Flow requesting ID Token)
+      const scope = 'openid profile email';
+      const responseType = 'id_token';
+      const nonce = crypto.randomBytes(16).toString('hex');
+
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(
+        clientId
+      )}&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}&response_type=${encodeURIComponent(
+        responseType
+      )}&scope=${encodeURIComponent(
+        scope
+      )}&nonce=${encodeURIComponent(
+        nonce
+      )}`;
+
+      res.redirect(authUrl);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public static async getMe(
     req: AuthRequest,
     res: Response,

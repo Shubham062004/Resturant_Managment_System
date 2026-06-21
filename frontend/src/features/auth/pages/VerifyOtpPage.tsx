@@ -44,9 +44,10 @@ export const VerifyOtpPage: React.FC = () => {
     const result = await dispatch(verifyOtp(payload as any));
     if (verifyOtp.fulfilled.match(result)) {
       const from = location.state?.from || '/';
+      const fromState = location.state?.fromState;
       const dashboardRoute = getDashboardRouteByRole(result.payload.user?.role);
       const destination = from === '/' ? dashboardRoute : from;
-      navigate(destination, { replace: true });
+      navigate(destination, { state: fromState, replace: true });
     }
   };
 

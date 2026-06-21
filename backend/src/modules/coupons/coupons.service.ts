@@ -7,7 +7,7 @@ export class CouponService {
    */
   public static async validateCoupon(
     code: string,
-    userId: string,
+    userId: string | undefined,
     orderAmount: number
   ) {
     const uppercaseCode = code.toUpperCase();
@@ -43,12 +43,14 @@ export class CouponService {
       );
     }
 
-    const usage = await prisma.couponUsage.findFirst({
-      where: { couponId: coupon.id, userId },
-    });
+    if (userId) {
+      const usage = await prisma.couponUsage.findFirst({
+        where: { couponId: coupon.id, userId },
+      });
 
-    if (usage) {
-      throw new AppError('You have already used this coupon', 400);
+      if (usage) {
+        throw new AppError('You have already used this coupon', 400);
+      }
     }
 
     let discountAmount = 0;

@@ -65,7 +65,7 @@ export const WishlistPage: React.FC = () => {
   const removeWishlist = useRemoveWishlist();
   const addAllToCart = useAddAllWishlistToCart();
   const { mutate: addToCart } = useAddToCart();
-  const { data: cart } = useCart(isAuthenticated);
+  const { data: cart } = useCart();
   const updateCartItem = useUpdateCartItem();
   const removeCartItem = useRemoveCartItem();
 
@@ -162,7 +162,7 @@ export const WishlistPage: React.FC = () => {
 
   const handleAddSingleToCart = (item: any) => {
     addToCart(
-      { productId: item.productId, quantity: 1 },
+      { productId: item.productId, quantity: 1, product: item.product },
       {
         onSuccess: () => {
           toast.success(`${item.product.name} added to cart!`);
@@ -398,7 +398,7 @@ export const WishlistPage: React.FC = () => {
                   >
                     {processedItems.map((item) => {
                       const cartItem = cart?.items.find(
-                        (c) => c.productId === item.productId
+                        (c: any) => c.productId === item.productId
                       );
                       const cartQty = cartItem?.quantity || 0;
 

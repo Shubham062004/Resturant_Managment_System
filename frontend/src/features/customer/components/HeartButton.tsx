@@ -28,10 +28,14 @@ export const HeartButton: React.FC<HeartButtonProps> = ({
   const { mutate: removeWishlist } = useRemoveWishlist();
 
   // Retrieve wishlist cache to check if wishlisted (limit 100 query is cached and shared across cards)
-  const { data: wishlistResponse } = useWishlist({
-    branchId: selectedBranch?.id || undefined,
-    limit: 100,
-  });
+  const { data: wishlistResponse } = useWishlist(
+    {
+      branchId: selectedBranch?.id || undefined,
+      limit: 100,
+    },
+    isAuthenticated
+  );
+
 
   const isWishlisted =
     isAuthenticated &&

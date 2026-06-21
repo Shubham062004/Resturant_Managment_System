@@ -30,7 +30,7 @@ export const CheckoutPage: React.FC = () => {
   const location = useLocation();
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { data: cart, isLoading } = useCart(isAuthenticated);
+  const { data: cart, isLoading } = useCart();
   const { data: addresses = [] } = useAddresses(isAuthenticated);
   const validateCoupon = useValidateCoupon();
 
@@ -75,7 +75,7 @@ export const CheckoutPage: React.FC = () => {
   }
 
   const subtotal = cart.items.reduce(
-    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    (sum: number, item: any) => sum + parseFloat(item.price) * item.quantity,
     0
   );
 
@@ -382,7 +382,7 @@ export const CheckoutPage: React.FC = () => {
                 </h3>
 
                 <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                  {cart.items.map((item) => (
+                  {cart.items.map((item: any) => (
                     <div key={item.id} className="flex justify-between gap-4">
                       <div className="flex items-start gap-3">
                         <span className="text-xs font-bold bg-white/10 px-2 py-0.5 rounded text-neutral-300 shrink-0">

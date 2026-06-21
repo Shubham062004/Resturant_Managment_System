@@ -15,7 +15,7 @@ import {
   UtensilsCrossed,
   Truck,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAppSelector } from '../../../app/store';
@@ -30,13 +30,16 @@ import {
   useRemoveCartItem,
   useClearCart,
   useValidateCoupon,
+  applyGuestCoupon,
+  removeGuestCoupon,
+  loadGuestCart,
 } from '../store/cartQueries';
 
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
-  const { data: cart, isLoading, isError } = useCart(isAuthenticated);
+  const { data: cart, isLoading, isError } = useCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
   const clearCart = useClearCart();
@@ -50,6 +53,39 @@ export const CartPage: React.FC = () => {
   const [orderType, setOrderType] = useState<'DELIVERY' | 'TAKEAWAY' | 'DINE_IN'>('DELIVERY');
   const [tableNumber, setTableNumber] = useState('');
   const [couponDrawerOpen, setCouponDrawerOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const subtotal = cart?.items?.reduce(
+    (sum: number, item: any) => sum + parseFloat(item.price) * item.quantity,
+    0
+  ) || 0;
+
+  // Load applied coupon from local storage if guest
+  useEffect(() => {
+    if (cart && !isAuthenticated) {
+      const guestCart = cart as any;
+      if (guestCart.couponCode && guestCart.cartTotals?.discount > 0) {
+        setAppliedCoupon({
+          code: guestCart.couponCode,
+          discountAmount: guestCart.cartTotals.discount,
+        });
+      }
+    }
+  }, [cart, isAuthenticated]);
+
+  // Remove coupon if cart subtotal drops below minimumAmount
+  useEffect(() => {
+    if (appliedCoupon) {
+      const match = couponList.find((c) => c.code === appliedCoupon.code);
+      if (match && subtotal < match.minimumAmount) {
+        setAppliedCoupon(null);
+        toast.error(`Coupon ${appliedCoupon.code} removed as order subtotal is below ₹${match.minimumAmount}`);
+        if (!isAuthenticated) {
+          removeGuestCoupon();
+        }
+      }
+    }
+  }, [subtotal, appliedCoupon, isAuthenticated, toast]);
 
   const couponList = [
     { code: 'WELCOME50', description: 'Get ₹50 off on orders of ₹499 or more', discountType: 'FIXED_AMOUNT', discountValue: 50, minimumAmount: 499 },
@@ -58,34 +94,6 @@ export const CartPage: React.FC = () => {
     { code: 'SUPER300', description: 'Get ₹300 off on orders of ₹1999 or more', discountType: 'FIXED_AMOUNT', discountValue: 300, minimumAmount: 1999 },
     { code: 'MEGA500', description: 'Get ₹500 off on orders of ₹2999 or more', discountType: 'FIXED_AMOUNT', discountValue: 500, minimumAmount: 2999 },
   ];
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[#08070F] pt-32 pb-20 px-4">
-        <div className="py-20 text-center max-w-md mx-auto space-y-6">
-          <div className="w-24 h-24 rounded-full bg-white/[0.02] border border-white/5 flex items-center justify-center mx-auto text-4xl shadow-inner">
-            👤
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold font-display text-white">Sign in to view your cart</h3>
-            <p className="text-neutral-400 text-sm leading-relaxed">
-              Log in to add items and proceed to checkout.
-            </p>
-          </div>
-          <Button
-            variant="primary"
-            className="w-full h-12 font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group"
-            onClick={() =>
-              navigate('/login', { state: { from: { pathname: '/cart' } } })
-            }
-          >
-            Go to Login
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (
@@ -119,11 +127,6 @@ export const CartPage: React.FC = () => {
       </div>
     );
   }
-
-  const subtotal = cart.items.reduce(
-    (sum, item) => sum + parseFloat(item.price) * item.quantity,
-    0
-  );
 
   const isBirthdayEligible = user?.email === 'customer1@abcrestaurant.com';
   const isBirthdayApplied = isBirthdayEligible && subtotal >= 3000 && !appliedCoupon;
@@ -173,6 +176,10 @@ export const CartPage: React.FC = () => {
       });
       setCouponCode('');
       toast.success('Coupon applied successfully!');
+
+      if (!isAuthenticated) {
+        applyGuestCoupon(match.code, match.discountValue);
+      }
       return;
     }
 
@@ -187,6 +194,10 @@ export const CartPage: React.FC = () => {
       });
       setCouponCode('');
       toast.success('Coupon applied successfully!');
+
+      if (!isAuthenticated) {
+        applyGuestCoupon(res.coupon.code, res.discountAmount);
+      }
     } catch (err: any) {
       toast.error(err.response?.data?.error?.message || 'Invalid coupon code');
       setAppliedCoupon(null);
@@ -205,24 +216,39 @@ export const CartPage: React.FC = () => {
     });
     setCouponDrawerOpen(false);
     toast.success(`Coupon ${coupon.code} applied!`);
+
+    if (!isAuthenticated) {
+      applyGuestCoupon(coupon.code, coupon.discountValue);
+    }
   };
 
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponCode('');
     toast.success('Coupon removed');
+
+    if (!isAuthenticated) {
+      removeGuestCoupon();
+    }
   };
 
   const handleProceedToCheckout = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    const checkoutState = {
+      orderType,
+      tableNumber: orderType === 'DINE_IN' ? tableNumber : '',
+      discount,
+      couponCode: appliedCoupon?.code || '',
+      isBirthdayApplied,
+      deliveryFee,
+    };
+
     navigate('/checkout', {
-      state: {
-        orderType,
-        tableNumber: orderType === 'DINE_IN' ? tableNumber : '',
-        discount,
-        couponCode: appliedCoupon?.code || '',
-        isBirthdayApplied,
-        deliveryFee,
-      },
+      state: checkoutState,
     });
   };
 
@@ -239,6 +265,11 @@ export const CartPage: React.FC = () => {
               <h1 className="text-3xl md:text-4xl font-bold font-display flex items-center gap-3">
                 <ShoppingBag className="text-primary" size={32} />
                 Your Cart
+                {!isAuthenticated && (
+                  <span className="text-xs bg-amber-500/20 text-amber-400 font-extrabold uppercase px-2.5 py-1 rounded-full border border-amber-500/30 tracking-wider">
+                    Guest Cart
+                  </span>
+                )}
               </h1>
               <p className="text-neutral-400 text-sm mt-2">
                 {cart.items.length} {cart.items.length === 1 ? 'item' : 'items'}{' '}
@@ -285,8 +316,14 @@ export const CartPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
               {/* Left Column: Cart Items & Dining Modes */}
               <div className="lg:col-span-8 space-y-6">
+                {!isAuthenticated && (
+                  <div className="flex items-center gap-3 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm">
+                    <Info size={18} className="shrink-0" />
+                    <span>Your cart will be saved after login. Do not lose cart contents.</span>
+                  </div>
+                )}
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-2 sm:p-4 space-y-2">
-                  {cart.items.map((item) => (
+                  {cart.items.map((item: any) => (
                     <div
                       key={item.id}
                       className="group p-4 rounded-2xl bg-transparent hover:bg-white/[0.02] transition-colors flex flex-col sm:flex-row gap-5 items-start sm:items-center relative"
@@ -441,7 +478,7 @@ export const CartPage: React.FC = () => {
                 </div>
 
                 <SmartComboSuggestion
-                  cartItemIds={cart.items.map((item) => item.product.id)}
+                  cartItemIds={cart.items.map((item: any) => item.product.id)}
                 />
               </div>
 
@@ -671,6 +708,123 @@ export const CartPage: React.FC = () => {
                     </div>
                   );
                 })}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Login Required Modal */}
+      <AnimatePresence>
+        {showLoginModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowLoginModal(false)}
+              className="fixed inset-0 bg-black/75 backdrop-blur-sm"
+            />
+            {/* Modal Box */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative w-full max-w-md bg-[#0F0D16] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl overflow-hidden z-10 space-y-6 animate-fade-in"
+            >
+              <div className="text-center space-y-2">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-2 text-primary">
+                  <ShoppingBag size={28} />
+                </div>
+                <h3 className="text-2xl font-bold font-display text-white">Continue to Checkout</h3>
+                <p className="text-neutral-400 text-sm leading-relaxed">
+                  Login or create an account to place your order.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {/* Continue with Google */}
+                <Button
+                  onClick={() => {
+                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+                    window.location.href = `${apiUrl}/auth/google`;
+                  }}
+                  variant="outline"
+                  className="w-full h-12 border-white/10 hover:bg-white/5 font-semibold flex items-center justify-center gap-3 text-white"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                      fill="#4285F4"
+                    />
+                    <path
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                      fill="#34A853"
+                    />
+                    <path
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                      fill="#FBBC05"
+                    />
+                    <path
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                      fill="#EA4335"
+                    />
+                  </svg>
+                  <span>Continue with Google</span>
+                </Button>
+
+                {/* Login */}
+                <Button
+                  onClick={() => {
+                    const checkoutState = {
+                      orderType,
+                      tableNumber: orderType === 'DINE_IN' ? tableNumber : '',
+                      discount,
+                      couponCode: appliedCoupon?.code || '',
+                      isBirthdayApplied,
+                      deliveryFee,
+                    };
+                    navigate('/login', {
+                      state: { from: { pathname: '/checkout', state: checkoutState } },
+                    });
+                  }}
+                  variant="primary"
+                  className="w-full h-12 font-bold shadow-md shadow-primary/10"
+                >
+                  Login
+                </Button>
+
+                {/* Register */}
+                <Button
+                  onClick={() => {
+                    const checkoutState = {
+                      orderType,
+                      tableNumber: orderType === 'DINE_IN' ? tableNumber : '',
+                      discount,
+                      couponCode: appliedCoupon?.code || '',
+                      isBirthdayApplied,
+                      deliveryFee,
+                    };
+                    navigate('/register', {
+                      state: { from: { pathname: '/checkout', state: checkoutState } },
+                    });
+                  }}
+                  variant="secondary"
+                  className="w-full h-12 font-bold text-slate-900"
+                >
+                  Register
+                </Button>
+
+                {/* Cancel */}
+                <Button
+                  onClick={() => setShowLoginModal(false)}
+                  variant="outline"
+                  className="w-full h-12 border-transparent hover:bg-white/5 font-semibold text-neutral-400"
+                >
+                  Cancel
+                </Button>
               </div>
             </motion.div>
           </div>

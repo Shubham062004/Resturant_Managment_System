@@ -28,24 +28,20 @@ const FoodCard: React.FC<FoodCardProps> = ({
 }) => {
   const toast = useToast();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { data: cart } = useCart(isAuthenticated);
+  const { data: cart } = useCart();
   const addToCart = useAddToCart();
   const updateItem = useUpdateCartItem();
   const removeItem = useRemoveCartItem();
 
   // Find this product in the cart
-  const cartItem = cart?.items.find((i) => i.productId === product.id);
+  const cartItem = cart?.items.find((i: any) => i.productId === product.id);
   const quantity = cartItem?.quantity || 0;
 
   const handleAdd = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isAuthenticated) {
-      toast.warning('Please login to add items to cart');
-      return;
-    }
     try {
-      await addToCart.mutateAsync({ productId: product.id, quantity: 1 });
+      await addToCart.mutateAsync({ productId: product.id, quantity: 1, product });
       toast.success(`${product.name} added to cart`);
     } catch {
       toast.error('Failed to add item');

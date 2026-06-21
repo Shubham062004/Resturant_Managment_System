@@ -19,5 +19,8 @@ router.post('/wishlist/:menuItemId', authGuard, WishlistController.addToWishlist
 router.delete('/wishlist/:menuItemId', authGuard, WishlistController.removeFromWishlist);
 router.delete('/wishlist', authGuard, WishlistController.clearWishlist);
 
+// Authenticated Customer Cart Merge Routes
+router.post('/cart/merge', authGuard, CustomerController.mergeCart);
+
 export default router;
 

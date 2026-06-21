@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { authGuard } from '../../middleware/authGuard';
+import { authGuard, optionalAuth } from '../../middleware/authGuard';
 import { validate } from '../../middleware/validate';
 
 import { validateCoupon, getActiveCoupons } from './coupons.controller';
@@ -14,7 +14,7 @@ router.get('/active', getActiveCoupons);
 // Authenticated route to validate a coupon against user and order
 router.post(
   '/validate',
-  authGuard,
+  optionalAuth,
   validate(validateCouponSchema),
   validateCoupon
 );

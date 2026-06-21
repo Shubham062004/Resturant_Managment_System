@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, Suspense } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../app/store';
 import ProtectedRoute from '../features/auth/components/ProtectedRoute';
 import PublicRoute from '../features/auth/components/PublicRoute';
 import { refreshSession, fetchProfile } from '../features/auth/store/authSlice';
+import { apiClient } from '../services/apiClient';
 import ErrorBoundary from '../shared/components/ErrorBoundary';
 import { ToastProvider } from '../shared/components/ui/Toast';
 import ThemeProvider from '../shared/theme/theme-provider';
@@ -215,6 +217,9 @@ const OrganizationManagementPage = React.lazy(
 const MenuPage = React.lazy(
   () => import('../features/customer/pages/MenuPage')
 );
+const ProductDetailPage = React.lazy(
+  () => import('../features/customer/pages/ProductDetailPage')
+);
 
 // Cart & Checkout
 const CartPage = React.lazy(() => import('../features/cart/pages/CartPage'));
@@ -270,7 +275,8 @@ const RouteLoader = () => (
 
 const AppRouter = () => {
   const dispatch = useAppDispatch();
-  const { authStatus } = useAppSelector((state) => state.auth);
+  const { authStatus, isAuthenticated } = useAppSelector((state) => state.auth);
+  const queryClient = useQueryClient();
 
   // Restore session from HttpOnly cookies on boot (non-blocking)
   useEffect(() => {
@@ -287,6 +293,43 @@ const AppRouter = () => {
         /* no active session — public routes remain available */
       });
   }, [authStatus, dispatch]);
+
+  // Merge guest cart with backend cart on successful login
+  useEffect(() => {
+    if (isAuthenticated) {
+      const guestCartJson = localStorage.getItem('guest_cart');
+      if (guestCartJson) {
+        try {
+          const guestCart = JSON.parse(guestCartJson);
+          if (guestCart && Array.isArray(guestCart.items) && guestCart.items.length > 0) {
+            const guestItems = guestCart.items.map((item: any) => ({
+              productId: item.productId,
+              variantId: item.variantId || undefined,
+              quantity: item.quantity,
+            }));
+
+            apiClient.post('/customer/cart/merge', {
+              guestItems,
+              couponCode: guestCart.couponCode || '',
+              branchId: guestCart.branchId || '',
+            })
+              .then(() => {
+                localStorage.removeItem('guest_cart');
+                queryClient.invalidateQueries({ queryKey: ['cart'] });
+              })
+              .catch((err) => {
+                console.error('Failed to merge cart:', err);
+              });
+          } else {
+            localStorage.removeItem('guest_cart');
+          }
+        } catch (e) {
+          console.error('Error parsing guest cart:', e);
+          localStorage.removeItem('guest_cart');
+        }
+      }
+    }
+  }, [isAuthenticated, queryClient]);
 
   return (
     <BrowserRouter>
@@ -363,9 +406,18 @@ const AppRouter = () => {
               {/* Menu Catalog Routes */}
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/restaurants" element={<Navigate to="/menu" replace />} />
+              <Route path="/products/:slug" element={<ProductDetailPage />} />
+              <Route path="/product/:slug" element={<ProductDetailPage />} />
 
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute allowedRoles={['CUSTOMER']}>
+                    <CheckoutPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/checkout/address"
                 element={<Navigate to="/checkout" replace />}

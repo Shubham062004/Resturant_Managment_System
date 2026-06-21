@@ -16,7 +16,7 @@ export const BranchSelector: React.FC = () => {
 
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { selectedBranch } = useAppSelector((state) => state.customer);
-  const { data: cart } = useCart(isAuthenticated);
+  const { data: cart } = useCart();
   const { data: branchesRes, isLoading } = useCustomerBranches();
   const { mutate: clearCart } = useClearCart();
 

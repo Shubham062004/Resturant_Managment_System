@@ -35,19 +35,27 @@ export const Navbar: React.FC = () => {
 
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const { selectedBranch } = useAppSelector((state) => state.customer);
-  const { data: cart } = useCart(isAuthenticated);
+  const { data: cart } = useCart();
   const { data: wishlistSummary } = useWishlistSummary(isAuthenticated);
 
-  const cartItemCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const cartItemCount = cart?.items?.reduce((sum: number, item: any) => sum + item.quantity, 0) || 0;
   const wishlistCount = wishlistSummary?.data?.count || 0;
 
-  const navLinks = [
-    { name: 'Home', path: '/', icon: Home },
-    { name: 'Menu', path: '/menu', icon: Flame },
-    { name: 'Offers', path: '/offers', icon: Tag },
-    { name: 'Orders', path: '/orders', icon: ClipboardList },
-    { name: 'Wishlist', path: '/wishlist', icon: Heart },
-  ];
+  const navLinks = isAuthenticated
+    ? [
+        { name: 'Home', path: '/', icon: Home },
+        { name: 'Menu', path: '/menu', icon: Flame },
+        { name: 'Offers', path: '/offers', icon: Tag },
+        { name: 'Search', path: '/search', icon: Search },
+        { name: 'Orders', path: '/orders', icon: ClipboardList },
+      ]
+    : [
+        { name: 'Home', path: '/', icon: Home },
+        { name: 'Menu', path: '/menu', icon: Flame },
+        { name: 'Offers', path: '/offers', icon: Tag },
+        { name: 'Search', path: '/search', icon: Search },
+        { name: 'Cart', path: '/cart', icon: ShoppingBag },
+      ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,6 +123,11 @@ export const Navbar: React.FC = () => {
                   {wishlistCount}
                 </span>
               )}
+              {link.name === 'Cart' && cartItemCount > 0 && (
+                <span className="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
+                  {cartItemCount}
+                </span>
+              )}
               {isActive && (
                 <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
               )}
@@ -125,29 +138,22 @@ export const Navbar: React.FC = () => {
 
       {/* Call to Actions / User profile */}
       <div className="hidden md:flex items-center gap-5">
-        {/* Search Icon */}
-        <Link
-          to="/search"
-          className="p-2 text-neutral-400 hover:text-white transition-colors"
-          title="Search"
-        >
-          <Search size={22} />
-        </Link>
+        {/* Cart Icon (Authenticated only, guests have it in navLinks) */}
+        {isAuthenticated && (
+          <Link
+            to="/cart"
+            className="relative p-2 text-neutral-400 hover:text-white transition-colors"
+          >
+            <ShoppingBag size={22} />
+            {cartItemCount > 0 && (
+              <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md border border-[#08070F]">
+                {cartItemCount}
+              </span>
+            )}
+          </Link>
+        )}
 
-        {/* Cart Icon */}
-        <Link
-          to="/cart"
-          className="relative p-2 text-neutral-400 hover:text-white transition-colors"
-        >
-          <ShoppingBag size={22} />
-          {cartItemCount > 0 && (
-            <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md border border-[#08070F]">
-              {cartItemCount}
-            </span>
-          )}
-        </Link>
-
-        <div className="w-[1px] h-6 bg-white/10 mx-1" />
+        {isAuthenticated && <div className="w-[1px] h-6 bg-white/10 mx-1" />}
 
         {user ? (
           <div className="flex items-center gap-4 select-none">

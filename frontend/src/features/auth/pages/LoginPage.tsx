@@ -21,11 +21,11 @@ export const LoginPage: React.FC = () => {
   const { authStatus, error } = useAppSelector((state) => state.auth);
 
   const from = (location.state as any)?.from?.pathname;
+  const fromState = (location.state as any)?.from?.state;
 
   const handleGoogleLogin = () => {
-    // In local development, redirect with a mock token to trigger auto-verify
-    const redirectUrl = `/auth/callback/google#id_token=mock-google-user@abc.com`;
-    navigate(redirectUrl);
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+    window.location.href = `${apiUrl}/auth/google`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,6 +74,7 @@ export const LoginPage: React.FC = () => {
             email: result.payload.email,
             phone: result.payload.phone,
             from: from,
+            fromState: fromState,
           },
         });
       } else {
@@ -82,7 +83,7 @@ export const LoginPage: React.FC = () => {
           result.payload.user?.role
         );
         const destination = !from || from === '/login' ? dashboardRoute : from;
-        navigate(destination, { replace: true });
+        navigate(destination, { state: fromState, replace: true });
       }
     }
   };

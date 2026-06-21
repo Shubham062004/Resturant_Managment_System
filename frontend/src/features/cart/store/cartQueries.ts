@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { useAppSelector } from '../../../app/store';
 import { apiClient } from '../../../services/apiClient';
 import type { Product } from '../../customer/store/catalogQueries';
 
@@ -47,169 +48,291 @@ export interface Coupon {
   endDate: string;
 }
 
-export const useCart = (enabled = true) =>
-  useQuery({
-    queryKey: ['cart'],
+const getSelectedBranchId = (): string => {
+  try {
+    const saved = localStorage.getItem('selectedBranch');
+    if (saved) {
+      const branch = JSON.parse(saved);
+      return branch?.id || '';
+    }
+  } catch {
+    // Ignore
+  }
+  return '';
+};
+
+export interface GuestCart {
+  branchId: string;
+  items: CartItem[];
+  couponCode: string;
+  cartTotals: {
+    subtotal: number;
+    discount: number;
+    deliveryFee: number;
+    gst: number;
+    grandTotal: number;
+  };
+}
+
+export const loadGuestCart = (): GuestCart => {
+  const branchId = getSelectedBranchId();
+  const guestCartJson = localStorage.getItem('guest_cart');
+  if (guestCartJson) {
+    try {
+      const parsed = JSON.parse(guestCartJson);
+      if (parsed && Array.isArray(parsed.items)) {
+        return {
+          branchId: parsed.branchId || branchId,
+          items: parsed.items,
+          couponCode: parsed.couponCode || '',
+          cartTotals: parsed.cartTotals || {
+            subtotal: 0,
+            discount: 0,
+            deliveryFee: 0,
+            gst: 0,
+            grandTotal: 0,
+          },
+        };
+      }
+    } catch {
+      // Ignore
+    }
+  }
+  return {
+    branchId,
+    items: [],
+    couponCode: '',
+    cartTotals: {
+      subtotal: 0,
+      discount: 0,
+      deliveryFee: 0,
+      gst: 0,
+      grandTotal: 0,
+    },
+  };
+};
+
+export const saveGuestCart = (items: CartItem[], couponCode = '', discount = 0) => {
+  const branchId = getSelectedBranchId();
+  const subtotal = items.reduce((sum, item) => sum + parseFloat(item.price) * item.quantity, 0);
+  const deliveryFee = subtotal === 0 ? 0 : (subtotal >= 200 ? 0 : 20);
+  const taxableAmount = Math.max(0, subtotal - discount);
+  const gst = taxableAmount * 0.05;
+  const grandTotal = taxableAmount + deliveryFee + gst;
+
+  const guestCart: GuestCart = {
+    branchId,
+    items,
+    couponCode,
+    cartTotals: {
+      subtotal,
+      discount,
+      deliveryFee,
+      gst,
+      grandTotal,
+    },
+  };
+  localStorage.setItem('guest_cart', JSON.stringify(guestCart));
+  return guestCart;
+};
+
+export const applyGuestCoupon = (code: string, discount: number) => {
+  const guest = loadGuestCart();
+  saveGuestCart(guest.items, code, discount);
+};
+
+export const removeGuestCoupon = () => {
+  const guest = loadGuestCart();
+  saveGuestCart(guest.items, '', 0);
+};
+
+export const useCart = () => {
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+  return useQuery({
+    queryKey: ['cart', isAuthenticated],
     queryFn: async () => {
+      if (!isAuthenticated) {
+        const guest = loadGuestCart();
+        return {
+          id: 'guest-cart',
+          items: guest.items,
+          branchId: guest.branchId,
+          couponCode: guest.couponCode,
+          cartTotals: guest.cartTotals,
+        } as any;
+      }
       const { data } = await apiClient.get('/cart');
       return data.data as Cart;
     },
-    enabled,
     retry: false,
   });
+};
 
 export const useAddToCart = () => {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   return useMutation({
     mutationFn: async (payload: {
       productId: string;
       variantId?: string;
       quantity: number;
+      product?: Product & { restaurant?: { name: string; slug: string } };
+      variant?: { id: string; name: string; price: string } | null;
     }) => {
-      const { data } = await apiClient.post('/cart/items', payload);
+      if (!isAuthenticated) {
+        const guest = loadGuestCart();
+
+        const price = payload.variant
+          ? payload.variant.price
+          : payload.product?.basePrice || '0';
+
+        const existingItemIndex = guest.items.findIndex(
+          (item) =>
+            item.productId === payload.productId &&
+            item.variantId === (payload.variantId || null)
+        );
+
+        if (existingItemIndex > -1) {
+          guest.items[existingItemIndex].quantity += payload.quantity;
+        } else {
+          const newCartItem: CartItem = {
+            id: `guest-item-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+            cartId: 'guest-cart',
+            productId: payload.productId,
+            variantId: payload.variantId || null,
+            quantity: payload.quantity,
+            price: price.toString(),
+            product: payload.product || {
+              id: payload.productId,
+              name: 'Item',
+              basePrice: '0',
+              image: '',
+              isVeg: true,
+              isAvailable: true,
+              featured: false,
+              rating: 5,
+              slug: '',
+              gallery: [],
+              variants: [],
+              restaurantId: '',
+              categoryId: '',
+            },
+            variant: payload.variant || null,
+          };
+          guest.items.push(newCartItem);
+        }
+
+        const updated = saveGuestCart(guest.items, guest.couponCode, guest.cartTotals.discount);
+        return {
+          id: 'guest-cart',
+          items: updated.items,
+          branchId: updated.branchId,
+          couponCode: updated.couponCode,
+          cartTotals: updated.cartTotals,
+        };
+      }
+
+      const { data } = await apiClient.post('/cart/items', {
+        productId: payload.productId,
+        variantId: payload.variantId,
+        quantity: payload.quantity,
+      });
       return data.data as Cart;
     },
-    onMutate: async (newItem) => {
-      await queryClient.cancelQueries({ queryKey: ['cart'] });
-      const previousCart = queryClient.getQueryData<Cart>(['cart']);
-
-      if (previousCart) {
-        const tempItem: CartItem = {
-          id: `temp-${Date.now()}`,
-          cartId: previousCart.id,
-          productId: newItem.productId,
-          variantId: newItem.variantId || null,
-          quantity: newItem.quantity,
-          price: '0',
-          product: {
-            id: newItem.productId,
-            name: 'Adding...',
-            basePrice: '0',
-            image: '',
-            isVeg: true,
-            isAvailable: true,
-            featured: false,
-            rating: 5,
-            slug: '',
-            gallery: [],
-            variants: [],
-            restaurantId: '',
-            categoryId: '',
-          },
-        };
-
-        queryClient.setQueryData(['cart'], {
-          ...previousCart,
-          items: [...previousCart.items, tempItem],
-        });
-      }
-
-      return { previousCart };
-    },
-    onError: (err, newItem, context) => {
-      if (context?.previousCart) {
-        queryClient.setQueryData(['cart'], context.previousCart);
-      }
-    },
     onSuccess: (data) => {
-      queryClient.setQueryData(['cart'], data);
+      queryClient.setQueryData(['cart', isAuthenticated], data);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };
 
 export const useUpdateCartItem = () => {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   return useMutation({
     mutationFn: async ({ id, quantity }: { id: string; quantity: number }) => {
+      if (!isAuthenticated) {
+        const guest = loadGuestCart();
+        const updatedItems = guest.items.map((item) =>
+          item.id === id ? { ...item, quantity } : item
+        );
+
+        const updated = saveGuestCart(updatedItems, guest.couponCode, guest.cartTotals.discount);
+        return {
+          id: 'guest-cart',
+          items: updated.items,
+          branchId: updated.branchId,
+          couponCode: updated.couponCode,
+          cartTotals: updated.cartTotals,
+        };
+      }
+
       const { data } = await apiClient.put(`/cart/items/${id}`, { quantity });
       return data.data as Cart;
     },
-    onMutate: async ({ id, quantity }) => {
-      await queryClient.cancelQueries({ queryKey: ['cart'] });
-      const previousCart = queryClient.getQueryData<Cart>(['cart']);
-
-      if (previousCart) {
-        const updatedItems = previousCart.items.map((item) =>
-          item.id === id ? { ...item, quantity } : item
-        );
-        queryClient.setQueryData(['cart'], {
-          ...previousCart,
-          items: updatedItems,
-        });
-      }
-
-      return { previousCart };
-    },
-    onError: (err, newVariables, context) => {
-      if (context?.previousCart) {
-        queryClient.setQueryData(['cart'], context.previousCart);
-      }
-    },
     onSuccess: (data) => {
-      queryClient.setQueryData(['cart'], data);
+      queryClient.setQueryData(['cart', isAuthenticated], data);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };
 
 export const useRemoveCartItem = () => {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   return useMutation({
     mutationFn: async (id: string) => {
+      if (!isAuthenticated) {
+        const guest = loadGuestCart();
+        const updatedItems = guest.items.filter((item) => item.id !== id);
+
+        const updated = saveGuestCart(updatedItems, guest.couponCode, guest.cartTotals.discount);
+        return {
+          id: 'guest-cart',
+          items: updated.items,
+          branchId: updated.branchId,
+          couponCode: updated.couponCode,
+          cartTotals: updated.cartTotals,
+        };
+      }
+
       const { data } = await apiClient.delete(`/cart/items/${id}`);
       return data.data as Cart;
     },
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: ['cart'] });
-      const previousCart = queryClient.getQueryData<Cart>(['cart']);
-
-      if (previousCart) {
-        const updatedItems = previousCart.items.filter((item) => item.id !== id);
-        queryClient.setQueryData(['cart'], {
-          ...previousCart,
-          items: updatedItems,
-        });
-      }
-
-      return { previousCart };
-    },
-    onError: (err, id, context) => {
-      if (context?.previousCart) {
-        queryClient.setQueryData(['cart'], context.previousCart);
-      }
-    },
     onSuccess: (data) => {
-      queryClient.setQueryData(['cart'], data);
+      queryClient.setQueryData(['cart', isAuthenticated], data);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };
 
 export const useClearCart = () => {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+
   return useMutation({
     mutationFn: async () => {
+      if (!isAuthenticated) {
+        const updated = saveGuestCart([], '', 0);
+        return {
+          id: 'guest-cart',
+          items: updated.items,
+          branchId: updated.branchId,
+          couponCode: updated.couponCode,
+          cartTotals: updated.cartTotals,
+        };
+      }
+
       const { data } = await apiClient.delete('/cart');
       return data.data as Cart;
     },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['cart'] });
-      const previousCart = queryClient.getQueryData<Cart>(['cart']);
-
-      if (previousCart) {
-        queryClient.setQueryData(['cart'], {
-          ...previousCart,
-          items: [],
-        });
-      }
-
-      return { previousCart };
-    },
-    onError: (err, newVariables, context) => {
-      if (context?.previousCart) {
-        queryClient.setQueryData(['cart'], context.previousCart);
-      }
-    },
     onSuccess: (data) => {
-      queryClient.setQueryData(['cart'], data);
+      queryClient.setQueryData(['cart', isAuthenticated], data);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 };

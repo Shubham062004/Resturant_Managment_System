@@ -74,15 +74,18 @@ export interface WishlistSummaryResponse {
 }
 
 // Hook to fetch wishlist items with filters/sorting/selected branch
-export const useWishlist = (filters: {
-  page?: number;
-  limit?: number;
-  search?: string;
-  veg?: string;
-  category?: string;
-  sortBy?: string;
-  branchId?: string;
-}) => {
+export const useWishlist = (
+  filters: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    veg?: string;
+    category?: string;
+    sortBy?: string;
+    branchId?: string;
+  },
+  enabled = true
+) => {
   return useQuery<WishlistResponse>({
     queryKey: ['wishlist', filters],
     queryFn: async () => {
@@ -92,8 +95,10 @@ export const useWishlist = (filters: {
       return data;
     },
     staleTime: 2000,
+    enabled,
   });
 };
+
 
 // Hook to fetch wishlist summary metrics
 export const useWishlistSummary = (enabled = true) => {

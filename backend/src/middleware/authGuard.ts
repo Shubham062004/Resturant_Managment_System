@@ -55,6 +55,33 @@ export const authGuard = async (
   }
 };
 
+export const optionalAuth = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const token = extractAccessToken(req);
+
+    if (!token) {
+      return next();
+    }
+
+    const decoded = jwt.verify(token, env.JWT_SECRET) as DecodedToken;
+
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role,
+      assignedCategory: decoded.assignedCategory,
+    };
+
+    next();
+  } catch {
+    next();
+  }
+};
+
 // Authorization Hook: Role-Based Access Controls
 export const restrictTo = (...roles: Array<Role>) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {

@@ -24,24 +24,21 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ product }) => {
   const { mutate: addToCart, isPending: isAdding } = useAddToCart();
   const updateCartItem = useUpdateCartItem();
   const removeCartItem = useRemoveCartItem();
-  const { data: cart } = useCart(isAuthenticated);
+  const { data: cart } = useCart();
 
   // Find if this product is in the cart
-  const cartItem = cart?.items.find((item) => item.productId === product.id);
+  const cartItem = cart?.items.find((item: any) => item.productId === product.id);
   const cartQty = cartItem?.quantity || 0;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isAuthenticated) {
-      toast.error('Please sign in to add items to your cart.');
-      return;
-    }
 
     addToCart(
       {
         productId: product.id,
         quantity: 1,
+        product,
       },
       {
         onSuccess: () => {
